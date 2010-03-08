@@ -1,4 +1,4 @@
-#summary Einführung und Spielkonzept
+#summary Spielbeschreibung, Spielsteuerung, Spielmechanismus
 #labels Einführung,Spielkonzept
 
 = Einführung und Spielkonzept =
