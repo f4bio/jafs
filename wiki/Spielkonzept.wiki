@@ -12,7 +12,7 @@ Nach Ablauf einer Rundenzeit werden alle Punkte statistisch errechnet und sowohl
 
 <br />
 == Spielsteuerung ==
-Das Position des Spieler-Männchens wird mit den Tasten [W], [A], [S], [D] (hoch, links, runter, rechts) gesteuert. Das Anvisieren ist durch direktes Zielen mit dem Mauszeiger möglich, folglich dreht sich die Spielfigur mit der Ausrichtung der Maus.
+Das Position des Spieler-Männchens wird mit den Tasten W, A, S, D (hoch, links, runter, rechts) gesteuert. Das Anvisieren ist durch direktes Zielen mit dem Mauszeiger möglich, folglich dreht sich die Spielfigur mit der Ausrichtung der Maus.
 Geschossen wird mit der linken Maustaste.
 
 <br />
