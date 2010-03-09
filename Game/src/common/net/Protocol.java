@@ -30,6 +30,9 @@ public class Protocol {
     }
 
     public static String buildPacket(String command, Object... o) {
+        if(cmd.containsKey(command) && getArgType(command)[0] == argNull)
+            return command;
+
         if(!cmd.containsKey(command) || cmd.get(command).length != o.length)
             return null;
 
@@ -59,10 +62,19 @@ public class Protocol {
 
     public static void init() {
         //----- Client commands
-        registerCmd("test", argString, argInt, argDouble);
+
+        registerCmd("client_master_listrequest", argString, argInt);
 
         //----- Server commands
 
+        registerCmd("server_master_pong", argString, argInt);
+        registerCmd("server_master_auth", argString, argInt);
+
         //----- Master Server commands
+
+        registerCmd("master_server_auth_success", argNull);
+        registerCmd("master_server_auth_failure", argNull);
+        registerCmd("master_client_newlist", argNull);
+        registerCmd("master_client_listentry", argString);
     }
 }
