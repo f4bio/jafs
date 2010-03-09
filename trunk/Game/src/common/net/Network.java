@@ -28,6 +28,7 @@ public class Network {
 
         private NetworkReader() {
             this.thread = new Thread(this);
+            this.thread.setDaemon(true);
             this.thread.start();
         }
 
@@ -49,18 +50,29 @@ public class Network {
 
         private NetworkWriter() {
             this.thread = new Thread(this);
+            this.thread.setDaemon(true);
             this.thread.start();
         }
 
         public void run() {
+            DatagramPacket curPacket = null;
+            
             while(socket != null) {
-                DatagramPacket p = outQueue.poll();
-                if(p != null) {
-                    try {
-                        socket.send(p);
-                    } catch(Exception e) {
+                for(int i=0; i<outQueue.size(); i++) {
+                    curPacket = outQueue.poll();
+                    if(curPacket != null) {
+                        try {
+                            socket.send(curPacket);
+                        } catch(Exception e) {
 
+                        }
                     }
+                }
+
+                try {
+                    Thread.sleep(1);
+                } catch(Exception e) {
+
                 }
             }
         }
@@ -95,6 +107,9 @@ public class Network {
     }
 
     public void send(String packet, InetSocketAddress destination) {
+        if(destination == null)
+             return;
+
         DatagramPacket p = null;
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), destination);
@@ -103,14 +118,19 @@ public class Network {
 
         }
     }
-    
+
+    public void send(String packet, String host, int port) {
+        InetSocketAddress destination = new InetSocketAddress(host, port);
+        send(packet, destination);
+    }
+   
     public String getPacket() {
         DatagramPacket p = inQueue.poll();
         if(p != null)
             return new String(p.getData());
         return null;
     }
-    
+   
     public void addTestPacket(String packet) {
         DatagramPacket p = null;
         try {
@@ -169,3 +189,4 @@ public class Network {
         }
     }
 }
+

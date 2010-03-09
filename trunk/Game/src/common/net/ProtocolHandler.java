@@ -19,20 +19,33 @@ public abstract class ProtocolHandler implements Runnable {
     public ProtocolHandler(Network net) {
         this.net = net;
         thread = new Thread(this);
+        thread.setDaemon(true);
         thread.start();
+    }
+
+    public void sleep() {
+        try {
+            Thread.sleep(1);
+        } catch(Exception e) {
+
+        }
     }
 
     public void run() {
         while(true) {
             String packet = net.getPacket();
 
-            if(packet == null)
+            if(packet == null) {
+                sleep();
                 continue;
+            }
 
             String[] sPacket = packet.split(Protocol.argSeperator);
 
-            if(!Protocol.containsCmd(sPacket[0]))
+            if(!Protocol.containsCmd(sPacket[0])) {
+                sleep();
                 continue;
+            }
 
             Object[] param = new Object[Protocol.getArgSize(sPacket[0])];
             Class[] sig = new Class[param.length];
@@ -40,6 +53,7 @@ public abstract class ProtocolHandler implements Runnable {
 
             for(int i=0; i<type.length; ++i) {
                 try {
+                    sPacket[i+1] = sPacket[i+1].trim();
                     switch(type[i]) {
                         case Protocol.argByte:
                             param[i] = Byte.parseByte(sPacket[i+1]);
@@ -63,6 +77,8 @@ public abstract class ProtocolHandler implements Runnable {
                             param[i] = sPacket[i+1];
                             break;
                         case Protocol.argNull:
+                            sig = new Class[0];
+                            param = new Object[0];
                             break;
 
                         default:
