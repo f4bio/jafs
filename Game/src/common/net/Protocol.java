@@ -21,7 +21,7 @@ public class Protocol {
     public static final int argFloat = 4;
     public static final int argDouble = 5;
     public static final int argString = 6;
-    public static final int argNull = 7;
+    public static final int argNone = 7;
 
     public static final String argSeperator = ";";
 
@@ -30,7 +30,7 @@ public class Protocol {
     }
 
     public static String buildPacket(String command, Object... o) {
-        if(cmd.containsKey(command) && getArgType(command)[0] == argNull)
+        if(cmd.containsKey(command) && getArgType(command)[0] == argNone)
             return command;
 
         if(!cmd.containsKey(command) || cmd.get(command).length != o.length)
@@ -72,9 +72,9 @@ public class Protocol {
 
         //----- Master Server commands
 
-        registerCmd("master_server_auth_success", argNull);
-        registerCmd("master_server_auth_failure", argNull);
-        registerCmd("master_client_newlist", argNull);
+        registerCmd("master_server_auth_success", argNone);
+        registerCmd("master_server_auth_failure", argNone);
+        registerCmd("master_client_newlist", argNone);
         registerCmd("master_client_listentry", argString);
     }
 }

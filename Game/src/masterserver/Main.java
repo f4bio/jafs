@@ -24,15 +24,17 @@ public class Main {
     private static Network net;
     private static ProtocolHandler handler;
     private static Vector<Server> serverlist = new Vector<Server>();
-    private static Hashtable<Server, Integer> pingTable = new Hashtable<Server, Integer>();
 
     private static TimerTask pinger = new TimerTask() {
         public void run() {
+            int failures;
+
             for(int i=0; i<serverlist.size(); ++i) {
                 Server cur = serverlist.get(i);
-                int failures = pingTable.put(cur, pingTable.get(cur) + 1);
+                cur.increasePingFailureCnt();
+                failures = cur.getPingFailureCnt();
 
-		if(failures > maxPingFailures) {
+                if(failures > maxPingFailures) {
                     removeServer(cur);
                     continue;
                 }
@@ -62,24 +64,24 @@ public class Main {
 
         Server serv = new Server(host, port);
         serverlist.add(serv);
-        pingTable.put(serv, 0);
 
         System.out.println("Server " + serv.getHost() + ":" + serv.getPort() + " listed." );
-
+        
         return serv;
     }
 
     public static void removeServer(Server server) {
         serverlist.remove(server);
-        pingTable.remove(server);
     }
 
     public static Server getServer(String host, int port) {
         for(int i=0; i<serverlist.size(); ++i) {
             Server cur = serverlist.get(i);
+
             if(cur.getHost().equals(host) && cur.getPort() == port)
                 return cur;
         }
+
         return null;
     }
 
@@ -87,19 +89,22 @@ public class Main {
         String list = "";
         String seperator = " ";
         Server current = null;
+
         for(int i=0; i<serverlist.size(); ++i) {
             current = serverlist.get(i);
             list += current.getHost() + ":" + current.getPort();
             if(i < serverlist.size() - 1)
                 list += seperator;
         }
+
         return list;
     }
 
     public static void decreasePingFailures(String server, int port) {
         Server serv = getServer(server, port);
+
         if(serv != null) {
-            pingTable.put(serv, pingTable.get(serv) - 1);
+            serv.decreasePingFailureCnt();
         }
     }
 }
