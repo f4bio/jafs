@@ -16,7 +16,7 @@ public class TestUI extends JFrame {
         setSize(600, 400);
 
         JPanel p = new JPanel();
-        p.add(new MainMenu());
+        p.add(new Serverbrowser());
         getContentPane().add(p, BorderLayout.CENTER);
 
         setVisible(true);
