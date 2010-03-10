@@ -62,18 +62,16 @@ public class Protocol {
 
     public static void init() {
         //----- Client commands
-
         registerCmd("client_master_listrequest", argString, argInt);
 
         //----- Server commands
-
         registerCmd("server_master_pong", argString, argInt);
         registerCmd("server_master_auth", argString, argInt);
 
         //----- Master Server commands
-
         registerCmd("master_server_auth_success", argNone);
         registerCmd("master_server_auth_failure", argNone);
+        registerCmd("master_server_ping", argNone);
         registerCmd("master_client_newlist", argNone);
         registerCmd("master_client_listentry", argString);
     }

@@ -8,7 +8,6 @@ package masterserver;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.Server;
-import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -19,7 +18,7 @@ import java.util.Vector;
  */
 public class Main {
     public static int maxPingFailures = 2;
-    public static final int pingRefreshInterval = 1000;
+    public static final int pingRefreshInterval = 5000;
 
     private static Network net;
     private static ProtocolHandler handler;
@@ -34,7 +33,7 @@ public class Main {
                 cur.increasePingFailureCnt();
                 failures = cur.getPingFailureCnt();
 
-                if(failures > maxPingFailures) {
+                if(failures >= maxPingFailures) {
                     removeServer(cur);
                     continue;
                 }
@@ -72,6 +71,8 @@ public class Main {
 
     public static void removeServer(Server server) {
         serverlist.remove(server);
+
+        System.out.println("Server " + server.getHost() + ":" + server.getPort() + " dropped." );
     }
 
     public static Server getServer(String host, int port) {
