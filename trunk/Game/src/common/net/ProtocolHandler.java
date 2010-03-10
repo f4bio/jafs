@@ -76,7 +76,7 @@ public abstract class ProtocolHandler implements Runnable {
                         case Protocol.argString:
                             param[i] = sPacket[i+1];
                             break;
-                        case Protocol.argNull:
+                        case Protocol.argNone:
                             sig = new Class[0];
                             param = new Object[0];
                             break;

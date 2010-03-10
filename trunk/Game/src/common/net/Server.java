@@ -20,10 +20,12 @@ public class Server {
     private int curPlayers;
     private int latency;
     private InetSocketAddress address;
+    private int pingFailureCnt;
 
     public Server(String host, int port) {
         this.host = host;
         this.port = port;
+        pingFailureCnt = 0;
         address = new InetSocketAddress(host, port);
     }
 
@@ -38,4 +40,21 @@ public class Server {
     public InetSocketAddress getAddress() {
         return address;
     }
+
+    public void increasePingFailureCnt() {
+        pingFailureCnt++;
+    }
+
+    public void decreasePingFailureCnt() {
+        pingFailureCnt--;
+    }
+
+    public void resetPingFailureCnt() {
+        pingFailureCnt = 0;
+    }
+
+    public int getPingFailureCnt() {
+        return pingFailureCnt;
+    }
+
 }
