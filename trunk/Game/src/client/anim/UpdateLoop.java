@@ -18,10 +18,12 @@ public class UpdateLoop implements Runnable{
     private Vector<UpdateObject> list;
     private boolean paused;
     private long curTime;
+    private int curUPS;
     private double speedfactor;
 
     public UpdateLoop(int ups) {
         setUPS(ups);
+        list = new Vector<UpdateObject>();
         thread  = new Thread(this);
         thread.setDaemon(true);
         thread.start();
@@ -34,9 +36,11 @@ public class UpdateLoop implements Runnable{
     }
 
     public void run() {
-        long lastTime;
+        long lastTime = System.nanoTime();
         double timeDiff;
         double sleepTime;
+        curTime = System.nanoTime();
+        double sumDiff;
 
         while(Thread.currentThread() == thread) {
             if(paused) {
@@ -49,22 +53,24 @@ public class UpdateLoop implements Runnable{
                 continue;
             }
 
-            curTime = System.nanoTime();
-
             update();
 
-            lastTime = System.nanoTime();
-            timeDiff = (lastTime - curTime) / 1000000.0d;
-            speedfactor = timeDiff / period;
+            timeDiff = (System.nanoTime() - curTime) * 0.000001;
+            sumDiff = (curTime - lastTime) * 0.000001;
+            speedfactor = sumDiff / period;
+            curUPS = (int)(1000.0d / sumDiff);
             sleepTime = period - timeDiff;
 
             if(sleepTime > 1) {
                 try {
-                    Thread.sleep((int)sleepTime);
+                    Thread.sleep(Math.round(sleepTime));
                 } catch(InterruptedException e) {
 
                 }
             }
+
+            lastTime = curTime;
+            curTime = System.nanoTime();
         }
     }
 
@@ -75,6 +81,10 @@ public class UpdateLoop implements Runnable{
     
     public int getUPS() {
         return ups;
+    }
+
+    public int getCurrentUPS() {
+        return curUPS;
     }
 
     public void addUpdateObject(UpdateObject u) {
