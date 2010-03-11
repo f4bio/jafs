@@ -17,7 +17,7 @@ public class TestUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 600);
 
-        uiTest = new UiWindow();
+        uiTest = new MainMenu();
         uiTest.setVisible(true);
         UiManager.init();
         UiManager.addComponent("Test", uiTest);

@@ -13,12 +13,13 @@ package client.ui;
 
 import client.anim.UpdateLoop;
 import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Administrator
  */
-public class Serverbrowser  extends UiWindow {
+public class Serverbrowser  extends JPanel {
 
     /** Creates new form Serverbrowser */
     public Serverbrowser() {
