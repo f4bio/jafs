@@ -14,10 +14,11 @@ import java.util.Vector;
 public class UpdateLoop implements Runnable{
     private Thread thread;
     private int ups;
-    private int period;
+    private double period;
     private Vector<UpdateObject> list;
     private boolean paused;
     private long curTime;
+    private double speedfactor;
 
     public UpdateLoop(int ups) {
         setUPS(ups);
@@ -34,29 +35,73 @@ public class UpdateLoop implements Runnable{
 
     public void run() {
         long lastTime;
-        int timeDiff;
+        double timeDiff;
+        double sleepTime;
 
         while(Thread.currentThread() == thread) {
-            if(paused)
-                continue;
+            if(paused) {
+                try {
+                    Thread.yield();
+                } catch(Exception e) {
 
-            lastTime = System.nanoTime();
+                }
+
+                continue;
+            }
+
+            curTime = System.nanoTime();
 
             update();
 
-            curTime = System.nanoTime();
-            timeDiff = (int)((curTime - lastTime) / 1000000.0d);
+            lastTime = System.nanoTime();
+            timeDiff = (lastTime - curTime) / 1000000.0d;
+            speedfactor = timeDiff / period;
+            sleepTime = period - timeDiff;
 
-            try {
-                Thread.sleep(period - timeDiff);
-            } catch(InterruptedException e) {
+            if(sleepTime > 1) {
+                try {
+                    Thread.sleep((int)sleepTime);
+                } catch(InterruptedException e) {
 
+                }
             }
         }
     }
 
     public void setUPS(int ups) {
         this.ups = ups;
-        period = 1000 / ups;
+        period = 1000.0d / ups;
+    }
+    
+    public int getUPS() {
+        return ups;
+    }
+
+    public void addUpdateObject(UpdateObject u) {
+        list.add(u);
+    }
+
+    public UpdateObject removeUpdateObject(UpdateObject u) {
+        return list.remove(list.indexOf(u));
+    }
+
+    public double getSpeedfactor() {
+        return speedfactor;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPriority(int priority) {
+        thread.setPriority(priority);
+    }
+
+    public int getPriority() {
+        return thread.getPriority();
     }
 }
