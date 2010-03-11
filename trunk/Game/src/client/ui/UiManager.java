@@ -7,6 +7,10 @@ import java.awt.Point;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+/**
+ *
+ * @author Julian Sanio
+ */
 public class UiManager {
 
     public static final int decoHeight = 0;
@@ -45,9 +49,5 @@ public class UiManager {
         Point p = cmp.getLocation();
         Dimension d = cmp.getSize();
         g.drawRect(p.x - borderWidth, p.y - borderWidth, d.width, d.height);
-
-        g.setColor(Color.YELLOW);
-        g.drawOval(p.x - borderWidth, p.y - borderWidth, 10, 10);
     }
 }
-

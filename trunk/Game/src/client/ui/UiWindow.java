@@ -2,15 +2,16 @@ package client.ui;
 
 import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 /**
-*
-* @author ubuntu
-*/
+ *
+ * @author Julian Sanio
+ */
 public class UiWindow extends JPanel implements ActionListener, UpdateObject{
     public UiWindow() {
         super();
@@ -23,6 +24,9 @@ public class UiWindow extends JPanel implements ActionListener, UpdateObject{
             g.translate(x, y);
             paint(g);
             g.translate(-x, -y);
+
+            g.setColor(Color.YELLOW);
+            g.fillOval(x, y, 100, 100);
         }
     }
 
