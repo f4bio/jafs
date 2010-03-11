@@ -1,10 +1,7 @@
 package client.ui;
 
-import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
@@ -12,9 +9,11 @@ import javax.swing.JPanel;
  *
  * @author Julian Sanio
  */
-public class UiWindow extends JPanel implements ActionListener, UpdateObject{
-    public UiWindow() {
+public abstract class UiWindow extends JPanel implements ActionListener, UpdateObject{
+
+    public UiWindow(int width, int height) {
         super();
+        setSize(width, height);
     }
 
     public void render(Graphics2D g) {
@@ -23,19 +22,9 @@ public class UiWindow extends JPanel implements ActionListener, UpdateObject{
             int y = getLocation().y;
             g.translate(x, y);
             paint(g);
+            //paintAll(g);
             g.translate(-x, -y);
-
-            g.setColor(Color.YELLOW);
-            g.fillOval(x, y, 100, 100);
         }
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void update(UpdateLoop u) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

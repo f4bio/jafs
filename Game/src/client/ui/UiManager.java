@@ -45,9 +45,11 @@ public class UiManager {
     private static void renderComponent(UiWindow cmp, Graphics2D g) {
         cmp.render(g);
 
-        g.setColor(Color.RED);
+        g.setColor(Color.LIGHT_GRAY);
         Point p = cmp.getLocation();
         Dimension d = cmp.getSize();
+
         g.drawRect(p.x - borderWidth, p.y - borderWidth, d.width, d.height);
+        g.drawString("x", p.x - borderWidth, p.y - borderWidth);
     }
 }
