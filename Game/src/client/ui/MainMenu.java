@@ -6,7 +6,6 @@
 
 package client.ui;
 
-import client.anim.UpdateLoop;
 import java.awt.event.ActionEvent;
 
 /**
@@ -19,7 +18,7 @@ public class MainMenu extends UiWindow {
     public MainMenu() {
         super(300, 300);
         initComponents();
-        setLocation(200, 100);
+        //setLocation(200, 100);
     }
 
     @SuppressWarnings("unchecked")
@@ -82,10 +81,6 @@ public class MainMenu extends UiWindow {
 
     public void actionPerformed(ActionEvent e) {
         System.out.println("Launched ActionListener.");
-    }
-
-    public void update(UpdateLoop u) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
