@@ -13,10 +13,11 @@ import java.awt.event.ActionEvent;
  *
  * @author Julian Sanio
  */
-public class MainMenu extends UserInterface {
+public class MainMenu extends UiWindow {
 
     /** Creates new form MainMenu */
     public MainMenu() {
+//        super(200, 200);
         initComponents();
     }
 

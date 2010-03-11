@@ -18,13 +18,14 @@ import java.awt.event.ActionEvent;
  *
  * @author Administrator
  */
-public class Serverbrowser  extends UserInterface {
+public class Serverbrowser  extends UiWindow {
 
     /** Creates new form Serverbrowser */
     public Serverbrowser() {
+//        super(200, 200);
         initComponents();
-        jRadioButton1.addActionListener(this);
-        jCheckBox1.addActionListener(this);
+//        jRadioButton1.addActionListener(this);
+//        jCheckBox1.addActionListener(this);
     }
 
 
@@ -58,22 +59,7 @@ public class Serverbrowser  extends UserInterface {
         jTable1.setBackground(java.awt.SystemColor.controlHighlight);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Server", "Map", "Spieler", "Ping"
@@ -94,6 +80,7 @@ public class Serverbrowser  extends UserInterface {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTable1.setGridColor(new java.awt.Color(204, 204, 204));
         jTable1.setMaximumSize(new java.awt.Dimension(300, 256));
