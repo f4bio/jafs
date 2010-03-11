@@ -18,7 +18,7 @@ public class MainMenu extends UiWindow {
     public MainMenu() {
         super(300, 300);
         initComponents();
-        //setLocation(200, 100);
+        setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
