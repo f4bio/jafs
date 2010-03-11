@@ -21,7 +21,6 @@ public class Main {
         Protocol.init();
         Network net = new Network();
         ProtocolHandler handler = new ProtocolHandler(net);
-        net.addTestPacket("test;lolololol so awesome!!!!1;99;1.5");
     }
 
 }
