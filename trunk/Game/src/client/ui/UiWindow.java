@@ -12,7 +12,8 @@ public abstract class UiWindow extends JPanel implements ActionListener {
 
     public UiWindow(int width, int height) {
         super();
-        //setSize(width, height);
+        setSize(width, height);
+        setLocation(10, 10);
     }
 
     public void render(Graphics2D g) {
