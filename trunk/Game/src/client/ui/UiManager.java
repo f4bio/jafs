@@ -20,7 +20,6 @@ public class UiManager {
 
     public static void init() {
         content = new Hashtable<String, UiWindow>();
-        addComponent("MainMenu", new MainMenu());
     }
 
     public static UiWindow addComponent(String identifier, UiWindow c) {
@@ -46,12 +45,12 @@ public class UiManager {
     private static void renderComponent(UiWindow cmp, Graphics2D g) {
         cmp.render(g);
 
-        g.setColor(Color.RED);
+        g.setColor(Color.LIGHT_GRAY);
         
         Point p = cmp.getLocation();
         Dimension d = cmp.getSize();
 
         g.drawRect(p.x - borderWidth, p.y - borderWidth, d.width, d.height);
-        g.drawString("x", p.x - borderWidth, p.y - borderWidth);
+        g.drawString("x", p.x - borderWidth + cmp.getWidth() - 10, p.y - borderWidth + 10);
     }
 }
