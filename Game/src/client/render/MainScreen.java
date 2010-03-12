@@ -31,12 +31,12 @@ public class MainScreen extends JFrame implements UpdateObject {
 
     public MainScreen() {
         super();
+        this.setIgnoreRepaint(true);
         this.screenSize = this.getToolkit().getScreenSize();
         this.setLayout(null);
         this.setSize(screenSize);
         this.setResizable(false);
         this.setUndecorated(true);
-
 
         this.setVisible(true);
 

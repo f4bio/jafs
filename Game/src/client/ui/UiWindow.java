@@ -1,5 +1,6 @@
 package client.ui;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
@@ -13,7 +14,9 @@ public abstract class UiWindow extends JPanel implements ActionListener {
     public UiWindow(int width, int height) {
         super();
         setSize(width, height);
-        setLocation(10, 10);
+        setLocation(300, 10);
+        setOpaque(true);
+        setBackground(new Color(128, 128, 128, 128));
     }
 
     public void render(Graphics2D g) {
@@ -22,6 +25,7 @@ public abstract class UiWindow extends JPanel implements ActionListener {
             int y = getLocation().y;
             g.translate(x, y);
             paint(g);
+            
             g.translate(-x, -y);
         }
     }
