@@ -16,7 +16,7 @@ public class UiManager {
     public static final int decoHeight = 0;
     public static final int borderWidth = 1;
 
-    private static Hashtable<String, UiWindow> content = new Hashtable<String, UiWindow>();
+    private static Hashtable<String, UiWindow> content;
 
     public static void init() {
         content = new Hashtable<String, UiWindow>();
