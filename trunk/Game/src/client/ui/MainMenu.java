@@ -16,7 +16,8 @@ public class MainMenu extends UiWindow {
 
     /** Creates new form MainMenu */
     public MainMenu() {
-        super(300, 300);
+        super();
+        setSize(300, 300);
         initComponents();
         setVisible(true);
     }

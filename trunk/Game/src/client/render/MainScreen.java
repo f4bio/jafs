@@ -5,10 +5,8 @@
 
 package client.render;
 
-import java.awt.image.BufferStrategy;
-import javax.swing.JFrame;
-import client.anim.UpdateObject;
 import client.anim.UpdateLoop;
+import client.anim.UpdateObject;
 import client.ui.UiManager;
 import java.awt.AWTException;
 import java.awt.BufferCapabilities;
@@ -18,36 +16,27 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.ImageCapabilities;
+import java.awt.image.BufferStrategy;
+import javax.swing.JFrame;
+import javax.swing.JWindow;
 
 /**
  *
  * @author miracle
  */
-public class MainScreen extends JFrame implements UpdateObject {
+public class MainScreen extends JWindow implements UpdateObject {
     private BufferStrategy buffer;
     private Dimension screenSize;
     private Viewport gamescene;
     private boolean init = true;
 
-    public MainScreen() {
-        super();
+    public MainScreen(JFrame owner) {
+        super(owner);
         this.setIgnoreRepaint(true);
         this.screenSize = this.getToolkit().getScreenSize();
         this.setLayout(null);
         this.setSize(screenSize);
-        this.setResizable(false);
-        this.setUndecorated(true);
-
-        this.setVisible(true);
-
-        ImageCapabilities img = new ImageCapabilities(true);
-        try {
-            this.createBufferStrategy(2, new BufferCapabilities(img, img, FlipContents.UNDEFINED));
-        } catch(AWTException e) {
-
-        }
-        
-        this.buffer = this.getBufferStrategy();
+        setVisible(true);
     }
 
     public void update(UpdateLoop u) {
@@ -68,6 +57,7 @@ public class MainScreen extends JFrame implements UpdateObject {
             }
 
             Graphics2D g = (Graphics2D)buffer.getDrawGraphics();
+
             clear(g);
 
             g.setColor(Color.white);
@@ -86,6 +76,7 @@ public class MainScreen extends JFrame implements UpdateObject {
             UiManager.renderAll(g);
 
             buffer.show();
+            
             g.dispose();
         } while(buffer.contentsLost());
     }

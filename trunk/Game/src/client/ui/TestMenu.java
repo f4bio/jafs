@@ -7,16 +7,18 @@
 package client.ui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author Administrator
  */
-public class TestMenu extends UiWindow {
+public class TestMenu extends UiWindow implements ActionListener {
 
     /** Creates new form TestMenu */
     public TestMenu() {
-        super(200, 200);
+        super();
+        setSize(200, 200);
         initComponents();
         jButton1.addActionListener(this);
         setVisible(true);

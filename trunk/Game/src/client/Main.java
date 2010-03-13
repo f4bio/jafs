@@ -8,11 +8,11 @@ package client;
 import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.MainMenu;
-import client.ui.TestMenu;
 import client.ui.UiManager;
 import client.ui.UiWindow;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -26,16 +26,14 @@ public class Main {
      */
 
     public static class UiTest extends UiWindow {
+
         public UiTest() {
-            super(200, 200);
-            JLabel lb = new JLabel("Test");
-            lb.setForeground(Color.BLACK);
-            lb.setIgnoreRepaint(true);
-            setLayout(null);
-            lb.setBounds(10, 10, 100, 100);
-            add(lb);
-            setVisible(true);
-            
+            super();
+            setSize(200, 200);
+            setForeground(Color.black);
+            setLocation(10, 20);
+
+            add(new JLabel("lol"));
         }
 
         public void actionPerformed(ActionEvent ae) {
@@ -44,12 +42,22 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        TestMenu menu = new TestMenu();
-        UiManager.addComponent("MainMenu", menu);
+        MainMenu test = new MainMenu();
+        UiManager.init();
+        UiManager.addComponent("MainMenu", test);
+        
         /*Protocol.init();
         Network net = new Network();
         ProtocolHandler handler = new ProtocolHandler(net);*/
-        MainScreen screen = new MainScreen();
+
+        test.setLocation(300, 300);
+
+        JFrame frm = new JFrame();
+        frm.setVisible(true);
+
+        MainScreen screen = new MainScreen(frm);
+        screen.add(test);
+
         UpdateLoop loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
     }
