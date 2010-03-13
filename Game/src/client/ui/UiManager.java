@@ -1,6 +1,5 @@
 package client.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -44,13 +43,14 @@ public class UiManager {
 
     private static void renderComponent(UiWindow cmp, Graphics2D g) {
         cmp.render(g);
-
-        g.setColor(Color.LIGHT_GRAY);
-        
         Point p = cmp.getLocation();
         Dimension d = cmp.getSize();
+//        g.setColor(Color.LIGHT_GRAY);
+//        g.drawRect(p.x - borderWidth, p.y - borderWidth, d.width, d.height);
+//        g.drawString("x", p.x - borderWidth + cmp.getWidth() - 10, p.y - borderWidth + 10);
+    }
 
-        g.drawRect(p.x - borderWidth, p.y - borderWidth, d.width, d.height);
-        g.drawString("x", p.x - borderWidth + cmp.getWidth() - 10, p.y - borderWidth + 10);
+    public static void changeLocation(String identifier, int x, int y){
+        content.get(identifier).setLocation(x, y);
     }
 }
