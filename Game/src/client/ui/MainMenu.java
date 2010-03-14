@@ -16,6 +16,7 @@ public class MainMenu extends UiWindow {
     public MainMenu() {
         initComponents();
         initDecoration();
+        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
     }
 
     @SuppressWarnings("unchecked")
@@ -32,14 +33,26 @@ public class MainMenu extends UiWindow {
         setPreferredSize(new java.awt.Dimension(150, 200));
 
         jButton1.setText("Server suchen");
+        jButton1.setMaximumSize(new java.awt.Dimension(111, 23));
+        jButton1.setMinimumSize(new java.awt.Dimension(111, 23));
+        jButton1.setPreferredSize(new java.awt.Dimension(111, 23));
 
         jButton2.setText("Server erstellen");
 
         jButton3.setText("Optionen");
+        jButton3.setMaximumSize(new java.awt.Dimension(111, 23));
+        jButton3.setMinimumSize(new java.awt.Dimension(111, 23));
+        jButton3.setPreferredSize(new java.awt.Dimension(111, 23));
 
         jButton4.setText("Credits");
+        jButton4.setMaximumSize(new java.awt.Dimension(111, 23));
+        jButton4.setMinimumSize(new java.awt.Dimension(111, 23));
+        jButton4.setPreferredSize(new java.awt.Dimension(111, 23));
 
         jButton5.setText("Beenden");
+        jButton5.setMaximumSize(new java.awt.Dimension(111, 23));
+        jButton5.setMinimumSize(new java.awt.Dimension(111, 23));
+        jButton5.setPreferredSize(new java.awt.Dimension(111, 23));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -48,30 +61,26 @@ public class MainMenu extends UiWindow {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents

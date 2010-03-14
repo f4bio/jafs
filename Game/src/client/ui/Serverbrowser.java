@@ -18,6 +18,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     /** Creates new form Serverbrowser */
     public Serverbrowser() {
         initComponents();
+        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
         jCheckBox1.addActionListener(this);
         jButton1.addActionListener(this);
         initDecoration();
