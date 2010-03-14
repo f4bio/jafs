@@ -1,8 +1,6 @@
 package client.ui;
 
 import client.Main;
-import client.render.MainScreen;
-import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.Vector;
