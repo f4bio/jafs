@@ -1,10 +1,10 @@
 package client.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -15,12 +15,17 @@ import javax.swing.JPanel;
  *
  * @author Julian Sanio
  *
- * setName(...) muss gesetzt werden (auch im GUI Designer unter den Eigenschaften möglich)!!!
- *
+ * Pflicht-Initialisierungen für jedes Interface
+ * (nach dem Init. aller grafischen Elemente):
+ *      1. setName("...") - auch im GUI Designer unter den Eigenschaften->name möglich
+ *      2. setSize(getPreferredSize().width, getPreferredSize().height);
+ *      3. initDecoration() - nur bei !isUndecorated
  */
 public abstract class UiWindow extends JPanel implements MouseListener, MouseMotionListener {
 
     public static final int borderWidth = 10;
+    public static final String ALCMD_SERVERBROWSER = "browser";     // ALCMD - ActionListener Command
+    public static final String ALCMD_OPTIONS = "options";
 
     protected Point location;
     protected GradientPaint gradLeft;
@@ -32,6 +37,7 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
 
     protected boolean isMoveable;
     protected boolean isMousePressed;
+    protected boolean isUndecorated;
 
     protected int tX = 0;
     protected int tY = 0;
@@ -39,12 +45,14 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
     public UiWindow() {
         super();
 
+        this.setVisible(false);
         this.setDoubleBuffered(true);
         this.setIgnoreRepaint(true);
 
         initDecoration();
         isMoveable = true;
         isMousePressed = false;
+        isUndecorated = false;
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -99,7 +107,8 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
             location = getLocation();
             g.translate(location.x, location.y);
             paint(g);
-            renderDecoration(g);
+            if (!isUndecorated)
+                renderDecoration(g);
             g.translate(-location.x, -location.y);
         }
     }
@@ -127,8 +136,18 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
         isMoveable = b;
     }
 
+    public boolean isUndecorated(){
+        return isUndecorated;
+    }
+
+    public void setUndecorated(boolean b){
+        isUndecorated = b;
+    }
+
     @Override
     public boolean isOptimizedDrawingEnabled() {
         return true;
     }
+
+    public abstract void addActionListener(ActionListener a);
 }

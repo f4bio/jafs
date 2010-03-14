@@ -6,6 +6,8 @@
 
 package client.ui;
 
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author Julian Sanio
@@ -15,8 +17,8 @@ public class MainMenu extends UiWindow {
     /** Creates new form MainMenu */
     public MainMenu() {
         initComponents();
-        initDecoration();
         setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
+        setUndecorated(true);
     }
 
     @SuppressWarnings("unchecked")
@@ -84,8 +86,6 @@ public class MainMenu extends UiWindow {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -93,5 +93,16 @@ public class MainMenu extends UiWindow {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void addActionListener(ActionListener a) {
+        jButton1.setActionCommand(UiWindow.ALCMD_SERVERBROWSER);
+        jButton1.addActionListener(a);
+        jButton2.addActionListener(a);
+        jButton3.setActionCommand(UiWindow.ALCMD_OPTIONS);
+        jButton3.addActionListener(a);
+        jButton4.addActionListener(a);
+        jButton5.addActionListener(a);
+    }
 
 }
