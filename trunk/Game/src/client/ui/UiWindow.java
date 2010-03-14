@@ -1,11 +1,13 @@
 package client.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import javax.swing.JPanel;
 
@@ -16,7 +18,7 @@ import javax.swing.JPanel;
  * setName(...) muss gesetzt werden (auch im GUI Designer unter den Eigenschaften möglich)!!!
  *
  */
-public abstract class UiWindow extends JPanel implements MouseListener, Runnable {
+public abstract class UiWindow extends JPanel implements MouseListener, MouseMotionListener {
 
     public static final int borderWidth = 10;
 
@@ -30,21 +32,22 @@ public abstract class UiWindow extends JPanel implements MouseListener, Runnable
 
     protected boolean isMoveable;
     protected boolean isMousePressed;
-    protected MouseEvent mouse = null;
-    protected Thread t;
+
+    protected int tX = 0;
+    protected int tY = 0;
 
     public UiWindow() {
         super();
 
-        this.setDoubleBuffered(false);
+        this.setDoubleBuffered(true);
         this.setIgnoreRepaint(true);
 
         initDecoration();
         isMoveable = true;
         isMousePressed = false;
+
         addMouseListener(this);
-        t = new Thread(this);
-        t.start();
+        addMouseMotionListener(this);
     }
 
     public void initDecoration(){
@@ -57,20 +60,15 @@ public abstract class UiWindow extends JPanel implements MouseListener, Runnable
         gradBottom = new GradientPaint(0, 0, from, 0, borderWidth, to, true);  
     }
 
-    public void run(){
-        while(t.isAlive()){
-            if (mouse != null && isMousePressed)
-                UiManager.changeLocation(getName(), mouse.getXOnScreen(), mouse.getYOnScreen()-50);
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException ex) {  }
-        }
-    }
-
     public void mouseClicked(MouseEvent e) {  }
 
     public void mousePressed(MouseEvent e) {
-        isMousePressed = true;
+        if(!UiManager.isOverlapped(e.getXOnScreen(), e.getYOnScreen(), this)) {
+            UiManager.setForeground(this);
+            isMousePressed = true;
+            tX = e.getX();
+            tY = e.getY();
+        }
     }
 
     public void mouseReleased(MouseEvent e) {
@@ -78,14 +76,26 @@ public abstract class UiWindow extends JPanel implements MouseListener, Runnable
     }
 
     public void mouseEntered(MouseEvent e) {
-        mouse = e;
+
     }
 
-    public void mouseExited(MouseEvent e) {  }
+    public void mouseExited(MouseEvent e) {
+    
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        if(isMousePressed && isMoveable) {
+            setLocation(e.getXOnScreen() - tX,
+                    e.getYOnScreen() - tY);
+        }
+    }
 
     public void render(Graphics2D g) {
         if(isVisible() && g != null) {
-            setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
             location = getLocation();
             g.translate(location.x, location.y);
             paint(g);
@@ -115,5 +125,10 @@ public abstract class UiWindow extends JPanel implements MouseListener, Runnable
 
     public void setMoveable(boolean b){
         isMoveable = b;
+    }
+
+    @Override
+    public boolean isOptimizedDrawingEnabled() {
+        return true;
     }
 }

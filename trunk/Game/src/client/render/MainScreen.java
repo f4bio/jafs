@@ -8,77 +8,88 @@ package client.render;
 import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
 import client.ui.UiManager;
-import java.awt.AWTException;
-import java.awt.BufferCapabilities;
-import java.awt.BufferCapabilities.FlipContents;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.ImageCapabilities;
-import java.awt.image.BufferStrategy;
+import java.awt.image.VolatileImage;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JWindow;
 
 /**
  *
  * @author miracle
  */
-public class MainScreen extends JWindow implements UpdateObject {
-    private BufferStrategy buffer;
+public  class MainScreen extends JWindow implements UpdateObject {
+    private VolatileImage buffer;
     private Dimension screenSize;
     private Viewport gamescene;
     private boolean init = true;
+    private JLayeredPane pane;
 
     public MainScreen(JFrame owner) {
         super(owner);
         this.setIgnoreRepaint(true);
         this.screenSize = this.getToolkit().getScreenSize();
-        this.setLayout(null);
         this.setSize(screenSize);
+        this.pane = new JLayeredPane();
+        this.setContentPane(pane);
+        this.getContentPane().setLayout(null);
+        
+        createBuffer();
+
         setVisible(true);
     }
 
-    public void update(UpdateLoop u) {
-        do {
-            if(init) {
-                ImageCapabilities img = new ImageCapabilities(true);
+    public void update(UpdateLoop a) {
+        renderOffscreen(a);
+        render(a);
+    }
 
-                try {
-                    this.createBufferStrategy(2, new BufferCapabilities(img, img, FlipContents.UNDEFINED));
-                } catch(AWTException e) {
-                    System.out.println("Unable to create buffer strategy!");
+    public void render(UpdateLoop u) {
+        Graphics2D g = null;
+        try {
+            g = (Graphics2D)getGraphics();
+            do {
+                int returnCode = buffer.validate(getGraphicsConfiguration());
+                if (returnCode == VolatileImage.IMAGE_RESTORED) {
+                    renderOffscreen(u);
+                } else if (returnCode == VolatileImage.IMAGE_INCOMPATIBLE) {
+                    createBuffer();
+                    renderOffscreen(u);
                 }
+                g.drawImage(buffer, 0, 0, this);
+            } while (buffer.contentsLost());
+        } catch(Exception e) {
 
-                this.buffer = this.getBufferStrategy();
+        } finally {
+            if(g != null)
+                g.dispose();
+        }
+    }
 
-                if(buffer != null)
-                    init = false;
+    public void renderOffscreen(UpdateLoop u) {
+        do {
+            if (buffer.validate(getGraphicsConfiguration()) ==
+                    VolatileImage.IMAGE_INCOMPATIBLE) {
+                createBuffer();
             }
-
-            Graphics2D g = (Graphics2D)buffer.getDrawGraphics();
+            Graphics2D g = buffer.createGraphics();
 
             clear(g);
 
             g.setColor(Color.white);
             g.drawString("speedfactor: " + u.getSpeedfactor(), 50, 50);
             g.drawString("current up/s: " + u.getCurrentUPS(), 50, 75);
-            g.drawString("backbuffer accelerated: " + buffer.getCapabilities().getBackBufferCapabilities().isAccelerated(), 50, 100);
-            g.drawString("frontbuffer accelerated: " + buffer.getCapabilities().getFrontBufferCapabilities().isAccelerated(), 50, 125);
-
-            if(gamescene != null) {
-                gamescene.renderScene();
-
-            } else {
-
-            }
+            g.drawString("buffer accelerated: " + buffer.getCapabilities().isAccelerated(), 50, 100);
 
             UiManager.renderAll(g);
+        } while (buffer.contentsLost());
+    }
 
-            buffer.show();
-            
-            g.dispose();
-        } while(buffer.contentsLost());
+    public void createBuffer() {
+        buffer = getGraphicsConfiguration().createCompatibleVolatileImage(screenSize.width, screenSize.height);
     }
 
     public void clear(Graphics g) {
