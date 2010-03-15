@@ -20,10 +20,11 @@ import javax.swing.JPanel;
  *      1. setName("...") - auch im GUI Designer unter den Eigenschaften->name möglich
  *      2. setSize(getPreferredSize().width, getPreferredSize().height);
  *      3. initDecoration() - nur bei !isUndecorated
+ * Es scheint, dass die decoration nur bei geraden Werten der Panelgröße korrekt gezeichnet wird.
  */
 public abstract class UiWindow extends JPanel implements MouseListener, MouseMotionListener {
 
-    public static final int borderWidth = 10;
+    public static final int borderWidth = 6;
     public static final String ALCMD_SERVERBROWSER = "browser";     // ALCMD - ActionListener Command
     public static final String ALCMD_OPTIONS = "options";
 
@@ -45,21 +46,21 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
     public UiWindow() {
         super();
 
-        this.setVisible(false);
-        this.setDoubleBuffered(true);
-        this.setIgnoreRepaint(true);
+        setVisible(false);
+        setDoubleBuffered(true);
+        setIgnoreRepaint(true);
 
-        initDecoration();
         isMoveable = true;
         isMousePressed = false;
         isUndecorated = false;
+        initDecoration();
 
         addMouseListener(this);
         addMouseMotionListener(this);
     }
 
     public void initDecoration(){
-        Color from = this.getBackground();
+        Color from = getBackground();
         Color to = new Color(from.getRed(), from.getGreen(), from.getBlue(), 0);
 
         gradLeft = new GradientPaint(0, 0, from, borderWidth, 0, to, true);
@@ -71,12 +72,10 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
     public void mouseClicked(MouseEvent e) {  }
 
     public void mousePressed(MouseEvent e) {
-        if(!UiManager.isOverlapped(e.getXOnScreen(), e.getYOnScreen(), this)) {
-            UiManager.setForeground(this);
-            isMousePressed = true;
-            tX = e.getX();
-            tY = e.getY();
-        }
+        UiManager.setForeground(this);
+        isMousePressed = true;
+        tX = e.getX();
+        tY = e.getY();
     }
 
     public void mouseReleased(MouseEvent e) {

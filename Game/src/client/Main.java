@@ -3,62 +3,77 @@ package client;
 import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.JFrame;
 
 /**
  *
  * @author miracle
  */
-public class Main implements ActionListener, KeyListener {
+public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     private static MainScreen screen;
-    private UiWindow main;
-    private UiWindow serverbowser;
-    private UiWindow options;
-    private WeaponSidebar wSidebar;
+    private static UiWindow uiMain;
+    private static UiWindow uiCreate;
+    private static Serverbrowser uiBrowser;
+    private static UiWindow uiOptions;
+    private static UiWindow uiCredits;
+    private static WeaponSidebar wSidebar;
 
-    public Main(){
+    public static void main(String[] args) {
+
+        UiActionListener aListener = new UiActionListener();
+        UiKeyListener kListener = new UiKeyListener();
+
         JFrame frm = new JFrame();
-        frm.addKeyListener(this);
+        frm.addKeyListener(kListener);
         frm.setVisible(true);
+
         screen = new MainScreen(frm);
 
-        // Ui
-        main = new MainMenu();
-        main.setLocation(10, 200);
-        main.addActionListener(this);
-        main.setVisible(true);
-        serverbowser = new Serverbrowser();
-        serverbowser.setLocation(60, 300);
-        serverbowser.addActionListener(this);
-        options = new Options();
-        options.setLocation(600, 400);
-        options.addActionListener(this);
+        // Interfaces
+        uiMain = new MainMenu();
+        uiMain.setLocation(10, 200);
+        uiMain.addActionListener(aListener);
+        uiMain.setMoveable(false);
+        uiMain.setVisible(true);
+        uiCreate = new CreateServer();
+        uiCreate.setLocation(200, 200);
+        uiCreate.addActionListener(aListener);
+        uiBrowser = new Serverbrowser();
+        uiBrowser.setLocation(200, 200);
+        uiBrowser.addActionListener(aListener);
+        uiOptions = new Options();
+        uiOptions.setLocation(200, 200);
+        uiOptions.addActionListener(aListener);
+        uiCredits = new Credits();
+        uiCredits.setLocation(screen.getWidth()/2 - uiCredits.getWidth()/2,
+                              screen.getHeight()/2 - uiCredits.getHeight()/2);
         wSidebar = new WeaponSidebar(300, 100);
-        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(), 100);
+        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(),
+                             screen.getHeight()-wSidebar.getHeight()-200);
         wSidebar.setVisible(true);
 
         // UiManager
         UiManager.init();
-        UiManager.addComponent(main);
-        UiManager.addComponent(serverbowser);
-        UiManager.addComponent(options);
+        UiManager.addComponent(uiMain);
+        UiManager.addComponent(uiCreate);
+        UiManager.addComponent(uiBrowser);
+        UiManager.addComponent(uiOptions);
+        UiManager.addComponent(uiCredits);
         UiManager.addComponent(wSidebar);
 
-        screen.getContentPane().add(main);
-        screen.getContentPane().add(serverbowser);
-        screen.getContentPane().add(options);
+        // MainScreen
+        screen.getContentPane().add(uiMain);
+        screen.getContentPane().add(uiCreate);
+        screen.getContentPane().add(uiBrowser);
+        screen.getContentPane().add(uiOptions);
+        screen.getContentPane().add(uiCredits);
         screen.getContentPane().add(wSidebar);
 
+        // UpdateLoop
         UpdateLoop loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
+        loop.addUpdateObject(wSidebar);
 
         /*Protocol.init();
         Network net = new Network();
@@ -69,38 +84,27 @@ public class Main implements ActionListener, KeyListener {
         return screen;
     }
 
-    // ActionListener
-    public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
-        // Serverbrowser
-        if(e.getActionCommand().equals(UiWindow.ALCMD_SERVERBROWSER)) {
-            serverbowser.setVisible(true);
-        }
-        // Options
-        else if(e.getActionCommand().equals(UiWindow.ALCMD_OPTIONS)) {
-            options.setVisible(true);
-        }
-        // Exit
-        else if(e.getActionCommand().equals("Beenden")) {
-            System.exit(0);
-        }
+    public static UiWindow getUiMainMenu() {
+        return uiMain;
     }
 
-    // KeyListener
-    public void keyTyped(KeyEvent e) {  }
-
-    public void keyPressed(KeyEvent e) {
-        System.out.println("Pressed "+e.getKeyChar());
-        if(e.getKeyCode() == KeyEvent.VK_A){
-            wSidebar.setAktiveWeapon(wSidebar.getAktiveWeapon()+1);
-        } else if(e.getKeyCode() == KeyEvent.VK_Q){
-            wSidebar.setAktiveWeapon(wSidebar.getAktiveWeapon()-1);
-        }
+    public static UiWindow getUiCreateServer() {
+        return uiCreate;
     }
 
-    public void keyReleased(KeyEvent e) {  }
+    public static Serverbrowser getUiServerbrowser() {
+        return uiBrowser;
+    }
 
-    public static void main(String[] args) {
-        new Main();
+    public static UiWindow getUiOptions() {
+        return uiOptions;
+    }
+
+    public static UiWindow getUiCredits() {
+        return uiCredits;
+    }
+
+    public static WeaponSidebar getWeaponSidebar() {
+        return wSidebar;
     }
 }

@@ -8,15 +8,17 @@ package client.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
- * @author Administrator
+ * @author Julian Sanio
  */
 public class Serverbrowser extends UiWindow implements ActionListener {
 
     /** Creates new form Serverbrowser */
     public Serverbrowser() {
+        sModel = new ServerbrowserTableModel();
         initComponents();
         jCheckBox1.addActionListener(this);
         jButton1.addActionListener(this);
@@ -30,53 +32,28 @@ public class Serverbrowser extends UiWindow implements ActionListener {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
-        setBackground(java.awt.SystemColor.controlHighlight);
-        setAlignmentX(0.0F);
-        setAlignmentY(0.0F);
         setName("Serverbrowser"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(520, 280));
+        setPreferredSize(new java.awt.Dimension(520, 324));
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setBackground(java.awt.SystemColor.controlHighlight);
-        jTable1.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Server", "Map", "Spieler", "Ping"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        jTable1.setFont(new java.awt.Font("Consolas", 0, 11));
+        jTable1.setModel(sModel);
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTable1.setGridColor(new java.awt.Color(204, 204, 204));
         jTable1.setMaximumSize(new java.awt.Dimension(300, 256));
-        jTable1.setName("Serverbrowser"); // NOI18N
+        jTable1.setName(""); // NOI18N
         jTable1.setRowMargin(0);
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jTable1.setSelectionForeground(new java.awt.Color(0, 0, 0));
@@ -85,25 +62,25 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Aktualisieren");
-        jButton1.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jTextField2.setBackground(new java.awt.Color(236, 233, 216));
+        jTextField2.setEnabled(false);
+        jTextField2.setSelectionColor(new java.awt.Color(204, 204, 204));
+
+        jCheckBox1.setText("Filter");
+        jCheckBox1.setEnabled(false);
 
         jButton2.setText("Verbinden");
         jButton2.setMargin(new java.awt.Insets(1, 14, 1, 14));
 
-        jCheckBox1.setBackground(java.awt.SystemColor.controlHighlight);
-        jCheckBox1.setText("Filter");
+        jButton1.setText("Aktualisieren");
+        jButton1.setMargin(new java.awt.Insets(1, 14, 1, 14));
 
-        jLabel1.setText("Max Ping");
-        jLabel1.setEnabled(false);
-
-        jTextField1.setBackground(java.awt.SystemColor.controlHighlight);
+        jTextField1.setBackground(new java.awt.Color(236, 233, 216));
         jTextField1.setEnabled(false);
         jTextField1.setSelectionColor(new java.awt.Color(204, 204, 204));
 
-        jTextField2.setBackground(java.awt.SystemColor.controlHighlight);
-        jTextField2.setEnabled(false);
-        jTextField2.setSelectionColor(new java.awt.Color(204, 204, 204));
+        jLabel1.setText("Max Ping");
+        jLabel1.setEnabled(false);
 
         jLabel2.setText("Map");
         jLabel2.setEnabled(false);
@@ -121,18 +98,18 @@ public class Serverbrowser extends UiWindow implements ActionListener {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
                                         .addGap(27, 27, 27))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                                .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                                 .addGap(75, 75, 75)))
-                        .addGap(243, 243, 243)
+                        .addGap(246, 246, 246)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1))))
@@ -140,22 +117,26 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCheckBox1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -169,48 +150,19 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+    private ServerbrowserTableModel sModel;
 
-    public void setServerlist(String[][] list){
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            list,
-            new String [] {
-                "Server", "Map", "Spieler", "Ping"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+    public void setServerlist(String[][] list) {
+        sModel.setData(list);
+        jTable1.setModel(sModel);
+        jScrollPane1.setViewportView(jTable1);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == jCheckBox1){
-            if(jCheckBox1.isSelected()){
-                jLabel1.setEnabled(true);
-                jLabel2.setEnabled(true);
-                jTextField1.setEnabled(true);
-                jTextField2.setEnabled(true);
-            } else {
-                jLabel1.setEnabled(false);
-                jLabel2.setEnabled(false);
-                jTextField1.setEnabled(false);
-                jTextField2.setEnabled(false);
-            }
-        } else if (e.getSource() == jButton1) {
-            String[][] s = {{"test", "test", "test", "test"}};
-            setServerlist(s);
-        }
+    public String getSelectedServer(){
+        if (jTable1.getSelectedRow() >= 0)
+            return (String) sModel.getValueAt(jTable1.getSelectedRow(), 0);
+        else
+            return null;
     }
 
     @Override
@@ -219,4 +171,49 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jButton2.addActionListener(a);
     }
 
+    public void actionPerformed(ActionEvent e) {
+        if(jCheckBox1.isSelected()){
+            jLabel1.setEnabled(true);
+            jLabel2.setEnabled(true);
+            jTextField1.setEnabled(true);
+            jTextField2.setEnabled(true);
+        } else {
+            jLabel1.setEnabled(false);
+            jLabel2.setEnabled(false);
+            jTextField1.setEnabled(false);
+            jTextField2.setEnabled(false);
+        }
+    }
+
+    // TableModel
+    public class ServerbrowserTableModel extends AbstractTableModel {
+        private String[] columnNames = {"Server", "Map", "Spieler", "Ping"};
+        private Object[][] data = new Object [][] {  };
+
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        public int getRowCount() {
+            return data.length;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            return columnNames[col];
+        }
+
+        public Object getValueAt(int row, int col) {
+            return data[row][col];
+        }
+
+        @Override
+        public Class getColumnClass(int c) {
+            return getValueAt(0, c).getClass();
+        }
+
+        public void setData(Object[][] data) {
+            this.data = data;
+        }
+    }
 }
