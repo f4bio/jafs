@@ -1,6 +1,7 @@
 package client.ui;
 
 import client.Main;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.Vector;
@@ -36,24 +37,6 @@ public class UiManager {
 
     private static void renderComponent(UiWindow cmp, Graphics2D g) {
         cmp.render(g);
-    }
-
-    public static boolean isOverlapped(int x, int y, UiWindow c) {
-        for(int i=content.size()-1; i>=0; --i) {
-            UiWindow u = content.get(i);
-
-            if(u.equals(c)) {
-                return false;
-            }
-
-            Point p = u.getLocation();
-
-            if(x >= p.x && x <= p.x + u.getSize().width
-                    && y >= p.y && y <= p.y + u.getSize().height) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void setForeground(UiWindow u) {

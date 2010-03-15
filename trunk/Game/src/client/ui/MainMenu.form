@@ -4,7 +4,7 @@
   <Properties>
     <Property name="name" type="java.lang.String" value="MainMenu" noResource="true"/>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[150, 200]"/>
+      <Dimension value="[150, 190]"/>
     </Property>
   </Properties>
   <AuxValues>
@@ -25,11 +25,11 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jButton1" alignment="1" pref="130" max="32767" attributes="1"/>
+                  <Component id="jButton2" alignment="1" pref="130" max="32767" attributes="1"/>
                   <Component id="jButton5" alignment="0" pref="130" max="32767" attributes="1"/>
                   <Component id="jButton4" alignment="0" pref="130" max="32767" attributes="1"/>
                   <Component id="jButton3" alignment="0" pref="130" max="32767" attributes="1"/>
-                  <Component id="jButton1" alignment="1" pref="130" max="32767" attributes="1"/>
-                  <Component id="jButton2" alignment="0" pref="130" max="32767" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -42,13 +42,13 @@
               <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jButton3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButton4" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jButton5" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="50" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,13 +64,16 @@
           <Dimension value="[111, 23]"/>
         </Property>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[111, 23]"/>
+          <Dimension value="[111, 28]"/>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton2">
       <Properties>
         <Property name="text" type="java.lang.String" value="Server erstellen"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[109, 28]"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton3">

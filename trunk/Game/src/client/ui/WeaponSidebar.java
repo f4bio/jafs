@@ -1,5 +1,7 @@
 package client.ui;
 
+import client.anim.UpdateLoop;
+import client.anim.UpdateObject;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
@@ -12,7 +14,7 @@ import javax.imageio.ImageIO;
  *
  * @author Julian Sanio
  */
-public class WeaponSidebar extends UiWindow implements Runnable {
+public class WeaponSidebar extends UiWindow implements UpdateObject {
 
     private BufferedImage[] img_weapon;
     private int height;
@@ -27,7 +29,6 @@ public class WeaponSidebar extends UiWindow implements Runnable {
     private int focus_y2;
     private int focus_border;
     private Color focus_color;
-    private Thread t;
 
     public WeaponSidebar(int width, int focus_height){
         URL[] url = new URL[3];
@@ -52,15 +53,15 @@ public class WeaponSidebar extends UiWindow implements Runnable {
             img_weapon[i] = new BufferedImage(width, focus_height, BufferedImage.TYPE_INT_ARGB);
             try {
                 img_weapon[i] = ImageIO.read(url[i]);
-            } catch (IOException e) {  }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        t = new Thread(this);
-        t.start();
         setSize(this.width, height);
         setUndecorated(true);
         setMoveable(false);
-        setVisible(false);
+        setOpaque(true);
     }
 
     @Override
@@ -88,21 +89,14 @@ public class WeaponSidebar extends UiWindow implements Runnable {
         return aktiv_weapon;
     }
 
-    public void run() {
-        while(true){
-            if(slot_position < aktiv_weapon*focus_height) {
-                slot_position++;
-                repaint();
-            } else if(slot_position > aktiv_weapon*focus_height) {
-                slot_position--;
-                repaint();
-            }
-            try {
-                Thread.sleep(2);
-            } catch (InterruptedException ex) {  }
-        }
-    }
-
     @Override
     public void addActionListener(ActionListener a) {  }
+
+    public void update(UpdateLoop u) {
+        if(slot_position < aktiv_weapon*focus_height) {
+            slot_position += 10;
+        } else if(slot_position > aktiv_weapon*focus_height) {
+            slot_position -= 10;
+        }
+    }
 }
