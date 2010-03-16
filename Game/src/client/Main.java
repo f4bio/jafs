@@ -25,7 +25,7 @@ public class Main {
         UiKeyListener kListener = new UiKeyListener();
 
         JFrame frm = new JFrame();
-        frm.addKeyListener(kListener);
+//        frm.addKeyListener(kListener);
         frm.setVisible(true);
 
         screen = new MainScreen(frm);
@@ -48,10 +48,10 @@ public class Main {
         uiCredits = new Credits();
         uiCredits.setLocation(screen.getWidth()/2 - uiCredits.getWidth()/2,
                               screen.getHeight()/2 - uiCredits.getHeight()/2);
-        wSidebar = new WeaponSidebar(300, 100);
-        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(),
-                             screen.getHeight()-wSidebar.getHeight()-200);
-        wSidebar.setVisible(true);
+//        wSidebar = new WeaponSidebar(300, 100);
+//        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(),
+//                             screen.getHeight()-wSidebar.getHeight()-200);
+//        wSidebar.setVisible(true);
 
         // UiManager
         UiManager.init();
@@ -60,7 +60,7 @@ public class Main {
         UiManager.addComponent(uiBrowser);
         UiManager.addComponent(uiOptions);
         UiManager.addComponent(uiCredits);
-        UiManager.addComponent(wSidebar);
+//        UiManager.addComponent(wSidebar);
 
         // MainScreen
         screen.getContentPane().add(uiMain);
@@ -68,12 +68,12 @@ public class Main {
         screen.getContentPane().add(uiBrowser);
         screen.getContentPane().add(uiOptions);
         screen.getContentPane().add(uiCredits);
-        screen.getContentPane().add(wSidebar);
+//        screen.getContentPane().add(wSidebar);
 
         // UpdateLoop
         UpdateLoop loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
-        loop.addUpdateObject(wSidebar);
+//        loop.addUpdateObject(wSidebar);
 
         /*Protocol.init();
         Network net = new Network();

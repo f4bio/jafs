@@ -25,8 +25,6 @@ import javax.swing.JPanel;
 public abstract class UiWindow extends JPanel implements MouseListener, MouseMotionListener {
 
     public static final int borderWidth = 6;
-    public static final String ALCMD_SERVERBROWSER = "browser";     // ALCMD - ActionListener Command
-    public static final String ALCMD_OPTIONS = "options";
 
     protected Point location;
     protected GradientPaint gradLeft;
