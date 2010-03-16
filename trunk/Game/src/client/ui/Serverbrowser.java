@@ -62,7 +62,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
-        jTextField2.setBackground(new java.awt.Color(236, 233, 216));
+        jTextField2.setBackground(new java.awt.Color(240, 240, 240));
         jTextField2.setEnabled(false);
         jTextField2.setSelectionColor(new java.awt.Color(204, 204, 204));
 
@@ -75,7 +75,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jButton1.setText("Aktualisieren");
         jButton1.setMargin(new java.awt.Insets(1, 14, 1, 14));
 
-        jTextField1.setBackground(new java.awt.Color(236, 233, 216));
+        jTextField1.setBackground(new java.awt.Color(240, 240, 240));
         jTextField1.setEnabled(false);
         jTextField1.setSelectionColor(new java.awt.Color(204, 204, 204));
 
@@ -119,7 +119,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -167,7 +167,9 @@ public class Serverbrowser extends UiWindow implements ActionListener {
 
     @Override
     public void addActionListener(ActionListener a) {
+        jButton1.setActionCommand(UiActionListener.CMD_REFRESH_SERVERBROWSER);
         jButton1.addActionListener(a);
+        jButton2.setActionCommand(UiActionListener.CMD_CONNECT);
         jButton2.addActionListener(a);
     }
 

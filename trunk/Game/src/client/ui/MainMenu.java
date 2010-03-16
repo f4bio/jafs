@@ -97,12 +97,15 @@ public class MainMenu extends UiWindow {
 
     @Override
     public void addActionListener(ActionListener a) {
-        jButton1.setActionCommand(UiWindow.ALCMD_SERVERBROWSER);
+        jButton1.setActionCommand(UiActionListener.CMD_TOGGLE_SERVERBROWSER);
         jButton1.addActionListener(a);
+        jButton2.setActionCommand(UiActionListener.CMD_TOGGLE_CREATESERVER);
         jButton2.addActionListener(a);
-        jButton3.setActionCommand(UiWindow.ALCMD_OPTIONS);
+        jButton3.setActionCommand(UiActionListener.CMD_TOGGLE_OPTIONS);
         jButton3.addActionListener(a);
+        jButton4.setActionCommand(UiActionListener.CMD_TOGGLE_CREDITS);
         jButton4.addActionListener(a);
+        jButton5.setActionCommand(UiActionListener.CMD_EXIT);
         jButton5.addActionListener(a);
     }
 

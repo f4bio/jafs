@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client.anim;
 
 import java.util.Vector;
@@ -31,7 +26,8 @@ public class UpdateLoop implements Runnable{
 
     private void update() {
         for(UpdateObject uo : list) {
-            uo.update(this);
+            if(uo != null)
+                uo.update(this);
         }
     }
 
