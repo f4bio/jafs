@@ -46,7 +46,7 @@ public class Main {
 
     public static void main(String[] args) {
         net = new Network();
-        net.listen();
+        net.listen(Network.masterPort);
         handler = new ProtocolHandler(net);
         Protocol.init();
 

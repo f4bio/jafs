@@ -45,7 +45,7 @@ public class Protocol {
     }
 
     public static String buildPacket(final String command, Object... o) {
-        if(getArgType(command)[0] == argNone)
+        if(cmd.containsKey(command) && getArgType(command)[0] == argNone)
             return command;
 
         if(!cmd.containsKey(command) || cmd.get(command).length != o.length)
