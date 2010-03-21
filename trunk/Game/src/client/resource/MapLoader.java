@@ -16,5 +16,13 @@ public class MapLoader {
     private static CMap map;
     private static CArchive archive;
 
+    public MapLoader() {
+        map = null;
+        archive = null;
+    }
 
+    public boolean load(String map) {
+
+        return true;
+    }
 }

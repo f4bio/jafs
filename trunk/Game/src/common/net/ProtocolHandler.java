@@ -21,7 +21,7 @@ public abstract class ProtocolHandler implements Runnable {
     public ProtocolHandler(Network net) {
         this.net = net;
         thread = new Thread(this);
-        thread.setDaemon(true);
+        //thread.setDaemon(true);
         thread.start();
     }
 
@@ -58,28 +58,34 @@ public abstract class ProtocolHandler implements Runnable {
 
             for(int i=0; i<type.length; ++i) {
                 try {
-                    sPacket[i+1] = sPacket[i+1].trim();
                     switch(type[i]) {
                         case Protocol.argByte:
                             param[i] = Byte.parseByte(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argShort:
                             param[i] = Short.parseShort(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argInt:
                             param[i] = Integer.parseInt(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argLong:
                             param[i] = Long.parseLong(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argFloat:
                             param[i] = Float.parseFloat(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argDouble:
                             param[i] = Double.parseDouble(sPacket[i+1]);
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argString:
                             param[i] = sPacket[i+1];
+                            sig[i] = param[i].getClass();
                             break;
                         case Protocol.argNone:
                             sig = new Class[1];
@@ -88,8 +94,6 @@ public abstract class ProtocolHandler implements Runnable {
 
                         default:
                     }
-
-                    sig[i] = param[i].getClass();
 
                 } catch(Exception e) {
                     e.printStackTrace();

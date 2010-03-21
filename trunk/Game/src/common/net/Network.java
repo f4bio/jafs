@@ -187,9 +187,9 @@ public class Network {
         connect(masterHost, masterPort);
     }
 
-    public void listen() {
+    public void listen(int port) {
         try {
-            socket = new DatagramSocket(masterPort);
+            socket = new DatagramSocket(port);
             nIn = new NetworkReader();
             nOut = new NetworkWriter();
         } catch(SocketException e) {
