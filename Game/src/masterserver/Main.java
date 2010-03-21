@@ -8,9 +8,10 @@ package masterserver;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.Server;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 /**
  *
@@ -22,14 +23,13 @@ public class Main {
 
     private static Network net;
     private static ProtocolHandler handler;
-    private static Vector<Server> serverlist = new Vector<Server>();
+    private static ArrayList<Server> serverlist = new ArrayList<Server>();
 
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             int failures;
 
-            for(int i=0; i<serverlist.size(); ++i) {
-                Server cur = serverlist.get(i);
+            for(Server cur : serverlist) {
                 cur.increasePingFailureCnt();
                 failures = cur.getPingFailureCnt();
 
@@ -38,7 +38,7 @@ public class Main {
                     continue;
                 }
                 
-                net.send(Protocol.buildPacket("master_server_ping", new Object[0]), cur.getAddress());
+                net.send(cur.getAddress(), Protocol.master_server_ping, new Object[0]);
             }
         }
     };
@@ -54,14 +54,13 @@ public class Main {
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
     }
 
-    public static Server addServer(String host, Integer port) {
-        for(int i=0; i<serverlist.size(); ++i) {
-            Server cur = serverlist.get(i);
-            if(cur.getHost().equals(host) && cur.getPort() == port)
+    public static Server addServer(InetSocketAddress adr) {
+        for(Server server : serverlist) {
+            if(server.getAddress().equals(adr))
                 return null;
         }
 
-        Server serv = new Server(host, port);
+        Server serv = new Server(adr);
         serverlist.add(serv);
 
         System.out.println("Server " + serv.getHost() + ":" + serv.getPort() + " listed." );
@@ -76,9 +75,7 @@ public class Main {
     }
 
     public static Server getServer(String host, int port) {
-        for(int i=0; i<serverlist.size(); ++i) {
-            Server cur = serverlist.get(i);
-
+        for(Server cur : serverlist) {
             if(cur.getHost().equals(host) && cur.getPort() == port)
                 return cur;
         }
@@ -86,23 +83,28 @@ public class Main {
         return null;
     }
 
-    public static String getServerlist() {
-        String list = "";
-        String seperator = " ";
-        Server current = null;
-
-        for(int i=0; i<serverlist.size(); ++i) {
-            current = serverlist.get(i);
-            list += current.getHost() + ":" + current.getPort();
-            if(i < serverlist.size() - 1)
-                list += seperator;
+    public static Server getServer(InetSocketAddress adr) {
+        for(Server cur : serverlist) {
+            if(cur.getAddress().equals(adr))
+                return cur;
         }
 
-        return list;
+        return null;
     }
 
-    public static void decreasePingFailures(String server, int port) {
-        Server serv = getServer(server, port);
+    public static String[] getServerlist() {
+        String[] srv = new String[serverlist.size()];
+        int i = 0;
+        for(Server current : serverlist) {
+            srv[i] = current.getHost() + ":" + current.getPort();
+            i++;
+        }
+
+        return srv;
+    }
+
+    public static void decreasePingFailures(InetSocketAddress adr) {
+        Server serv = getServer(adr);
 
         if(serv != null) {
             serv.decreasePingFailureCnt();

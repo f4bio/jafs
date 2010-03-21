@@ -96,39 +96,48 @@ public class Network {
         connected = false;
     }
 
-    public void send(String packet) {
+    public boolean send(final String cmd, Object... o) {
+        String packet = Protocol.buildPacket(cmd, o);
+
+        if(packet == null)
+            return false;
+
         DatagramPacket p = null;
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), dest);
             outQueue.add(p);
         } catch(SocketException e) {
-
+            return false;
         }
+
+        return true;
     }
 
-    public void send(String packet, InetSocketAddress destination) {
-        if(destination == null)
-             return;
+    public boolean send(InetSocketAddress destination, final String cmd, Object... o) {
+        String packet = Protocol.buildPacket(cmd, o);
+
+        if(destination == null || packet == null)
+             return false;
 
         DatagramPacket p = null;
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), destination);
             outQueue.add(p);
         } catch(SocketException e) {
-
+            return false;
         }
+
+        return true;
     }
 
-    public void send(String packet, String host, int port) {
+    public boolean send(String host, int port, final String cmd, Object... o) {
         InetSocketAddress destination = new InetSocketAddress(host, port);
-        send(packet, destination);
+        return send(destination, cmd, o);
     }
    
-    public String getPacket() {
+    public DatagramPacket getPacket() {
         DatagramPacket p = inQueue.poll();
-        if(p != null)
-            return new String(p.getData());
-        return null;
+        return p;
     }
    
     public void addTestPacket(String packet) {

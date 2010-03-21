@@ -8,6 +8,7 @@ package masterserver;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.Server;
+import java.net.InetSocketAddress;
 
 /**
  *
@@ -18,23 +19,25 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         super(net);
     }
 
-    public void server_master_auth(String host, Integer port) {
-        Server added = Main.addServer(host, port);
-        String result;
+    public void s_m_auth(InetSocketAddress adr) {
+        Server added = Main.addServer(adr);
 
         if(added != null)
-            result = "success";
+            net.send(adr, Protocol.master_server_auth_success, new Object[0]);
         else
-            result = "failure";
-
-        net.send(Protocol.buildPacket("master_server_auth_" + result, new Object[0]), added.getAddress());
+            net.send(adr, Protocol.master_server_auth_failure, new Object[0]);
     }
 
-    public void server_master_pong(String host, Integer port) {
-        Main.decreasePingFailures(host, port);
+    public void s_m_pong(InetSocketAddress adr) {
+        Main.decreasePingFailures(adr);
     }
 
-    public void client_master_listrequest(String host, Integer port) {
-        net.send(Protocol.buildPacket("master_client_list", Main.getServerlist()), host, port);
+    public void c_m_listrequest(InetSocketAddress adr) {
+        String[] list = Main.getServerlist();
+        net.send(adr, Protocol.master_client_newlist, new Object[0]);
+        for(String i : list) {
+            net.send(adr, Protocol.master_client_listentry, i);
+        }
+        net.send(adr, Protocol.master_client_endlist, new Object[0]);
     }
 }

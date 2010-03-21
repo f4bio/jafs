@@ -7,6 +7,8 @@ package common.net;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.DatagramPacket;
+import java.net.InetSocketAddress;
 
 /**
  *
@@ -32,23 +34,26 @@ public abstract class ProtocolHandler implements Runnable {
     }
 
     public void run() {
+        DatagramPacket dPacket;
+        InetSocketAddress dAddress;
         while(true) {
-            String packet = net.getPacket();
+            dPacket = net.getPacket();
 
-            if(packet == null) {
+            if(dPacket == null) {
                 sleep();
                 continue;
             }
 
-            String[] sPacket = packet.split(Protocol.argSeperator);
+            String[] sPacket = new String(dPacket.getData(), 0, dPacket.getLength()).split(Protocol.argSeperator);
+            dAddress = (InetSocketAddress)dPacket.getSocketAddress();
 
             if(!Protocol.containsCmd(sPacket[0])) {
                 sleep();
                 continue;
             }
 
-            Object[] param = new Object[Protocol.getArgSize(sPacket[0])];
-            Class[] sig = new Class[param.length];
+            Object[] param = new Object[Protocol.getArgSize(sPacket[0]) + 1];
+            Class[] sig = new Class[param.length + 1];
             int[] type = Protocol.getArgType(sPacket[0]);
 
             for(int i=0; i<type.length; ++i) {
@@ -77,8 +82,8 @@ public abstract class ProtocolHandler implements Runnable {
                             param[i] = sPacket[i+1];
                             break;
                         case Protocol.argNone:
-                            sig = new Class[0];
-                            param = new Object[0];
+                            sig = new Class[1];
+                            param = new Object[1];
                             break;
 
                         default:
@@ -90,6 +95,9 @@ public abstract class ProtocolHandler implements Runnable {
                     e.printStackTrace();
                 }
             }
+
+            param[param.length - 1] = dAddress;
+            sig[sig.length - 1] = dAddress.getClass();
 
             Method method = null;
             try {

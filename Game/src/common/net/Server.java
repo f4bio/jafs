@@ -6,6 +6,7 @@
 package common.net;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 
 /**
  *
@@ -27,6 +28,13 @@ public class Server {
         this.port = port;
         pingFailureCnt = 0;
         address = new InetSocketAddress(host, port);
+    }
+
+    public Server(InetSocketAddress adr) {
+        this.host = adr.getHostName();
+        this.port = adr.getPort();
+        pingFailureCnt = 0;
+        address = adr;
     }
 
     public String getHost() {

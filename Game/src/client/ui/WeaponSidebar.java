@@ -59,6 +59,7 @@ public class WeaponSidebar extends UiWindow implements UpdateObject {
         }
 
         setBackground(new Color(0, 0, 0, 128));
+        setOpaque(true);
         setSize(this.width, height);
         setUndecorated(true);
         setMoveable(false);
