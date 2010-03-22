@@ -19,7 +19,7 @@ import java.util.TimerTask;
  */
 public class Main {
     public static int maxPingFailures = 2;
-    public static final int pingRefreshInterval = 5000;
+    public static final int pingRefreshInterval = 10000;
 
     private static Network net;
     private static ProtocolHandler handler;
@@ -109,5 +109,8 @@ public class Main {
         if(serv != null) {
             serv.decreasePingFailureCnt();
         }
+    }
+    public static int serverCount(){
+        return serverlist.size();
     }
 }

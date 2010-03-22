@@ -21,7 +21,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_m_auth(InetSocketAddress adr) {
         Server added = Main.addServer(adr);
-
         if(added != null)
             net.send(adr, Protocol.master_server_auth_success, new Object[0]);
         else
@@ -30,6 +29,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_m_pong(InetSocketAddress adr) {
         Main.decreasePingFailures(adr);
+    }
+
+    public void s_m_servercount(InetSocketAddress adr){
+        net.send(adr, Protocol.master_server_servercount, Main.serverCount());
     }
 
     public void c_m_listrequest(InetSocketAddress adr) {

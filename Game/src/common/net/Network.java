@@ -16,12 +16,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String masterHost = "x.org";
-    public static final int masterPort = 31338;
+    public static final String host = "x.org";
+    public static final int masterPort = 30000;
 
     private InetSocketAddress dest;
 
     private static final int packetLength = 256;
+    private static int port;
 
     private class NetworkReader implements Runnable {
         private Thread thread;
@@ -184,11 +185,18 @@ public class Network {
     }
 
     public void connect() {
-        connect(masterHost, masterPort);
+        connect(host, masterPort);
     }
 
+    public int getPort(){
+        return port;
+    }
+    public String getHost(){
+        return host;
+    }
     public void listen(int port) {
         try {
+            this.port = port;
             socket = new DatagramSocket(port);
             nIn = new NetworkReader();
             nOut = new NetworkWriter();
