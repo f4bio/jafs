@@ -30,6 +30,8 @@ public class Chat extends Thread{
                         net.send("localhost", 40000, Protocol.client_server_logoff);
                         running = false;
                     }
+                }else if(input.equals(";")){
+                    System.out.println("illegal character");
                 }else
                     net.send("localhost", 40000, Protocol.client_server_chat_all, input);
             }catch(Exception e){

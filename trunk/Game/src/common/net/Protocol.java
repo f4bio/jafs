@@ -106,7 +106,7 @@ public class Protocol {
         //----- Server commands
         registerCmd(server_master_pong, argNone);
         registerCmd(server_master_auth, argNone);
-        registerCmd(server_master_servercount, argInt);
+        registerCmd(server_master_servercount, argNone);
         registerCmd(server_client_clientid, argInt);
         registerCmd(server_client_clientcount, argInt);
         registerCmd(server_client_ping, argNone);
