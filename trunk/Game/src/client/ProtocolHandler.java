@@ -28,13 +28,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("yout id is: "+id);
     }
     public void m_c_newlist(InetSocketAddress adr) {
-        System.out.println("Not yet implemented");
+        System.out.println("ServerList:");
     }
-    public void m_c_listentry(InetSocketAddress adr) {
-        System.out.println("Not yet implemented");
+    public void m_c_listentry(String server, InetSocketAddress adr) {
+        Main.serverlist.add(server);
     }
     public void m_c_endlist(InetSocketAddress adr) {
-        System.out.println("Not yet implemented");
+        Main.completeServerlist(Main.serverlist);
+        System.out.println(":ServerList");
     }
     public void s_c_auth_success(InetSocketAddress adr) {
         System.out.println("client succesfully listed.");
