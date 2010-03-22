@@ -29,6 +29,8 @@ public class Chat extends Thread{
                     if(input.startsWith("/logoff")){
                         net.send("localhost", 40000, Protocol.client_server_logoff);
                         running = false;
+                    }else if(input.startsWith("/serverlist")){
+                        net.send("localhost", 30000, Protocol.client_master_listrequest);
                     }
                 }else if(input.equals(";")){
                     System.out.println("illegal character");
@@ -43,4 +45,5 @@ public class Chat extends Thread{
     public Chat(common.net.Network net) {
         this.net = net;
     }
+
 }

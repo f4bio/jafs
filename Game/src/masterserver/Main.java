@@ -59,13 +59,12 @@ public class Main {
             if(server.getAddress().equals(adr))
                 return null;
         }
-
-        Server serv = new Server(adr);
-        serverlist.add(serv);
-
-        System.out.println("Server " + serv.getHost() + ":" + serv.getPort() + " listed." );
+        Server server = new Server(adr);
+        server.setServerId(serverlist.size());
+        serverlist.add(server);
+        System.out.println("Server " + server.getHost() + ":" + server.getPort() + " listed." );
         
-        return serv;
+        return server;
     }
 
     public static void removeServer(Server server) {

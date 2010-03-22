@@ -22,6 +22,7 @@ public class Server {
     private int latency;
     private InetSocketAddress address;
     private int pingFailureCnt;
+    private int serverId;
 
     public Server(String host, int port) {
         this.host = host;
@@ -63,6 +64,18 @@ public class Server {
 
     public int getPingFailureCnt() {
         return pingFailureCnt;
+    }
+    public void setServerId(int id){
+        this.serverId = id;
+    }
+    public int getServerId(){
+        return serverId;
+    }
+    public void setMap(String map){
+       this.map = map;
+    }
+    public String getMap(){
+        return map;
     }
 
 }

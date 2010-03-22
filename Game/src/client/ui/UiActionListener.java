@@ -35,9 +35,9 @@ public class UiActionListener implements ActionListener {
         }
         // Serverliste aktualisieren
         else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
-            String[][] s = {{"127.0.0.1", "dust", "0/16", "500"},   // !!! SERVERLIST INPUT?
-                            {"192.0.0.1", "italy", "2/16", "80"},
-                            {"162.0.0.1", "aztec", "5/16", "63"}};
+            String[][] s = {{"127.0.0.1:40000", "dust", "0/16", "500"},   // !!! SERVERLIST INPUT?
+                            {"192.0.0.1:40001", "italy", "2/16", "80"},
+                            {"162.0.0.1:40002", "aztec", "5/16", "63"}};
             Main_OLD.getUiServerbrowser().setServerlist(s);
         }
         // Mit Server verbinden
