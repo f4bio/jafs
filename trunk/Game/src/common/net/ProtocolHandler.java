@@ -53,7 +53,7 @@ public abstract class ProtocolHandler implements Runnable {
             }
 
             Object[] param = new Object[Protocol.getArgSize(sPacket[0]) + 1];
-            Class[] sig = new Class[param.length + 1];
+            Class[] sig = new Class[param.length];
             int[] type = Protocol.getArgType(sPacket[0]);
 
             for(int i=0; i<type.length; ++i) {
