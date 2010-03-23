@@ -9,7 +9,7 @@
 
 === Alex: ===
 
-* TIMER-TASK EXCEPTION! (when server leaves MS) (added by fabio)
+* ----
 
 === Fabio: ===
 
