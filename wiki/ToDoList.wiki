@@ -9,6 +9,7 @@
 
 === Alex: ===
 
+* TIMER-TASK EXCEPTION! (when server leaves MS)
 * T5 werden ;D ! gl! (added by fabio)
 
 === Fabio: ===
