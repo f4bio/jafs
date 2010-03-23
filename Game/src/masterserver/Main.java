@@ -28,16 +28,16 @@ public class Main {
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             int failures;
-            for(Server cur : serverlist) {
-                cur.increasePingFailureCnt();
-                failures = cur.getPingFailureCnt();
+            for(int i=0;i<serverlist.size();i++) {
+                serverlist.get(i).increasePingFailureCnt();
+                failures = serverlist.get(i).getPingFailureCnt();
 
                 if(failures >= maxPingFailures) {
-                    removeServer(cur);
+                    removeServer(serverlist.get(i));
                     continue;
                 }
 
-                net.send(cur.getAddress(), Protocol.master_server_ping, new Object[0]);
+                net.send(serverlist.get(i).getAddress(), Protocol.master_server_ping, new Object[0]);
             }
         }
     };
