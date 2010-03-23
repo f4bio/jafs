@@ -11,8 +11,6 @@
 
 * TIMER-TASK EXCEPTION! (when server leaves MS) (added by fabio)
 
-* T5 werden ;D ! gl! (added by fabio)
-
 === Fabio: ===
 
 * maaaaaaaany :D
