@@ -32,7 +32,7 @@ public class Main {
         net.listen(40000);
         net.send("localhost", 30000, Protocol.server_master_servercount);
         net.send("localhost", 30000, Protocol.server_master_auth, new Object[0]);
-        System.out.println("Connected on MasterServer "+net.getHost()+":"+net.getPort()+"! Server-iD:"+serverId+"");
+        System.out.println("Connected on MasterServer "+net.getHost()+":"+net.masterPort+"! Server-iD:"+serverId+"");
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
@@ -100,6 +100,32 @@ public class Main {
         for(Client client: clientlist)
             if(client.getAddress().equals(adr))
                 return client.getId();
+        return -1;
+    }
+    public static void broadcast(String msg, InetSocketAddress adr){
+        for(Client client: clientlist)
+            net.send(client.getAddress(), Protocol.server_client_chat, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+"): "+msg);
+    }
+    public static void broadcast_team(String msg, InetSocketAddress adr){
+        int teamId = getClient(adr).getTeamId();
+        for(Client client: clientlist)
+            if(client.getTeamId()==teamId)
+                net.send(client.getAddress(), Protocol.server_client_chat, "(TEAM-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+") @ Team-"+teamId+": "+msg);
+    }
+    public static int getClientTeamId(InetSocketAddress adr){
+        for(Client client: clientlist)
+            if(client.getAddress().equals(adr))
+                return client.getTeamId();
+        return -1;
+    }
+    // wenn teamid schon gesetzt nicht nehr setzten?!  xD
+    public static int setClientTeamId(InetSocketAddress adr, int teamId){
+        for(Client client: clientlist)
+            if(client.getAddress().equals(adr)){
+                client.setTeamId(teamId);
+                System.out.println("Player-"+client.getId()+" joined Team: "+client.getTeamId());
+                return 0;
+            }
         return -1;
     }
 }

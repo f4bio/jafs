@@ -34,6 +34,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Main.serverlist.add(server);
     }
     public void m_c_endlist(InetSocketAddress adr) {
+        System.out.println(adr);
         Main.completeServerlist(Main.serverlist);
         System.out.println(":ServerList");
     }
@@ -45,7 +46,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     // --- chat fkt
     public void s_c_chat(String msg, InetSocketAddress adr) {
-        System.out.println(msg);
+        System.out.println("CHAT: "+msg);
     }
     // --- end chat
     public void s_c_logoff_success(InetSocketAddress adr) {
@@ -53,6 +54,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void s_c_logoff_failure(InetSocketAddress adr) {
         System.out.println("log off failed");
+    }
+    public void s_c_jointeam_success(InetSocketAddress adr) {
+        System.out.println("you have been succesfully join team");
+    }
+    public void s_c_jointeam_failure(InetSocketAddress adr) {
+        System.out.println("join team failed");
     }
 
 }

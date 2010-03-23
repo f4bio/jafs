@@ -28,7 +28,6 @@ public class Main {
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             int failures;
-
             for(Server cur : serverlist) {
                 cur.increasePingFailureCnt();
                 failures = cur.getPingFailureCnt();
@@ -37,7 +36,7 @@ public class Main {
                     removeServer(cur);
                     continue;
                 }
-                
+
                 net.send(cur.getAddress(), Protocol.master_server_ping, new Object[0]);
             }
         }
