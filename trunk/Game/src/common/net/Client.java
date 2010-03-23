@@ -23,6 +23,7 @@ public class Client {
     private InetSocketAddress address;
     private int pingFailureCnt;
     private int id;
+    private int teamId;
     
     public Client(String host, int port){
         this.host = host;
@@ -68,5 +69,11 @@ public class Client {
     }
     public int getId() {
         return id;
+    }
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+    public int getTeamId() {
+        return teamId;
     }
 }

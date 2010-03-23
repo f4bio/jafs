@@ -31,7 +31,14 @@ public class Chat extends Thread{
                         running = false;
                     }else if(input.startsWith("/serverlist")){
                         net.send("localhost", 30000, Protocol.client_master_listrequest);
+                    }else if(input.startsWith("/jointeam") || input.startsWith("/jt")){
+                        net.send("localhost", 40000, 
+                                Protocol.client_server_jointeam, Integer.parseInt(input.split(" ")[1]));
+                    }else if(input.startsWith("/teamchat") || input.startsWith("/tc")){
+                        net.send("localhost", 40000,
+                                Protocol.client_server_chat_team, input.substring(input.indexOf(" ")));
                     }
+
                 }else if(input.equals(";")){
                     System.out.println("illegal character");
                 }else

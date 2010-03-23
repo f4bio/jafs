@@ -34,6 +34,7 @@ public class Protocol {
     public static final String client_server_chat_all = "c_s_chat_all";
     public static final String client_server_chat_team = "c_s_chat_team";
     public static final String client_server_logoff = "c_s_logoff";
+    public static final String client_server_jointeam = "c_s_jointeam";
 
     //----- Server commands
     public static final String server_master_pong = "s_m_pong";
@@ -47,6 +48,8 @@ public class Protocol {
     public static final String server_client_chat = "s_c_chat";
     public static final String server_client_logoff_success = "s_c_logoff_success";
     public static final String server_client_logoff_failure = "s_c_logoff_failure";
+    public static final String server_client_jointeam_success = "s_c_jointeam_success";
+    public static final String server_client_jointeam_failure = "s_c_jointeam_failure";
 
     //----- Master Server commands
     public static final String master_server_auth_success = "m_s_auth_success";
@@ -102,6 +105,7 @@ public class Protocol {
         registerCmd(client_server_chat_all, argString);
         registerCmd(client_server_chat_team, argString);
         registerCmd(client_server_logoff,argNone);
+        registerCmd(client_server_jointeam,argInt);
 
         //----- Server commands
         registerCmd(server_master_pong, argNone);
@@ -115,6 +119,8 @@ public class Protocol {
         registerCmd(server_client_chat, argString);
         registerCmd(server_client_logoff_success, argNone);
         registerCmd(server_client_logoff_failure, argNone);
+        registerCmd(server_client_jointeam_success, argNone);
+        registerCmd(server_client_jointeam_failure, argNone);
 
         //----- Master Server commands
         registerCmd(master_server_auth_success, argNone);
