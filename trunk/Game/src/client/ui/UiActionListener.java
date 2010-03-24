@@ -11,13 +11,14 @@ import java.awt.event.ActionListener;
 public class UiActionListener implements ActionListener {
 
     // Command list
-    public static final String CMD_TOGGLE_SERVERBROWSER =   "1";
-    public static final String CMD_TOGGLE_OPTIONS =         "2";
-    public static final String CMD_TOGGLE_CREDITS =         "3";
-    public static final String CMD_TOGGLE_CREATESERVER =    "4";
-    public static final String CMD_EXIT =                   "5";
-    public static final String CMD_CONNECT =                "6";
-    public static final String CMD_REFRESH_SERVERBROWSER =  "7";
+    public static final String CMD_TOGGLE_SERVERBROWSER     = "1";
+    public static final String CMD_TOGGLE_LOBBYCHAT         = "2";
+    public static final String CMD_TOGGLE_OPTIONS           = "3";
+    public static final String CMD_TOGGLE_CREDITS           = "4";
+    public static final String CMD_TOGGLE_CREATESERVER      = "5";
+    public static final String CMD_EXIT                     = "6";
+    public static final String CMD_CONNECT                  = "7";
+    public static final String CMD_REFRESH_SERVERBROWSER    = "8";
 
     public void actionPerformed(ActionEvent e) {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
@@ -28,6 +29,10 @@ public class UiActionListener implements ActionListener {
         // Serverbrowser
         else if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
             Main_UI_Test.getUiServerbrowser().setVisible(Main_UI_Test.getUiServerbrowser().isVisible()?false:true);
+        }
+        // Lobby Chat
+        else if(e.getActionCommand().equals(CMD_TOGGLE_LOBBYCHAT)) {
+            Main_UI_Test.getUiLobbyChat().setVisible(Main_UI_Test.getUiLobbyChat().isVisible()?false:true);
         }
         // Options
         else if(e.getActionCommand().equals(CMD_TOGGLE_OPTIONS)) {

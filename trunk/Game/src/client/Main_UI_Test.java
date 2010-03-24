@@ -15,6 +15,7 @@ public class Main_UI_Test {
     private static UiWindow uiMain;
     private static UiWindow uiCreate;
     private static Serverbrowser uiBrowser;
+    private static UiWindow uiLobbyChat;
     private static UiWindow uiOptions;
     private static UiWindow uiCredits;
     private static WeaponSidebar wSidebar;
@@ -42,6 +43,9 @@ public class Main_UI_Test {
         uiBrowser = new Serverbrowser();
         uiBrowser.setLocation(200, 200);
         uiBrowser.addActionListener(aListener);
+        uiLobbyChat = new LobbyChat();
+        uiLobbyChat.setLocation(200, 200);
+        uiLobbyChat.addActionListener(aListener);
         uiOptions = new Options();
         uiOptions.setLocation(200, 200);
         uiOptions.addActionListener(aListener);
@@ -58,6 +62,7 @@ public class Main_UI_Test {
         UiManager.addComponent(uiMain);
         UiManager.addComponent(uiCreate);
         UiManager.addComponent(uiBrowser);
+        UiManager.addComponent(uiLobbyChat);
         UiManager.addComponent(uiOptions);
         UiManager.addComponent(uiCredits);
 //        UiManager.addComponent(wSidebar);
@@ -66,6 +71,7 @@ public class Main_UI_Test {
         screen.getContentPane().add(uiMain);
         screen.getContentPane().add(uiCreate);
         screen.getContentPane().add(uiBrowser);
+        screen.getContentPane().add(uiLobbyChat);
         screen.getContentPane().add(uiOptions);
         screen.getContentPane().add(uiCredits);
 //        screen.getContentPane().add(wSidebar);
@@ -94,6 +100,10 @@ public class Main_UI_Test {
 
     public static Serverbrowser getUiServerbrowser() {
         return uiBrowser;
+    }
+
+    public static UiWindow getUiLobbyChat() {
+        return uiLobbyChat;
     }
 
     public static UiWindow getUiOptions() {
