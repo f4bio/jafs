@@ -3,18 +3,24 @@
 
 (Add everything to everybody you want to)
 
+<br />
 === Julian: ===
 
-* test (added by fabio)
+* Serverbrowser with Lobby chat (added by Julian)
 
+<br />
 === Alex: ===
 
 * ----
 
+<br />
 === Fabio: ===
 
-* maaaaaaaany :D
+* Masterserver-Client chat (Lobby chat) implementation (added by Julian)
 
+<br />
 === Sezer: ===
 
-* Traffic-Encryption / Security... (added by fabio)
+* Traffic-Encryption / Security... (added by Fabio)
+
+* Map-Editor (added by Julian)
