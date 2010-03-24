@@ -38,6 +38,7 @@ public  class MainScreen extends JWindow implements UpdateObject {
         this.getContentPane().setLayout(null);
         
         createBuffer();
+        createGameScene();
 
         setVisible(true);
     }
@@ -70,22 +71,18 @@ public  class MainScreen extends JWindow implements UpdateObject {
     }
 
     public void renderOffscreen(UpdateLoop u) {
-        do {
-            if (buffer.validate(getGraphicsConfiguration()) ==
-                    VolatileImage.IMAGE_INCOMPATIBLE) {
-                createBuffer();
-            }
-            Graphics2D g = buffer.createGraphics();
+        Graphics2D g = buffer.createGraphics();
 
-            clear(g);
+        clear(g);
 
-            g.setColor(Color.white);
-            g.drawString("speedfactor: " + u.getSpeedfactor(), 50, 50);
-            g.drawString("current up/s: " + u.getCurrentUPS(), 50, 75);
-            g.drawString("buffer accelerated: " + buffer.getCapabilities().isAccelerated(), 50, 100);
+        gamescene.renderScene(g);
 
-            UiManager.renderAll(g);
-        } while (buffer.contentsLost());
+        g.setColor(Color.white);
+        g.drawString("speedfactor: " + u.getSpeedfactor(), 50, 50);
+        g.drawString("current up/s: " + u.getCurrentUPS(), 50, 75);
+        g.drawString("buffer accelerated: " + buffer.getCapabilities().isAccelerated(), 50, 100);
+
+        UiManager.renderAll(g);
     }
 
     public void createBuffer() {
@@ -98,6 +95,6 @@ public  class MainScreen extends JWindow implements UpdateObject {
     }
 
     public void createGameScene() {
-        gamescene = new Viewport(this.getGraphicsConfiguration());
+        gamescene = new Viewport(getGraphicsConfiguration());
     }
 }

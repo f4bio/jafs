@@ -13,11 +13,7 @@ public class UiManager {
     public static final int decoHeight = 0;
     public static final int borderWidth = 1;
 
-    private static Vector<UiWindow> content;
-
-    public static void init() {
-        content = new Vector<UiWindow>();
-    }
+    private static Vector<UiWindow> content = new Vector<UiWindow>();
 
     public static boolean addComponent(UiWindow c) {
         return content.add(c);

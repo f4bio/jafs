@@ -54,7 +54,7 @@ public class Main_OLD {
 //        wSidebar.setVisible(true);
 
         // UiManager
-        UiManager.init();
+        //UiManager.init();
         UiManager.addComponent(uiMain);
         UiManager.addComponent(uiCreate);
         UiManager.addComponent(uiBrowser);
