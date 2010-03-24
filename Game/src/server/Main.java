@@ -29,7 +29,7 @@ public class Main {
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
-        net.listen(40000);
+        net.listen(40001);
         net.send("localhost", 30000, Protocol.server_master_servercount);
         net.send("localhost", 30000, Protocol.server_master_auth, new Object[0]);
         System.out.println("Connected on MasterServer "+net.getHost()+":"+net.masterPort+"! Server-iD:"+serverId+"");

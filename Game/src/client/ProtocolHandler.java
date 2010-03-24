@@ -25,7 +25,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println(i+ "clients connected on this server");
     }
     public void s_c_clientid(Integer id, InetSocketAddress adr) {
-        System.out.println("yout id is: "+id);
+        System.out.println("your id is: "+id);
     }
     public void m_c_newlist(InetSocketAddress adr) {
         System.out.println("ServerList:");
@@ -37,6 +37,15 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println(adr);
         Main.completeServerlist(Main.serverlist);
         System.out.println(":ServerList");
+    }
+    public void m_c_auth_success(InetSocketAddress adr) {
+        System.out.println("client succesfully listed. (master)");
+    }
+    public void m_c_auth_failure(InetSocketAddress adr) {
+        System.out.println("client failed to be listed.(master)");
+    }
+    public void c_m_chat_lobby(String msg, InetSocketAddress adr) {
+        System.out.println(msg);
     }
     public void s_c_auth_success(InetSocketAddress adr) {
         System.out.println("client succesfully listed.");

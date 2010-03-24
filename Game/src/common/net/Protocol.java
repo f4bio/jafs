@@ -27,6 +27,8 @@ public class Protocol {
 
     //----- Client commands
     public static final String client_master_listrequest = "c_m_listrequest";
+    public static final String client_master_chat_lobby = "c_m_chat_lobby";
+    public static final String client_master_auth = "c_m_auth";
     public static final String client_server_auth = "c_s_auth";
     public static final String client_server_pong = "c_s_pong";
     public static final String client_server_clientcount = "c_s_clientcount";
@@ -40,6 +42,7 @@ public class Protocol {
     public static final String server_master_pong = "s_m_pong";
     public static final String server_master_auth = "s_m_auth";
     public static final String server_master_servercount = "s_m_servercount";
+
     public static final String server_client_ping = "s_c_ping";
     public static final String server_client_auth_success = "s_c_auth_success";
     public static final String server_client_auth_failure = "s_c_auth_failure";
@@ -56,9 +59,12 @@ public class Protocol {
     public static final String master_server_auth_failure = "m_s_auth_failure";
     public static final String master_server_ping = "m_s_ping";
     public static final String master_server_servercount = "m_s_servercount";
+    public static final String master_client_auth_success = "s_c_auth_success";
+    public static final String master_client_auth_failure = "s_c_auth_failure";
     public static final String master_client_newlist = "m_c_newlist";
     public static final String master_client_listentry = "m_c_listentry";
     public static final String master_client_endlist = "m_c_endlist";
+    public static final String master_client_chat_lobby = "m_c_chat_lobby";
 
     public static int[] registerCmd(final String command, int... arg) {
         return cmd.put(command, arg);
@@ -79,7 +85,9 @@ public class Protocol {
 
         return packet;
     }
-
+    public static String buildPacket(final String command) {
+        return buildPacket(command, new Object[0]);
+    }
     public static int getArgSize(final String command) {
         int[] args = cmd.get(command);
         if(args != null)
@@ -98,14 +106,16 @@ public class Protocol {
     public static void init() {
         //----- Client commands
         registerCmd(client_master_listrequest, argNone);
+        registerCmd(client_master_chat_lobby, argString);
+        registerCmd(client_master_auth, argNone);
         registerCmd(client_server_auth, argNone);
         registerCmd(client_server_pong, argNone);
         registerCmd(client_server_clientid,argNone);
         registerCmd(client_server_clientcount,argNone);
         registerCmd(client_server_chat_all, argString);
         registerCmd(client_server_chat_team, argString);
-        registerCmd(client_server_logoff,argNone);
-        registerCmd(client_server_jointeam,argInt);
+        registerCmd(client_server_logoff, argNone);
+        registerCmd(client_server_jointeam, argInt);
 
         //----- Server commands
         registerCmd(server_master_pong, argNone);
@@ -127,9 +137,12 @@ public class Protocol {
         registerCmd(master_server_auth_failure, argNone);
         registerCmd(master_server_ping, argNone);
         registerCmd(master_server_servercount, argInt);
+        registerCmd(master_client_auth_success, argNone);
+        registerCmd(master_client_auth_failure, argNone);
         registerCmd(master_client_newlist, argNone);
         registerCmd(master_client_listentry, argString);
         registerCmd(master_client_endlist, argNone);
+        registerCmd(master_client_chat_lobby, argString);
 
     }
 }

@@ -5,6 +5,7 @@
 
 package masterserver;
 
+import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.Server;
@@ -43,4 +44,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
         net.send(adr, Protocol.master_client_endlist, new Object[0]);
     }
+    public void c_m_auth(InetSocketAddress adr)
+    {
+        Client client = Main.addClient(adr);
+        if(client != null)
+            net.send(adr, Protocol.master_client_auth_success, new Object[0]);
+        else
+            net.send(adr, Protocol.master_client_auth_failure, new Object[0]);
+    }
+    public void m_c_chat_lobby(String msg, InetSocketAddress adr) {
+        System.out.println(msg);
+    }
+
 }
