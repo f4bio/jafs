@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.Main_OLD;
+import client.Main_UI_Test;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
@@ -37,6 +37,6 @@ public class UiManager {
         content.remove(u);
         content.add(u);
 
-        Main_OLD.getScreen().getContentPane().setComponentZOrder(u, 0);
+        Main_UI_Test.getScreen().getContentPane().setComponentZOrder(u, 0);
     }
 }

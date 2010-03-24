@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client;
 
 import common.net.Network;
@@ -18,7 +13,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         super(net);
     }
     public void s_c_ping(InetSocketAddress adr) {
-        net.send(adr, Protocol.client_server_pong, new Object[0]);
+        net.send(adr, Protocol.CLIENT_SERVER_PONG);
 //        System.out.println("Client ponged");
     }
     public void s_c_clientcount(Integer i, InetSocketAddress adr) {
