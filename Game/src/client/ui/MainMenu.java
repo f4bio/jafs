@@ -30,9 +30,10 @@ public class MainMenu extends UiWindow {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
 
         setName("MainMenu"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(150, 190));
+        setPreferredSize(new java.awt.Dimension(150, 220));
 
         jButton1.setText("Server suchen");
         jButton1.setMaximumSize(new java.awt.Dimension(111, 23));
@@ -57,6 +58,9 @@ public class MainMenu extends UiWindow {
         jButton5.setMinimumSize(new java.awt.Dimension(111, 23));
         jButton5.setPreferredSize(new java.awt.Dimension(111, 23));
 
+        jButton6.setText("Lobby");
+        jButton6.setPreferredSize(new java.awt.Dimension(109, 28));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -65,7 +69,8 @@ public class MainMenu extends UiWindow {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
@@ -76,6 +81,8 @@ public class MainMenu extends UiWindow {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -93,6 +100,7 @@ public class MainMenu extends UiWindow {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     // End of variables declaration//GEN-END:variables
 
     @Override
@@ -107,6 +115,8 @@ public class MainMenu extends UiWindow {
         jButton4.addActionListener(a);
         jButton5.setActionCommand(UiActionListener.CMD_EXIT);
         jButton5.addActionListener(a);
+        jButton6.setActionCommand(UiActionListener.CMD_TOGGLE_LOBBYCHAT);
+        jButton6.addActionListener(a);
     }
 
 }
