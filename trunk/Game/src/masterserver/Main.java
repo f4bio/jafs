@@ -5,6 +5,7 @@
 
 package masterserver;
 
+import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.Server;
@@ -24,6 +25,7 @@ public class Main {
     private static Network net;
     private static ProtocolHandler handler;
     private static ArrayList<Server> serverlist = new ArrayList<Server>();
+    private static ArrayList<Client> clientlist = new ArrayList<Client>();
 
     private static TimerTask pinger = new TimerTask() {
         public void run() {
@@ -108,7 +110,34 @@ public class Main {
             serv.decreasePingFailureCnt();
         }
     }
+
     public static int serverCount(){
         return serverlist.size();
+    }
+
+    public static void broadcast(String msg, InetSocketAddress adr){
+//        for(Server server: serverlist)
+//            net.send(server.getAddress(), Protocol.master_client_chat_lobby, "(LOBBY-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+"): "+msg);
+    }
+
+    public static Client addClient(InetSocketAddress adr) {
+        for(Client client: clientlist)
+            if(client.getAddress().equals(adr))
+                return null;
+
+        Client client = new Client(adr);
+        client.setId(clientlist.size());
+        clientlist.add(client);
+        System.out.println("Client "+client.getHost()+":"+client.getPort()+" listed.");
+        
+        return client;
+    }
+
+    public static void removeClient(Client client) {
+        clientlist.remove(client);
+        System.out.println("Client " + client.getHost() + ":" + client.getPort() + " dropped");
+    }
+    public static void removeClient(InetSocketAddress adr) {
+        removeClient(new Client(adr));
     }
 }

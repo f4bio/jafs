@@ -40,11 +40,6 @@ public class CImage {
         }
     }
 
-    private GraphicsConfiguration getGC() {
-        return GraphicsEnvironment.getLocalGraphicsEnvironment().
-                getDefaultScreenDevice().getDefaultConfiguration();
-    }
-
     public void load(byte[] data) {
         BufferedImage tmp = null;
         try {

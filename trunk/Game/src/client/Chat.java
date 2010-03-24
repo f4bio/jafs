@@ -38,8 +38,13 @@ public class Chat extends Thread{
                         net.send("localhost", 40000,
                                 Protocol.client_server_chat_team, input.substring(input.indexOf(" ")));
                     }
+                    // Lobby Chat
+                    else if(input.startsWith("/lobbychat") || input.startsWith("/lc")){
+                        net.send("localhost", 30000,
+                                Protocol.client_master_chat_lobby, input.substring(input.indexOf(" ")));
+                    }
 
-                }else if(input.equals(";")){
+                }else if(input.contains(";")){
                     System.out.println("illegal character");
                 }else
                     net.send("localhost", 40000, Protocol.client_server_chat_all, input);
