@@ -24,7 +24,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, Protocol.server_master_pong, new Object[0]);
     }
 
-    public void m_s_servercount(Integer i,InetSocketAddress adr){
+    public void m_s_servercount(Integer i, InetSocketAddress adr){
         Main.setServerId(i);
     }
     public void m_s_auth_success(InetSocketAddress adr) {
@@ -34,6 +34,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_s_auth_failure(InetSocketAddress adr) {
         System.out.println("server failed to be listed.");
     }
+
     public void c_s_auth(InetSocketAddress adr){
         Client added = Main.addClient(adr);
         if(added != null)

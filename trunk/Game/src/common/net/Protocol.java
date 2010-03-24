@@ -126,7 +126,7 @@ public class Protocol {
         registerCmd(master_server_auth_success, argNone);
         registerCmd(master_server_auth_failure, argNone);
         registerCmd(master_server_ping, argNone);
-        registerCmd(master_server_servercount,argInt);
+        registerCmd(master_server_servercount, argInt);
         registerCmd(master_client_newlist, argNone);
         registerCmd(master_client_listentry, argString);
         registerCmd(master_client_endlist, argNone);

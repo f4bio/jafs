@@ -36,6 +36,14 @@ public class Main {
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
+        
+        try {
+            Thread.sleep(1000);
+        } catch(Exception e) {
+
+        }
+
+        net.send("localhost", 31338, Protocol.server_master_servercount, new Object[0]);
     }
     private static TimerTask pinger = new TimerTask() {
         public void run() {

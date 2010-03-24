@@ -5,6 +5,8 @@
 
 package client.render;
 
+import client.Main;
+import common.engine.CMap;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -20,6 +22,7 @@ public class Viewport {
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
+    private CMap map;
 
     public Viewport(GraphicsConfiguration gc) {
         this.gc = gc;
@@ -41,26 +44,34 @@ public class Viewport {
         return buffer;
     }
 
-    public void renderScene() {
+    public void renderScene(Graphics2D g2) {
         do {
-            int result = buffer.validate(gc);
-
-            if(result == VolatileImage.IMAGE_INCOMPATIBLE)
-                createBuffer();
-
             Graphics2D g = buffer.createGraphics();
+            Graphics2D mG = null;
+            try {
+                int result = buffer.validate(gc);
 
-            if(g != null) {
+                if(result == VolatileImage.IMAGE_INCOMPATIBLE)
+                    createBuffer();
+
                 clear(g);
-                renderWorld(g);
-                renderProjectiles(g);
-                renderPlayers(g);
+
+                map = Main.getGameData().getMap();
+                if (map != null) {
+                    map.render();
+                    mG = map.getBuffer().createGraphics();
+
+                    renderPlayers(mG);
+                    renderProjectiles(mG);
+                }
+
+                g2.drawImage(buffer, 0, 0, null);
+            } catch(Exception e) {
+
+            } finally {
+                g.dispose();
             }
         } while(buffer.contentsLost());
-    }
-
-    public void renderWorld(Graphics2D g) {
-
     }
 
     public void renderProjectiles(Graphics2D g) {

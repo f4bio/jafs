@@ -45,6 +45,11 @@ public abstract class ProtocolHandler implements Runnable {
             }
 
             String[] sPacket = new String(dPacket.getData(), 0, dPacket.getLength()).split(Protocol.argSeperator);
+
+            for(String t : sPacket) {
+                System.out.println(t);
+            }
+
             dAddress = (InetSocketAddress)dPacket.getSocketAddress();
 
             if(!Protocol.containsCmd(sPacket[0])) {

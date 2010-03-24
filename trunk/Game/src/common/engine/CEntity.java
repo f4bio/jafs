@@ -7,6 +7,7 @@ package common.engine;
 
 import common.CVector2;
 import java.awt.Dimension;
+import java.awt.Point;
 
 /**
  *
@@ -17,12 +18,15 @@ public class CEntity {
     protected CVector2 direction;
     protected double speed;
     protected Dimension size;
+    protected String name;
+    protected Point tilePos;
 
     public CEntity() {
         position = null;
         direction = null;
         speed = 1.0d;
         size = null;
+        name = null;
     }
 
     public void setPosition(CVector2 vec2) {
@@ -73,5 +77,24 @@ public class CEntity {
 
     public Dimension getSize() {
         return size;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setTilePos(int x, int y) {
+        if(tilePos != null)
+            tilePos.setLocation(x, y);
+        else
+            tilePos = new Point(x, y);
+    }
+
+    public Point getTilePos() {
+        return tilePos;
     }
 }
