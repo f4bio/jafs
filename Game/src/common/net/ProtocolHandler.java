@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package common.net;
 
 import java.lang.reflect.Method;
@@ -44,7 +39,7 @@ public abstract class ProtocolHandler implements Runnable {
                 continue;
             }
 
-            String[] sPacket = new String(dPacket.getData(), 0, dPacket.getLength()).split(Protocol.argSeperator);
+            String[] sPacket = new String(dPacket.getData(), 0, dPacket.getLength()).split(Protocol.ARG_SEPERATOR);
 
             dAddress = (InetSocketAddress)dPacket.getSocketAddress();
 
@@ -60,35 +55,35 @@ public abstract class ProtocolHandler implements Runnable {
             for(int i=0; i<type.length; ++i) {
                 try {
                     switch(type[i]) {
-                        case Protocol.argByte:
+                        case Protocol.ARG_BYTE:
                             param[i] = Byte.parseByte(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argShort:
+                        case Protocol.ARG_SHORT:
                             param[i] = Short.parseShort(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argInt:
+                        case Protocol.ARG_INT:
                             param[i] = Integer.parseInt(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argLong:
+                        case Protocol.ARG_LONG:
                             param[i] = Long.parseLong(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argFloat:
+                        case Protocol.ARG_FLOAT:
                             param[i] = Float.parseFloat(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argDouble:
+                        case Protocol.ARG_DOUBLE:
                             param[i] = Double.parseDouble(sPacket[i+1]);
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argString:
+                        case Protocol.ARG_STRING:
                             param[i] = sPacket[i+1];
                             sig[i] = param[i].getClass();
                             break;
-                        case Protocol.argNone:
+                        case Protocol.ARG_NONE:
                             sig = new Class[1];
                             param = new Object[1];
                             break;

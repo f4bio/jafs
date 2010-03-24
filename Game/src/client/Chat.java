@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client;
 
 import common.net.Network;
@@ -19,36 +14,46 @@ public class Chat extends Thread{
     BufferedReader in;
     private static boolean running = true;
 
-    public void run(){
+    @Override
+    public void run() {
         in = new BufferedReader(new InputStreamReader(System.in));
-        while(running){
+        while(running) {
             try{
                 System.out.print("Type in your msg: ");
                 String input = in.readLine();
                 if(input.startsWith("/")){
-                    if(input.startsWith("/logoff")){
-                        net.send("localhost", 40000, Protocol.client_server_logoff);
+                    // Log Off
+                    if(input.startsWith("/logoff")) {
+                        net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
                         running = false;
-                    }else if(input.startsWith("/serverlist")){
-                        net.send("localhost", 30000, Protocol.client_master_listrequest);
-                    }else if(input.startsWith("/jointeam") || input.startsWith("/jt")){
+                    }
+                    // Show Serverlist
+                    else if(input.startsWith("/serverlist")) {
+                        net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
+                    }
+                    // Join team
+                    else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {
                         net.send("localhost", 40000, 
-                                Protocol.client_server_jointeam, Integer.parseInt(input.split(" ")[1]));
-                    }else if(input.startsWith("/teamchat") || input.startsWith("/tc")){
+                                Protocol.CLIENT_SERVER_JOINTEAM, Integer.parseInt(input.split(" ")[1]));
+                    }
+                    // Team Chat
+                    else if(input.startsWith("/teamchat") || input.startsWith("/tc")) {
                         net.send("localhost", 40000,
-                                Protocol.client_server_chat_team, input.substring(input.indexOf(" ")));
+                                Protocol.CLIENT_SERVER_CHAT_TEAM, input.substring(input.indexOf(" ")));
                     }
                     // Lobby Chat
-                    else if(input.startsWith("/lobbychat") || input.startsWith("/lc")){
+                    else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
                         net.send("localhost", 30000,
-                                Protocol.client_master_chat_lobby, input.substring(input.indexOf(" ")));
+                                Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
 
-                }else if(input.contains(";")){
+                }
+                else if(input.contains(";")) {
                     System.out.println("illegal character");
-                }else
-                    net.send("localhost", 40000, Protocol.client_server_chat_all, input);
-            }catch(Exception e){
+                }
+                else
+                    net.send("localhost", 40000, Protocol.CLIENT_SERVER_CHAT_ALL, input);
+            } catch(Exception e) {
                 System.out.println(e);
             }
         }

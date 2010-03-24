@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.Main_OLD;
+import client.Main_UI_Test;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,31 +23,31 @@ public class UiActionListener implements ActionListener {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
         // Server erstellen
         if(e.getActionCommand().equals(CMD_TOGGLE_CREATESERVER)) {
-            Main_OLD.getUiCreateServer().setVisible(Main_OLD.getUiCreateServer().isVisible()?false:true);
+            Main_UI_Test.getUiCreateServer().setVisible(Main_UI_Test.getUiCreateServer().isVisible()?false:true);
         }
         // Serverbrowser
         else if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
-            Main_OLD.getUiServerbrowser().setVisible(Main_OLD.getUiServerbrowser().isVisible()?false:true);
+            Main_UI_Test.getUiServerbrowser().setVisible(Main_UI_Test.getUiServerbrowser().isVisible()?false:true);
         }
         // Options
         else if(e.getActionCommand().equals(CMD_TOGGLE_OPTIONS)) {
-            Main_OLD.getUiOptions().setVisible(Main_OLD.getUiOptions().isVisible()?false:true);
+            Main_UI_Test.getUiOptions().setVisible(Main_UI_Test.getUiOptions().isVisible()?false:true);
         }
         // Serverliste aktualisieren
         else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
             String[][] s = {{"127.0.0.1:40000", "dust", "0/16", "500"},   // !!! SERVERLIST INPUT?
                             {"192.0.0.1:40001", "italy", "2/16", "80"},
                             {"162.0.0.1:40002", "aztec", "5/16", "63"}};
-            Main_OLD.getUiServerbrowser().setServerlist(s);
+            Main_UI_Test.getUiServerbrowser().setServerlist(s);
         }
         // Mit Server verbinden
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
-            if(Main_OLD.getUiServerbrowser().getSelectedServer() != null)
-                System.out.println(Main_OLD.getUiServerbrowser().getSelectedServer());
+            if(Main_UI_Test.getUiServerbrowser().getSelectedServer() != null)
+                System.out.println(Main_UI_Test.getUiServerbrowser().getSelectedServer());
         }
         // Credits
         else if(e.getActionCommand().equals(CMD_TOGGLE_CREDITS)) {
-            Main_OLD.getUiCredits().setVisible(Main_OLD.getUiCredits().isVisible()?false:true);
+            Main_UI_Test.getUiCredits().setVisible(Main_UI_Test.getUiCredits().isVisible()?false:true);
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {

@@ -31,10 +31,10 @@ public class Main {
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
-        net.listen(50001);
+        net.listen(50002);
 //        net.send("localhost", 40000, Protocol.client_server_clientcount);
-        net.send("localhost", 40000, Protocol.client_server_auth, new Object[0]);
-        net.send("localhost", Network.masterPort, Protocol.client_master_auth, new Object[0]);
+        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
+        net.send("localhost", Network.masterPort, Protocol.CLIENT_MASTER_AUTH);
         new Chat(net).start();
 
         /*Protocol.init();

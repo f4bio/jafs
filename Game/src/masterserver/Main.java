@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package masterserver;
 
 import common.net.Client;
@@ -39,7 +34,7 @@ public class Main {
                     continue;
                 }
 
-                net.send(serverlist.get(i).getAddress(), Protocol.master_server_ping, new Object[0]);
+                net.send(serverlist.get(i).getAddress(), Protocol.MASTER_SERVER_PING);
             }
         }
     };

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package server;
 
 import common.net.Client;
@@ -29,10 +24,10 @@ public class Main {
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
-        net.listen(40001);
-        net.send("localhost", 30000, Protocol.server_master_servercount);
-        net.send("localhost", 30000, Protocol.server_master_auth, new Object[0]);
-        System.out.println("Connected on MasterServer "+net.getHost()+":"+net.masterPort+"! Server-iD:"+serverId+"");
+        net.listen(40000);
+        net.send("localhost", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
+        net.send("localhost", 30000, Protocol.SERVER_MASTER_AUTH);
+        System.out.println("Connected on MasterServer "+net.getHost()+":"+Network.masterPort+"! Server-iD:"+serverId+"");
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
@@ -43,7 +38,7 @@ public class Main {
 
         }
 
-        net.send("localhost", 31338, Protocol.server_master_servercount, new Object[0]);
+        net.send("localhost", 31338, Protocol.SERVER_MASTER_SERVERCOUNT);
     }
     private static TimerTask pinger = new TimerTask() {
         public void run() {
@@ -56,7 +51,7 @@ public class Main {
                     removeClient(cur);
                     continue;
                 }
-                net.send(cur.getAddress(), Protocol.server_client_ping, new Object[0]);
+                net.send(cur.getAddress(), Protocol.SERVER_CLIENT_PING);
             }
         }
     };
@@ -112,13 +107,13 @@ public class Main {
     }
     public static void broadcast(String msg, InetSocketAddress adr){
         for(Client client: clientlist)
-            net.send(client.getAddress(), Protocol.server_client_chat, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+"): "+msg);
+            net.send(client.getAddress(), Protocol.SERVER_CLIENT_CHAT, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+"): "+msg);
     }
     public static void broadcast_team(String msg, InetSocketAddress adr){
         int teamId = getClient(adr).getTeamId();
         for(Client client: clientlist)
             if(client.getTeamId()==teamId)
-                net.send(client.getAddress(), Protocol.server_client_chat, "(TEAM-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+") @ Team-"+teamId+": "+msg);
+                net.send(client.getAddress(), Protocol.SERVER_CLIENT_CHAT, "(TEAM-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+") @ Team-"+teamId+": "+msg);
     }
     public static int getClientTeamId(InetSocketAddress adr){
         for(Client client: clientlist)

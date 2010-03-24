@@ -9,7 +9,7 @@ import javax.swing.JFrame;
  *
  * @author miracle
  */
-public class Main_OLD {
+public class Main_UI_Test {
 
     private static MainScreen screen;
     private static UiWindow uiMain;

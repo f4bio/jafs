@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package server;
 
 import common.net.Client;
@@ -20,8 +15,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void m_s_ping(InetSocketAddress adr) {
-//        System.out.println("Server ponged");
-        net.send(adr, Protocol.server_master_pong, new Object[0]);
+        net.send(adr, Protocol.SERVER_MASTER_PONG, new Object[0]);
     }
 
     public void m_s_servercount(Integer i, InetSocketAddress adr){
@@ -38,22 +32,22 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_auth(InetSocketAddress adr){
         Client added = Main.addClient(adr);
         if(added != null)
-            net.send(adr, Protocol.server_client_auth_success, new Object[0]);
+            net.send(adr, Protocol.SERVER_CLIENT_AUTH_SUCCESS, new Object[0]);
         else
-            net.send(adr, Protocol.server_client_auth_failure, new Object[0]);
+            net.send(adr, Protocol.SERVER_CLIENT_AUTH_FAILURE, new Object[0]);
     }
     public void c_s_pong(InetSocketAddress adr) {
         Main.decreasePingFailures(adr);
     }
     public void c_s_clientcount(InetSocketAddress adr){
-        net.send(adr, Protocol.server_client_clientcount, Main.clientCount());
+        net.send(adr, Protocol.SERVER_CLIENT_CLIENTCOUNT, Main.clientCount());
     }
     public void c_s_clientid(InetSocketAddress adr){
-        net.send(adr, Protocol.server_client_clientid, Main.getClient(adr));
+        net.send(adr, Protocol.SERVER_CLIENT_CLIENTID, Main.getClient(adr));
     }
     public void c_s_logoff(InetSocketAddress adr){
         Main.removeClient(adr);
-        net.send(adr, Protocol.server_client_logoff_success, new Object[0]);
+        net.send(adr, Protocol.SERVER_CLIENT_LOGOFF_SUCCESS, new Object[0]);
     }
     // --- chat fkt
     public void c_s_chat_all(String msg, InetSocketAddress adr){
@@ -67,8 +61,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat end
     public void c_s_jointeam(Integer teamId, InetSocketAddress adr){
         if(Main.setClientTeamId(adr, teamId)==-1)
-            net.send(adr, Protocol.server_client_jointeam_failure);
+            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_FAILURE);
         else
-            net.send(adr, Protocol.server_client_jointeam_success);
+            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_SUCCESS);
     }
 }
