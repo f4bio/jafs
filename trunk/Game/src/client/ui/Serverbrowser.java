@@ -23,7 +23,6 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jCheckBox1.addActionListener(this);
         jButton1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);
-        initDecoration();
     }
 
     @SuppressWarnings("unchecked")

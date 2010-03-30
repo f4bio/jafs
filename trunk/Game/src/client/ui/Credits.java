@@ -17,8 +17,7 @@ public class Credits extends UiWindow {
     /** Creates new form Credits */
     public Credits() {
         initComponents();
-        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
-        initDecoration();
+        setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
     @SuppressWarnings("unchecked")

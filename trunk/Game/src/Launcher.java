@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 /*
  * GUI.java
@@ -65,36 +64,51 @@ public class Launcher extends javax.swing.JDialog implements ActionListener {
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        Launcher dialog = new Launcher(new javax.swing.JFrame(), false);
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
+        // Checking Java version >= 6
+        if ( Double.parseDouble(System.getProperty("java.version").substring(0, 3)) >= 1.6 ) {
+            if( args.length >= 2 ) {
+                if( args[0].equals("master") ) {
+                    // launch masterserver
+                    masterserver.Main.main(new String[0]);
+                }
+                else if( args[0].equals("server") ) {
+                    // launch server -> args[1] = ip+port
+                    server.Main.main(args);
+                }
+                else if( args[0].equals("client") ) {
+                    // launch client -> args[1] = ip+port
+                    client.Main.main(args);
+                }
             }
-        });
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        dialog.setLocation(screenSize.width/2-dialog.getWidth()/2, screenSize.height/2-dialog.getHeight()/2);
-        dialog.setVisible(true);
+            else {
+                Launcher uiLauncher = new Launcher(new javax.swing.JFrame(), false);
+                uiLauncher.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                uiLauncher.setLocation(screenSize.width/2-uiLauncher.getWidth()/2, screenSize.height/2-uiLauncher.getHeight()/2);
+                uiLauncher.setVisible(true);
+            }
+        }
+        else {
+            // fehlermeldung java 6 re
+            javax.swing.JOptionPane.showMessageDialog(null, "The Game requires Java 6, please install the latest JRE!", "Error", javax.swing.JOptionPane.OK_CANCEL_OPTION);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
-        String launch = System.getProperty("user.dir") + "\\";
-        if(e.getSource()==jButton1)
-            launch += "client\\Main";
-        else
-            launch += "server\\Main";
-        System.out.println("Main-path: "+launch);
-        // Checking Java version >= 6
-        if (Double.parseDouble(System.getProperty("java.version").substring(0, 3)) >= 1.6) {
-            System.out.println("Java 6 installed > Launching Game with OpenGL support.");
-            try {
-                Runtime.getRuntime().exec("java -Dsun.java2d.opengl=True \"" + launch + "\"");
-            } catch (IOException ex) {
-                System.out.println("Could not launch game. " + ex);
-            }
-            setVisible(false);
-        } else {
-            System.out.println("The Game requires Java 6, please install the latest JRE!");
+        if(e.getSource()==jButton1) {
+            // launch client
+            dispose();
+            client.Main.main(new String[0]);
+        }
+        else {
+            // launch server
+            dispose();
+            server.Main.main(new String[0]);
         }
     }
 
