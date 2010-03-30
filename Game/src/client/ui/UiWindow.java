@@ -2,7 +2,6 @@ package client.ui;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionListener;
@@ -20,7 +19,6 @@ import javax.swing.JPanel;
  * (nach dem Init. aller grafischen Elemente):
  *      1. setName("...") - auch im GUI Designer unter den Eigenschaften->name möglich
  *      2. setSize(getPreferredSize().width, getPreferredSize().height);
- *      3. initDecoration() - nur bei !isUndecorated
  * Es scheint, dass die decoration nur bei geraden Werten der Panelgröße korrekt gezeichnet wird.
  */
 public abstract class UiWindow extends JPanel implements MouseListener, MouseMotionListener {
@@ -44,6 +42,7 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
 
     public UiWindow() {
         super();
+        initDecoration();
 
         setVisible(false);
         setDoubleBuffered(true);
@@ -52,10 +51,9 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
         isMoveable = true;
         isMousePressed = false;
         isUndecorated = false;
-        initDecoration();
 
         addMouseListener(this);
-        addMouseMotionListener(this);
+        addMouseMotionListener(this);        
     }
 
     public void initDecoration(){
@@ -81,17 +79,11 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
         isMousePressed = false;
     }
 
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) {  }
 
-    }
+    public void mouseExited(MouseEvent e) {  }
 
-    public void mouseExited(MouseEvent e) {
-    
-    }
-
-    public void mouseMoved(MouseEvent e) {
-        
-    }
+    public void mouseMoved(MouseEvent e) {  }
 
     public void mouseDragged(MouseEvent e) {
         if(isMousePressed && isMoveable) {
@@ -145,6 +137,12 @@ public abstract class UiWindow extends JPanel implements MouseListener, MouseMot
     @Override
     public boolean isOptimizedDrawingEnabled() {
         return true;
+    }
+
+    @Override
+    public void setBackground(Color bg) {
+        super.setBackground(bg);
+        initDecoration();
     }
 
     public abstract void addActionListener(ActionListener a);

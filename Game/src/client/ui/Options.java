@@ -17,8 +17,7 @@ public class Options extends UiWindow {
     /** Creates new form Options */
     public Options() {
         initComponents();
-        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
-        initDecoration();
+        setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
     @SuppressWarnings("unchecked")

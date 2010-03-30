@@ -20,8 +20,7 @@ public class CreateServer extends UiWindow {
     public CreateServer() {
         initComponents();
         jPanel1.add(new JLabel("< Map Vorschau >"), BorderLayout.CENTER);
-        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
-        initDecoration();
+        setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
     @SuppressWarnings("unchecked")

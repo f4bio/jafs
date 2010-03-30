@@ -17,7 +17,7 @@ public class MainMenu extends UiWindow {
     /** Creates new form MainMenu */
     public MainMenu() {
         initComponents();
-        setSize(getPreferredSize().width, getPreferredSize().height); // !!! bessere Implementierung?
+        setSize(getPreferredSize().width, getPreferredSize().height);
         setUndecorated(true);
     }
 
