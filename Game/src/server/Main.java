@@ -24,10 +24,10 @@ public class Main {
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
+        net.setProtocolHandler(protocol);
         net.listen(40000);
         net.send("localhost", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
         net.send("localhost", 30000, Protocol.SERVER_MASTER_AUTH);
-        System.out.println("Connected on MasterServer "+net.getHost()+":"+Network.masterPort+"! Server-iD:"+serverId+"");
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
@@ -44,13 +44,13 @@ public class Main {
         public void run() {
             int failures;
             for(Client cur : clientlist) {
-                cur.increasePingFailureCnt();
+                /*cur.increasePingFailureCnt();
                 failures = cur.getPingFailureCnt();
 
                 if(failures >= maxPingFailures) {
                     removeClient(cur);
                     continue;
-                }
+                }*/
                 net.send(cur.getAddress(), Protocol.SERVER_CLIENT_PING);
             }
         }
@@ -74,7 +74,7 @@ public class Main {
         System.out.println("Client " + client.getHost() + ":" + client.getPort() + " dropped from Server-"+serverId+"." );
     }
     public static void removeClient(InetSocketAddress adr) {
-        removeClient(new Client(adr));
+        removeClient(getClient(adr));
     }
     public static int getServerId(){
         return serverId;

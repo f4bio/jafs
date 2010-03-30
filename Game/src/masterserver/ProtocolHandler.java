@@ -2,6 +2,7 @@ package masterserver;
 
 import common.net.Client;
 import common.net.Network;
+import common.net.Packet;
 import common.net.Protocol;
 import common.net.Server;
 import java.net.InetSocketAddress;
@@ -18,9 +19,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_m_auth(InetSocketAddress adr) {
         Server added = Main.addServer(adr);
         if(added != null)
-            net.send(adr, Protocol.MASTER_SERVER_AUTH_SUCCESS, new Object[0]);
+            net.send(adr, Protocol.MASTER_SERVER_AUTH_REPLY, Protocol.REPLY_SUCCESS);
         else
-            net.send(adr, Protocol.MASTER_SERVER_AUTH_FAILURE, new Object[0]);
+            net.send(adr, Protocol.MASTER_SERVER_AUTH_REPLY, Protocol.REPLY_FAILURE);
     }
 
     public void s_m_pong(InetSocketAddress adr) {
@@ -43,12 +44,17 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         Client client = Main.addClient(adr);
         if(client != null)
-            net.send(adr, Protocol.MASTER_CLIENT_AUTH_SUCCESS, new Object[0]);
+            net.send(adr, Protocol.MASTER_CLIENT_AUTH_REPLY, Protocol.REPLY_SUCCESS);
         else
-            net.send(adr, Protocol.MASTER_CLIENT_AUTH_FAILURE, new Object[0]);
+            net.send(adr, Protocol.MASTER_CLIENT_AUTH_REPLY, Protocol.REPLY_FAILURE);
     }
     public void m_c_chat_lobby(String msg, InetSocketAddress adr) {
         System.out.println(msg);
     }
 
+    public void noReplyReceived(Packet p) {
+        if(p.getCmd().equals(Protocol.MASTER_SERVER_PING)) {
+            Main.removeServer(p.getAddress());
+        }
+    }
 }

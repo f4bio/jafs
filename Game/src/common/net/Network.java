@@ -9,6 +9,10 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -16,13 +20,43 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String host = "x.org";
-    public static final int masterPort = 30000;
+    public static final String HOST = "x.org";
+    public static final int MASTERPORT = 30000;
+
+    public static final int RESEND_COUNT = 5;
+    public static final int RESEND_INTERVAL = 1000;
 
     private InetSocketAddress dest;
+    private ProtocolHandler handler;
 
     private static final int packetLength = 256;
-    private static int port;
+    private int port;
+
+    private TimerTask failCheck = new TimerTask() {
+
+        public void run() {
+            Packet p;
+
+            synchronized(replyQueue) {
+                for(int i=0; i<replyQueue.size(); ++i) {
+                    try {
+                        p = replyQueue.get(i);
+
+                        if(!p.hasTimeToLive()) {
+                            handler.noReplyReceived(p);
+                            replyQueue.remove(i);
+                        } else {
+                            p.decreaseTimeToLive();
+                        }
+                    } catch(Exception e) {
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
+    private static Timer checker;
 
     private class NetworkReader implements Runnable {
         private Thread thread;
@@ -34,11 +68,33 @@ public class Network {
         }
 
         public void run() {
+            DatagramPacket packet;
+            Packet pPacket;
+            Packet rPacket;
+            Iterator<Packet> i;
+
             try {
                 while(socket != null) {
-                    DatagramPacket packet = new DatagramPacket(new byte[packetLength], packetLength);
+                    packet = new DatagramPacket(new byte[packetLength], packetLength);
                     socket.receive(packet);
-                    inQueue.add(packet);
+
+                    pPacket = new Packet(packet);
+
+                    if(isValid(pPacket) && handler != null) {
+                        synchronized(replyQueue) {
+                            i = replyQueue.iterator();
+
+                            while(i.hasNext()) {
+                                rPacket = i.next();
+                                if(pPacket.getCmd().equals(Protocol.getReplyOfCmd(rPacket.getCmd()))) {
+                                    i.remove();
+                                }
+                            }
+                        }
+
+                        inQueue.add(pPacket);
+                        handler.wakeUp();
+                    }
                 }
             } catch(Exception e) {
 
@@ -48,6 +104,7 @@ public class Network {
 
     private class NetworkWriter implements Runnable {
         private Thread thread;
+        private boolean ready;
 
         private NetworkWriter() {
             this.thread = new Thread(this);
@@ -55,34 +112,57 @@ public class Network {
             this.thread.start();
         }
 
+        private void waiting() {
+            synchronized(thread) {
+                try {
+                    while(!ready) {
+                        thread.wait();
+                    }
+                } catch (Exception e) {
+
+                }
+            }
+        }
+
+        public void wakeUp() {
+            if (!ready) {
+                ready = true;
+
+                synchronized(thread) {
+                    thread.notify();
+                }
+            }
+        }
+
         public void run() {
             DatagramPacket curPacket = null;
             
             while(socket != null) {
-                for(int i=0; i<outQueue.size(); i++) {
-                    curPacket = outQueue.poll();
-                    if(curPacket != null) {
-                        try {
-                            socket.send(curPacket);
-                        } catch(Exception e) {
+                curPacket = outQueue.poll();
 
-                        }
-                    }
+                if(curPacket == null) {
+                    ready = false;
+                    waiting();
+                    continue;
                 }
 
                 try {
-                    Thread.sleep(1);
-                } catch(Exception e) {
+                    socket.send(curPacket);
+                } catch (Exception e) {
 
                 }
             }
         }
     }
 
-    private ConcurrentLinkedQueue<DatagramPacket> inQueue =
-            new ConcurrentLinkedQueue<DatagramPacket>();
+    private ConcurrentLinkedQueue<Packet> inQueue =
+            new ConcurrentLinkedQueue<Packet>();
+
     private ConcurrentLinkedQueue<DatagramPacket> outQueue =
             new ConcurrentLinkedQueue<DatagramPacket>();
+
+    private final ArrayList<Packet> replyQueue =
+            new ArrayList<Packet>();
 
     private DatagramSocket socket;
     private NetworkReader nIn;
@@ -95,6 +175,19 @@ public class Network {
         nOut = null;
         socket = null;
         connected = false;
+
+        checker = new Timer();
+        checker.schedule(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
+    }
+
+    private boolean isValid(Packet packet) {
+        String[] p = packet.getPacket();
+
+        if(Protocol.containsCmd(p[0]) && Protocol.getArgSize(p[0]) == p.length - 1) {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean send(final String cmd, Object... o) {
@@ -106,7 +199,16 @@ public class Network {
         DatagramPacket p = null;
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), dest);
+
+            if(Protocol.hasReply(cmd)) {
+                synchronized(replyQueue) {
+                    Packet rPacket = new Packet(p);
+                    replyQueue.add(rPacket);
+                }
+            }
+
             outQueue.add(p);
+            nOut.wakeUp();
         } catch(SocketException e) {
             return false;
         }
@@ -123,7 +225,16 @@ public class Network {
         DatagramPacket p = null;
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), destination);
+
+            if(Protocol.hasReply(cmd)) {
+                synchronized(replyQueue) {
+                    Packet rPacket = new Packet(p);
+                    replyQueue.add(rPacket);
+                }
+            }
+
             outQueue.add(p);
+            nOut.wakeUp();
         } catch(SocketException e) {
             return false;
         }
@@ -136,25 +247,15 @@ public class Network {
         return send(destination, cmd, o);
     }
    
-    public DatagramPacket getPacket() {
-        DatagramPacket p = inQueue.poll();
-        return p;
-    }
-   
-    public void addTestPacket(String packet) {
-        DatagramPacket p = null;
-        try {
-            p = new DatagramPacket(packet.getBytes(), packet.length());
-            inQueue.add(p);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public Packet getPacket() {
+        return inQueue.poll();
     }
 
     public void disconnect() {
         if(connected) {
             inQueue.clear();
             outQueue.clear();
+            replyQueue.clear();
 
             socket.close();
             socket = null;
@@ -185,14 +286,14 @@ public class Network {
     }
 
     public void connect() {
-        connect(host, masterPort);
+        connect(HOST, MASTERPORT);
     }
 
     public int getPort(){
         return port;
     }
     public String getHost(){
-        return host;
+        return HOST;
     }
     public void listen(int port) {
         try {
@@ -204,6 +305,10 @@ public class Network {
             e.printStackTrace();
             disconnect();
         }
+    }
+
+    public void setProtocolHandler(ProtocolHandler handler) {
+        this.handler = handler;
     }
 }
 

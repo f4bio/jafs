@@ -1,8 +1,8 @@
 package common.net;
 
+import common.CLog;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 
 /**
@@ -12,41 +12,51 @@ import java.net.InetSocketAddress;
 public abstract class ProtocolHandler implements Runnable {
     protected Network net;
     protected Thread thread;
+    protected boolean ready;
 
     public ProtocolHandler(Network net) {
         this.net = net;
+        ready = false;
         thread = new Thread(this);
-        //thread.setDaemon(true);
         thread.start();
     }
 
-    public void sleep() {
-        try {
-            Thread.sleep(1);
-        } catch(Exception e) {
+    private void waiting() {
+        synchronized(thread) {
+            try {
+                while(!ready)
+                    thread.wait();
+            } catch(Exception e) {
 
+            }
+        }
+    }
+
+    public void wakeUp() {
+        if(!ready) {
+            ready = true;
+
+            synchronized(thread) {
+                thread.notify();
+            }
         }
     }
 
     public void run() {
-        DatagramPacket dPacket;
+        Packet dPacket;
         InetSocketAddress dAddress;
+
         while(true) {
             dPacket = net.getPacket();
 
             if(dPacket == null) {
-                sleep();
+                ready = false;
+                waiting();
                 continue;
             }
 
-            String[] sPacket = new String(dPacket.getData(), 0, dPacket.getLength()).split(Protocol.ARG_SEPERATOR);
-
-            dAddress = (InetSocketAddress)dPacket.getSocketAddress();
-
-            if(!Protocol.containsCmd(sPacket[0])) {
-                sleep();
-                continue;
-            }
+            String[] sPacket = dPacket.getPacket();
+            dAddress = dPacket.getAddress();
 
             Object[] param = new Object[Protocol.getArgSize(sPacket[0]) + 1];
             Class[] sig = new Class[param.length];
@@ -92,7 +102,8 @@ public abstract class ProtocolHandler implements Runnable {
                     }
 
                 } catch(Exception e) {
-                    e.printStackTrace();
+                    CLog.log("Invalid packet sent by " + dAddress.getHostName()
+                            + ":" + dAddress.getPort());
                 }
             }
 
@@ -115,4 +126,6 @@ public abstract class ProtocolHandler implements Runnable {
             }
         }
     }
+
+    public abstract void noReplyReceived(Packet p);
 }

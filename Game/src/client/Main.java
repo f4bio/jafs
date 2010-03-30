@@ -2,6 +2,7 @@ package client;
 
 import client.anim.UpdateLoop;
 import client.render.MainScreen;
+import common.CLog;
 import common.net.Network;
 import common.net.Protocol;
 import common.utils.CUtils;
@@ -27,14 +28,15 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+        CLog.init("debug.txt");
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
-        net.listen(50002);
+        net.setProtocolHandler(protocol);
+        net.listen(50001);
 //        net.send("localhost", 40000, Protocol.client_server_clientcount);
         net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
-        net.send("localhost", Network.masterPort, Protocol.CLIENT_MASTER_AUTH);
+        net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
         new Chat(net).start();
 
         /*Protocol.init();
