@@ -61,7 +61,7 @@ public class UpdateLoop implements Runnable{
                 try {
                     Thread.sleep((int)sleepTime);
                 } catch(InterruptedException e) {
-
+                    
                 }
             }
 

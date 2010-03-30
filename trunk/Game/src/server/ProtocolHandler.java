@@ -2,6 +2,7 @@ package server;
 
 import common.net.Client;
 import common.net.Network;
+import common.net.Packet;
 import common.net.Protocol;
 import java.net.InetSocketAddress;
 
@@ -21,20 +22,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_s_servercount(Integer i, InetSocketAddress adr){
         Main.setServerId(i);
     }
-    public void m_s_auth_success(InetSocketAddress adr) {
-        System.out.println("server succesfully listed.");
-    }
-
-    public void m_s_auth_failure(InetSocketAddress adr) {
-        System.out.println("server failed to be listed.");
+    public void m_s_auth_reply(Integer i, InetSocketAddress adr) {
+        if(i == Protocol.REPLY_SUCCESS)
+            System.out.println("server succesfully listed.");
+        else
+            System.out.println("server failed to be listed.");
     }
 
     public void c_s_auth(InetSocketAddress adr){
         Client added = Main.addClient(adr);
         if(added != null)
-            net.send(adr, Protocol.SERVER_CLIENT_AUTH_SUCCESS, new Object[0]);
+            net.send(adr, Protocol.SERVER_CLIENT_AUTH_REPLY, Protocol.REPLY_SUCCESS);
         else
-            net.send(adr, Protocol.SERVER_CLIENT_AUTH_FAILURE, new Object[0]);
+            net.send(adr, Protocol.SERVER_CLIENT_AUTH_REPLY, Protocol.REPLY_FAILURE);
     }
     public void c_s_pong(InetSocketAddress adr) {
         Main.decreasePingFailures(adr);
@@ -47,7 +47,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void c_s_logoff(InetSocketAddress adr){
         Main.removeClient(adr);
-        net.send(adr, Protocol.SERVER_CLIENT_LOGOFF_SUCCESS, new Object[0]);
+        net.send(adr, Protocol.SERVER_CLIENT_LOGOFF_REPLY, Protocol.REPLY_SUCCESS);
     }
     // --- chat fkt
     public void c_s_chat_all(String msg, InetSocketAddress adr){
@@ -61,8 +61,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat end
     public void c_s_jointeam(Integer teamId, InetSocketAddress adr){
         if(Main.setClientTeamId(adr, teamId)==-1)
-            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_FAILURE);
+            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_REPLY, Protocol.REPLY_FAILURE);
         else
-            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_SUCCESS);
+            net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_REPLY, Protocol.REPLY_SUCCESS);
+    }
+
+    public void noReplyReceived(Packet p) {
+        if(p.getCmd().equals(Protocol.SERVER_CLIENT_PING)) {
+            Main.removeClient(p.getAddress());
+        }
     }
 }

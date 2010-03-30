@@ -26,13 +26,13 @@ public class Main {
         public void run() {
             int failures;
             for(int i=0;i<serverlist.size();i++) {
-                serverlist.get(i).increasePingFailureCnt();
+                /*serverlist.get(i).increasePingFailureCnt();
                 failures = serverlist.get(i).getPingFailureCnt();
 
                 if(failures >= maxPingFailures) {
                     removeServer(serverlist.get(i));
                     continue;
-                }
+                }*/
 
                 net.send(serverlist.get(i).getAddress(), Protocol.MASTER_SERVER_PING);
             }
@@ -41,10 +41,11 @@ public class Main {
     private static Timer pingTimer;
 
     public static void main(String[] args) {
-        net = new Network();
-        net.listen(Network.masterPort);
-        handler = new ProtocolHandler(net);
         Protocol.init();
+        net = new Network();
+        handler = new ProtocolHandler(net);
+        net.setProtocolHandler(handler);
+        net.listen(Network.MASTERPORT);
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
@@ -67,6 +68,10 @@ public class Main {
         serverlist.remove(server);
 
         System.out.println("Server " + server.getHost() + ":" + server.getPort() + " dropped." );
+    }
+
+    public static void removeServer(InetSocketAddress adr) {
+        removeServer(getServer(adr));
     }
 
     public static Server getServer(String host, int port) {

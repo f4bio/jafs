@@ -1,6 +1,7 @@
 package client;
 
 import common.net.Network;
+import common.net.Packet;
 import common.net.Protocol;
 import java.net.InetSocketAddress;
 
@@ -33,37 +34,45 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Main.completeServerlist(Main.serverlist);
         System.out.println(":ServerList");
     }
-    public void m_c_auth_success(InetSocketAddress adr) {
-        System.out.println("client succesfully listed. (master)");
+    public void m_c_auth_reply(Integer i, InetSocketAddress adr) {
+        if(i == Protocol.REPLY_SUCCESS)
+            System.out.println("client succesfully listed. (master)");
+        else
+            System.out.println("client failed to be listed. (master)");
     }
-    public void m_c_auth_failure(InetSocketAddress adr) {
-        System.out.println("client failed to be listed.(master)");
-    }
+
     public void c_m_chat_lobby(String msg, InetSocketAddress adr) {
         System.out.println(msg);
     }
-    public void s_c_auth_success(InetSocketAddress adr) {
-        System.out.println("client succesfully listed.");
+
+    public void s_c_auth_reply(Integer i, InetSocketAddress adr) {
+        if(i == Protocol.REPLY_SUCCESS)
+            System.out.println("client succesfully listed. (master)");
+        else
+            System.out.println("client failed to be listed. (master)");
     }
-    public void s_c_auth_failure(InetSocketAddress adr) {
-        System.out.println("client failed to be listed.");
-    }
+
     // --- chat fkt
     public void s_c_chat(String msg, InetSocketAddress adr) {
         System.out.println("CHAT: "+msg);
     }
+
     // --- end chat
-    public void s_c_logoff_success(InetSocketAddress adr) {
-        System.out.println("you have been succesfully logged off.");
-    }
-    public void s_c_logoff_failure(InetSocketAddress adr) {
-        System.out.println("log off failed");
-    }
-    public void s_c_jointeam_success(InetSocketAddress adr) {
-        System.out.println("you have been succesfully join team");
-    }
-    public void s_c_jointeam_failure(InetSocketAddress adr) {
-        System.out.println("join team failed");
+    public void s_c_logoff_reply(Integer reply, InetSocketAddress adr) {
+        if(reply == Protocol.REPLY_SUCCESS)
+            System.out.println("you have been succesfully logged off.");
+        else
+            System.out.println("log off failed");
     }
 
+    public void s_c_jointeam_reply(Integer reply, InetSocketAddress adr) {
+        if(reply == Protocol.REPLY_SUCCESS)
+            System.out.println("you have been succesfully join team");
+        else
+            System.out.println("join team failed");
+    }
+
+    public void noReplyReceived(Packet p) {
+
+    }
 }

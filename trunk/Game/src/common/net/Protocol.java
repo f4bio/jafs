@@ -9,6 +9,7 @@ import java.util.Hashtable;
 public class Protocol {
     
     private static Hashtable<String, int[]> cmd = new Hashtable<String, int[]>();
+    private static Hashtable<String, String> cmdReply = new Hashtable<String, String>();
 
     //----- Argument definitions
     public static final int ARG_BYTE = 0;
@@ -19,6 +20,9 @@ public class Protocol {
     public static final int ARG_DOUBLE = 5;
     public static final int ARG_STRING = 6;
     public static final int ARG_NONE = 7;
+
+    public static final int REPLY_SUCCESS = 0;
+    public static final int REPLY_FAILURE = 1;
     
     public static final String ARG_SEPERATOR = ";";
 
@@ -40,23 +44,18 @@ public class Protocol {
     public static final String SERVER_MASTER_AUTH = "s_m_auth";
     public static final String SERVER_MASTER_SERVERCOUNT = "s_m_servercount";
     public static final String SERVER_CLIENT_PING = "s_c_ping";
-    public static final String SERVER_CLIENT_AUTH_SUCCESS = "s_c_auth_success";
-    public static final String SERVER_CLIENT_AUTH_FAILURE = "s_c_auth_failure";
+    public static final String SERVER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
     public static final String SERVER_CLIENT_CLIENTCOUNT = "s_c_clientcount";
     public static final String SERVER_CLIENT_CLIENTID = "s_c_clientid";
     public static final String SERVER_CLIENT_CHAT = "s_c_chat";
-    public static final String SERVER_CLIENT_LOGOFF_SUCCESS = "s_c_logoff_success";
-    public static final String SERVER_CLIENT_LOGOFF_FAILURE = "s_c_logoff_failure";
-    public static final String SERVER_CLIENT_JOINTEAM_SUCCESS = "s_c_jointeam_success";
-    public static final String SERVER_CLIENT_JOINTEAM_FAILURE = "s_c_jointeam_failure";
+    public static final String SERVER_CLIENT_LOGOFF_REPLY = "s_c_logoff_reply";
+    public static final String SERVER_CLIENT_JOINTEAM_REPLY = "s_c_jointeam_reply";
 
     //----- Master Server commands
-    public static final String MASTER_SERVER_AUTH_SUCCESS = "m_s_auth_success";
-    public static final String MASTER_SERVER_AUTH_FAILURE = "m_s_auth_failure";
+    public static final String MASTER_SERVER_AUTH_REPLY = "m_s_auth_reply";
     public static final String MASTER_SERVER_PING = "m_s_ping";
     public static final String MASTER_SERVER_SERVERCOUNT = "m_s_servercount";
-    public static final String MASTER_CLIENT_AUTH_SUCCESS = "s_c_auth_success";
-    public static final String MASTER_CLIENT_AUTH_FAILURE = "s_c_auth_failure";
+    public static final String MASTER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
     public static final String MASTER_CLIENT_NEWLIST = "m_c_newlist";
     public static final String MASTER_CLIENT_LISTENTRY = "m_c_listentry";
     public static final String MASTER_CLIENT_ENDLIST = "m_c_endlist";
@@ -64,6 +63,20 @@ public class Protocol {
 
     public static int[] registerCmd(final String command, int... arg) {
         return cmd.put(command, arg);
+    }
+
+    public static String registerCmdReply(final String command, final String reply) {
+        return cmdReply.put(command, reply);
+    }
+
+    public static boolean hasReply(final String command) {
+        if(cmdReply.containsKey(command))
+            return true;
+        return false;
+    }
+
+    public static final String getReplyOfCmd(final String command) {
+        return cmdReply.get(command);
     }
 
     public static String buildPacket(final String command, Object... o) {
@@ -88,8 +101,12 @@ public class Protocol {
 
     public static int getArgSize(final String command) {
         int[] args = cmd.get(command);
-        if(args != null)
-            return args.length;
+        if(args != null) {
+            if(args[0] != ARG_NONE)
+                return args.length;
+            else
+                return 0;
+        }
         return -1;
     }
 
@@ -122,24 +139,26 @@ public class Protocol {
         registerCmd(SERVER_CLIENT_CLIENTID, ARG_INT);
         registerCmd(SERVER_CLIENT_CLIENTCOUNT, ARG_INT);
         registerCmd(SERVER_CLIENT_PING, ARG_NONE);
-        registerCmd(SERVER_CLIENT_AUTH_SUCCESS, ARG_NONE);
-        registerCmd(SERVER_CLIENT_AUTH_FAILURE, ARG_NONE);
+        registerCmd(SERVER_CLIENT_AUTH_REPLY, ARG_INT);
         registerCmd(SERVER_CLIENT_CHAT, ARG_STRING);
-        registerCmd(SERVER_CLIENT_LOGOFF_SUCCESS, ARG_NONE);
-        registerCmd(SERVER_CLIENT_LOGOFF_FAILURE, ARG_NONE);
-        registerCmd(SERVER_CLIENT_JOINTEAM_SUCCESS, ARG_NONE);
-        registerCmd(SERVER_CLIENT_JOINTEAM_FAILURE, ARG_NONE);
+        registerCmd(SERVER_CLIENT_LOGOFF_REPLY, ARG_INT);
+        registerCmd(SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT);
 
         //----- Master Server commands
-        registerCmd(MASTER_SERVER_AUTH_SUCCESS, ARG_NONE);
-        registerCmd(MASTER_SERVER_AUTH_FAILURE, ARG_NONE);
+        registerCmd(MASTER_SERVER_AUTH_REPLY, ARG_INT);
         registerCmd(MASTER_SERVER_PING, ARG_NONE);
         registerCmd(MASTER_SERVER_SERVERCOUNT, ARG_INT);
-        registerCmd(MASTER_CLIENT_AUTH_SUCCESS, ARG_NONE);
-        registerCmd(MASTER_CLIENT_AUTH_FAILURE, ARG_NONE);
+        registerCmd(MASTER_CLIENT_AUTH_REPLY, ARG_INT);
         registerCmd(MASTER_CLIENT_NEWLIST, ARG_NONE);
         registerCmd(MASTER_CLIENT_LISTENTRY, ARG_STRING);
         registerCmd(MASTER_CLIENT_ENDLIST, ARG_NONE);
         registerCmd(MASTER_CLIENT_CHAT_LOBBY, ARG_STRING);
+
+        //----- Associate commands with replies
+        registerCmdReply(SERVER_MASTER_AUTH, MASTER_SERVER_AUTH_REPLY);
+        registerCmdReply(CLIENT_MASTER_AUTH, MASTER_CLIENT_AUTH_REPLY);
+        registerCmdReply(CLIENT_SERVER_AUTH, SERVER_CLIENT_AUTH_REPLY);
+        registerCmdReply(SERVER_CLIENT_PING, CLIENT_SERVER_PONG);
+        registerCmdReply(MASTER_SERVER_PING, SERVER_MASTER_PONG);
     }
 }
