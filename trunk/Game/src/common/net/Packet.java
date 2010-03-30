@@ -15,10 +15,12 @@ import java.net.InetSocketAddress;
 public class Packet {
     private String[] sPacket;
     private InetSocketAddress adr;
+    private DatagramPacket p;
     private int ttl;
 
     public Packet(DatagramPacket packet) {
         if(packet != null) {
+            p = packet;
             sPacket = new String(packet.getData(), 0, packet.getLength()).split(Protocol.ARG_SEPERATOR);
             adr = (InetSocketAddress)packet.getSocketAddress();
         }
@@ -37,6 +39,10 @@ public class Packet {
     public InetSocketAddress getAddress() {
         return adr;
     }
+
+    public DatagramPacket getDatagram() {
+        return p;
+    }
     
     public void resetTimeToLive() {
         ttl = Network.RESEND_COUNT;
@@ -50,5 +56,11 @@ public class Packet {
         if(ttl < 0)
             return false;
         return true;
+    }
+
+    public boolean equals(DatagramPacket packet) {
+        if(packet.equals(p))
+            return true;
+        return false;
     }
 }

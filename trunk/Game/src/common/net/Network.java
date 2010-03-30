@@ -36,20 +36,20 @@ public class Network {
 
         public void run() {
             Packet p;
+            Iterator<Packet> t;
 
             synchronized(replyQueue) {
-                for(int i=0; i<replyQueue.size(); ++i) {
-                    try {
-                        p = replyQueue.get(i);
+                t = replyQueue.iterator();
 
-                        if(!p.hasTimeToLive()) {
-                            handler.noReplyReceived(p);
-                            replyQueue.remove(i);
-                        } else {
-                            p.decreaseTimeToLive();
-                        }
-                    } catch(Exception e) {
-                        break;
+                while(t.hasNext()) {
+                    p = t.next();
+
+                    if(!p.hasTimeToLive()) {
+                        handler.noReplyReceived(p);
+                        t.remove();
+                    } else {
+                        send(p.getCmd(), p.getDatagram(), false);
+                        p.decreaseTimeToLive();
                     }
                 }
             }
@@ -190,6 +190,30 @@ public class Network {
         return false;
     }
 
+    private void send(String cmd, DatagramPacket packet, boolean check) {
+        if(check && Protocol.hasReply(cmd)) {
+            Iterator<Packet> i;
+            Packet p;
+
+            synchronized(replyQueue) {
+                i = replyQueue.iterator();
+
+                while(i.hasNext()) {
+                    p = i.next();
+
+                    if(p.equals(packet)) {
+                        return;
+                    }
+                }
+
+                replyQueue.add(new Packet(packet));
+            }
+        }
+
+        outQueue.add(packet);
+        nOut.wakeUp();
+    }
+
     public boolean send(final String cmd, Object... o) {
         String packet = Protocol.buildPacket(cmd, o);
 
@@ -200,15 +224,7 @@ public class Network {
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), dest);
 
-            if(Protocol.hasReply(cmd)) {
-                synchronized(replyQueue) {
-                    Packet rPacket = new Packet(p);
-                    replyQueue.add(rPacket);
-                }
-            }
-
-            outQueue.add(p);
-            nOut.wakeUp();
+            send(cmd, p, true);
         } catch(SocketException e) {
             return false;
         }
@@ -226,15 +242,7 @@ public class Network {
         try {
             p = new DatagramPacket(packet.getBytes(), packet.length(), destination);
 
-            if(Protocol.hasReply(cmd)) {
-                synchronized(replyQueue) {
-                    Packet rPacket = new Packet(p);
-                    replyQueue.add(rPacket);
-                }
-            }
-
-            outQueue.add(p);
-            nOut.wakeUp();
+            send(cmd, p, true);
         } catch(SocketException e) {
             return false;
         }
