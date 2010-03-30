@@ -116,10 +116,20 @@ public class Main {
     }
 
     public static void broadcast(String msg, InetSocketAddress adr){
-//        for(Server server: serverlist)
-//            net.send(server.getAddress(), Protocol.master_client_chat_lobby, "(LOBBY-CHAT) Player-"+Main.getClientId(adr)+" ("+client.getHost()+":"+client.getPort()+"): "+msg);
+        Client sender = getClient(adr);
+        for(Client client: clientlist)
+            if(!client.isInGame())
+            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT_LOBBY, "(LOBBY-CHAT) Player-"+sender.getId()+" ("+sender.getId()+":"+sender.getPort()+"): "+msg);
     }
 
+    public static Client getClient(InetSocketAddress adr) {
+        for(Client cur : clientlist) {
+            if(cur.getAddress().equals(adr))
+                return cur;
+        }
+
+        return null;
+    }
     public static Client addClient(InetSocketAddress adr) {
         for(Client client: clientlist)
             if(client.getAddress().equals(adr))

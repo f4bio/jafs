@@ -33,7 +33,6 @@ public class CLog {
         if(bw != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("[HH:mm:ss]");
             String timeStamp = sdf.format(new Date());
-
             try {
                 bw.write(timeStamp + " " + str);
                 bw.newLine();

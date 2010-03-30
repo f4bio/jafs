@@ -27,9 +27,11 @@ public class Protocol {
     public static final String ARG_SEPERATOR = ";";
 
     //----- Client commands
+    public static final String CLIENT_MASTER_JOINSERVER = "c_m_joinserver";
     public static final String CLIENT_MASTER_LISTREQUEST = "c_m_listrequest";
     public static final String CLIENT_MASTER_CHAT_LOBBY = "c_m_chat_lobby";
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
+
     public static final String CLIENT_SERVER_AUTH = "c_s_auth";
     public static final String CLIENT_SERVER_PONG = "c_s_pong";
     public static final String CLIENT_SERVER_CLIENTCOUNT = "c_s_clientcount";
@@ -43,6 +45,7 @@ public class Protocol {
     public static final String SERVER_MASTER_PONG = "s_m_pong";
     public static final String SERVER_MASTER_AUTH = "s_m_auth";
     public static final String SERVER_MASTER_SERVERCOUNT = "s_m_servercount";
+    
     public static final String SERVER_CLIENT_PING = "s_c_ping";
     public static final String SERVER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
     public static final String SERVER_CLIENT_CLIENTCOUNT = "s_c_clientcount";
@@ -55,7 +58,9 @@ public class Protocol {
     public static final String MASTER_SERVER_AUTH_REPLY = "m_s_auth_reply";
     public static final String MASTER_SERVER_PING = "m_s_ping";
     public static final String MASTER_SERVER_SERVERCOUNT = "m_s_servercount";
-    public static final String MASTER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
+
+    public static final String MASTER_CLIENT_JOINSERVER_REPLY = "m_c_joinserver_reply";
+    public static final String MASTER_CLIENT_AUTH_REPLY = "m_c_auth_reply";
     public static final String MASTER_CLIENT_NEWLIST = "m_c_newlist";
     public static final String MASTER_CLIENT_LISTENTRY = "m_c_listentry";
     public static final String MASTER_CLIENT_ENDLIST = "m_c_endlist";
@@ -123,6 +128,8 @@ public class Protocol {
         registerCmd(CLIENT_MASTER_LISTREQUEST, ARG_NONE);
         registerCmd(CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
         registerCmd(CLIENT_MASTER_AUTH, ARG_NONE);
+        registerCmd(CLIENT_MASTER_JOINSERVER, ARG_STRING, ARG_INT);
+
         registerCmd(CLIENT_SERVER_AUTH, ARG_NONE);
         registerCmd(CLIENT_SERVER_PONG, ARG_NONE);
         registerCmd(CLIENT_SERVER_CLIENTCOUNT,ARG_NONE);
@@ -148,6 +155,8 @@ public class Protocol {
         registerCmd(MASTER_SERVER_AUTH_REPLY, ARG_INT);
         registerCmd(MASTER_SERVER_PING, ARG_NONE);
         registerCmd(MASTER_SERVER_SERVERCOUNT, ARG_INT);
+
+        registerCmd(MASTER_CLIENT_JOINSERVER_REPLY, ARG_STRING);
         registerCmd(MASTER_CLIENT_AUTH_REPLY, ARG_INT);
         registerCmd(MASTER_CLIENT_NEWLIST, ARG_NONE);
         registerCmd(MASTER_CLIENT_LISTENTRY, ARG_STRING);
@@ -160,5 +169,6 @@ public class Protocol {
         registerCmdReply(CLIENT_SERVER_AUTH, SERVER_CLIENT_AUTH_REPLY);
         registerCmdReply(SERVER_CLIENT_PING, CLIENT_SERVER_PONG);
         registerCmdReply(MASTER_SERVER_PING, SERVER_MASTER_PONG);
+        registerCmdReply(CLIENT_MASTER_JOINSERVER, MASTER_CLIENT_JOINSERVER_REPLY);
     }
 }
