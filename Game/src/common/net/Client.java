@@ -20,6 +20,7 @@ public class Client {
     private int limitPlayers;
     private int curPlayers;
     private int latency;
+    private boolean inGame;
     private InetSocketAddress address;
     private int pingFailureCnt;
     private int id;
@@ -36,6 +37,7 @@ public class Client {
         this.port = adr.getPort();
         pingFailureCnt = 0;
         address = adr;
+        this.inGame = false;
     }
     public String getHost() {
         return host;
@@ -69,6 +71,12 @@ public class Client {
     }
     public int getId() {
         return id;
+    }
+    public void changeInGame() {
+        this.inGame = !this.inGame;
+    }
+    public boolean isInGame() {
+        return this.inGame;
     }
     public void setTeamId(int teamId) {
         this.teamId = teamId;

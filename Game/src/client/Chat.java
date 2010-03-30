@@ -27,9 +27,15 @@ public class Chat extends Thread{
                         net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
                         running = false;
                     }
+
                     // Show Serverlist
                     else if(input.startsWith("/serverlist")) {
                         net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
+                    }
+                    // join server
+                    else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
+                        net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)),
+                                Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
                     // Join team
                     else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {

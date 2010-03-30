@@ -12,11 +12,13 @@ import java.net.InetSocketAddress;
  * @author miracle
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
-    public ProtocolHandler(Network net) {
+    public ProtocolHandler(Network net)
+    {
         super(net);
     }
 
-    public void s_m_auth(InetSocketAddress adr) {
+    public void s_m_auth(InetSocketAddress adr)
+    {
         Server added = Main.addServer(adr);
         if(added != null)
             net.send(adr, Protocol.MASTER_SERVER_AUTH_REPLY, Protocol.REPLY_SUCCESS);
@@ -24,15 +26,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             net.send(adr, Protocol.MASTER_SERVER_AUTH_REPLY, Protocol.REPLY_FAILURE);
     }
 
-    public void s_m_pong(InetSocketAddress adr) {
+    public void s_m_pong(InetSocketAddress adr)
+    {
         Main.decreasePingFailures(adr);
     }
 
-    public void s_m_servercount(InetSocketAddress adr){
+    public void s_m_servercount(InetSocketAddress adr)
+    {
         net.send(adr, Protocol.MASTER_SERVER_SERVERCOUNT, Main.serverCount());
     }
 
-    public void c_m_listrequest(InetSocketAddress adr) {
+    public void c_m_joinserver(String host, Integer port, InetSocketAddress adr) 
+    {
+        System.out.println("c_m_joinserver()");
+    }
+
+    public void c_m_listrequest(InetSocketAddress adr)
+    {
         String[] list = Main.getServerlist();
         net.send(adr, Protocol.MASTER_CLIENT_NEWLIST, new Object[0]);
         for(String i : list) {
@@ -48,11 +58,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         else
             net.send(adr, Protocol.MASTER_CLIENT_AUTH_REPLY, Protocol.REPLY_FAILURE);
     }
-    public void m_c_chat_lobby(String msg, InetSocketAddress adr) {
-        System.out.println(msg);
+    public void c_m_chat_lobby(String msg, InetSocketAddress adr)
+    {
+        Main.broadcast(msg, adr);
     }
 
-    public void noReplyReceived(Packet p) {
+    public void noReplyReceived(Packet p)
+    {
         if(p.getCmd().equals(Protocol.MASTER_SERVER_PING)) {
             Main.removeServer(p.getAddress());
         }
