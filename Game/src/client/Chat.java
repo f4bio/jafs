@@ -19,7 +19,7 @@ public class Chat extends Thread{
         in = new BufferedReader(new InputStreamReader(System.in));
         while(running) {
             try{
-                System.out.print("Type in your msg: ");
+                System.out.print("Type in your msg/cmd: ");
                 String input = in.readLine();
                 if(input.startsWith("/")){
                     // Log Off
@@ -29,13 +29,18 @@ public class Chat extends Thread{
                     }
 
                     // Show Serverlist
-                    else if(input.startsWith("/serverlist")) {
+                    else if(input.startsWith("/serverlist") || input.startsWith("/sl")) {
                         net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
                     }
                     // join server
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
-                        net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)),
-                                Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
+                        net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)), Protocol.CLIENT_SERVER_AUTH);
+                        net.send("localhost", 30000,
+                                Protocol.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
+                    }
+                     // lobby chat
+                    else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
+                        net.send("localhost", 30000, Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
                     // Join team
                     else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {
@@ -57,8 +62,8 @@ public class Chat extends Thread{
                 else if(input.contains(";")) {
                     System.out.println("illegal character");
                 }
-                else
-                    net.send("localhost", 40000, Protocol.CLIENT_SERVER_CHAT_ALL, input);
+//                else
+//                    net.send("localhost", 40000, Protocol.CLIENT_SERVER_CHAT_ALL, input);
             } catch(Exception e) {
                 System.out.println(e);
             }
