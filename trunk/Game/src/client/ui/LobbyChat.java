@@ -44,14 +44,15 @@ public class LobbyChat extends UiWindow implements ActionListener {
 
         jTextField1.setBackground(new java.awt.Color(240, 240, 240));
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-        jTextField1.setMinimumSize(new java.awt.Dimension(2, 20));
-        jTextField1.setPreferredSize(new java.awt.Dimension(2, 20));
+        jTextField1.setMinimumSize(new java.awt.Dimension(2, 21));
+        jTextField1.setPreferredSize(new java.awt.Dimension(2, 21));
         jTextField1.setSelectionColor(new java.awt.Color(204, 204, 204));
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("Senden");
-        jButton1.setMaximumSize(new java.awt.Dimension(73, 20));
-        jButton1.setMinimumSize(new java.awt.Dimension(73, 20));
-        jButton1.setPreferredSize(new java.awt.Dimension(73, 20));
+        jButton1.setMaximumSize(new java.awt.Dimension(73, 21));
+        jButton1.setMinimumSize(new java.awt.Dimension(73, 21));
+        jButton1.setPreferredSize(new java.awt.Dimension(73, 21));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -71,7 +72,7 @@ public class LobbyChat extends UiWindow implements ActionListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
