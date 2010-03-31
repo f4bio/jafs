@@ -16,32 +16,32 @@ import javax.swing.JPanel;
  * @author Julian Sanio
  * @version 0.1
  *
- * ZU BEACHTEN:
  *
- *   Pflicht-Initialisierungen (nach dem Init. aller grafischen Elemente):
- *      1. setName("...") - auch im GUI Designer unter den Eigenschaften->name
- *      2. setSize(getPreferredSize().width, getPreferredSize().height);
- *   Es scheint, die decoration wird nur korrekt gezeichnet, wenn genügend
- *   Abstand zwischen deco und einem grafischen Element besteht.
+ * Pflicht-Initialisierungen (nach dem Init. aller grafischen Elemente):
+ *     1. setName("...") - auch im GUI Designer unter den Eigenschaften->name
+ *     2. setSize(getPreferredSize().width, getPreferredSize().height);
+ * Es scheint, die decoration wird nur korrekt gezeichnet, wenn genügend
+ * Abstand zwischen deco und einem grafischen Element besteht.
  *
- *   Bei grafische Elemente mit Hintergrund (z.B. JCheckBox, JPanel etc.) muss
- *   jeweils setBackground(...) angepasst werden mit:
- *                        setBackground(new Color(1, 1, 1, 0))
- *   Dies bewirkt eine totale Tranzparenz, somit kann der UI Hintergrund zur
- *   Laufzeit geändert werden.
+ * Bei grafische Elemente mit Hintergrund (z.B. JCheckBox, JPanel etc.) muss
+ * jeweils setBackground(...) angepasst werden mit:
+ *                                    setBackground(new Color(1, 1, 1, 0))
+ * Dies bewirkt eine totale Tranzparenz, somit kann der UI Hintergrund zur
+ * Laufzeit geändert werden.
  *
- *   Ein UI Objekt muss IMMER erst dem UiManager -> addComponent(...)
- *                           und dem  MainScreen -> getContentPane().add(...)
- *      hinzugefügt werden, erst dann können Funktionalitäten wie setVisible etc.
- *   genutzt werden.
+ * Ein UI Objekt muss IMMER erst dem UiManager -> addComponent(...)
+ *                         und dem  MainScreen -> getContentPane().add(...)
+ * hinzugefügt werden, erst dann können Funktionalitäten wie setVisible etc.
+ * genutzt werden.
  *
  */
 public abstract class UiWindow extends JPanel
                                implements MouseListener, MouseMotionListener {
 
     public static final int BORDER_WIDTH = 6;
-    public static final Color UI_BACKGROUND_ON_TOP = new Color(216, 216, 216);
-    public static final Color UI_BACKGROUND_IN_BACKGROUND = new Color(240, 240, 240);
+    public static final Color UI_COLOR_ON_TOP = new Color(218, 218, 218);
+    public static final Color UI_COLOR_IN_BACKGROUND = new Color(240, 240, 240);
+    public static final Color UI_COLOR_TRANSPARENT = new Color(1, 1, 1, 0);
 
     protected Point location;
     protected GradientPaint gradLeft;
@@ -69,7 +69,7 @@ public abstract class UiWindow extends JPanel
         isMousePressed = false;
         isUndecorated = false;
 
-        setBackground(UI_BACKGROUND_ON_TOP);
+        setBackground(UI_COLOR_ON_TOP);
         addMouseListener(this);
         addMouseMotionListener(this);        
     }
@@ -116,18 +116,22 @@ public abstract class UiWindow extends JPanel
     }
 
     public void renderDecoration(Graphics2D g) {
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawLine(0, 0, 0, getHeight());                         // Left
+        g.drawLine(getWidth()-1, 0, getWidth()-1, getHeight());   // Right
+        g.drawLine(0, getHeight(), getWidth()-1, getHeight());    // Right
         // Right
 /*      g.setPaint(gradRight);
-        g.fillRect(getWidth(), 0, borderWidth, getHeight());    */
+        g.fillRect(getWidth(), 0, BORDER_WIDTH, getHeight());    */
         // Left
 /*      g.setPaint(gradLeft);
-        g.fillRect(-borderWidth, 0, borderWidth, getHeight());  */
+        g.fillRect(-BORDER_WIDTH, 0, BORDER_WIDTH, getHeight());  */
         // Top
         g.setPaint(gradTop);
         g.fillRect(0, -BORDER_WIDTH, getWidth(), BORDER_WIDTH);
         // Bottom
-        g.setPaint(gradBottom);
-        g.fillRect(0, getHeight(), getWidth(), BORDER_WIDTH);
+/*      g.setPaint(gradBottom);
+        g.fillRect(0, getHeight(), getWidth(), BORDER_WIDTH);   */
     }
 
     public boolean isMoveable(){

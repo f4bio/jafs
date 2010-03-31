@@ -6,7 +6,6 @@
 
 package client.ui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.AbstractTableModel;
@@ -21,9 +20,9 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     public Serverbrowser() {
         sModel = new ServerbrowserTableModel();
         initComponents();
-        jCheckBox1.setBackground(new Color(1, 1, 1, 0));
-        jTextField1.setBackground(new Color(1, 1, 1, 0));
-        jTextField2.setBackground(new Color(1, 1, 1, 0));
+        jCheckBox1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
+        jTextField1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
+        jTextField2.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
         jCheckBox1.addActionListener(this);
         jButton1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);
@@ -72,11 +71,19 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jCheckBox1.setText("Filter");
         jCheckBox1.setEnabled(false);
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton2.setText("Verbinden");
         jButton2.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jButton2.setMaximumSize(new java.awt.Dimension(79, 21));
+        jButton2.setMinimumSize(new java.awt.Dimension(79, 21));
+        jButton2.setPreferredSize(new java.awt.Dimension(79, 21));
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("Aktualisieren");
         jButton1.setMargin(new java.awt.Insets(1, 14, 1, 14));
+        jButton1.setMaximumSize(new java.awt.Dimension(89, 21));
+        jButton1.setMinimumSize(new java.awt.Dimension(89, 21));
+        jButton1.setPreferredSize(new java.awt.Dimension(89, 21));
 
         jTextField1.setBackground(new java.awt.Color(240, 240, 240));
         jTextField1.setEnabled(false);
@@ -101,21 +108,21 @@ public class Serverbrowser extends UiWindow implements ActionListener {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
                                         .addGap(27, 27, 27))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
+                                .addComponent(jCheckBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                                 .addGap(75, 75, 75)))
-                        .addGap(246, 246, 246)
+                        .addGap(238, 238, 238)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1))))
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -136,9 +143,9 @@ public class Serverbrowser extends UiWindow implements ActionListener {
                             .addComponent(jLabel1)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -154,19 +161,6 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
     private ServerbrowserTableModel sModel;
-
-    public void setServerlist(String[][] list) {
-        sModel.setData(list);
-        jTable1.setModel(sModel);
-        jScrollPane1.setViewportView(jTable1);
-    }
-
-    public String getSelectedServer(){
-        if (jTable1.getSelectedRow() >= 0)
-            return (String) sModel.getValueAt(jTable1.getSelectedRow(), 0);
-        else
-            return null;
-    }
 
     @Override
     public void addActionListener(ActionListener a) {
@@ -190,35 +184,57 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         }
     }
 
-    // TableModel
+    public void setServerlist(String[][] list) {
+        sModel.setServerlist(list);
+        jTable1.setModel(sModel);
+        jScrollPane1.setViewportView(jTable1);
+    }
+
+    public String getSelectedServer(){
+        if (jTable1.getSelectedRow() >= 0)
+            return (String) sModel.getValueAt(jTable1.getSelectedRow(), 0);
+        else
+            return null;
+    }
+
+
+    /**
+     *
+     * @author Julian Sanio
+     */
     public class ServerbrowserTableModel extends AbstractTableModel {
+
         private String[] columnNames = {"Server", "Map", "Spieler", "Ping"};
-        private Object[][] data = new Object [][] {  };
-
-        public int getColumnCount() {
-            return columnNames.length;
-        }
-
-        public int getRowCount() {
-            return data.length;
-        }
+        private String[][] serverList = new String [][] {  };
 
         @Override
         public String getColumnName(int col) {
             return columnNames[col];
         }
 
-        public Object getValueAt(int row, int col) {
-            return data[row][col];
-        }
-
         @Override
         public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();
         }
+        
+        public int getColumnCount() {
+            return columnNames.length;
+        }
 
-        public void setData(Object[][] data) {
-            this.data = data;
+        public int getRowCount() {
+            return serverList.length;
+        }
+
+        public String getValueAt(int row, int col) {
+            return serverList[row][col];
+        }
+
+        public void setServerlist(String[][] list) {
+            this.serverList = list;
+        }
+
+        public String[][] getServerlist() {
+            return serverList;
         }
     }
 }
