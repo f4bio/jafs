@@ -17,6 +17,7 @@
 === Fabio: ===
 
 * Masterserver-Client chat (Lobby chat) implementation (added by Julian)
+
 * whisper (added by fabio)
 <br />
 === Sezer: ===
