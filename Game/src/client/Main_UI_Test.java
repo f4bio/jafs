@@ -7,7 +7,10 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author miracle
+ * @author Julian Sanio
+ *
+ * ONLY TESTING ;)
+ *
  */
 public class Main_UI_Test {
 
@@ -26,17 +29,15 @@ public class Main_UI_Test {
         UiKeyListener kListener = new UiKeyListener();
 
         JFrame frm = new JFrame();
-//        frm.addKeyListener(kListener);
-        frm.setVisible(true);
+        frm.addKeyListener(kListener);
 
         screen = new MainScreen(frm);
 
-        // Interfaces
+        // Init Interfaces
         uiMain = new MainMenu();
         uiMain.setLocation(10, 200);
         uiMain.addActionListener(aListener);
         uiMain.setMoveable(false);
-        uiMain.setVisible(true);
         uiCreate = new CreateServer();
         uiCreate.setLocation(200, 200);
         uiCreate.addActionListener(aListener);
@@ -52,21 +53,18 @@ public class Main_UI_Test {
         uiCredits = new Credits();
         uiCredits.setLocation(screen.getWidth()/2 - uiCredits.getWidth()/2,
                               screen.getHeight()/2 - uiCredits.getHeight()/2);
-//        wSidebar = new WeaponSidebar(300, 100);
-//        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(),
-//                             screen.getHeight()-wSidebar.getHeight()-200);
-//        wSidebar.setVisible(true);
-
-//        uiLobbyChat.set
-        // UiManager
-        //UiManager.init();
+/*      wSidebar = new WeaponSidebar(300, 100);
+        wSidebar.setLocation(screen.getWidth()-wSidebar.getWidth(),
+                             screen.getHeight()-wSidebar.getHeight()-200);    */
+ 
+        // UIManger
         UiManager.addComponent(uiMain);
         UiManager.addComponent(uiCreate);
         UiManager.addComponent(uiBrowser);
         UiManager.addComponent(uiLobbyChat);
         UiManager.addComponent(uiOptions);
         UiManager.addComponent(uiCredits);
-//        UiManager.addComponent(wSidebar);
+        //UiManager.addComponent(wSidebar);
 
         // MainScreen
         screen.getContentPane().add(uiMain);
@@ -75,16 +73,17 @@ public class Main_UI_Test {
         screen.getContentPane().add(uiLobbyChat);
         screen.getContentPane().add(uiOptions);
         screen.getContentPane().add(uiCredits);
-//        screen.getContentPane().add(wSidebar);
-
+        //screen.getContentPane().add(wSidebar);
+        
         // UpdateLoop
         UpdateLoop loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
-//        loop.addUpdateObject(wSidebar);
+        //loop.addUpdateObject(wSidebar);
 
-        /*Protocol.init();
-        Network net = new Network();
-        ProtocolHandler handler = new ProtocolHandler(net);*/
+        
+        frm.setVisible(true);
+        uiMain.setVisible(true);
+        //wSidebar.setVisible(true);
     }
 
     public static MainScreen getScreen() {
