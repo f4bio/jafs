@@ -33,7 +33,7 @@ public class Main {
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
-        net.listen(50000);
+        net.listen(50001);
 //        net.send("localhost", 40000, Protocol.client_server_clientcount);
 //        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
         net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);

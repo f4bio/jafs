@@ -38,6 +38,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_joinserver(String host, Integer port, InetSocketAddress adr) 
     {
+
         System.out.println("c_m_joinserver()");
     }
 
