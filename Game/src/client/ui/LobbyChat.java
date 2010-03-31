@@ -38,7 +38,6 @@ public class LobbyChat extends UiWindow implements ActionListener {
 
         jTextArea1.setBackground(new java.awt.Color(240, 240, 240));
         jTextArea1.setColumns(20);
-        jTextArea1.setEditable(false);
         jTextArea1.setRows(5);
         jTextArea1.setSelectionColor(new java.awt.Color(204, 204, 204));
         jScrollPane1.setViewportView(jTextArea1);

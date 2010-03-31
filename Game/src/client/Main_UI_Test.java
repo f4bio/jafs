@@ -57,6 +57,7 @@ public class Main_UI_Test {
 //                             screen.getHeight()-wSidebar.getHeight()-200);
 //        wSidebar.setVisible(true);
 
+//        uiLobbyChat.set
         // UiManager
         //UiManager.init();
         UiManager.addComponent(uiMain);
