@@ -1,6 +1,7 @@
 package client.ui;
 
 import client.Main_UI_Test;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
@@ -10,8 +11,8 @@ import java.util.Vector;
  */
 public class UiManager {
 
-    public static final int decoHeight = 0;
-    public static final int borderWidth = 1;
+    public static final int DECO_HEIGHT = 0;
+    public static final int DECO_WIDTH = 1;
 
     private static Vector<UiWindow> content = new Vector<UiWindow>();
 
@@ -24,7 +25,7 @@ public class UiManager {
     }
 
     public static void renderAll(Graphics2D g) {
-       for(int i=0; i<content.size(); i++) {
+        for(int i=0; i<content.size(); i++) {
             renderComponent(content.get(i), g);
         }
     }
@@ -34,7 +35,13 @@ public class UiManager {
     }
 
     public static void setForeground(UiWindow u) {
+        for(int i=0; i<content.size(); i++) {
+            if(content.get(i) != Main_UI_Test.getUiMainMenu())
+                content.get(i).setBackground(UiWindow.UI_BACKGROUND_IN_BACKGROUND);
+        }
+
         content.remove(u);
+        u.setBackground(UiWindow.UI_BACKGROUND_ON_TOP);
         content.add(u);
 
         Main_UI_Test.getScreen().getContentPane().setComponentZOrder(u, 0);

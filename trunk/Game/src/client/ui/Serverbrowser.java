@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.AbstractTableModel;
@@ -20,6 +21,9 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     public Serverbrowser() {
         sModel = new ServerbrowserTableModel();
         initComponents();
+        jCheckBox1.setBackground(new Color(1, 1, 1, 0));
+        jTextField1.setBackground(new Color(1, 1, 1, 0));
+        jTextField2.setBackground(new Color(1, 1, 1, 0));
         jCheckBox1.addActionListener(this);
         jButton1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);
