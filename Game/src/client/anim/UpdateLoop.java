@@ -20,14 +20,18 @@ public class UpdateLoop implements Runnable{
         setUPS(ups);
         list = new Vector<UpdateObject>();
         thread  = new Thread(this);
-        thread.setDaemon(true);
+        //thread.setDaemon(true);
+        thread.setName("UpdateLoop");
         thread.start();
     }
 
     private void update() {
-        for(UpdateObject uo : list) {
-            if(uo != null)
-                uo.update(this);
+        synchronized(list) {
+            for(UpdateObject uo : list) {
+                if(uo != null) {
+                    uo.update(this);
+                }
+            }
         }
     }
 
@@ -39,14 +43,14 @@ public class UpdateLoop implements Runnable{
         double sumDiff;
 
         while(Thread.currentThread() == thread) {
-            if(paused) {
-                try {
-                    Thread.yield();
-                } catch(Exception e) {
+            while(paused) {
+                synchronized(thread) {
+                    try {
+                        thread.wait();
+                    } catch(Exception e) {
 
+                    }
                 }
-
-                continue;
             }
 
             update();
@@ -61,7 +65,7 @@ public class UpdateLoop implements Runnable{
                 try {
                     Thread.sleep((int)sleepTime);
                 } catch(InterruptedException e) {
-                    
+
                 }
             }
 
@@ -83,6 +87,10 @@ public class UpdateLoop implements Runnable{
         return curUPS;
     }
 
+    public long getCurrentTime() {
+        return curTime;
+    }
+
     public void addUpdateObject(UpdateObject u) {
         list.add(u);
     }
@@ -95,8 +103,17 @@ public class UpdateLoop implements Runnable{
         return speedfactor;
     }
 
-    public void setPaused(boolean paused) {
-        this.paused = paused;
+    public void pause() {
+        paused = true;
+    }
+
+    public void wakeUp() {
+        if(paused) {
+            paused = false;
+            synchronized(thread) {
+                thread.notify();
+            }
+        }
     }
 
     public boolean isPaused() {

@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.AbstractTableModel;
@@ -17,7 +18,8 @@ import javax.swing.table.AbstractTableModel;
 public class Serverbrowser extends UiWindow implements ActionListener {
 
     /** Creates new form Serverbrowser */
-    public Serverbrowser() {
+    public Serverbrowser(MainScreen scr) {
+        super(scr);
         sModel = new ServerbrowserTableModel();
         initComponents();
         jCheckBox1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);

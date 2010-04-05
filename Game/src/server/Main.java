@@ -42,7 +42,6 @@ public class Main {
     }
     private static TimerTask pinger = new TimerTask() {
         public void run() {
-            int failures;
             for(Client cur : clientlist) {
                 /*cur.increasePingFailureCnt();
                 failures = cur.getPingFailureCnt();

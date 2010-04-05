@@ -2,6 +2,7 @@ package client.ui;
 
 import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
+import client.render.MainScreen;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionListener;
@@ -30,7 +31,8 @@ public class WeaponSidebar extends UiWindow implements UpdateObject {
     private int focus_border;
     private Color focus_color;
 
-    public WeaponSidebar(int width, int focus_height){
+    public WeaponSidebar(MainScreen scr, int width, int focus_height){
+        super(scr);
         URL[] url = new URL[3];
         url[0] = getClass().getResource("/common/resource/weapon_glock18.png");
         url[1] = getClass().getResource("/common/resource/weapon_mp5.png");

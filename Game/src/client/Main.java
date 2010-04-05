@@ -9,6 +9,7 @@ import common.utils.CUtils;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  *
@@ -31,39 +32,54 @@ public class Main {
      */
     public static void main(String[] args) {
         CLog.init("debug.txt");
-        Protocol.init();
+        /*Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
         net.listen(net.getFreePort(50000, 65000));
 //        net.send("localhost", 40000, Protocol.client_server_clientcount);
-//        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
+        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
         net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
-        new Chat(net).start();
+        new Chat(net).start();*/
 
-        /*Protocol.init();
+        Protocol.init();
         net = new Network();
         net.listen(31330);
 
         JFrame frame = new JFrame();
+        frame.setIgnoreRepaint(true);
         frame.setVisible(true);
 
         screen = new MainScreen(frame);
         input = new Input();
-        screen.addKeyListener(input);
-        screen.addMouseMotionListener(input);
+        frame.addKeyListener(input);
+        frame.addMouseMotionListener(input);
 
         data = new GameData(input);
         data.loadMap("map");
 
         loop = new UpdateLoop(60);
         loop.addUpdateObject(data);
-        loop.addUpdateObject(screen);*/
+        loop.addUpdateObject(screen);
     }
 
     public static GameData getGameData() {
         return data;
     }
+    private static int getFreePort(){
+        DatagramSocket socket;
+            for(int i = 50000; i<65000;i++)
+                try{
+                    socket = new DatagramSocket(i);
+                    return i;
+                }catch(java.net.SocketException se){}
+        return -1;
+    }
+
+    public static MainScreen getScreen() {
+        return screen;
+    }
+
     public static void completeServerlist(ArrayList<String> list) {
         System.out.println("not yet implemented");
     }

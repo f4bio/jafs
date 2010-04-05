@@ -190,7 +190,7 @@ public class Network {
         return false;
     }
 
-    private void send(String cmd, DatagramPacket packet, boolean check) {
+    private synchronized void send(String cmd, DatagramPacket packet, boolean check) {
         if(check && Protocol.hasReply(cmd)) {
             Iterator<Packet> i;
             Packet p;
@@ -198,13 +198,20 @@ public class Network {
             synchronized(replyQueue) {
                 i = replyQueue.iterator();
 
+                System.out.println("-----");
                 while(i.hasNext()) {
                     p = i.next();
+                    String pack[] = p.getPacket();
+                    for(String l : pack) {
+                        System.out.print(l + ";");
+                    }
+                    System.out.println();
 
                     if(p.equals(packet)) {
                         return;
                     }
                 }
+                System.out.println("-----");
 
                 replyQueue.add(new Packet(packet));
             }
@@ -214,7 +221,7 @@ public class Network {
         nOut.wakeUp();
     }
 
-    public boolean send(final String cmd, Object... o) {
+    public synchronized boolean send(final String cmd, Object... o) {
         String packet = Protocol.buildPacket(cmd, o);
 
         if(packet == null)
@@ -232,7 +239,7 @@ public class Network {
         return true;
     }
 
-    public boolean send(InetSocketAddress destination, final String cmd, Object... o) {
+    public synchronized boolean send(InetSocketAddress destination, final String cmd, Object... o) {
         String packet = Protocol.buildPacket(cmd, o);
 
         if(destination == null || packet == null)
@@ -250,7 +257,7 @@ public class Network {
         return true;
     }
 
-    public boolean send(String host, int port, final String cmd, Object... o) {
+    public synchronized boolean send(String host, int port, final String cmd, Object... o) {
         InetSocketAddress destination = new InetSocketAddress(host, port);
         return send(destination, cmd, o);
     }

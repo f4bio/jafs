@@ -31,12 +31,15 @@ public class Input implements KeyListener, MouseMotionListener {
         switch(k.getKeyCode()) {
             case KeyEvent.VK_W:
                 key_w = true;
+                break;
             case KeyEvent.VK_A:
                 key_a = true;
+                break;
             case KeyEvent.VK_S:
-                key_w = true;
+                key_s = true;
+                break;
             case KeyEvent.VK_D:
-                key_a = true;
+                key_d = true;
         }
     }
 
@@ -48,12 +51,15 @@ public class Input implements KeyListener, MouseMotionListener {
         switch(k.getKeyCode()) {
             case KeyEvent.VK_W:
                 key_w = false;
+                break;
             case KeyEvent.VK_A:
                 key_a = false;
+                break;
             case KeyEvent.VK_S:
-                key_w = false;
+                key_s = false;
+                break;
             case KeyEvent.VK_D:
-                key_a = false;
+                key_d = false;
         }
     }
 
@@ -78,6 +84,6 @@ public class Input implements KeyListener, MouseMotionListener {
     }
 
     public boolean isKeyDPressed() {
-        return key_s;
+        return key_d;
     }
 }

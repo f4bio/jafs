@@ -26,31 +26,35 @@ public class GameData implements UpdateObject {
     }
 
     public void loadMap(String map) {
-        player = new CPlayer[4];
+        player = new CPlayer[1];
+
+        player[0] = new CPlayer();
+        player[0].setTeam(CPlayer.TEAM_BLUE);
+        setSelfId(0);
 
         loader.setMap(map);
         loader.load(map);
     }
     
-    private void checkPlayerInput() {
+    private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
         
         if(self == null)
             return;
         
         if(input.isKeyWPressed()) {
-            
+            self.move(CPlayer.VEC_UP, u.getSpeedfactor());
         } else if(input.isKeyAPressed()) {
-            
+            self.move(CPlayer.VEC_LEFT, u.getSpeedfactor());
         } else if(input.isKeySPressed()) {
-            
+            self.move(CPlayer.VEC_DOWN, u.getSpeedfactor());
         } else if(input.isKeyDPressed()) {
-            
+            self.move(CPlayer.VEC_RIGHT, u.getSpeedfactor());
         }
     }
 
     public void update(UpdateLoop u) {
-        checkPlayerInput();
+        checkPlayerInput(u);
     }
 
     public CMap getMap() {

@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.event.ActionListener;
 
 /**
@@ -15,7 +16,8 @@ import java.awt.event.ActionListener;
 public class Options extends UiWindow {
 
     /** Creates new form Options */
-    public Options() {
+    public Options(MainScreen scr) {
+        super(scr);
         initComponents();
         jSlider1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
         jPanel1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);

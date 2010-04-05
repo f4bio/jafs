@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.event.ActionListener;
 
 /**
@@ -15,7 +16,8 @@ import java.awt.event.ActionListener;
 public class Credits extends UiWindow {
 
     /** Creates new form Credits */
-    public Credits() {
+    public Credits(MainScreen scr) {
+        super(scr);
         initComponents();
         setSize(getPreferredSize().width, getPreferredSize().height);
     }

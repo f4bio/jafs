@@ -1,8 +1,10 @@
 package client.ui;
 
 import client.Main_UI_Test;
+import client.render.MainScreen;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.VolatileImage;
 import java.util.Vector;
 
 /**
@@ -25,13 +27,27 @@ public class UiManager {
     }
 
     public static void renderAll(Graphics2D g) {
-        for(int i=0; i<content.size(); i++) {
-            renderComponent(content.get(i), g);
+        UiWindow w;
+
+        for(int i=0; i<content.size(); ++i) {
+            w = content.get(i);
+
+            if(w != null && w.isVisible() && g != null) {
+                g.translate(w.getLocation().x, w.getLocation().y);
+                g.drawImage(w.getBuffer(), 0, 0, null);
+                g.translate(-w.getLocation().x, -w.getLocation().y);
+            }
         }
     }
 
-    private static void renderComponent(UiWindow cmp, Graphics2D g) {
-        cmp.render(g);
+     public static void preRender() {
+        UiWindow w;
+
+        for(int i=0; i<content.size(); ++i) {
+            w = content.get(i);
+            if(w != null && w.isVisible())
+                w.render();
+        }
     }
 
     public static void setForeground(UiWindow u) {
