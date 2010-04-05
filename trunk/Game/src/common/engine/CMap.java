@@ -8,10 +8,7 @@ package common.engine;
 import common.resource.CImage;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 
 /**
@@ -31,8 +28,6 @@ public class CMap {
     private Point spawnRed;
     private Point spawnBlue;
 
-    private VolatileImage buffer;
-
     public CMap() {
         textures = new ArrayList<CImage>();
     }
@@ -42,7 +37,6 @@ public class CMap {
         sizeY = y;
 
         tile = new Tile[x][y];
-        createBuffer();
     }
 
     public void setTile(int x, int y, Tile t) {
@@ -55,6 +49,10 @@ public class CMap {
 
     public Dimension getSize() {
         return new Dimension(sizeX, sizeY);
+    }
+
+    public Dimension getRealSize() {
+        return new Dimension(sizeX * tileSizeX, sizeY * tileSizeY);
     }
 
     public void setTileSize(int x, int y) {
@@ -98,36 +96,35 @@ public class CMap {
         return spawnBlue;
     }
 
-    private void createBuffer() {
-        buffer = getGC().createCompatibleVolatileImage(sizeX*tileSizeX, sizeY*tileSizeY,
-                VolatileImage.TRANSLUCENT);
+    public Point getTileByCoords(int x, int y) {
+        int xx, yy;
+
+        if(x < 0)
+            xx = 0;
+        else if(x > sizeX * tileSizeX)
+            xx = sizeX - 1;
+        else
+            xx = x / tileSizeX;
+
+        if(y < 0)
+            yy = 0;
+        else if(y > sizeY * tileSizeY)
+            yy = sizeY - 1;
+        else
+            yy = y / tileSizeY;
+
+        return new Point(xx, yy);
     }
 
-    private GraphicsConfiguration getGC() {
-        return GraphicsEnvironment.getLocalGraphicsEnvironment().
-                getDefaultScreenDevice().getDefaultConfiguration();
+    public Tile getTile(int x, int y) {
+        return tile[x][y];
     }
 
-    public void render() {
-        Graphics2D g = null;
-        try {
-            g = buffer.createGraphics();
-
-            if(buffer.validate(getGC()) != VolatileImage.IMAGE_OK) {
-                createBuffer();
-                g = buffer.createGraphics();
-            }
-
-            renderToBuffer(g);
-        } catch(Exception e) {
-
-        } finally {
-            if(g != null)
-                g.dispose();
-        }
+    public Point getTileByCoords(Point p) {
+        return getTileByCoords(p.x, p.y);
     }
 
-    private void renderToBuffer(Graphics2D g) {
+    public void render(Graphics2D g) {
         for (int x = 0; x < tile.length; ++x) {
             for (int y = 0; y < tile[x].length; ++y) {
                 g.drawImage(tile[x][y].getTexture(), x * tileSizeX, y * tileSizeY,
@@ -136,7 +133,7 @@ public class CMap {
         }
     }
 
-    public VolatileImage getBuffer() {
-        return buffer;
+    public void renderEntity(Graphics2D g, CEntity entity) {
+        
     }
 }

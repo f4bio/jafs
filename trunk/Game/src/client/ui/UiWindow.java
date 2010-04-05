@@ -1,14 +1,18 @@
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
 import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferStrategy;
+import java.awt.image.VolatileImage;
 import javax.swing.JPanel;
 
 /**
@@ -49,8 +53,6 @@ public abstract class UiWindow extends JPanel
     protected GradientPaint gradTop;
     protected GradientPaint gradBottom;
 
-    protected BufferStrategy buffer;
-
     protected boolean isMoveable;
     protected boolean isMousePressed;
     protected boolean isUndecorated;
@@ -58,11 +60,16 @@ public abstract class UiWindow extends JPanel
     protected int tX = 0;
     protected int tY = 0;
 
-    public UiWindow() {
+    protected MainScreen scr;
+    protected VolatileImage buffer;
+
+    public UiWindow(MainScreen scr) {
         super();
 
+        this.scr = scr;
+
         setVisible(false);
-        setDoubleBuffered(true);
+        setDoubleBuffered(false);
         setIgnoreRepaint(true);
 
         isMoveable = true;
@@ -71,12 +78,8 @@ public abstract class UiWindow extends JPanel
 
         setBackground(UI_COLOR_ON_TOP);
         addMouseListener(this);
-        addMouseMotionListener(this);        
-    }
-
-    @Override
-    public boolean isOptimizedDrawingEnabled() {
-        return true;
+        addMouseMotionListener(this);
+        createBuffer();
     }
 
     @Override
@@ -104,16 +107,63 @@ public abstract class UiWindow extends JPanel
         gradBottom = new GradientPaint(0, 0, from, 0, BORDER_WIDTH, to, true);
     }
 
-    public void render(Graphics2D g) {
-        if(isVisible() && g != null) {
-            location = getLocation();
-            g.translate(location.x, location.y);
-            paint(g);
-            if (!isUndecorated)
-                renderDecoration(g);
-            g.translate(-location.x, -location.y);
+    public void render() {
+        if(buffer == null) {
+            createBuffer();
+            return;
         }
+
+        //synchronized(buffer) {
+            Graphics2D g = null;
+            try {
+                g = buffer.createGraphics();
+                do {
+                    int returnCode = buffer.
+                            validate(getGraphicsConfiguration());
+                    if (returnCode == VolatileImage.IMAGE_RESTORED) {
+                        repaint();
+                    } else if (returnCode == VolatileImage.IMAGE_INCOMPATIBLE) {
+                        createBuffer();
+                        repaint();
+                    }
+
+                    paint(g);
+
+                    if (!isUndecorated)
+                        renderDecoration(g);
+
+                } while(buffer.contentsLost());
+            } catch(Exception e) {
+
+            } finally {
+                if(g != null)
+                    g.dispose();
+            }
+        //}
     }
+
+    public void createBuffer() {
+        GraphicsConfiguration gc = null;
+        gc = this.getGraphicsConfiguration();
+        
+        if(gc != null)
+            buffer = gc.createCompatibleVolatileImage(getWidth(),
+                    getHeight(), Transparency.TRANSLUCENT);
+    }
+
+    public VolatileImage getBuffer() {
+        return buffer;
+    }
+
+    /*@Override
+    public void paint(Graphics g) {
+        render();
+    }
+
+    @Override
+    public void update(Graphics g) {
+        paint(g);
+    }*/
 
     public void renderDecoration(Graphics2D g) {
         g.setColor(Color.LIGHT_GRAY);

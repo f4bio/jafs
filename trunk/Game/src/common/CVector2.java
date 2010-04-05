@@ -5,6 +5,8 @@
 
 package common;
 
+import java.awt.Point;
+
 /**
  *
  * @author miracle
@@ -58,7 +60,23 @@ public class CVector2 {
         y *= a;
     }
 
+    public CVector2 mul_cpy(double a) {
+        return new CVector2(x*a, y*a);
+    }
+
     public double norm() {
         return Math.sqrt((x*x) + (y*y));
+    }
+
+    public Point get() {
+        return new Point((int)x, (int)y);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 }

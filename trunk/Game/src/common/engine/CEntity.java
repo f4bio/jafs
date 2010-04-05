@@ -7,7 +7,7 @@ package common.engine;
 
 import common.CVector2;
 import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -19,7 +19,6 @@ public class CEntity {
     protected double speed;
     protected Dimension size;
     protected String name;
-    protected Point tilePos;
 
     public CEntity() {
         position = null;
@@ -36,7 +35,10 @@ public class CEntity {
     }
 
     public void setPosition(double x, double y) {
-        position.set(x, y);
+        if(position == null)
+            position = new CVector2(x, y);
+        else
+            position.set(x, y);
     }
 
     public CVector2 getPosition() {
@@ -87,14 +89,7 @@ public class CEntity {
         return name;
     }
 
-    public void setTilePos(int x, int y) {
-        if(tilePos != null)
-            tilePos.setLocation(x, y);
-        else
-            tilePos = new Point(x, y);
-    }
-
-    public Point getTilePos() {
-        return tilePos;
+    public void render(Graphics2D g) {
+        
     }
 }

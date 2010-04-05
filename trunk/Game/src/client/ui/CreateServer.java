@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JLabel;
@@ -17,7 +18,8 @@ import javax.swing.JLabel;
 public class CreateServer extends UiWindow {
 
     /** Creates new form CreateServer */
-    public CreateServer() {
+    public CreateServer(MainScreen scr) {
+        super(scr);
         initComponents();
         jPanel1.add(new JLabel("< Map Vorschau >"), BorderLayout.CENTER);
         setSize(getPreferredSize().width, getPreferredSize().height);

@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.render.MainScreen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,7 +17,8 @@ import java.awt.event.ActionListener;
 public class LobbyChat extends UiWindow implements ActionListener {
 
     /** Creates new form LobbyChat */
-    public LobbyChat() {
+    public LobbyChat(MainScreen scr) {
+        super(scr);
         initComponents();
         jTextField1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);

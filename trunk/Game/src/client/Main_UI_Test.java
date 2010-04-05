@@ -3,6 +3,8 @@ package client;
 import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
+import common.CLog;
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 /**
@@ -22,35 +24,49 @@ public class Main_UI_Test {
     private static UiWindow uiOptions;
     private static UiWindow uiCredits;
     private static WeaponSidebar wSidebar;
+    private static JFrame frm;
+
+    public static class Handler {
+        public void handler(Throwable t) {
+            try {
+                CLog.log(t.getMessage());
+            } catch(Throwable a) {
+
+            }
+        }
+    }
 
     public static void main(String[] args) {
+        CLog.init("debug.txt");
+        System.setProperty("sun.awt.exception.handler", Handler.class.getName());
 
         UiActionListener aListener = new UiActionListener();
         UiKeyListener kListener = new UiKeyListener();
 
-        JFrame frm = new JFrame();
+        frm = new JFrame();
+        frm.setIgnoreRepaint(true);
         frm.addKeyListener(kListener);
 
         screen = new MainScreen(frm);
 
         // Init Interfaces
-        uiMain = new MainMenu();
+        uiMain = new MainMenu(screen);
         uiMain.setLocation(10, 200);
         uiMain.addActionListener(aListener);
         uiMain.setMoveable(false);
-        uiCreate = new CreateServer();
+        uiCreate = new CreateServer(screen);
         uiCreate.setLocation(200, 200);
         uiCreate.addActionListener(aListener);
-        uiBrowser = new Serverbrowser();
+        uiBrowser = new Serverbrowser(screen);
         uiBrowser.setLocation(200, 200);
         uiBrowser.addActionListener(aListener);
-        uiLobbyChat = new LobbyChat();
+        uiLobbyChat = new LobbyChat(screen);
         uiLobbyChat.setLocation(200, 200);
         uiLobbyChat.addActionListener(aListener);
-        uiOptions = new Options();
+        uiOptions = new Options(screen);
         uiOptions.setLocation(200, 200);
         uiOptions.addActionListener(aListener);
-        uiCredits = new Credits();
+        uiCredits = new Credits(screen);
         uiCredits.setLocation(screen.getWidth()/2 - uiCredits.getWidth()/2,
                               screen.getHeight()/2 - uiCredits.getHeight()/2);
 /*      wSidebar = new WeaponSidebar(300, 100);
@@ -80,9 +96,13 @@ public class Main_UI_Test {
         loop.addUpdateObject(screen);
         //loop.addUpdateObject(wSidebar);
 
+        EventQueue.invokeLater(new Runnable() {
+           public void run() {
+               frm.setVisible(true);
+               uiMain.setVisible(true);
+           }
+        });
         
-        frm.setVisible(true);
-        uiMain.setVisible(true);
         //wSidebar.setVisible(true);
     }
 
