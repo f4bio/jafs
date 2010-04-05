@@ -64,16 +64,6 @@ public class Main {
     public static GameData getGameData() {
         return data;
     }
-    private static int getFreePort(){
-        DatagramSocket socket;
-            for(int i = 50000; i<65000;i++)
-                try{
-                    socket = new DatagramSocket(i);
-                    return i;
-                }catch(java.net.SocketException se){}
-        return -1;
-    }
-
     public static void completeServerlist(ArrayList<String> list) {
         System.out.println("not yet implemented");
     }
