@@ -49,11 +49,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void m_c_joinserver_reply(String s, InetSocketAddress adr)
     {
-        System.out.println("m_c_joinserver_reply()");
+        System.out.println(s);
     }
-    public void m_c_chat_lobby(String msg, InetSocketAddress adr)
+    public void m_c_chat(String msg, InetSocketAddress adr)
     {
-        System.out.println(msg);
+        System.out.println(msg.replace("vXv", ";"));
     }
 
     public void s_c_auth_reply(Integer i, InetSocketAddress adr)

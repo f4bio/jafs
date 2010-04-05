@@ -47,6 +47,7 @@ public class Main {
         net.setProtocolHandler(handler);
         net.listen(Network.MASTERPORT);
 
+        System.out.println("Masterserver startet");
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
     }
@@ -102,6 +103,12 @@ public class Main {
 
         return srv;
     }
+    public static Client getClient(int id){
+        for(Client client: clientlist)
+            if(client.getId() == id)
+                return client;
+        return null;
+    }
 
     public static void decreasePingFailures(InetSocketAddress adr) {
         Server serv = getServer(adr);
@@ -119,7 +126,7 @@ public class Main {
         Client sender = getClient(adr);
         for(Client client: clientlist)
             if(!client.isInGame())
-            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT_LOBBY, "(LOBBY-CHAT) Player-"+sender.getId()+" ("+sender.getId()+":"+sender.getPort()+"): "+msg);
+            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, "(LOBBY-CHAT) Player-"+sender.getId()+" ("+sender.getId()+":"+sender.getPort()+"): "+msg);
     }
 
     public static Client getClient(InetSocketAddress adr) {

@@ -38,8 +38,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_joinserver(String host, Integer port, InetSocketAddress adr) 
     {
-
-        System.out.println("c_m_joinserver()");
+        net.send(adr, Protocol.MASTER_CLIENT_JOINSERVER_REPLY, "JOINED! ServerInfos: "+host+":"+port);
+//        System.out.println("c_m_joinserver()");
     }
 
     public void c_m_listrequest(InetSocketAddress adr)
@@ -62,6 +62,15 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {
         Main.broadcast(msg, adr);
+    }
+
+    public void c_m_chat_private(Integer id, String msg, InetSocketAddress adr)
+    {
+        Client client = Main.getClient(id);
+        if(client != null)
+            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, "Private Chat ("+adr.getHostName()+":"+adr.getPort()+"): "+msg);
+        else
+            net.send(adr, Protocol.MASTER_CLIENT_CHAT, "No such player");
     }
 
     public void noReplyReceived(Packet p)
