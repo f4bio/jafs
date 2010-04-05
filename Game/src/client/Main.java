@@ -6,6 +6,8 @@ import common.CLog;
 import common.net.Network;
 import common.net.Protocol;
 import common.utils.CUtils;
+import java.net.DatagramSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +35,7 @@ public class Main {
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
-        net.listen(50001);
+        net.listen(net.getFreePort(50000, 65000));
 //        net.send("localhost", 40000, Protocol.client_server_clientcount);
 //        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
         net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
@@ -61,6 +63,15 @@ public class Main {
 
     public static GameData getGameData() {
         return data;
+    }
+    private static int getFreePort(){
+        DatagramSocket socket;
+            for(int i = 50000; i<65000;i++)
+                try{
+                    socket = new DatagramSocket(i);
+                    return i;
+                }catch(java.net.SocketException se){}
+        return -1;
     }
 
     public static void completeServerlist(ArrayList<String> list) {

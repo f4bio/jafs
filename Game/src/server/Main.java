@@ -25,7 +25,7 @@ public class Main {
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
-        net.listen(40000);
+        net.listen(net.getFreePort(40000, 50000));
         net.send("localhost", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
         net.send("localhost", 30000, Protocol.SERVER_MASTER_AUTH);
 

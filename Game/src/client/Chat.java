@@ -21,6 +21,9 @@ public class Chat extends Thread{
             try{
                 System.out.print("Type in your msg/cmd: ");
                 String input = in.readLine();
+                if(input.contains(";"))
+                    input = input.replace(";", "vXv");
+
                 if(input.startsWith("/")){
                     // Log Off
                     if(input.startsWith("/logoff")) {
@@ -57,11 +60,14 @@ public class Chat extends Thread{
                         net.send("localhost", 30000,
                                 Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
+                    // private Chat
+                    else if(input.startsWith("/private") || input.startsWith("/p")) {
+                        String[] zwi = input.split(" ");
+                        net.send("localhost", 30000,
+                                Protocol.CLIENT_MASTER_CHAT_PRIVATE, Integer.parseInt(zwi[1]),input.substring(input.indexOf(" ", input.indexOf(zwi[1]))));
+                    }
 
-                }
-                else if(input.contains(";")) {
-                    System.out.println("illegal character");
-                }
+                }               
 //                else
 //                    net.send("localhost", 40000, Protocol.CLIENT_SERVER_CHAT_ALL, input);
             } catch(Exception e) {

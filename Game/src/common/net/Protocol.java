@@ -30,6 +30,7 @@ public class Protocol {
     public static final String CLIENT_MASTER_JOINSERVER = "c_m_joinserver";
     public static final String CLIENT_MASTER_LISTREQUEST = "c_m_listrequest";
     public static final String CLIENT_MASTER_CHAT_LOBBY = "c_m_chat_lobby";
+    public static final String CLIENT_MASTER_CHAT_PRIVATE = "c_m_chat_private";
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
 
     public static final String CLIENT_SERVER_AUTH = "c_s_auth";
@@ -38,6 +39,7 @@ public class Protocol {
     public static final String CLIENT_SERVER_CLIENTID = "c_s_clientid";
     public static final String CLIENT_SERVER_CHAT_ALL = "c_s_chat_all";
     public static final String CLIENT_SERVER_CHAT_TEAM = "c_s_chat_team";
+    public static final String CLIENT_SERVER_CHAT_PRIVATE = "c_s_chat_private";
     public static final String CLIENT_SERVER_LOGOFF = "c_s_logoff";
     public static final String CLIENT_SERVER_JOINTEAM = "c_s_jointeam";
 
@@ -64,7 +66,7 @@ public class Protocol {
     public static final String MASTER_CLIENT_NEWLIST = "m_c_newlist";
     public static final String MASTER_CLIENT_LISTENTRY = "m_c_listentry";
     public static final String MASTER_CLIENT_ENDLIST = "m_c_endlist";
-    public static final String MASTER_CLIENT_CHAT_LOBBY = "m_c_chat_lobby";
+    public static final String MASTER_CLIENT_CHAT = "m_c_chat";
 
     public static int[] registerCmd(final String command, int... arg) {
         return cmd.put(command, arg);
@@ -126,7 +128,10 @@ public class Protocol {
     public static void init() {
         //----- Client commands
         registerCmd(CLIENT_MASTER_LISTREQUEST, ARG_NONE);
+        // chat
         registerCmd(CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
+        registerCmd(CLIENT_MASTER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
+        // ----
         registerCmd(CLIENT_MASTER_AUTH, ARG_NONE);
         registerCmd(CLIENT_MASTER_JOINSERVER, ARG_STRING, ARG_INT);
 
@@ -134,8 +139,11 @@ public class Protocol {
         registerCmd(CLIENT_SERVER_PONG, ARG_NONE);
         registerCmd(CLIENT_SERVER_CLIENTCOUNT,ARG_NONE);
         registerCmd(CLIENT_SERVER_CLIENTID,ARG_NONE);
+        // chat
         registerCmd(CLIENT_SERVER_CHAT_ALL, ARG_STRING);
         registerCmd(CLIENT_SERVER_CHAT_TEAM, ARG_STRING);
+        registerCmd(CLIENT_SERVER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
+        // ----
         registerCmd(CLIENT_SERVER_LOGOFF, ARG_NONE);
         registerCmd(CLIENT_SERVER_JOINTEAM, ARG_INT);
 
@@ -161,7 +169,7 @@ public class Protocol {
         registerCmd(MASTER_CLIENT_NEWLIST, ARG_NONE);
         registerCmd(MASTER_CLIENT_LISTENTRY, ARG_STRING);
         registerCmd(MASTER_CLIENT_ENDLIST, ARG_NONE);
-        registerCmd(MASTER_CLIENT_CHAT_LOBBY, ARG_STRING);
+        registerCmd(MASTER_CLIENT_CHAT, ARG_STRING);
 
         //----- Associate commands with replies
         registerCmdReply(SERVER_MASTER_AUTH, MASTER_SERVER_AUTH_REPLY);

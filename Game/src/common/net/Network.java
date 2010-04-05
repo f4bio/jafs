@@ -318,5 +318,15 @@ public class Network {
     public void setProtocolHandler(ProtocolHandler handler) {
         this.handler = handler;
     }
+    public int getFreePort(int from, int to){
+        DatagramSocket testSocket;
+            for(int i = from; i<to;i++)
+                try{
+                    testSocket = new DatagramSocket(i);
+                    testSocket.close();
+                    return i;
+                }catch(java.net.SocketException se){}
+        return -1;
+    }
 }
 
