@@ -7,20 +7,18 @@
 package client.ui;
 
 import client.render.MainScreen;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  *
  * @author Julian Sanio
  */
-public class LobbyChat extends UiWindow implements ActionListener {
+public class LobbyChat extends UiWindow {
 
     /** Creates new form LobbyChat */
     public LobbyChat(MainScreen scr) {
         super(scr);
         initComponents();
-        jTextField1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
@@ -90,12 +88,20 @@ public class LobbyChat extends UiWindow implements ActionListener {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void addActionListener(ActionListener a) {  }
-
-    public void actionPerformed(ActionEvent e) {
-        // send message
-        jTextArea1.append("<Nick>" + jTextField1.getText() + "\n");
-        jTextField1.setText("");
+    public void addActionListener(ActionListener a) {
+        jButton1.setActionCommand(UiActionListener.CMD_LOBBYCHAT_SEND_MSG);
+        jButton1.addActionListener(a);
     }
 
+    public String getMSG() {
+        return jTextField1.getText();
+    }
+
+    public void appendMSG(String msg) {
+        jTextArea1.append(msg + "\n");
+    }
+
+    public void clearMsgField() {
+        jTextField1.setText("");
+    }
 }

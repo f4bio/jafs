@@ -4,7 +4,10 @@ import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
 import common.CLog;
+import common.net.Network;
+import common.net.Protocol;
 import java.awt.EventQueue;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 
 /**
@@ -17,14 +20,19 @@ import javax.swing.JFrame;
 public class Main_UI_Test {
 
     private static MainScreen screen;
+    private static Network net;
+    private static JFrame frm;
+    private static UiActionListener aListener;
+    // UI
     private static UiWindow uiMain;
     private static UiWindow uiCreate;
     private static Serverbrowser uiBrowser;
-    private static UiWindow uiLobbyChat;
+    private static LobbyChat uiLobbyChat;
     private static UiWindow uiOptions;
     private static UiWindow uiCredits;
-    private static WeaponSidebar wSidebar;
-    private static JFrame frm;
+    //private static WeaponSidebar wSidebar;
+
+    public static ArrayList<String> serverlist = new ArrayList<String>();
 
     public static class Handler {
         public void handler(Throwable t) {
@@ -40,12 +48,24 @@ public class Main_UI_Test {
         CLog.init("debug.txt");
         System.setProperty("sun.awt.exception.handler", Handler.class.getName());
 
-        UiActionListener aListener = new UiActionListener();
-        UiKeyListener kListener = new UiKeyListener();
+        Protocol.init();
+        net = new Network();
+        net.listen(31330);
+
+
+        ProtocolHandler protocol = new ProtocolHandler(net);
+        net.setProtocolHandler(protocol);
+        net.listen(net.getFreePort(50000, 65000));
+        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
+        net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
+//        new Chat(net).start();
+
+        aListener = new UiActionListener(net);
+        //UiKeyListener kListener = new UiKeyListener();
 
         frm = new JFrame();
         frm.setIgnoreRepaint(true);
-        frm.addKeyListener(kListener);
+        //frm.addKeyListener(kListener);
 
         screen = new MainScreen(frm);
 
@@ -100,10 +120,9 @@ public class Main_UI_Test {
            public void run() {
                frm.setVisible(true);
                uiMain.setVisible(true);
+               //wSidebar.setVisible(true);
            }
         });
-        
-        //wSidebar.setVisible(true);
     }
 
     public static MainScreen getScreen() {
@@ -122,7 +141,7 @@ public class Main_UI_Test {
         return uiBrowser;
     }
 
-    public static UiWindow getUiLobbyChat() {
+    public static LobbyChat getUiLobbyChat() {
         return uiLobbyChat;
     }
 
@@ -134,7 +153,19 @@ public class Main_UI_Test {
         return uiCredits;
     }
 
-    public static WeaponSidebar getWeaponSidebar() {
-        return wSidebar;
+    //public static WeaponSidebar getWeaponSidebar() {
+    //    return wSidebar;
+    //}
+
+    public static void completeServerlist(ArrayList<String> list) {
+        /* | Server | Map | Spieler | Ping | */
+        String[][] server = new String[list.size()][4];
+        for(int i=0; i<list.size(); i++){
+            server[i][0] = list.get(i);
+            server[i][1] = "map";
+            server[i][2] = "0/16";
+            server[i][3] = "5ms";
+        }
+        uiBrowser.setServerlist(server);
     }
 }

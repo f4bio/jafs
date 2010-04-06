@@ -39,7 +39,7 @@ public class Chat extends Thread{
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
                         net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)), Protocol.CLIENT_SERVER_AUTH);
                         net.send("localhost", 30000,
-                                Protocol.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
+                                 Protocol.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
                     }
                      // lobby chat
                     else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
@@ -54,11 +54,6 @@ public class Chat extends Thread{
                     else if(input.startsWith("/teamchat") || input.startsWith("/tc")) {
                         net.send("localhost", 40000,
                                 Protocol.CLIENT_SERVER_CHAT_TEAM, input.substring(input.indexOf(" ")));
-                    }
-                    // Lobby Chat
-                    else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
-                        net.send("localhost", 30000,
-                                Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
                     // private Chat
                     else if(input.startsWith("/private") || input.startsWith("/p")) {

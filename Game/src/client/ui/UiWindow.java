@@ -3,7 +3,6 @@ package client.ui;
 import client.render.MainScreen;
 import java.awt.Color;
 import java.awt.GradientPaint;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
@@ -155,7 +154,7 @@ public abstract class UiWindow extends JPanel
         return buffer;
     }
 
-    /*@Override
+/*  @Override
     public void paint(Graphics g) {
         render();
     }
@@ -163,8 +162,8 @@ public abstract class UiWindow extends JPanel
     @Override
     public void update(Graphics g) {
         paint(g);
-    }*/
-
+    }
+ */
     public void renderDecoration(Graphics2D g) {
         g.setColor(Color.LIGHT_GRAY);
         g.drawLine(0, 0, 0, getHeight());                         // Left
@@ -172,16 +171,16 @@ public abstract class UiWindow extends JPanel
         g.drawLine(0, getHeight(), getWidth()-1, getHeight());    // Right
         // Right
 /*      g.setPaint(gradRight);
-        g.fillRect(getWidth(), 0, BORDER_WIDTH, getHeight());    */
+        g.fillRect(getWidth(), 0, BORDER_WIDTH, getHeight());     */
         // Left
 /*      g.setPaint(gradLeft);
         g.fillRect(-BORDER_WIDTH, 0, BORDER_WIDTH, getHeight());  */
         // Top
-        g.setPaint(gradTop);
-        g.fillRect(0, -BORDER_WIDTH, getWidth(), BORDER_WIDTH);
+/*      g.setPaint(gradTop);
+        g.fillRect(0, -BORDER_WIDTH, getWidth(), BORDER_WIDTH);   */
         // Bottom
 /*      g.setPaint(gradBottom);
-        g.fillRect(0, getHeight(), getWidth(), BORDER_WIDTH);   */
+        g.fillRect(0, getHeight(), getWidth(), BORDER_WIDTH);     */
     }
 
     public boolean isMoveable(){
@@ -222,7 +221,7 @@ public abstract class UiWindow extends JPanel
     public void mouseDragged(MouseEvent e) {
         if(isMousePressed && isMoveable) {
             setLocation(e.getXOnScreen() - tX,
-                    e.getYOnScreen() - tY);
+                        e.getYOnScreen() - tY);
         }
     }
 }

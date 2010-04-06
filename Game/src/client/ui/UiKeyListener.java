@@ -28,13 +28,13 @@ public class UiKeyListener implements KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_D){
             // WALK RIGHT
         }
-
-        // WeaponSidebar
+        
+        /*// WeaponSidebar
         if(e.getKeyCode() == KeyEvent.VK_Y){
             Main_UI_Test.getWeaponSidebar().setAktiveWeapon(Main_UI_Test.getWeaponSidebar().getAktiveWeapon()+1);
         } else if(e.getKeyCode() == KeyEvent.VK_X){
             Main_UI_Test.getWeaponSidebar().setAktiveWeapon(Main_UI_Test.getWeaponSidebar().getAktiveWeapon()-1);
-        }
+        } */
     }
 
     public void keyReleased(KeyEvent e) {  }
