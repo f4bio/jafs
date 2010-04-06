@@ -50,9 +50,9 @@ public class Main {
         frame.setVisible(true);
 
         screen = new MainScreen(frame);
-        input = new Input();
+        input = new Input(screen);
         frame.addKeyListener(input);
-        frame.addMouseMotionListener(input);
+        screen.addMouseMotionListener(input);
 
         data = new GameData(input);
         data.loadMap("map");

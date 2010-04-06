@@ -6,6 +6,7 @@
 package client.render;
 
 import client.Main;
+import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
 import common.engine.Tile;
@@ -21,7 +22,7 @@ import java.awt.image.VolatileImage;
  * @author miracle
  */
 public class Viewport {
-    public static final Dimension size = new Dimension(200, 200);
+    public static final Dimension size = new Dimension(1024, 768);
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
@@ -137,10 +138,10 @@ public class Viewport {
 
                 if(loc.x >= upperLeft.x && loc.x <= bottomRight.x &&
                         loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
-                    int posX = initCntX + pX - (player[i].getSize().width/2) +
-                            (loc.x - upperLeft.x)*map.getTileSize().width;
-                    int posY = initCntY + pY - (player[i].getSize().height/2) +
-                            (loc.y - upperLeft.y)*map.getTileSize().height;
+                    int posX = initCntX + pX +
+                            (loc.x - upperLeft.x) * map.getTileSize().width;
+                    int posY = initCntY + pY +
+                            (loc.y - upperLeft.y) * map.getTileSize().height;
                     Dimension pSize = player[i].getSize();
 
                     if(player[i].getTeam() == CPlayer.TEAM_BLUE)
@@ -148,7 +149,13 @@ public class Viewport {
                     else
                         g.setColor(Color.RED);
 
-                    g.drawOval(posX, posY, pSize.width, pSize.height);
+                    g.drawOval(posX - (player[i].getSize().width/2),
+                            posY - (player[i].getSize().height/2),
+                            pSize.width, pSize.height);
+
+                    CVector2 dir = player[i].getDirection().trim_cpy(50);
+                    g.drawLine(posX, posY, posX + (int)dir.getX(),
+                            posY + (int)dir.getY());
                 }
             }
         }
