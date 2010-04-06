@@ -26,8 +26,9 @@ public class Main {
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
         net.listen(net.getFreePort(40000, 50000));
-        net.send("localhost", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
-        net.send("localhost", 30000, Protocol.SERVER_MASTER_AUTH);
+        net.send("secureit.ath.cx", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
+        net.send("secureit.ath.cx", 30000, Protocol.SERVER_MASTER_AUTH);
+
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);

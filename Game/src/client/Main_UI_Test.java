@@ -56,8 +56,8 @@ public class Main_UI_Test {
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
         net.listen(net.getFreePort(50000, 65000));
-        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
-        net.send("localhost", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
+//        net.send("localhost", 40000, Protocol.CLIENT_SERVER_AUTH);
+        net.send("secureit.ath.cx", Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
 //        new Chat(net).start();
 
         aListener = new UiActionListener(net);
