@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.VolatileImage;
+import javax.sound.sampled.Line;
 import javax.swing.JPanel;
 
 /**
@@ -111,6 +112,8 @@ public abstract class UiWindow extends JPanel
             createBuffer();
             return;
         }
+
+        Line l;
 
         //synchronized(buffer) {
             Graphics2D g = null;

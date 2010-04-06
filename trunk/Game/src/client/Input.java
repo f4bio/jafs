@@ -5,6 +5,8 @@
 
 package client;
 
+import client.render.MainScreen;
+import common.CVector2;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -19,12 +21,18 @@ public class Input implements KeyListener, MouseMotionListener {
     private boolean key_a;
     private boolean key_s;
     private boolean key_d;
+
+    private CVector2 direction;
+    private MainScreen scrn;
     
-    public Input() {
+    public Input(MainScreen scrn) {
         key_w = false;
         key_a = false;
         key_s = false;
         key_d = false;
+
+        direction = new CVector2();
+        this.scrn = scrn;
     }
 
     public void keyPressed(KeyEvent k) {
@@ -64,7 +72,10 @@ public class Input implements KeyListener, MouseMotionListener {
     }
 
     public void mouseMoved(MouseEvent m) {
+        double x = (double)m.getXOnScreen() - (double)scrn.getSize().width/2;
+        double y = (double)m.getYOnScreen() - (double)scrn.getSize().height/2;
 
+        direction.set(x, y);
     }
 
     public void mouseDragged(MouseEvent m) {
@@ -85,5 +96,9 @@ public class Input implements KeyListener, MouseMotionListener {
 
     public boolean isKeyDPressed() {
         return key_d;
+    }
+
+    public CVector2 getDirection() {
+        return direction;
     }
 }

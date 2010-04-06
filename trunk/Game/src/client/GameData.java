@@ -8,6 +8,7 @@ package client;
 import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
 import client.resource.MapLoader;
+import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
 
@@ -42,15 +43,35 @@ public class GameData implements UpdateObject {
         if(self == null)
             return;
         
+        CVector2 mov = null;
+
         if(input.isKeyWPressed()) {
-            self.move(CPlayer.VEC_UP, u.getSpeedfactor());
-        } else if(input.isKeyAPressed()) {
-            self.move(CPlayer.VEC_LEFT, u.getSpeedfactor());
-        } else if(input.isKeySPressed()) {
-            self.move(CPlayer.VEC_DOWN, u.getSpeedfactor());
-        } else if(input.isKeyDPressed()) {
-            self.move(CPlayer.VEC_RIGHT, u.getSpeedfactor());
+            if(input.isKeyAPressed())
+                mov = CPlayer.VEC_UP_LEFT;
+            else if(input.isKeyDPressed())
+                mov = CPlayer.VEC_UP_RIGHT;
+            else
+                mov = CPlayer.VEC_UP;
         }
+        else if(input.isKeySPressed()) {
+            if(input.isKeyAPressed())
+                mov = CPlayer.VEC_DOWN_LEFT;
+            else if(input.isKeyDPressed())
+                mov = CPlayer.VEC_DOWN_RIGHT;
+            else
+                mov = CPlayer.VEC_DOWN;
+        }
+        else if(input.isKeyAPressed()) {
+            mov = CPlayer.VEC_LEFT;
+        }
+        else if(input.isKeyDPressed()) {
+            mov = CPlayer.VEC_RIGHT;
+        }
+
+        if(mov != null)
+            self.move(mov, u.getSpeedfactor());
+
+        self.setDirection(input.getDirection());
     }
 
     public void update(UpdateLoop u) {

@@ -79,4 +79,33 @@ public class CVector2 {
     public double getY() {
         return y;
     }
+
+    public void rotate(double a) {
+        x = x*Math.cos(a) - y*Math.sin(a);
+        y = x*Math.sin(a) + y*Math.cos(a);
+    }
+
+    public CVector2 rotate_cpy(double a) {
+        return new CVector2(x*Math.cos(a) - y*Math.sin(a),
+                x*Math.sin(a) + y*Math.cos(a));
+    }
+
+    public void trim(double l) {
+        if(l <= 0)
+            return;
+
+        double n = norm();
+
+        x /= n / l;
+        y /= n / l;
+    }
+
+    public CVector2 trim_cpy(double l) {
+        if(l <= 0)
+            return null;
+
+        double n = norm();
+
+        return new CVector2(x/(n/l), y/(n/l));
+    }
 }
