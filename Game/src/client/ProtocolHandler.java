@@ -28,17 +28,17 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void m_c_newlist(InetSocketAddress adr)
     {
-        Main_UI_Test.serverlist.clear();
+        Main.serverlist.clear();
         System.out.println("NewServerList:");
     }
     public void m_c_listentry(String server, InetSocketAddress adr)
     {
-        Main_UI_Test.serverlist.add(server);
+        Main.serverlist.add(server);
         System.out.println(server);
     }
     public void m_c_endlist(InetSocketAddress adr)
     {
-        Main_UI_Test.completeServerlist(Main_UI_Test.serverlist);
+        Main.completeServerlist(Main.serverlist);
         System.out.println(":NewServerList");
     }
     public void m_c_auth_reply(Integer i, InetSocketAddress adr)
@@ -54,8 +54,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void m_c_chat(String msg, InetSocketAddress adr)
     {
-        Main_UI_Test.getUiLobbyChat().appendMSG(msg.replace("vXv", ";"));
-        Main_UI_Test.getUiLobbyChat().clearMsgField();
+        Main.getUiLobbyChat().appendMSG(msg.replace("vXv", ";"));
+        Main.getUiLobbyChat().clearMsgField();
         System.out.println(msg.replace("vXv", ";"));
     }
 
@@ -70,7 +70,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat fkt
     public void s_c_chat(String msg, InetSocketAddress adr)
     {
-        Main_UI_Test.getUiLobbyChat().appendMSG(msg); // LOBBY
+        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
         System.out.println("CHAT: "+msg);
     }
 

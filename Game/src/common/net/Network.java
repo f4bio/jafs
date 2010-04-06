@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String MASTERHOST = "217.233.14.153";
+    public static final String MASTERHOST = "localhost";
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;

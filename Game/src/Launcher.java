@@ -79,7 +79,7 @@ public class Launcher extends javax.swing.JDialog implements ActionListener {
                 else if( args[0].equals("client") ) {
                     // launch client -> args[1] = ip+port
                     System.setProperty("Dsun.java2d.opengl", "True");
-                    client.Main_UI_Test.main(args);
+                    client.Main.main(args);
                 }
             }
             else {
@@ -105,7 +105,7 @@ public class Launcher extends javax.swing.JDialog implements ActionListener {
         if(e.getSource()==jButton1) {
             // launch client
             dispose();
-            client.Main_UI_Test.main(new String[0]);
+            client.Main.main(new String[0]);
         }
         else {
             // launch server
