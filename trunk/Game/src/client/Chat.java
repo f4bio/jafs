@@ -33,17 +33,17 @@ public class Chat extends Thread{
 
                     // Show Serverlist
                     else if(input.startsWith("/serverlist") || input.startsWith("/sl")) {
-                        net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
                     }
                     // join server
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
                         net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)), Protocol.CLIENT_SERVER_AUTH);
-                        net.send("localhost", 30000,
+                        net.send(Network.MASTERHOST, Network.MASTERPORT,
                                  Protocol.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
                     }
                      // lobby chat
                     else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
-                        net.send("localhost", 30000, Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
                     }
                     // Join team
                     else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {
@@ -58,7 +58,7 @@ public class Chat extends Thread{
                     // private Chat
                     else if(input.startsWith("/private") || input.startsWith("/p")) {
                         String[] zwi = input.split(" ");
-                        net.send("localhost", 30000,
+                        net.send(Network.MASTERHOST, Network.MASTERPORT,
                                 Protocol.CLIENT_MASTER_CHAT_PRIVATE, Integer.parseInt(zwi[1]),input.substring(input.indexOf(" ", input.indexOf(zwi[1]))));
                     }
 

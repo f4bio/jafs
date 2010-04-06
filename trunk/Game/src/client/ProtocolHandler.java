@@ -38,7 +38,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void m_c_endlist(InetSocketAddress adr)
     {
-//        System.out.println(adr);
         Main_UI_Test.completeServerlist(Main_UI_Test.serverlist);
         System.out.println(":NewServerList");
     }

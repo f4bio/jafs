@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String HOST = "x.org";
+    public static final String MASTERHOST = "217.233.14.153";
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
@@ -197,8 +197,6 @@ public class Network {
 
             synchronized(replyQueue) {
                 i = replyQueue.iterator();
-
-                System.out.println("-----");
                 while(i.hasNext()) {
                     p = i.next();
                     String pack[] = p.getPacket();
@@ -211,7 +209,6 @@ public class Network {
                         return;
                     }
                 }
-                System.out.println("-----");
 
                 replyQueue.add(new Packet(packet));
             }
@@ -301,14 +298,14 @@ public class Network {
     }
 
     public void connect() {
-        connect(HOST, MASTERPORT);
+        connect(MASTERHOST, MASTERPORT);
     }
 
     public int getPort(){
         return port;
     }
     public String getHost(){
-        return HOST;
+        return MASTERHOST;
     }
     public void listen(int port) {
         try {
