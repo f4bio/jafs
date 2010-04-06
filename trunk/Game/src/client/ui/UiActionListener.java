@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.Main_UI_Test;
+import client.Main;
 import common.net.Network;
 import common.net.Protocol;
 import java.awt.event.ActionEvent;
@@ -33,48 +33,44 @@ public class UiActionListener implements ActionListener {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
         // Server erstellen
         if(e.getActionCommand().equals(CMD_TOGGLE_CREATESERVER)) {
-            Main_UI_Test.getUiCreateServer().setVisible(Main_UI_Test.getUiCreateServer().isVisible()?false:true);
+            Main.getUiCreateServer().setVisible(Main.getUiCreateServer().isVisible()?false:true);
         }
         // Serverbrowser
         else if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
-            Main_UI_Test.getUiServerbrowser().setVisible(Main_UI_Test.getUiServerbrowser().isVisible()?false:true);
-            net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
+            Main.getUiServerbrowser().setVisible(Main.getUiServerbrowser().isVisible()?false:true);
+            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
         }
         // Lobby Chat
         else if(e.getActionCommand().equals(CMD_TOGGLE_LOBBYCHAT)) {
-            Main_UI_Test.getUiLobbyChat().setVisible(Main_UI_Test.getUiLobbyChat().isVisible()?false:true);
+            Main.getUiLobbyChat().setVisible(Main.getUiLobbyChat().isVisible()?false:true);
         }
         // Options
         else if(e.getActionCommand().equals(CMD_TOGGLE_OPTIONS)) {
-            Main_UI_Test.getUiOptions().setVisible(Main_UI_Test.getUiOptions().isVisible()?false:true);
+            Main.getUiOptions().setVisible(Main.getUiOptions().isVisible()?false:true);
         }
         // Serverliste aktualisieren
         else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
-         /* String[][] s = {{"127.0.0.1:40000", "dust", "0/16", "500"},
-                            {"192.0.0.1:40001", "italy", "2/16", "80"},
-                            {"162.0.0.1:40002", "aztec", "5/16", "63"}};
-            Main_UI_Test.getUiServerbrowser().setServerlist(s); */
-            net.send("localhost", 30000, Protocol.CLIENT_MASTER_LISTREQUEST);
+            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
         }
         // Mit Server verbinden
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
-            if(Main_UI_Test.getUiServerbrowser().getSelectedServer() != null) {
-                System.out.println("Connect to Server: "+Main_UI_Test.getUiServerbrowser().getSelectedServer());
-                net.send(Main_UI_Test.getUiServerbrowser().getSelectedServer(), Protocol.CLIENT_SERVER_AUTH);
-                net.send("localhost", 30000, Protocol.CLIENT_MASTER_JOINSERVER, Main_UI_Test.getUiServerbrowser().getSelectedServer());
+            if(Main.getUiServerbrowser().getSelectedServer() != null) {
+                System.out.println("Connect to Server: "+Main.getUiServerbrowser().getSelectedServer());
+                net.send(Main.getUiServerbrowser().getSelectedServer(), Protocol.CLIENT_SERVER_AUTH);
+                net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_JOINSERVER, Main.getUiServerbrowser().getSelectedServer());
             }
         }
         // Credits
         else if(e.getActionCommand().equals(CMD_TOGGLE_CREDITS)) {
-            Main_UI_Test.getUiCredits().setVisible(Main_UI_Test.getUiCredits().isVisible()?false:true);
+            Main.getUiCredits().setVisible(Main.getUiCredits().isVisible()?false:true);
         }
         // Lobby Chat SendMSG
         else if(e.getActionCommand().equals(CMD_LOBBYCHAT_SEND_MSG)) {
-            net.send("localhost", 30000, Protocol.CLIENT_MASTER_CHAT_LOBBY, Main_UI_Test.getUiLobbyChat().getMSG());
+            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_CHAT_LOBBY, Main.getUiLobbyChat().getMSG());
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
-            net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
+//            net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
             System.exit(0);
         }
     }

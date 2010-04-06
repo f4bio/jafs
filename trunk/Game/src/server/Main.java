@@ -26,8 +26,8 @@ public class Main {
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
         net.listen(net.getFreePort(40000, 50000));
-        net.send("secureit.ath.cx", 30000, Protocol.SERVER_MASTER_SERVERCOUNT);
-        net.send("secureit.ath.cx", 30000, Protocol.SERVER_MASTER_AUTH);
+        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.SERVER_MASTER_SERVERCOUNT);
+        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.SERVER_MASTER_AUTH);
 
 
         pingTimer = new Timer();
@@ -38,8 +38,6 @@ public class Main {
         } catch(Exception e) {
 
         }
-
-        net.send("localhost", 31338, Protocol.SERVER_MASTER_SERVERCOUNT);
     }
     private static TimerTask pinger = new TimerTask() {
         public void run() {

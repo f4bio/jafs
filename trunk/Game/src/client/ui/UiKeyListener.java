@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.Main_UI_Test;
+import client.Main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

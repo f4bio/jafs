@@ -1,6 +1,6 @@
 package client.ui;
 
-import client.Main_UI_Test;
+import client.Main;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
@@ -49,7 +49,7 @@ public class UiManager {
 
     public static void setForeground(UiWindow u) {
         for(int i=0; i<content.size(); i++) {
-            if(content.get(i) != Main_UI_Test.getUiMainMenu())
+            if(content.get(i) != Main.getUiMainMenu())
                 content.get(i).setBackground(UiWindow.UI_COLOR_IN_BACKGROUND);
         }
 
@@ -57,6 +57,6 @@ public class UiManager {
         u.setBackground(UiWindow.UI_COLOR_ON_TOP);
         content.add(u);
 
-        Main_UI_Test.getScreen().getContentPane().setComponentZOrder(u, 0);
+        Main.getScreen().getContentPane().setComponentZOrder(u, 0);
     }
 }
