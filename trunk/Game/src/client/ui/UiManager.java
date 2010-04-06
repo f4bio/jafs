@@ -1,10 +1,7 @@
 package client.ui;
 
 import client.Main_UI_Test;
-import client.render.MainScreen;
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.image.VolatileImage;
 import java.util.Vector;
 
 /**

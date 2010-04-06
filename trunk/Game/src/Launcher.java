@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 /**
  *
  * @author Julian Sanio
+ * @version 0.1a
  */
 public class Launcher extends javax.swing.JDialog implements ActionListener {
 
