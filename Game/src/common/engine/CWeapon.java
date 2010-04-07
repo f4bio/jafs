@@ -5,10 +5,12 @@
 
 package common.engine;
 
+import common.CVector2;
+
 /**
  *
  * @author miracle
  */
 public abstract class CWeapon {
-
+    public abstract void shoot(CVector2 direction);
 }

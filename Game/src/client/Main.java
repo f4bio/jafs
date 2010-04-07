@@ -111,12 +111,11 @@ public class Main {
 
         // GameData
         data = new GameData(input);
-        data.loadMap("map");
 
         // UpdateLoop
         loop = new UpdateLoop(60);
-        loop.addUpdateObject(data);
         loop.addUpdateObject(screen);
+        loop.addUpdateObject(data);
 
         EventQueue.invokeLater(new Runnable() {
            public void run() {
@@ -124,6 +123,9 @@ public class Main {
                uiMain.setVisible(true);
            }
         });
+        
+        net.connect("localhost", 40000);
+        net.send(Protocol.CLIENT_SERVER_AUTH);
     }
 
     public static MainScreen getScreen() {
@@ -132,6 +134,10 @@ public class Main {
 
     public static GameData getGameData() {
         return data;
+    }
+
+    public static Network getNetwork() {
+        return net;
     }
 
     public static void completeServerlist(ArrayList<String> list) {

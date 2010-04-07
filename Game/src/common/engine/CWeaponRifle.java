@@ -5,10 +5,15 @@
 
 package common.engine;
 
+import common.CVector2;
+
 /**
  *
  * @author miracle
  */
-public class CWeaponRifle {
+public class CWeaponRifle extends CWeapon {
 
+    public void shoot(CVector2 direction) {
+
+    }
 }

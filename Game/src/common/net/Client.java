@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package common.net;
 
+import common.engine.CPlayer;
 import java.net.InetSocketAddress;
 
 /**
@@ -12,33 +8,37 @@ import java.net.InetSocketAddress;
  * @author adm1n
  */
 public class Client {
+    public static int STATUS_PENDING = 0;
+    public static int STATUS_CONNECTED = 1;
 
     private String host;
-    private String name;
-    private String map;
     private int port;
-    private int limitPlayers;
-    private int curPlayers;
-    private int latency;
     private boolean inGame;
     private InetSocketAddress address;
-    private int pingFailureCnt;
-    private int id;
-    private int teamId;
+    private int status;
+    private CPlayer player;
     
     public Client(String host, int port){
         this.host = host;
         this.port = port;
-        pingFailureCnt = 0;
         address = new InetSocketAddress(host, port);
+        status = STATUS_PENDING;
+        player = new CPlayer();
     }
+
     public Client(InetSocketAddress adr) {
         this.host = adr.getHostName();
         this.port = adr.getPort();
-        pingFailureCnt = 0;
+        status = STATUS_PENDING;
         address = adr;
         this.inGame = false;
+        player = new CPlayer();
     }
+
+    public CPlayer getPlayer() {
+        return player;
+    }
+
     public String getHost() {
         return host;
     }
@@ -51,37 +51,35 @@ public class Client {
         return address;
     }
 
-    public void increasePingFailureCnt() {
-        pingFailureCnt++;
-    }
-
-    public void decreasePingFailureCnt() {
-        pingFailureCnt--;
-    }
-
-    public void resetPingFailureCnt() {
-        pingFailureCnt = 0;
-    }
-
-    public int getPingFailureCnt() {
-        return pingFailureCnt;
-    }
     public void setId(int id) {
-        this.id = id;
+        player.setId(id);
     }
+
     public int getId() {
-        return id;
+        return player.getId();
     }
+
     public void changeInGame() {
         this.inGame = !this.inGame;
     }
+
     public boolean isInGame() {
         return this.inGame;
     }
+
     public void setTeamId(int teamId) {
-        this.teamId = teamId;
+        player.setTeam(teamId);
     }
+
     public int getTeamId() {
-        return teamId;
+        return player.getTeam();
+    }
+
+    public void setStatus(final int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

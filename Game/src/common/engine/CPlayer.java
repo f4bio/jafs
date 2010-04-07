@@ -34,14 +34,18 @@ public class CPlayer extends CEntity {
 
     private int team;
     private CWeapon[] weapon;
+    private int currentWeapon;
     private int id;
     private int health;
 
     public CPlayer() {
         team = TEAM_NONE;
+        weapon = new CWeapon[3];
+        currentWeapon = 0;
         size = new Dimension(50, 50);
         speed = 3.0d;
-        setPosition(60, 60);
+        health = 0;
+        setPosition(0, 0);
     }
 
     public void setId(int i) {
@@ -66,6 +70,22 @@ public class CPlayer extends CEntity {
 
     public int getHealth() {
         return health;
+    }
+
+    public boolean isDead() {
+        if(health <= 0)
+            return true;
+        return false;
+    }
+
+    public void setCurrentWeapon(int i) {
+        if(i < 0 || i > weapon.length - 1)
+            return;
+        currentWeapon = i;
+    }
+
+    public int getCurrentWeapon() {
+        return currentWeapon;
     }
 
     @Override

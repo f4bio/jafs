@@ -26,14 +26,6 @@ public class Main {
         public void run() {
             int failures;
             for(int i=0;i<serverlist.size();i++) {
-                /*serverlist.get(i).increasePingFailureCnt();
-                failures = serverlist.get(i).getPingFailureCnt();
-
-                if(failures >= maxPingFailures) {
-                    removeServer(serverlist.get(i));
-                    continue;
-                }*/
-
                 net.send(serverlist.get(i).getAddress(), Protocol.MASTER_SERVER_PING);
             }
         }
@@ -108,14 +100,6 @@ public class Main {
             if(client.getId() == id)
                 return client;
         return null;
-    }
-
-    public static void decreasePingFailures(InetSocketAddress adr) {
-        Server serv = getServer(adr);
-
-        if(serv != null) {
-            serv.decreasePingFailureCnt();
-        }
     }
 
     public static int serverCount(){
