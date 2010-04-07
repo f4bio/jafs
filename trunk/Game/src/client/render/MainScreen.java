@@ -5,6 +5,7 @@
 
 package client.render;
 
+import client.Main;
 import client.anim.UpdateLoop;
 import client.anim.UpdateObject;
 import client.ui.UiManager;
@@ -83,7 +84,8 @@ public  class MainScreen extends JWindow implements UpdateObject {
 
         clear(g);
 
-        gamescene.renderScene(g);
+        if(Main.getNetwork().isConnected() && Main.getGameData().isLoaded())
+            gamescene.renderScene(g);
 
         g.setColor(Color.white);
         g.drawString("speedfactor: " + u.getSpeedfactor(), 50, 50);
@@ -91,6 +93,7 @@ public  class MainScreen extends JWindow implements UpdateObject {
         g.drawString("buffer accelerated: " + buffer.getCapabilities().isAccelerated(), 50, 100);
 
         UiManager.renderAll(g);
+
         cntUiRepaint++;
         if(cntUiRepaint % 2 == 0) {
             cntUiRepaint = 0;

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client;
 
 import client.anim.UpdateLoop;
@@ -11,6 +6,7 @@ import client.resource.MapLoader;
 import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.net.Protocol;
 
 /**
  *
@@ -18,23 +14,21 @@ import common.engine.CPlayer;
  */
 public class GameData implements UpdateObject {
     private MapLoader loader = new MapLoader(null, null);
+    private String name;
     private CPlayer[] player;
     private int selfId;
     private Input input;
+    private boolean loaded;
 
     public GameData(Input input) {
         this.input = input;
     }
 
-    public void loadMap(String map) {
-        player = new CPlayer[1];
-
-        player[0] = new CPlayer();
-        player[0].setTeam(CPlayer.TEAM_BLUE);
-        setSelfId(0);
-
+    public boolean loadMap(String map) {
         loader.setMap(map);
-        loader.load(map);
+
+        loaded = loader.load(map);
+        return loaded;
     }
     
     private void checkPlayerInput(UpdateLoop u) {
@@ -72,6 +66,17 @@ public class GameData implements UpdateObject {
             self.move(mov, u.getSpeedfactor());
 
         self.setDirection(input.getDirection());
+
+        //Send player info
+        int id = self.getId();
+        int weapon = self.getCurrentWeapon();
+        double posX = self.getPosition().getX();
+        double posY = self.getPosition().getY();
+        double dirX = self.getDirection().getX();
+        double dirY = self.getDirection().getY();
+
+        Main.getNetwork().send(Protocol.CLIENT_SERVER_PLAYER_INFO, id, weapon,
+                posX, posY, dirX, dirY);
     }
 
     public void update(UpdateLoop u) {
@@ -88,8 +93,14 @@ public class GameData implements UpdateObject {
 
     public void addPlayer(CPlayer p) {
         int idx = p.getId();
-        if(idx > 0 && idx < player.length)
+        if(idx >= 0 && idx < player.length)
             player[idx] = p;
+    }
+
+    public void removePlayer(CPlayer p) {
+        int idx = p.getId();
+        if(idx >= 0 && idx < player.length)
+            player[idx] = null;
     }
 
     public CPlayer getPlayer(int i) {
@@ -102,11 +113,33 @@ public class GameData implements UpdateObject {
         return player;
     }
 
+    public void setMaxPlayers(int max) {
+        player = new CPlayer[max];
+    }
+
     public void setSelfId(int id) {
         selfId = id;
     }
 
     public int getSelfId() {
         return selfId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String n) {
+        name = n;
+
+        try {
+            player[selfId].setName(n);
+        } catch(Exception e) {
+
+        }
+    }
+
+    public boolean isLoaded() {
+        return loaded;
     }
 }

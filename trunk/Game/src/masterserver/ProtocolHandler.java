@@ -28,7 +28,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_m_pong(InetSocketAddress adr)
     {
-        Main.decreasePingFailures(adr);
+        
     }
 
     public void s_m_servercount(InetSocketAddress adr)

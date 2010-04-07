@@ -34,14 +34,39 @@ public class Protocol {
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
 
     public static final String CLIENT_SERVER_AUTH = "c_s_auth";
+    public static final String CLIENT_SERVER_ALL_PLAYER_DATA = "c_s_all_player_data";
+    public static final String CLIENT_SERVER_PLAYER_DATA_OK = "c_s_player_data_ok";
+    public static final String CLIENT_SERVER_REQUEST_SERVER_INFO = "c_s_request_server_info";
     public static final String CLIENT_SERVER_PONG = "c_s_pong";
     public static final String CLIENT_SERVER_CLIENTCOUNT = "c_s_clientcount";
     public static final String CLIENT_SERVER_CLIENTID = "c_s_clientid";
+    public static final String CLIENT_SERVER_LOGOFF = "c_s_logoff";
+    public static final String CLIENT_SERVER_JOINTEAM = "c_s_jointeam";
+    public static final String CLIENT_SERVER_INIT_REPLY = "c_s_init_reply";
+    public static final String CLIENT_SERVER_PLAYER_INFO = "c_s_player_info";
+
+    public static final String CLIENT_SERVER_FORCED_NICKCHANGE_OK = "c_s_forced_nickchange_ok";
+    public static final String CLIENT_SERVER_REQUEST_NAME_REPLY = "c_s_request_name_reply";
+    public static final String CLIENT_SERVER_CONNECTION_TERMINATED_OK = "c_s_connection_terminated_ok";
+    public static final String CLIENT_SERVER_CONNECTION_ESTABLISHED_OK = "c_s_connection_established_ok";
+    
     public static final String CLIENT_SERVER_CHAT_ALL = "c_s_chat_all";
     public static final String CLIENT_SERVER_CHAT_TEAM = "c_s_chat_team";
     public static final String CLIENT_SERVER_CHAT_PRIVATE = "c_s_chat_private";
-    public static final String CLIENT_SERVER_LOGOFF = "c_s_logoff";
-    public static final String CLIENT_SERVER_JOINTEAM = "c_s_jointeam";
+    
+    public static final String CLIENT_SERVER_CHAT_ALL_OK = "c_s_chat_all_ok";
+    public static final String CLIENT_SERVER_CHAT_TEAM_OK = "c_s_chat_team_ok";
+    public static final String CLIENT_SERVER_CHAT_PRIVATE_OK = "c_s_chat_private_ok";
+
+    public static final String CLIENT_SERVER_EVENT_PLAYER_JOINED_OK = "c_s_event_player_joined_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_LEFT_OK = "c_s_event_player_left_ok";
+    public static final String CLIENT_SERVER_EVENT_ITEM_SPAWNED_OK = "c_s_event_item_spawned_ok";
+    public static final String CLIENT_SERVER_EVENT_ITEM_PICKED_OK = "c_s_event_item_picked_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_SHOT_OK = "c_s_event_player_shot_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_KILLED_OK = "c_s_event_player_killed_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK = "c_s_event_player_respawn_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK = "c_s_event_player_nick_changed_ok";
+    public static final String CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK = "c_s_event_player_team_changed_ok";
 
     //----- Server commands
     public static final String SERVER_MASTER_PONG = "s_m_pong";
@@ -49,12 +74,35 @@ public class Protocol {
     public static final String SERVER_MASTER_SERVERCOUNT = "s_m_servercount";
     
     public static final String SERVER_CLIENT_PING = "s_c_ping";
-    public static final String SERVER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
     public static final String SERVER_CLIENT_CLIENTCOUNT = "s_c_clientcount";
-    public static final String SERVER_CLIENT_CLIENTID = "s_c_clientid";
-    public static final String SERVER_CLIENT_CHAT = "s_c_chat";
+    public static final String SERVER_CLIENT_CLIENTID_REPLY = "s_c_clientid_reply";
+
+    public static final String SERVER_CLIENT_CHAT_ALL = "s_c_chat_all";
+    public static final String SERVER_CLIENT_CHAT_TEAM = "s_c_chat_team";
+    public static final String SERVER_CLIENT_CHAT_PRIVATE = "s_c_chat_private";
+
     public static final String SERVER_CLIENT_LOGOFF_REPLY = "s_c_logoff_reply";
+    public static final String SERVER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
+    public static final String SERVER_CLIENT_INIT = "s_c_init";
+    public static final String SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY = "c_s_request_server_info_reply";
     public static final String SERVER_CLIENT_JOINTEAM_REPLY = "s_c_jointeam_reply";
+    public static final String SERVER_CLIENT_CONNECTION_TERMINATED = "s_c_connection_terminated";
+    public static final String SERVER_CLIENT_CONNECTION_ESTABLISHED = "s_c_connection_established";
+    public static final String SERVER_CLIENT_ALL_PLAYER_DATA_OK = "s_c_all_player_data_ok";
+    public static final String SERVER_CLIENT_PLAYER_DATA = "s_c_player_data";
+    public static final String SERVER_CLIENT_REQUEST_NAME = "s_c_request_name";
+    public static final String SERVER_CLIENT_FORCED_NICKCHANGE = "s_c_forced_nickchange";
+    public static final String SERVER_CLIENT_PLAYER_INFO = "s_c_player_info";
+
+    public static final String SERVER_CLIENT_EVENT_PLAYER_JOINED = "s_c_event_player_joined";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_LEFT = "s_c_event_player_left";
+    public static final String SERVER_CLIENT_EVENT_ITEM_SPAWNED = "s_c_event_item_spawned";
+    public static final String SERVER_CLIENT_EVENT_ITEM_PICKED = "s_c_event_item_picked";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_SHOT = "s_c_event_player_shot";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_KILLED = "s_c_event_player_killed";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_RESPAWN = "s_c_event_player_respawn";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED = "s_c_event_player_nick_changed";
+    public static final String SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED = "s_c_event_player_team_changed";
 
     //----- Master Server commands
     public static final String MASTER_SERVER_AUTH_REPLY = "m_s_auth_reply";
@@ -151,13 +199,36 @@ public class Protocol {
         registerCmd(SERVER_MASTER_PONG, ARG_NONE);
         registerCmd(SERVER_MASTER_AUTH, ARG_NONE);
         registerCmd(SERVER_MASTER_SERVERCOUNT, ARG_NONE);
-        registerCmd(SERVER_CLIENT_CLIENTID, ARG_INT);
+        registerCmd(SERVER_CLIENT_CLIENTID_REPLY, ARG_INT);
         registerCmd(SERVER_CLIENT_CLIENTCOUNT, ARG_INT);
         registerCmd(SERVER_CLIENT_PING, ARG_NONE);
         registerCmd(SERVER_CLIENT_AUTH_REPLY, ARG_INT);
-        registerCmd(SERVER_CLIENT_CHAT, ARG_STRING);
+        registerCmd(SERVER_CLIENT_CHAT_ALL, ARG_STRING);
+        registerCmd(SERVER_CLIENT_CHAT_TEAM, ARG_STRING);
+        registerCmd(SERVER_CLIENT_CHAT_PRIVATE, ARG_STRING, ARG_INT);
         registerCmd(SERVER_CLIENT_LOGOFF_REPLY, ARG_INT);
         registerCmd(SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT);
+        registerCmd(SERVER_CLIENT_INIT, ARG_STRING, ARG_INT);
+        registerCmd(SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_NONE);
+
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
+        registerCmd(SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_INT, ARG_INT, ARG_INT, ARG_INT);
+        registerCmd(SERVER_CLIENT_EVENT_ITEM_PICKED, ARG_INT);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_SHOT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_KILLED, ARG_INT);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_RESPAWN, ARG_NONE);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED, ARG_INT, ARG_STRING);
+        registerCmd(SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED, ARG_INT, ARG_INT);
+
+        registerCmd(SERVER_CLIENT_CONNECTION_TERMINATED, ARG_NONE);
+        registerCmd(SERVER_CLIENT_CONNECTION_ESTABLISHED, ARG_NONE);
+        registerCmd(SERVER_CLIENT_ALL_PLAYER_DATA_OK, ARG_NONE);
+        registerCmd(SERVER_CLIENT_PLAYER_DATA, ARG_STRING, ARG_INT, ARG_INT);
+        registerCmd(SERVER_CLIENT_REQUEST_NAME, ARG_NONE);
+        registerCmd(SERVER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
+        registerCmd(SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE,
+                ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
 
         //----- Master Server commands
         registerCmd(MASTER_SERVER_AUTH_REPLY, ARG_INT);

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package common.net;
 
 import java.net.DatagramPacket;
@@ -20,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String MASTERHOST = "localhost";
+    public static final String MASTERHOST = "217.233.14.153";
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
@@ -167,6 +162,7 @@ public class Network {
     private DatagramSocket socket;
     private NetworkReader nIn;
     private NetworkWriter nOut;
+    private boolean sConnected;
     private boolean connected;
 
     public Network() {
@@ -175,6 +171,7 @@ public class Network {
         nOut = null;
         socket = null;
         connected = false;
+        sConnected = false;
 
         checker = new Timer();
         checker.schedule(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
@@ -199,12 +196,6 @@ public class Network {
                 i = replyQueue.iterator();
                 while(i.hasNext()) {
                     p = i.next();
-                    String pack[] = p.getPacket();
-                    for(String l : pack) {
-                        System.out.print(l + ";");
-                    }
-                    System.out.println();
-
                     if(p.equals(packet)) {
                         return;
                     }
@@ -263,20 +254,43 @@ public class Network {
         return inQueue.poll();
     }
 
+    public void clear() {
+        inQueue.clear();
+        outQueue.clear();
+        replyQueue.clear();
+    }
+
+    public void clearReplyQueue() {
+        synchronized(replyQueue) {
+            replyQueue.clear();
+        }
+    }
+
+    public void setReallyConnected(boolean con) {
+        sConnected = con;
+    }
+
+    public boolean isReallyConnected() {
+        return sConnected;
+    }
+
     public void disconnect() {
         if(connected) {
             inQueue.clear();
             outQueue.clear();
             replyQueue.clear();
 
-            socket.close();
-            socket = null;
+            socket.disconnect();
 
             nIn = null;
             nOut = null;
 
             connected = false;
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public void connect(String server, int port) {
@@ -289,11 +303,6 @@ public class Network {
             connected = true;
         } catch(SocketException e) {
             connected = false;
-        }
-
-        if(connected) {
-            nIn = new NetworkReader();
-            nOut = new NetworkWriter();
         }
     }
 
@@ -313,6 +322,7 @@ public class Network {
             socket = new DatagramSocket(port);
             nIn = new NetworkReader();
             nOut = new NetworkWriter();
+
         } catch(SocketException e) {
             e.printStackTrace();
             disconnect();
