@@ -1,6 +1,7 @@
 package server;
 
 import client.anim.UpdateLoop;
+import common.engine.CPlayer;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -16,6 +17,10 @@ public class Main {
     public static final int PING_INTERVAL = 10000;
 
     private static int maxClients = 16;
+    private static int respawntime = 10000;
+    private static int respawntimeItems = 5000;
+    private static int gameTime = 60*10000;
+
     private static String map;
     private static String name;
     private static Client[] client = new Client[maxClients];
@@ -56,6 +61,13 @@ public class Main {
         }
     }
 
+    public static void reset() {
+        net.clear();
+        game.setScoreBlue(0);
+        game.setScoreRed(0);
+        broadcast(Protocol.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+    }
+
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             for(Client cur : client) {
@@ -65,7 +77,28 @@ public class Main {
         }
     };
 
+    private static TimerTask respawner = new TimerTask() {
+        public void run() {
+            broadcast(Protocol.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+        }
+    };
+
+    private static TimerTask itemRespawner = new TimerTask() {
+        public void run() {
+            broadcast(Protocol.SERVER_CLIENT_EVENT_ITEM_SPAWNED);
+        }
+    };
+
+    private static TimerTask gameTimer = new TimerTask() {
+        public void run() {
+            broadcast(Protocol.SERVER_CLIENT_EVENT_TEAM_WON, game.getWinnerTeam());
+            reset();
+        }
+    };
+
     private static Timer pingTimer;
+    private static Timer respawnTimer;
+    private static Timer itemRespawnTimer;
 
     public synchronized static Client addClient(InetSocketAddress adr) {
         Client c = null;
@@ -144,7 +177,8 @@ public class Main {
     
     public synchronized static void broadcast(String cmd, Object... o) {
         for(Client c : client) {
-            if(c != null && c.getStatus() != Client.STATUS_PENDING)
+            if(c != null && c.getStatus() != Client.STATUS_PENDING &&
+                    c.getPlayer().getTeam() != CPlayer.TEAM_NONE)
                 net.send(c.getAddress(), cmd, o);
         }
     }

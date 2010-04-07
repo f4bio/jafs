@@ -1,9 +1,11 @@
 package client;
 
+import common.engine.CMap;
 import common.engine.CPlayer;
 import common.net.Network;
 import common.net.Packet;
 import common.net.Protocol;
+import java.awt.Point;
 import java.net.InetSocketAddress;
 
 /**
@@ -189,6 +191,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("joined team " + team);
         } else
             System.out.println("join team failed");
+    }
+
+    public void s_c_event_player_respawned(InetSocketAddress adr) {
+        CMap map = Main.getGameData().getMap();
+        CPlayer self = Main.getGameData().getSelf();
+
+        net.send(adr, Protocol.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK);
+
+        if(!self.isDead())
+            return;
+
+        Point p = (self.getTeam() == CPlayer.TEAM_BLUE) ? map.getSpawnBlue() :
+            map.getSpawnRed();
+        int x = p.x * map.getTileSize().width + map.getTileSize().width/2;
+        int y = p.y * map.getTileSize().height + map.getTileSize().height/2;
+
+        Main.getGameData().getSelf().setPosition(x, y);
     }
 
     public void noReplyReceived(Packet p)

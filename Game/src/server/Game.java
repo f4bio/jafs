@@ -15,10 +15,14 @@ public class Game implements UpdateObject {
     private MapLoader loader;
     private String map;
     private CPlayer[] player = new CPlayer[Main.getMaxPlayers()];
+    private int scoreRed;
+    private int scoreBlue;
 
     public Game(String map) {
         loader = new MapLoader(null, null);
         this.map = map;
+        scoreRed = 0;
+        scoreBlue = 0;
     }
 
     public void update(UpdateLoop u) {
@@ -69,5 +73,30 @@ public class Game implements UpdateObject {
         if(player != null && i < player.length && i > -1)
             return player[i];
         return null;
+    }
+
+    public void setScoreBlue(int score) {
+        scoreBlue = score;
+    }
+
+    public void setScoreRed(int score) {
+        scoreRed = score;
+    }
+
+    public int getScoreBlue() {
+        return scoreBlue;
+    }
+
+    public int getScoreRed() {
+        return scoreRed;
+    }
+
+    public final int getWinnerTeam() {
+        if(scoreBlue < scoreRed)
+            return CPlayer.TEAM_RED;
+        else if(scoreBlue > scoreRed)
+            return CPlayer.TEAM_BLUE;
+        else
+            return -1; // DRAW
     }
 }
