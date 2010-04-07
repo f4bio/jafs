@@ -66,6 +66,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, Protocol.SERVER_CLIENT_CONNECTION_ESTABLISHED);
     }
 
+    public void c_s_connection_established_ok(InetSocketAddress adr) {
+
+    }
+
+    public void c_s_forced_nickchange_ok(InetSocketAddress adr) {
+
+    }
+
     public void c_s_request_server_info(InetSocketAddress adr) {
         String name = Main.getServerName();
         String map = Main.getMapName();
@@ -92,7 +100,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_player_info(Integer id, Integer wep, Double posX, Double posY,
-            Double dirX, Double dirY) {
+            Double dirX, Double dirY, InetSocketAddress adr) {
         Client c = Main.getClient(id);
 
         if(c != null) {
@@ -115,7 +123,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_clientid(InetSocketAddress adr){
-        net.send(adr, Protocol.SERVER_CLIENT_CLIENTID_REPLY, Main.getClient(adr));
+        net.send(adr, Protocol.SERVER_CLIENT_CLIENTID_REPLY, Main.getClient(adr).getId());
     }
 
     public void c_s_logoff(InetSocketAddress adr){
@@ -146,10 +154,15 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             Client c = Main.getClient(adr);
 
             if(c != null) {
-                net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_REPLY, Protocol.REPLY_SUCCESS);
+                c.setTeamId(teamId);
+                net.send(adr, Protocol.SERVER_CLIENT_JOINTEAM_REPLY, Protocol.REPLY_SUCCESS, teamId);
                 Main.broadcast(Protocol.SERVER_CLIENT_EVENT_PLAYER_JOINED, c.getId());
             }
         }
+    }
+
+    public void c_s_event_player_joined_ok(InetSocketAddress adr) {
+        
     }
 
     public void noReplyReceived(Packet p) {

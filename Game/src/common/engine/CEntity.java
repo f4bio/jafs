@@ -52,7 +52,10 @@ public class CEntity {
     }
 
     public void setDirection(double x, double y) {
-        direction.set(x, y);
+        if(direction == null)
+            direction = new CVector2(x, y);
+        else
+            direction.set(x, y);
     }
 
     public CVector2 getDirection() {

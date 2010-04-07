@@ -34,7 +34,7 @@ public class GameData implements UpdateObject {
     private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
         
-        if(self == null)
+        if(self == null || !Main.getNetwork().isReallyConnected())
             return;
         
         CVector2 mov = null;

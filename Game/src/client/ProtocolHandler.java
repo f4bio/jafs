@@ -65,7 +65,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void m_c_joinserver_reply(String s, InetSocketAddress adr)
     {
-        System.out.println(s);
+        
     }
 
     public void m_c_chat(String msg, InetSocketAddress adr)
@@ -89,7 +89,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, Protocol.CLIENT_SERVER_REQUEST_NAME_REPLY, n);
     }
 
-    public void c_s_init(String m, Integer t, InetSocketAddress adr) {
+    public void s_c_init(String m, Integer t, InetSocketAddress adr) {
         Main.getGameData().setMaxPlayers(t);
         boolean result = Main.getGameData().loadMap(m);
 
@@ -105,10 +105,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_c_forced_nickchange(String n, InetSocketAddress adr) {
         Main.getGameData().setName(n);
+        net.send(adr, Protocol.CLIENT_SERVER_FORCED_NICKCHANGE_OK);
     }
 
     public void s_c_connection_established(InetSocketAddress adr) {
-        net.setReallyConnected(true);
         net.send(adr, Protocol.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK);
         net.send(adr, Protocol.CLIENT_SERVER_CLIENTID);
     }
@@ -126,13 +126,18 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             player.setName(name);
             Main.getGameData().addPlayer(player);
         }
+
+        net.send(adr, Protocol.CLIENT_SERVER_PLAYER_DATA_OK);
     }
 
     public void s_c_player_info(Integer id, Integer wep, Double posX, Double posY,
-            Double dirX, Double dirY) {
+            Double dirX, Double dirY, InetSocketAddress adr) {
+        if(!net.isReallyConnected())
+            return;
+
         CPlayer c = Main.getGameData().getPlayer(id);
 
-        if(c != null && c.getId() == Main.getGameData().getSelfId()) {
+        if(c != null && c.getId() != Main.getGameData().getSelfId()) {
             c.setCurrentWeapon(wep);
             c.setPosition(posX, posY);
             c.setDirection(dirX, dirY);
@@ -140,7 +145,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void s_c_all_player_data_ok(InetSocketAddress adr) {
-        
+        net.setReallyConnected(true);
+        net.send(adr, Protocol.CLIENT_SERVER_JOINTEAM, CPlayer.TEAM_BLUE);
+    }
+
+    public void s_c_event_player_joined(String n, InetSocketAddress adr) {
+        System.out.println("Player " + n + " joined.");
+        net.send(adr, Protocol.CLIENT_SERVER_EVENT_PLAYER_JOINED_OK);
     }
 
     // --- chat fkt
@@ -171,11 +182,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("log off failed");
     }
 
-    public void s_c_jointeam_reply(Integer reply, InetSocketAddress adr)
+    public void s_c_jointeam_reply(Integer reply, Integer team, InetSocketAddress adr)
     {
-        if(reply == Protocol.REPLY_SUCCESS)
-            System.out.println("you have been succesfully join team");
-        else
+        if(reply == Protocol.REPLY_SUCCESS) {
+            Main.getGameData().getSelf().setTeam(team);
+            System.out.println("joined team " + team);
+        } else
             System.out.println("join team failed");
     }
 

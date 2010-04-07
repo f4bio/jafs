@@ -84,7 +84,7 @@ public  class MainScreen extends JWindow implements UpdateObject {
 
         clear(g);
 
-        if(Main.getNetwork().isConnected() && Main.getGameData().isLoaded())
+        if(Main.getNetwork().isReallyConnected() && Main.getGameData().isLoaded())
             gamescene.renderScene(g);
 
         g.setColor(Color.white);
