@@ -70,11 +70,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         
     }
 
-    public void m_c_chat(String msg, InetSocketAddress adr)
+    public void m_c_chat(Integer id, String msg, InetSocketAddress adr)
     {
-        Main.getUiLobbyChat().appendMSG(msg.replace("vXv", ";"));
-        Main.getUiLobbyChat().clearMsgField();
-        System.out.println(msg.replace("vXv", ";"));
+        if(id != -1){
+            Main.getUiLobbyChat().appendMSG("Player-"+id+": "+msg.replace("vXv", ";"));
+            Main.getUiLobbyChat().clearMsgField();
+//            System.out.println("Player-"+id+": "+msg.replace("vXv", ";"));
+        }
     }
 
     public void s_c_auth_reply(Integer i, InetSocketAddress adr)
@@ -148,6 +150,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_c_all_player_data_ok(InetSocketAddress adr) {
         net.setReallyConnected(true);
+        net.setServer(adr);
         net.send(adr, Protocol.CLIENT_SERVER_JOINTEAM, CPlayer.TEAM_BLUE);
     }
 
@@ -212,6 +215,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void noReplyReceived(Packet p)
     {
+    }
 
+    public void m_c_chat_ok (InetSocketAddress adr)
+    {
     }
 }

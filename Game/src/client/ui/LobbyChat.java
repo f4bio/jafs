@@ -91,10 +91,14 @@ public class LobbyChat extends UiWindow {
     public void addActionListener(ActionListener a) {
         jButton1.setActionCommand(UiActionListener.CMD_LOBBYCHAT_SEND_MSG);
         jButton1.addActionListener(a);
+        jTextField1.setActionCommand(UiActionListener.CMD_LOBBYCHAT_SEND_MSG);
+        jTextField1.addActionListener(a);
     }
 
     public String getMSG() {
-        return jTextField1.getText();
+        String str = jTextField1.getText();
+        clearMsgField();
+        return str;
     }
 
     public void appendMSG(String msg) {

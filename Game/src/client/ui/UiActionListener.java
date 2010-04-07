@@ -31,6 +31,7 @@ public class UiActionListener implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
+        
         // Server erstellen
         if(e.getActionCommand().equals(CMD_TOGGLE_CREATESERVER)) {
             Main.getUiCreateServer().setVisible(Main.getUiCreateServer().isVisible()?false:true);
@@ -70,7 +71,7 @@ public class UiActionListener implements ActionListener {
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
-//            net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
+            net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
             System.exit(0);
         }
     }

@@ -36,8 +36,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(added != null) {
             net.send(adr, Protocol.SERVER_CLIENT_AUTH_REPLY, Protocol.REPLY_SUCCESS);
             net.send(adr, Protocol.SERVER_CLIENT_INIT, Main.getMapName(), Main.getMaxPlayers());
+            System.out.println("Client "+added.getHost()+":"+added.getPort()+" joined server");
         } else {
             net.send(adr, Protocol.SERVER_CLIENT_AUTH_REPLY, Protocol.REPLY_FAILURE);
+            System.out.println("Client "+added.getHost()+":"+added.getPort()+" not able joined server");
         }
     }
 
@@ -100,7 +102,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_player_info(Integer id, Integer wep, Double posX, Double posY,
-            Double dirX, Double dirY, InetSocketAddress adr) {
+                                Double dirX, Double dirY, InetSocketAddress adr) {
         Client c = Main.getClient(id);
 
         if(c != null) {
@@ -111,11 +113,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_player_data_ok(InetSocketAddress adr) {
-        
     }
 
     public void c_s_pong(InetSocketAddress adr) {
-;
     }
 
     public void c_s_clientcount(InetSocketAddress adr){

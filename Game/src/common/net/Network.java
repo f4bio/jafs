@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
-    public static final String MASTERHOST = "217.233.14.153";
+    public static final String MASTERHOST = "localhost";
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
@@ -83,6 +83,8 @@ public class Network {
 
                             while(i.hasNext()) {
                                 rPacket = i.next();
+//                                System.out.println("------");
+//                                System.out.println(rPacket.getCmd());
                                 if(pPacket.getCmd().equals(Protocol.getReplyOfCmd(rPacket.getCmd()))) {
                                     i.remove();
                                 }
@@ -308,6 +310,14 @@ public class Network {
 //        }
     }
 
+    public void setServer(InetSocketAddress adr) {
+        dest = adr;
+    }
+
+    public InetSocketAddress getServer() {
+        return dest;
+    }
+
     public void connect() {
         connect(MASTERHOST, MASTERPORT);
     }
@@ -315,9 +325,11 @@ public class Network {
     public int getPort(){
         return port;
     }
+
     public String getHost(){
         return MASTERHOST;
     }
+
     public void listen(int port) {
         try {
             this.port = port;
@@ -334,6 +346,7 @@ public class Network {
     public void setProtocolHandler(ProtocolHandler handler) {
         this.handler = handler;
     }
+
     public int getFreePort(int from, int to){
         DatagramSocket testSocket;
             for(int i = from; i<to;i++)
