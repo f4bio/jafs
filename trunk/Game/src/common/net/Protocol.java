@@ -68,6 +68,7 @@ public class Protocol {
     public static final String CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK = "c_s_event_player_respawn_ok";
     public static final String CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK = "c_s_event_player_nick_changed_ok";
     public static final String CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK = "c_s_event_player_team_changed_ok";
+    public static final String CLIENT_SERVER_EVENT_TEAM_WON_OK = "c_s_event_team_won_ok";
 
     //----- Server commands
     public static final String SERVER_MASTER_PONG = "s_m_pong";
@@ -107,6 +108,7 @@ public class Protocol {
     public static final String SERVER_CLIENT_EVENT_PLAYER_RESPAWN = "s_c_event_player_respawn";
     public static final String SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED = "s_c_event_player_nick_changed";
     public static final String SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED = "s_c_event_player_team_changed";
+    public static final String SERVER_CLIENT_EVENT_TEAM_WON = "s_c_event_team_won";
 
     //----- Master Server commands
     public static final String MASTER_SERVER_AUTH_REPLY = "m_s_auth_reply";
@@ -246,7 +248,7 @@ public class Protocol {
 
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING);
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
-        registerCmd(SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_INT, ARG_INT, ARG_INT, ARG_INT);
+        registerCmd(SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_NONE);
         registerCmd(SERVER_CLIENT_EVENT_ITEM_PICKED, ARG_INT);
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_SHOT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE);
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_KILLED, ARG_INT);
