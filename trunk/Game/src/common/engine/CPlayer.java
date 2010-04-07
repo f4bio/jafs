@@ -46,6 +46,7 @@ public class CPlayer extends CEntity {
         speed = 3.0d;
         health = 0;
         setPosition(0, 0);
+        setDirection(1, 0);
     }
 
     public void setId(int i) {

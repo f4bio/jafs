@@ -1,5 +1,6 @@
 package server;
 
+import client.anim.UpdateLoop;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -22,6 +23,7 @@ public class Main {
     private static int serverId;
     private static Network net;
     private static Game game;
+    private static UpdateLoop update;
 
     public static void main(String[] args) {
         name = "Test";
@@ -44,6 +46,9 @@ public class Main {
         pingTimer = new Timer();
         pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
 
+        update = new UpdateLoop(60);
+        update.addUpdateObject(game);
+
         try {
             Thread.sleep(1000);
         } catch(Exception e) {
@@ -54,7 +59,8 @@ public class Main {
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             for(Client cur : client) {
-                net.send(cur.getAddress(), Protocol.SERVER_CLIENT_PING);
+                if(cur != null)
+                    net.send(cur.getAddress(), Protocol.SERVER_CLIENT_PING);
             }
         }
     };
@@ -62,17 +68,13 @@ public class Main {
     private static Timer pingTimer;
 
     public synchronized static Client addClient(InetSocketAddress adr) {
-        for(Client c: client) {
-            if(c != null && c.getAddress().equals(adr))
-                return null;
-        }
-
         Client c = null;
 
         for(int i=0; i<client.length; ++i) {
             if(client[i] == null) {
                 c = new Client(adr);
                 c.setId(i);
+                client[i] = c;
                 game.addPlayer(c.getPlayer());
             }
         }
@@ -189,10 +191,11 @@ public class Main {
     public static int setClientTeamId(InetSocketAddress adr, int teamId) {
         Client c = getClient(adr);
 
-        if(c != null)
+        if(c != null) {
             c.setTeamId(teamId);
-
-        return -1;
+            return 0;
+        } else
+            return -1;
     }
 
     public static boolean nameExists(String name) {

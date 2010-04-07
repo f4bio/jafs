@@ -32,6 +32,7 @@ public class Protocol {
     public static final String CLIENT_MASTER_CHAT_LOBBY = "c_m_chat_lobby";
     public static final String CLIENT_MASTER_CHAT_PRIVATE = "c_m_chat_private";
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
+    public static final String CLIENT_MASTER_PONG = "c_m_pong";
 
     public static final String CLIENT_SERVER_AUTH = "c_s_auth";
     public static final String CLIENT_SERVER_ALL_PLAYER_DATA = "c_s_all_player_data";
@@ -80,6 +81,9 @@ public class Protocol {
     public static final String SERVER_CLIENT_CHAT_ALL = "s_c_chat_all";
     public static final String SERVER_CLIENT_CHAT_TEAM = "s_c_chat_team";
     public static final String SERVER_CLIENT_CHAT_PRIVATE = "s_c_chat_private";
+    public static final String SERVER_CLIENT_CHAT_ALL_OK = "s_c_chat_all_ok";
+    public static final String SERVER_CLIENT_CHAT_TEAM_OK = "s_c_chat_team_ok";
+    public static final String SERVER_CLIENT_CHAT_PRIVATE_OK = "s_c_chat_private_ok";
 
     public static final String SERVER_CLIENT_LOGOFF_REPLY = "s_c_logoff_reply";
     public static final String SERVER_CLIENT_AUTH_REPLY = "s_c_auth_reply";
@@ -109,6 +113,7 @@ public class Protocol {
     public static final String MASTER_SERVER_PING = "m_s_ping";
     public static final String MASTER_SERVER_SERVERCOUNT = "m_s_servercount";
 
+    public static final String MASTER_CLIENT_PING = "m_c_ping";
     public static final String MASTER_CLIENT_JOINSERVER_REPLY = "m_c_joinserver_reply";
     public static final String MASTER_CLIENT_AUTH_REPLY = "m_c_auth_reply";
     public static final String MASTER_CLIENT_NEWLIST = "m_c_newlist";
@@ -195,6 +200,31 @@ public class Protocol {
         registerCmd(CLIENT_SERVER_LOGOFF, ARG_NONE);
         registerCmd(CLIENT_SERVER_JOINTEAM, ARG_INT);
 
+        registerCmd(CLIENT_SERVER_ALL_PLAYER_DATA, ARG_NONE);
+        registerCmd(CLIENT_SERVER_PLAYER_DATA_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_REQUEST_SERVER_INFO, ARG_NONE);
+        registerCmd(CLIENT_SERVER_INIT_REPLY, ARG_INT);
+        registerCmd(CLIENT_SERVER_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE,
+                ARG_DOUBLE, ARG_DOUBLE);
+
+        registerCmd(CLIENT_SERVER_FORCED_NICKCHANGE_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_REQUEST_NAME_REPLY, ARG_STRING);
+        registerCmd(CLIENT_SERVER_CONNECTION_TERMINATED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, ARG_NONE);
+
+        registerCmd(CLIENT_SERVER_CHAT_ALL_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_CHAT_TEAM_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_CHAT_PRIVATE_OK, ARG_NONE);
+
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_JOINED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_LEFT_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_ITEM_SPAWNED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_ITEM_PICKED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_KILLED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK, ARG_NONE);
+
         //----- Server commands
         registerCmd(SERVER_MASTER_PONG, ARG_NONE);
         registerCmd(SERVER_MASTER_AUTH, ARG_NONE);
@@ -206,8 +236,11 @@ public class Protocol {
         registerCmd(SERVER_CLIENT_CHAT_ALL, ARG_STRING);
         registerCmd(SERVER_CLIENT_CHAT_TEAM, ARG_STRING);
         registerCmd(SERVER_CLIENT_CHAT_PRIVATE, ARG_STRING, ARG_INT);
+        registerCmd(SERVER_CLIENT_CHAT_ALL_OK, ARG_NONE);
+        registerCmd(SERVER_CLIENT_CHAT_TEAM_OK, ARG_NONE);
+        registerCmd(SERVER_CLIENT_CHAT_PRIVATE_OK, ARG_NONE);
         registerCmd(SERVER_CLIENT_LOGOFF_REPLY, ARG_INT);
-        registerCmd(SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT);
+        registerCmd(SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT, ARG_INT);
         registerCmd(SERVER_CLIENT_INIT, ARG_STRING, ARG_INT);
         registerCmd(SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_NONE);
 
@@ -246,8 +279,32 @@ public class Protocol {
         registerCmdReply(SERVER_MASTER_AUTH, MASTER_SERVER_AUTH_REPLY);
         registerCmdReply(CLIENT_MASTER_AUTH, MASTER_CLIENT_AUTH_REPLY);
         registerCmdReply(CLIENT_SERVER_AUTH, SERVER_CLIENT_AUTH_REPLY);
+        registerCmdReply(MASTER_CLIENT_PING, CLIENT_MASTER_PONG);
         registerCmdReply(SERVER_CLIENT_PING, CLIENT_SERVER_PONG);
         registerCmdReply(MASTER_SERVER_PING, SERVER_MASTER_PONG);
         registerCmdReply(CLIENT_MASTER_JOINSERVER, MASTER_CLIENT_JOINSERVER_REPLY);
+
+        registerCmdReply(SERVER_CLIENT_INIT, CLIENT_SERVER_INIT_REPLY);
+        registerCmdReply(SERVER_CLIENT_REQUEST_NAME, CLIENT_SERVER_REQUEST_NAME_REPLY);
+        registerCmdReply(SERVER_CLIENT_FORCED_NICKCHANGE, CLIENT_SERVER_FORCED_NICKCHANGE_OK);
+        registerCmdReply(SERVER_CLIENT_CONNECTION_ESTABLISHED, CLIENT_SERVER_CONNECTION_ESTABLISHED_OK);
+        registerCmdReply(SERVER_CLIENT_CONNECTION_TERMINATED, CLIENT_SERVER_CONNECTION_TERMINATED_OK);
+        registerCmdReply(CLIENT_SERVER_ALL_PLAYER_DATA, SERVER_CLIENT_ALL_PLAYER_DATA_OK);
+        registerCmdReply(SERVER_CLIENT_PLAYER_DATA, CLIENT_SERVER_PLAYER_DATA_OK);
+        registerCmdReply(CLIENT_SERVER_CHAT_ALL, SERVER_CLIENT_CHAT_ALL_OK);
+        registerCmdReply(CLIENT_SERVER_CHAT_TEAM, SERVER_CLIENT_CHAT_TEAM_OK);
+        registerCmdReply(CLIENT_SERVER_CHAT_PRIVATE, SERVER_CLIENT_CHAT_PRIVATE_OK);
+        registerCmdReply(SERVER_CLIENT_CHAT_ALL, CLIENT_SERVER_CHAT_ALL_OK);
+        registerCmdReply(SERVER_CLIENT_CHAT_TEAM, CLIENT_SERVER_CHAT_TEAM_OK);
+        registerCmdReply(SERVER_CLIENT_CHAT_PRIVATE, CLIENT_SERVER_CHAT_PRIVATE_OK);
+
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_JOINED, CLIENT_SERVER_EVENT_PLAYER_JOINED_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_LEFT, CLIENT_SERVER_EVENT_PLAYER_LEFT_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_ITEM_SPAWNED, CLIENT_SERVER_EVENT_ITEM_SPAWNED_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_ITEM_PICKED, CLIENT_SERVER_EVENT_ITEM_PICKED_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_KILLED, CLIENT_SERVER_EVENT_PLAYER_KILLED_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_RESPAWN, CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED, CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK);
+        registerCmdReply(SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED, CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
     }
 }

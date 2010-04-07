@@ -77,6 +77,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         if(p.getCmd().equals(Protocol.MASTER_SERVER_PING)) {
             Main.removeServer(p.getAddress());
+        } else if(p.getCmd().equals(Protocol.MASTER_CLIENT_PING)) {
+            Main.removeClient(Main.getClient(p.getAddress()));
         }
     }
 }

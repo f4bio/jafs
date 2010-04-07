@@ -74,6 +74,8 @@ public class Network {
                     socket.receive(packet);
 
                     pPacket = new Packet(packet);
+                    //String s = pPacket.getCmd();
+                    //System.out.println(s);
 
                     if(isValid(pPacket) && handler != null) {
                         synchronized(replyQueue) {
@@ -295,15 +297,15 @@ public class Network {
 
     public void connect(String server, int port) {
         dest = new InetSocketAddress(server, port);
-
-        disconnect();
-
-        try {
-            socket.connect(dest);
-            connected = true;
-        } catch(SocketException e) {
-            connected = false;
-        }
+//
+//        disconnect();
+//
+//        try {
+//            socket.connect(dest);
+//            connected = true;
+//        } catch(SocketException e) {
+//            connected = false;
+//        }
     }
 
     public void connect() {

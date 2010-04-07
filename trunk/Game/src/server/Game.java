@@ -17,6 +17,7 @@ public class Game implements UpdateObject {
     private CPlayer[] player = new CPlayer[Main.getMaxPlayers()];
 
     public Game(String map) {
+        loader = new MapLoader(null, null);
         this.map = map;
     }
 
