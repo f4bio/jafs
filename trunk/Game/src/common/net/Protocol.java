@@ -122,6 +122,7 @@ public class Protocol {
     public static final String MASTER_CLIENT_LISTENTRY = "m_c_listentry";
     public static final String MASTER_CLIENT_ENDLIST = "m_c_endlist";
     public static final String MASTER_CLIENT_CHAT = "m_c_chat";
+    public static final String MASTER_CLIENT_CHAT_OK = "m_c_chat_ok";
 
     public static int[] registerCmd(final String command, int... arg) {
         return cmd.put(command, arg);
@@ -206,8 +207,8 @@ public class Protocol {
         registerCmd(CLIENT_SERVER_PLAYER_DATA_OK, ARG_NONE);
         registerCmd(CLIENT_SERVER_REQUEST_SERVER_INFO, ARG_NONE);
         registerCmd(CLIENT_SERVER_INIT_REPLY, ARG_INT);
-        registerCmd(CLIENT_SERVER_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE,
-                ARG_DOUBLE, ARG_DOUBLE);
+        registerCmd(CLIENT_SERVER_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE,
+                    ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
 
         registerCmd(CLIENT_SERVER_FORCED_NICKCHANGE_OK, ARG_NONE);
         registerCmd(CLIENT_SERVER_REQUEST_NAME_REPLY, ARG_STRING);
@@ -263,7 +264,7 @@ public class Protocol {
         registerCmd(SERVER_CLIENT_REQUEST_NAME, ARG_NONE);
         registerCmd(SERVER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
         registerCmd(SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE,
-                ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
+                    ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
 
         //----- Master Server commands
         registerCmd(MASTER_SERVER_AUTH_REPLY, ARG_INT);
@@ -275,13 +276,16 @@ public class Protocol {
         registerCmd(MASTER_CLIENT_NEWLIST, ARG_NONE);
         registerCmd(MASTER_CLIENT_LISTENTRY, ARG_STRING);
         registerCmd(MASTER_CLIENT_ENDLIST, ARG_NONE);
-        registerCmd(MASTER_CLIENT_CHAT, ARG_STRING);
+        registerCmd(MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING);
+        registerCmd(MASTER_CLIENT_CHAT_OK, ARG_NONE);
 
         //----- Associate commands with replies
         registerCmdReply(SERVER_MASTER_AUTH, MASTER_SERVER_AUTH_REPLY);
         registerCmdReply(CLIENT_MASTER_AUTH, MASTER_CLIENT_AUTH_REPLY);
         registerCmdReply(CLIENT_SERVER_AUTH, SERVER_CLIENT_AUTH_REPLY);
         registerCmdReply(MASTER_CLIENT_PING, CLIENT_MASTER_PONG);
+        registerCmdReply(MASTER_CLIENT_CHAT, MASTER_CLIENT_CHAT_OK);
+
         registerCmdReply(SERVER_CLIENT_PING, CLIENT_SERVER_PONG);
         registerCmdReply(MASTER_SERVER_PING, SERVER_MASTER_PONG);
         registerCmdReply(CLIENT_MASTER_JOINSERVER, MASTER_CLIENT_JOINSERVER_REPLY);

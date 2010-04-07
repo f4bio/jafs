@@ -115,7 +115,7 @@ public class Main {
         Client sender = getClient(adr);
         for(Client client: clientlist)
             if(!client.isInGame())
-                net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, "(LOBBY-CHAT) Player-"+sender.getId()+" ("+sender.getId()+":"+sender.getPort()+"): "+msg);
+                net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, sender.getId(), msg);
     }
 
     public static Client getClient(InetSocketAddress adr) {

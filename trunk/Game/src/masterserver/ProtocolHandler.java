@@ -68,9 +68,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         Client client = Main.getClient(id);
         if(client != null)
-            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, "Private Chat ("+adr.getHostName()+":"+adr.getPort()+"): "+msg);
+            net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, id, msg);
         else
-            net.send(adr, Protocol.MASTER_CLIENT_CHAT, "No such player");
+            net.send(adr, Protocol.MASTER_CLIENT_CHAT, -1, "No such player");
     }
 
     public void noReplyReceived(Packet p)

@@ -46,7 +46,7 @@ public class Main {
         net.setProtocolHandler(protocol);
         //net.listen(net.getFreePort(40000, 50000));
         net.listen(40000);
-        //net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.SERVER_MASTER_AUTH);
+        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.SERVER_MASTER_AUTH);
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);

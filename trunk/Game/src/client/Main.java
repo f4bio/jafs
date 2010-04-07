@@ -60,7 +60,7 @@ public class Main {
 
         // Anmeldung: Client -> Masterserver
         net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
-//        new Chat(net).start();
+        new Chat(net).start();
 
         frame = new JFrame();
         frame.setIgnoreRepaint(true);
@@ -120,12 +120,12 @@ public class Main {
         EventQueue.invokeLater(new Runnable() {
            public void run() {
                frame.setVisible(true);
-               //uiMain.setVisible(true);
+               uiMain.setVisible(true);
            }
         });
         
-        net.connect("localhost", 40000);
-        net.send(Protocol.CLIENT_SERVER_AUTH);
+//        net.connect("localhost", 40000);
+//        net.send(Protocol.CLIENT_SERVER_AUTH);
     }
 
     public static MainScreen getScreen() {
