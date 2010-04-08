@@ -17,28 +17,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         super(net);
     }
 
-    public void s_c_ping(InetSocketAddress adr)
-    {
-        net.send(adr, Protocol.CLIENT_SERVER_PONG);
-//        System.out.println("Client ponged");
-    }
-
-    public void s_c_clientcount(Integer i, InetSocketAddress adr)
-    {
-        System.out.println(i+ "clients connected on this server");
-    }
-
-    public void s_c_clientid_reply(Integer id, InetSocketAddress adr)
-    {
-        CPlayer self = new CPlayer();
-        self.setId(id);
-        self.setName(Main.getGameData().getName());
-        Main.getGameData().addPlayer(self);
-        Main.getGameData().setSelfId(id);
-
-        net.send(adr, Protocol.CLIENT_SERVER_ALL_PLAYER_DATA);
-    }
-
     public void m_c_newlist(InetSocketAddress adr)
     {
         Main.serverlist.clear();
@@ -77,6 +55,28 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             Main.getUiLobbyChat().clearMsgField();
 //            System.out.println("Player-"+id+": "+msg.replace("vXv", ";"));
         }
+    }
+
+    public void s_c_ping(InetSocketAddress adr)
+    {
+        net.send(adr, Protocol.CLIENT_SERVER_PONG);
+//        System.out.println("Client ponged");
+    }
+
+    public void s_c_clientcount(Integer i, InetSocketAddress adr)
+    {
+        System.out.println(i+ "clients connected on this server");
+    }
+
+    public void s_c_clientid_reply(Integer id, InetSocketAddress adr)
+    {
+        CPlayer self = new CPlayer();
+        self.setId(id);
+        self.setName(Main.getGameData().getName());
+        Main.getGameData().addPlayer(self);
+        Main.getGameData().setSelfId(id);
+
+        net.send(adr, Protocol.CLIENT_SERVER_ALL_PLAYER_DATA);
     }
 
     public void s_c_auth_reply(Integer i, InetSocketAddress adr)
@@ -211,6 +211,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         int y = p.y * map.getTileSize().height + map.getTileSize().height/2;
 
         Main.getGameData().getSelf().setPosition(x, y);
+    }
+
+    public void s_c_latency_reply(InetSocketAddress adr)
+    {
+        Main.refreshLatency(adr, System.nanoTime());
     }
 
     public void noReplyReceived(Packet p)

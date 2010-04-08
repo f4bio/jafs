@@ -73,6 +73,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             net.send(adr, Protocol.MASTER_CLIENT_CHAT, -1, "No such player");
     }
 
+    public void c_m_logoff(InetSocketAddress adr){
+        Main.removeClient(adr);
+    }
+
     public void noReplyReceived(Packet p)
     {
         if(p.getCmd().equals(Protocol.MASTER_SERVER_PING)) {

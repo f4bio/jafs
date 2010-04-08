@@ -8,6 +8,7 @@ import common.net.Network;
 import common.net.Protocol;
 import common.utils.CUtils;
 import java.awt.EventQueue;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -33,6 +34,7 @@ public class Main {
     private static UiWindow uiCredits;
 
     public static ArrayList<String> serverlist = new ArrayList<String>();
+    public static long[] latencylist;
     
     public static final String PATH = CUtils.getApplicationPath("Game");
 
@@ -143,13 +145,32 @@ public class Main {
     public static void completeServerlist(ArrayList<String> list) {
         /* | Server | Map | Spieler | Ping | */
         String[][] server = new String[list.size()][4];
+        latencylist = new long[list.size()];
         for(int i=0; i<list.size(); i++){
             server[i][0] = list.get(i);
-            server[i][1] = "map";       //
-            server[i][2] = "0/16";      // noch zu implementieren!
-            server[i][3] = "5ms";       //
+            server[i][1] = "<pending>";       //
+            server[i][2] = "<pending>";      // noch zu implementieren!
+            server[i][3] = "<pending>";
         }
         uiBrowser.setServerlist(server);
+        // Daten aktualisieren
+        for(int i=0; i<list.size(); i++){
+            String ip = list.get(i).split(":")[0];
+            int port = Integer.parseInt(list.get(i).split(":")[1]);
+            latencylist[i] = System.nanoTime();
+            net.send(new InetSocketAddress(ip, port), Protocol.CLIENT_SERVER_LATENCY);  // LATENCY
+        }
+    }
+
+    public static void refreshLatency(InetSocketAddress adr, long nanoTime){
+        for(int i=0; i<Main.serverlist.size(); i++){
+            String server = adr.getHostName() + ":" + adr.getPort();
+            if(Main.serverlist.get(i).equals(server)){
+                latencylist[i] = nanoTime - latencylist[i];
+                uiBrowser.refreshValue((""+(latencylist[i]*0.000001))+"ms", i, 3);
+                break;
+            }
+        }
     }
 
     public static UiWindow getUiMainMenu() {
