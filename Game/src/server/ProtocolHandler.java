@@ -165,9 +165,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         
     }
 
+    public void c_s_latency(InetSocketAddress adr){
+        net.send(adr, Protocol.SERVER_CLIENT_LATENCY_REPLY);
+    }
+
     public void noReplyReceived(Packet p) {
         if(p.getCmd().equals(Protocol.SERVER_CLIENT_PING)) {
             Main.removeClient(p.getAddress());
         }
-    }
+    }   
 }

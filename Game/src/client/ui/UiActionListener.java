@@ -71,7 +71,8 @@ public class UiActionListener implements ActionListener {
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
-            net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
+            //net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);   //wenn mit server verbunden
+            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LOGOFF);
             System.exit(0);
         }
     }

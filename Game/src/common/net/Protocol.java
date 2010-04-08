@@ -12,29 +12,32 @@ public class Protocol {
     private static Hashtable<String, String> cmdReply = new Hashtable<String, String>();
 
     //----- Argument definitions
-    public static final int ARG_BYTE = 0;
-    public static final int ARG_SHORT = 1;
-    public static final int ARG_INT = 2;
-    public static final int ARG_LONG = 3;
-    public static final int ARG_FLOAT = 4;
+    public static final int ARG_BYTE   = 0;
+    public static final int ARG_SHORT  = 1;
+    public static final int ARG_INT    = 2;
+    public static final int ARG_LONG   = 3;
+    public static final int ARG_FLOAT  = 4;
     public static final int ARG_DOUBLE = 5;
     public static final int ARG_STRING = 6;
-    public static final int ARG_NONE = 7;
+    public static final int ARG_NONE   = 7;
 
     public static final int REPLY_SUCCESS = 0;
     public static final int REPLY_FAILURE = 1;
     
     public static final String ARG_SEPERATOR = ";";
 
-    //----- Client commands
+    //----- Client -> Master commands
     public static final String CLIENT_MASTER_JOINSERVER = "c_m_joinserver";
     public static final String CLIENT_MASTER_LISTREQUEST = "c_m_listrequest";
     public static final String CLIENT_MASTER_CHAT_LOBBY = "c_m_chat_lobby";
     public static final String CLIENT_MASTER_CHAT_PRIVATE = "c_m_chat_private";
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
     public static final String CLIENT_MASTER_PONG = "c_m_pong";
+    public static final String CLIENT_MASTER_LOGOFF = "c_m_logoff";
 
+    //----- Client -> Server commands
     public static final String CLIENT_SERVER_AUTH = "c_s_auth";
+    public static final String CLIENT_SERVER_LATENCY = "c_s_latency";
     public static final String CLIENT_SERVER_ALL_PLAYER_DATA = "c_s_all_player_data";
     public static final String CLIENT_SERVER_PLAYER_DATA_OK = "c_s_player_data_ok";
     public static final String CLIENT_SERVER_REQUEST_SERVER_INFO = "c_s_request_server_info";
@@ -42,9 +45,9 @@ public class Protocol {
     public static final String CLIENT_SERVER_CLIENTCOUNT = "c_s_clientcount";
     public static final String CLIENT_SERVER_CLIENTID = "c_s_clientid";
     public static final String CLIENT_SERVER_LOGOFF = "c_s_logoff";
-    public static final String CLIENT_SERVER_JOINTEAM = "c_s_jointeam";
     public static final String CLIENT_SERVER_INIT_REPLY = "c_s_init_reply";
     public static final String CLIENT_SERVER_PLAYER_INFO = "c_s_player_info";
+    public static final String CLIENT_SERVER_JOINTEAM = "c_s_jointeam";
 
     public static final String CLIENT_SERVER_FORCED_NICKCHANGE_OK = "c_s_forced_nickchange_ok";
     public static final String CLIENT_SERVER_REQUEST_NAME_REPLY = "c_s_request_name_reply";
@@ -70,11 +73,12 @@ public class Protocol {
     public static final String CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK = "c_s_event_player_team_changed_ok";
     public static final String CLIENT_SERVER_EVENT_TEAM_WON_OK = "c_s_event_team_won_ok";
 
-    //----- Server commands
+    //----- Server -> Master commands
     public static final String SERVER_MASTER_PONG = "s_m_pong";
     public static final String SERVER_MASTER_AUTH = "s_m_auth";
     public static final String SERVER_MASTER_SERVERCOUNT = "s_m_servercount";
-    
+
+    //----- Server -> Client commands
     public static final String SERVER_CLIENT_PING = "s_c_ping";
     public static final String SERVER_CLIENT_CLIENTCOUNT = "s_c_clientcount";
     public static final String SERVER_CLIENT_CLIENTID_REPLY = "s_c_clientid_reply";
@@ -109,12 +113,14 @@ public class Protocol {
     public static final String SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED = "s_c_event_player_nick_changed";
     public static final String SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED = "s_c_event_player_team_changed";
     public static final String SERVER_CLIENT_EVENT_TEAM_WON = "s_c_event_team_won";
+    public static final String SERVER_CLIENT_LATENCY_REPLY = "s_c_latency_reply";
 
-    //----- Master Server commands
+    //----- Master -> Server commands
     public static final String MASTER_SERVER_AUTH_REPLY = "m_s_auth_reply";
     public static final String MASTER_SERVER_PING = "m_s_ping";
     public static final String MASTER_SERVER_SERVERCOUNT = "m_s_servercount";
 
+    //----- Master -> Client commands
     public static final String MASTER_CLIENT_PING = "m_c_ping";
     public static final String MASTER_CLIENT_JOINSERVER_REPLY = "m_c_joinserver_reply";
     public static final String MASTER_CLIENT_AUTH_REPLY = "m_c_auth_reply";
@@ -190,6 +196,7 @@ public class Protocol {
         // ----
         registerCmd(CLIENT_MASTER_AUTH, ARG_NONE);
         registerCmd(CLIENT_MASTER_JOINSERVER, ARG_STRING, ARG_INT);
+        registerCmd(CLIENT_MASTER_LOGOFF, ARG_NONE);
 
         registerCmd(CLIENT_SERVER_AUTH, ARG_NONE);
         registerCmd(CLIENT_SERVER_PONG, ARG_NONE);
@@ -227,6 +234,7 @@ public class Protocol {
         registerCmd(CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK, ARG_NONE);
         registerCmd(CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK, ARG_NONE);
         registerCmd(CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK, ARG_NONE);
+        registerCmd(CLIENT_SERVER_LATENCY, ARG_NONE);
 
         //----- Server commands
         registerCmd(SERVER_MASTER_PONG, ARG_NONE);
@@ -246,6 +254,7 @@ public class Protocol {
         registerCmd(SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT, ARG_INT);
         registerCmd(SERVER_CLIENT_INIT, ARG_STRING, ARG_INT);
         registerCmd(SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_NONE);
+        registerCmd(SERVER_CLIENT_LATENCY_REPLY, ARG_NONE);
 
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING);
         registerCmd(SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);

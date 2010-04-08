@@ -199,6 +199,13 @@ public class Serverbrowser extends UiWindow implements ActionListener {
             return null;
     }
 
+    public void refreshValue(String v, int row, int col){
+        System.out.println("refresh @" + row + "," + col + " :" + v);
+        sModel.setValueAt(v, row, col);
+        jTable1.setModel(sModel);
+        jScrollPane1.setViewportView(jTable1);
+    }
+
 
     /**
      *
@@ -225,6 +232,10 @@ public class Serverbrowser extends UiWindow implements ActionListener {
 
         public int getRowCount() {
             return serverList.length;
+        }
+
+        public void setValueAt(String value, int row, int col) {
+            serverList[row][col] = value;
         }
 
         public String getValueAt(int row, int col) {
