@@ -31,6 +31,7 @@ public class Protocol {
     public static final String CLIENT_MASTER_LISTREQUEST = "c_m_listrequest";
     public static final String CLIENT_MASTER_CHAT_LOBBY = "c_m_chat_lobby";
     public static final String CLIENT_MASTER_CHAT_PRIVATE = "c_m_chat_private";
+    public static final String CLIENT_MASTER_CHAT_PRIVATE_OK = "c_m_chat_private_ok";
     public static final String CLIENT_MASTER_AUTH = "c_m_auth";
     public static final String CLIENT_MASTER_PONG = "c_m_pong";
     public static final String CLIENT_MASTER_LOGOFF = "c_m_logoff";
@@ -129,6 +130,7 @@ public class Protocol {
     public static final String MASTER_CLIENT_ENDLIST = "m_c_endlist";
     public static final String MASTER_CLIENT_CHAT = "m_c_chat";
     public static final String MASTER_CLIENT_CHAT_OK = "m_c_chat_ok";
+//    public static final String MASTER_CLIENT_CHAT_PRIVATE_OK = "m_c_chat_private_ok";
 
     public static int[] registerCmd(final String command, int... arg) {
         return cmd.put(command, arg);
@@ -193,6 +195,7 @@ public class Protocol {
         // chat
         registerCmd(CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
         registerCmd(CLIENT_MASTER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
+        registerCmd(CLIENT_MASTER_CHAT_PRIVATE_OK, ARG_NONE);
         // ----
         registerCmd(CLIENT_MASTER_AUTH, ARG_NONE);
         registerCmd(CLIENT_MASTER_JOINSERVER, ARG_STRING, ARG_INT);
@@ -293,7 +296,8 @@ public class Protocol {
         registerCmdReply(CLIENT_MASTER_AUTH, MASTER_CLIENT_AUTH_REPLY);
         registerCmdReply(CLIENT_SERVER_AUTH, SERVER_CLIENT_AUTH_REPLY);
         registerCmdReply(MASTER_CLIENT_PING, CLIENT_MASTER_PONG);
-        registerCmdReply(MASTER_CLIENT_CHAT, MASTER_CLIENT_CHAT_OK);
+        registerCmdReply(CLIENT_MASTER_CHAT_LOBBY, MASTER_CLIENT_CHAT_OK);
+        registerCmdReply(CLIENT_MASTER_CHAT_PRIVATE, MASTER_CLIENT_CHAT_OK);
 
         registerCmdReply(SERVER_CLIENT_PING, CLIENT_SERVER_PONG);
         registerCmdReply(MASTER_SERVER_PING, SERVER_MASTER_PONG);
