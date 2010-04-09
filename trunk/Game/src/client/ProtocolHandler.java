@@ -57,6 +57,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    public void m_c_chat_ok (InetSocketAddress adr)
+    {
+
+    }
+
     public void s_c_ping(InetSocketAddress adr)
     {
         net.send(adr, Protocol.CLIENT_SERVER_PONG);
@@ -219,10 +224,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void noReplyReceived(Packet p)
-    {
-    }
-
-    public void m_c_chat_ok (InetSocketAddress adr)
     {
     }
 }

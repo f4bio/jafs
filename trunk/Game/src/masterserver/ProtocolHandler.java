@@ -61,12 +61,20 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {
+        net.send(adr, Protocol.MASTER_CLIENT_CHAT_OK);
         Main.broadcast(msg, adr);
     }
+
+//    public void c_m_chat_lobby_ok(InetSocketAddress adr)
+//    {
+//        //
+//    }
+
 
     public void c_m_chat_private(Integer id, String msg, InetSocketAddress adr)
     {
         Client client = Main.getClient(id);
+        net.send(adr, Protocol.MASTER_CLIENT_CHAT_OK);
         if(client != null)
             net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, id, msg);
         else
