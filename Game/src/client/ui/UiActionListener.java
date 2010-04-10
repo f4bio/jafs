@@ -3,8 +3,11 @@ package client.ui;
 import client.Main;
 import common.net.Network;
 import common.net.Protocol;
+import common.net.ProtocolCmd;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
@@ -39,7 +42,7 @@ public class UiActionListener implements ActionListener {
         // Serverbrowser
         else if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
             Main.getUiServerbrowser().setVisible(Main.getUiServerbrowser().isVisible()?false:true);
-            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
+            net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
         }
         // Lobby Chat
         else if(e.getActionCommand().equals(CMD_TOGGLE_LOBBYCHAT)) {
@@ -51,14 +54,15 @@ public class UiActionListener implements ActionListener {
         }
         // Serverliste aktualisieren
         else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
-            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
+            net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
         }
         // Mit Server verbinden
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
             if(Main.getUiServerbrowser().getSelectedServer() != null) {
                 System.out.println("Connect to Server: "+Main.getUiServerbrowser().getSelectedServer());
-                net.send(Main.getUiServerbrowser().getSelectedServer(), Protocol.CLIENT_SERVER_AUTH);
-                net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_JOINSERVER, Main.getUiServerbrowser().getSelectedServer());
+                //net.send(Main.getUiServerbrowser().getSelectedServer(), ProtocolCmd.CLIENT_SERVER_AUTH);
+                net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_JOINSERVER,
+                        argStr(Main.getUiServerbrowser().getSelectedServer()));
             }
         }
         // Credits
@@ -67,12 +71,13 @@ public class UiActionListener implements ActionListener {
         }
         // Lobby Chat SendMSG
         else if(e.getActionCommand().equals(CMD_LOBBYCHAT_SEND_MSG)) {
-            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_CHAT_LOBBY, Main.getUiLobbyChat().getMSG());
+            net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY,
+                    argStr(Main.getUiLobbyChat().getMSG()));
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
             //net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);   //wenn mit server verbunden
-            net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LOGOFF);
+            net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LOGOFF);
             System.exit(0);
         }
     }

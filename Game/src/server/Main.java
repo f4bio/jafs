@@ -5,9 +5,12 @@ import common.engine.CPlayer;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
+import common.net.ProtocolCmd;
 import java.net.InetSocketAddress;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
@@ -46,7 +49,7 @@ public class Main {
         net.setProtocolHandler(protocol);
         //net.listen(net.getFreePort(40000, 50000));
         net.listen(40000);
-        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.SERVER_MASTER_AUTH);
+        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
         pingTimer = new Timer();
         pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
@@ -65,33 +68,34 @@ public class Main {
         net.clear();
         game.setScoreBlue(0);
         game.setScoreRed(0);
-        broadcast(Protocol.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+        broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
     }
 
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             for(Client cur : client) {
                 if(cur != null)
-                    net.send(cur.getAddress(), Protocol.SERVER_CLIENT_PING);
+                    net.send(cur.getAddress(), ProtocolCmd.SERVER_CLIENT_PING);
             }
         }
     };
 
     private static TimerTask respawner = new TimerTask() {
         public void run() {
-            broadcast(Protocol.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
         }
     };
 
     private static TimerTask itemRespawner = new TimerTask() {
         public void run() {
-            broadcast(Protocol.SERVER_CLIENT_EVENT_ITEM_SPAWNED);
+            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_SPAWNED);
         }
     };
 
     private static TimerTask gameTimer = new TimerTask() {
         public void run() {
-            broadcast(Protocol.SERVER_CLIENT_EVENT_TEAM_WON, game.getWinnerTeam());
+            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
+                    argInt(game.getWinnerTeam()));
             reset();
         }
     };
@@ -175,11 +179,11 @@ public class Main {
         return -1;
     }
     
-    public synchronized static void broadcast(String cmd, Object... o) {
+    public synchronized static void broadcast(ProtocolCmd cmd, byte[]... d) {
         for(Client c : client) {
             if(c != null && c.getStatus() != Client.STATUS_PENDING &&
                     c.getPlayer().getTeam() != CPlayer.TEAM_NONE)
-                net.send(c.getAddress(), cmd, o);
+                net.send(c.getAddress(), cmd, d);
         }
     }
 
@@ -191,7 +195,8 @@ public class Main {
 
         for(Client c: client) {
             if(c != null && c.getStatus() != Client.STATUS_PENDING)
-                net.send(c.getAddress(), Protocol.SERVER_CLIENT_CHAT_ALL, from.getId(), msg);
+                net.send(c.getAddress(), ProtocolCmd.SERVER_CLIENT_CHAT_ALL,
+                        argInt(from.getId()), argStr(msg));
         }
     }
 
@@ -200,7 +205,8 @@ public class Main {
 
         for(Client c: client) {
             if(c != null && c.getStatus() != Client.STATUS_PENDING && c.getTeamId() == from.getTeamId())
-                net.send(c.getAddress(), Protocol.SERVER_CLIENT_CHAT_TEAM, from.getId(), msg);
+                net.send(c.getAddress(), ProtocolCmd.SERVER_CLIENT_CHAT_TEAM,
+                        argInt(from.getId()), argStr(msg));
         }
     }
     
@@ -209,7 +215,8 @@ public class Main {
         Client from = getClient(adr);
         Client recv = client[to];
         
-        net.send(recv.getAddress(), Protocol.SERVER_CLIENT_CHAT_PRIVATE, from.getId(), msg);
+        net.send(recv.getAddress(), ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,
+                argInt(from.getId()), argStr(msg));
     }
 
     public static int getClientTeamId(InetSocketAddress adr) {

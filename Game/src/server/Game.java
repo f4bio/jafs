@@ -5,7 +5,9 @@ import client.anim.UpdateObject;
 import client.resource.MapLoader;
 import common.engine.CMap;
 import common.engine.CPlayer;
-import common.net.Protocol;
+import common.net.ProtocolCmd;
+
+import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
@@ -40,8 +42,9 @@ public class Game implements UpdateObject {
             double dirX = player[i].getDirection().getX();
             double dirY = player[i].getDirection().getY();
 
-            Main.broadcast(Protocol.SERVER_CLIENT_PLAYER_INFO, id, weapon,
-                posX, posY, dirX, dirY);
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id),
+                    argInt(weapon), argDouble(posX), argDouble(posY),
+                    argDouble(dirX), argDouble(dirY));
             }
         }
     }
