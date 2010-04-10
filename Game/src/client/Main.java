@@ -7,9 +7,12 @@ import common.CLog;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.ProtocolCmd;
+import common.net.Server;
 import common.utils.CUtils;
 import java.awt.EventQueue;
 import java.net.InetSocketAddress;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
@@ -34,7 +37,7 @@ public class Main {
     private static UiWindow uiOptions;
     private static UiWindow uiCredits;
 
-    public static ArrayList<String> serverlist = new ArrayList<String>();
+    public static ArrayList<Server> serverlist = new ArrayList<Server>();
     public static long[] latencylist;
     
     public static final String PATH = CUtils.getApplicationPath("Game");
@@ -143,12 +146,12 @@ public class Main {
         return net;
     }
 
-    public static void completeServerlist(ArrayList<String> list) {
+    public static void completeServerlist(ArrayList<Server> list) {
         /* | Server | Map | Spieler | Ping | */
         String[][] server = new String[list.size()][4];
         latencylist = new long[list.size()];
         for(int i=0; i<list.size(); i++){
-            server[i][0] = list.get(i);
+            server[i][0] = list.get(i).getHost()+":"+list.get(i).getPort();
             server[i][1] = "<pending>";       //
             server[i][2] = "<pending>";      // noch zu implementieren!
             server[i][3] = "<pending>";
@@ -156,19 +159,29 @@ public class Main {
         uiBrowser.setServerlist(server);
         // Daten aktualisieren
         for(int i=0; i<list.size(); i++){
-            String ip = list.get(i).split(":")[0];
-            int port = Integer.parseInt(list.get(i).split(":")[1]);
+            String ip = list.get(i).getHost();
+            int port = list.get(i).getPort();
             latencylist[i] = System.nanoTime();
             net.send(new InetSocketAddress(ip, port), ProtocolCmd.CLIENT_SERVER_LATENCY);  // LATENCY
         }
     }
 
+    public static Server getServer(String host, int port) {
+        for(Server cur : serverlist) {
+            if(cur.getHost().equals(host) && cur.getPort() == port)
+                return cur;
+        }
+
+        return null;
+    }
+
     public static void refreshLatency(InetSocketAddress adr, long nanoTime){
         for(int i=0; i<Main.serverlist.size(); i++){
             String server = adr.getHostName() + ":" + adr.getPort();
-            if(Main.serverlist.get(i).equals(server)){
+            if(Main.serverlist.get(i).getHostPort().equals(server)){
                 latencylist[i] = nanoTime - latencylist[i];
-                uiBrowser.refreshValue((""+(latencylist[i]*0.000001))+"ms", i, 3);
+                uiBrowser.refreshValue(new DecimalFormat("#0.00").format(latencylist[i]*0.000001)+"ms", i, 3);
+//                uiBrowser.refreshValue((""+(latencylist[i]*0.000001))+"ms", i, 3);
                 break;
             }
         }

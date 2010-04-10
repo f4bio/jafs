@@ -6,6 +6,7 @@ import common.net.Network;
 import common.net.Packet;
 import common.net.Protocol;
 import common.net.ProtocolCmd;
+import common.net.Server;
 import java.awt.Point;
 import java.net.InetSocketAddress;
 
@@ -28,19 +29,21 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_newlist(InetSocketAddress adr)
     {
         Main.serverlist.clear();
-        System.out.println("NewServerList:");
+//        System.out.println("NewServerList:");
     }
 
-    public void m_c_listentry(String server, InetSocketAddress adr)
+    public void m_c_listentry(String serverStr, InetSocketAddress adr)
     {
-        Main.serverlist.add(server);
-        System.out.println(server);
+        Server server = new Server(serverStr.split(":")[0], Integer.parseInt(serverStr.split(":")[1]));
+        if(server != null)
+            Main.serverlist.add(server);
+//        System.out.println(server.getHost()+":"+server.getPort());
     }
 
     public void m_c_endlist(InetSocketAddress adr)
     {
         Main.completeServerlist(Main.serverlist);
-        System.out.println(":NewServerList");
+//        System.out.println(":NewServerList");
     }
 
     public void m_c_auth_reply(int i, InetSocketAddress adr)
