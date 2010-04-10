@@ -161,6 +161,7 @@ public class Protocol {
 
     public static void init() {
         //----- Client commands
+        registerCmd(ProtocolCmd.CLIENT_MASTER_PONG, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_MASTER_LISTREQUEST, ARG_NONE);
         // chat
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
@@ -260,6 +261,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_CLIENT_ENDLIST, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_OK, ARG_NONE);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_PING, ARG_NONE);
 
         //----- Associate commands with replies
         registerCmdReply(ProtocolCmd.SERVER_MASTER_AUTH,
@@ -275,10 +277,15 @@ public class Protocol {
         registerCmdReply(ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE,
                 ProtocolCmd.MASTER_CLIENT_CHAT_OK);
 
+        // Ping <-> Pong
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_PING,
                 ProtocolCmd.CLIENT_SERVER_PONG);
+        registerCmdReply(ProtocolCmd.MASTER_CLIENT_PING,
+                ProtocolCmd.CLIENT_MASTER_PONG);
         registerCmdReply(ProtocolCmd.MASTER_SERVER_PING,
                 ProtocolCmd.SERVER_MASTER_PONG);
+        // Ping <-> Pong
+
         registerCmdReply(ProtocolCmd.CLIENT_MASTER_JOINSERVER,
                 ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY);
 

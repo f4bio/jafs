@@ -20,6 +20,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         super(net, ProtocolHandler.MODE_CLIENT);
     }
 
+    public void m_c_ping(InetSocketAddress adr)
+    {
+        net.send(adr, ProtocolCmd.CLIENT_MASTER_PONG);
+    }
+
     public void m_c_newlist(InetSocketAddress adr)
     {
         Main.serverlist.clear();

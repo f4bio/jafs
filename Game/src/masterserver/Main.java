@@ -30,7 +30,7 @@ public class Main {
             for(int i=0;i<serverlist.size();i++) {
                 net.send(serverlist.get(i).getAddress(), ProtocolCmd.MASTER_SERVER_PING);
             }
-
+            
             for(int i=0; i<clientlist.size(); ++i) {
                 net.send(clientlist.get(i).getAddress(), ProtocolCmd.MASTER_CLIENT_PING);
             }
