@@ -41,6 +41,10 @@ public class Server {
         return address;
     }
 
+    public String getHostPort() {
+        return host+":"+port;
+    }
+
     public void setServerId(int id){
         this.serverId = id;
     }
