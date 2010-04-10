@@ -3,11 +3,14 @@ package masterserver;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
+import common.net.ProtocolCmd;
 import common.net.Server;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
@@ -24,13 +27,12 @@ public class Main {
 
     private static TimerTask pinger = new TimerTask() {
         public void run() {
-            int failures;
             for(int i=0;i<serverlist.size();i++) {
-                net.send(serverlist.get(i).getAddress(), Protocol.MASTER_SERVER_PING);
+                net.send(serverlist.get(i).getAddress(), ProtocolCmd.MASTER_SERVER_PING);
             }
 
             for(int i=0; i<clientlist.size(); ++i) {
-                net.send(clientlist.get(i).getAddress(), Protocol.MASTER_CLIENT_PING);
+                net.send(clientlist.get(i).getAddress(), ProtocolCmd.MASTER_CLIENT_PING);
             }
         }
     };
@@ -115,7 +117,8 @@ public class Main {
         Client sender = getClient(adr);
         for(Client client: clientlist)
             if(!client.isInGame())
-                net.send(client.getAddress(), Protocol.MASTER_CLIENT_CHAT, sender.getId(), msg);
+                net.send(client.getAddress(), ProtocolCmd.MASTER_CLIENT_CHAT,
+                        argInt(sender.getId()), argStr(msg));
     }
 
     public static Client getClient(InetSocketAddress adr) {

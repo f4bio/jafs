@@ -6,6 +6,7 @@ import client.ui.*;
 import common.CLog;
 import common.net.Network;
 import common.net.Protocol;
+import common.net.ProtocolCmd;
 import common.utils.CUtils;
 import java.awt.EventQueue;
 import java.net.InetSocketAddress;
@@ -61,7 +62,7 @@ public class Main {
         net.listen(net.getFreePort(50000, 65000));
 
         // Anmeldung: Client -> Masterserver
-        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_AUTH);
+        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH);
         new Chat(net).start();
 
         frame = new JFrame();
@@ -158,7 +159,7 @@ public class Main {
             String ip = list.get(i).split(":")[0];
             int port = Integer.parseInt(list.get(i).split(":")[1]);
             latencylist[i] = System.nanoTime();
-            net.send(new InetSocketAddress(ip, port), Protocol.CLIENT_SERVER_LATENCY);  // LATENCY
+            net.send(new InetSocketAddress(ip, port), ProtocolCmd.CLIENT_SERVER_LATENCY);  // LATENCY
         }
     }
 

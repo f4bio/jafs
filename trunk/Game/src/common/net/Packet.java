@@ -13,31 +13,24 @@ import java.net.InetSocketAddress;
  * @author miracle
  */
 public class Packet {
-    private String[] sPacket;
-    private InetSocketAddress adr;
+    public static final byte CHECK_COUNTER = 5;
+
     private DatagramPacket p;
-    private int ttl;
+    private byte cmd;
+    private byte ttl;
+    private byte resent;
 
     public Packet(DatagramPacket packet) {
         if(packet != null) {
             p = packet;
-            sPacket = new String(packet.getData(), 0, packet.getLength()).split(Protocol.ARG_SEPERATOR);
-            adr = (InetSocketAddress)packet.getSocketAddress();
+            cmd = p.getData()[0];
         }
-
-        ttl = Network.RESEND_COUNT;
+        resent = Network.RESEND_COUNT;
+        ttl = CHECK_COUNTER;
     }
 
-    public String[] getPacket() {
-        return sPacket;
-    }
-
-    public String getCmd() {
-        return sPacket[0];
-    }
-
-    public InetSocketAddress getAddress() {
-        return adr;
+    public byte getCmd() {
+        return cmd;
     }
 
     public DatagramPacket getDatagram() {
@@ -45,7 +38,7 @@ public class Packet {
     }
     
     public void resetTimeToLive() {
-        ttl = Network.RESEND_COUNT;
+        ttl = CHECK_COUNTER;
     }
 
     public void decreaseTimeToLive() {
@@ -58,9 +51,11 @@ public class Packet {
         return true;
     }
 
-    public boolean equals(DatagramPacket packet) {
-        if(packet.equals(p))
-            return true;
-        return false;
+    public byte decreaseResentCounter() {
+        return --resent;
+    }
+
+    public InetSocketAddress getAddress() {
+        return (InetSocketAddress)p.getSocketAddress();
     }
 }

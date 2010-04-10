@@ -6,7 +6,9 @@ import client.resource.MapLoader;
 import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
-import common.net.Protocol;
+import common.net.ProtocolCmd;
+
+import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
@@ -75,8 +77,9 @@ public class GameData implements UpdateObject {
         double dirX = self.getDirection().getX();
         double dirY = self.getDirection().getY();
 
-        Main.getNetwork().send(Protocol.CLIENT_SERVER_PLAYER_INFO, id, weapon,
-                posX, posY, dirX, dirY);
+        Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_PLAYER_INFO, argInt(id),
+                argInt(weapon), argDouble(posX), argDouble(posY), argDouble(dirX),
+                argDouble(dirY));
     }
 
     public void update(UpdateLoop u) {

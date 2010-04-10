@@ -19,20 +19,19 @@ public class Network {
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
-    public static final int RESEND_INTERVAL = 1000;
+    public static final int RESEND_INTERVAL = 200;
 
     private InetSocketAddress dest;
     private ProtocolHandler handler;
 
-    private static final int packetLength = 256;
+    private static final int packetLength = 512;
     private int port;
 
     private TimerTask failCheck = new TimerTask() {
+        Packet p;
+        Iterator<Packet> t;
 
         public void run() {
-            Packet p;
-            Iterator<Packet> t;
-
             synchronized(replyQueue) {
                 t = replyQueue.iterator();
 
@@ -40,10 +39,15 @@ public class Network {
                     p = t.next();
 
                     if(!p.hasTimeToLive()) {
-                        handler.noReplyReceived(p);
-                        t.remove();
+                        send(p.getDatagram(), false);
+
+                        if(p.decreaseResentCounter() == 0) {
+                            t.remove();
+                            handler.noReplyReceived(p);
+                        } else {
+                            p.resetTimeToLive();
+                        }
                     } else {
-                        send(p.getCmd(), p.getDatagram(), false);
                         p.decreaseTimeToLive();
                     }
                 }
@@ -64,7 +68,6 @@ public class Network {
 
         public void run() {
             DatagramPacket packet;
-            Packet pPacket;
             Packet rPacket;
             Iterator<Packet> i;
 
@@ -73,25 +76,23 @@ public class Network {
                     packet = new DatagramPacket(new byte[packetLength], packetLength);
                     socket.receive(packet);
 
-                    pPacket = new Packet(packet);
-                    //String s = pPacket.getCmd();
-                    //System.out.println(s);
+                    if(handler != null) {
+                        byte cmd = packet.getData()[0];
 
-                    if(isValid(pPacket) && handler != null) {
-                        synchronized(replyQueue) {
-                            i = replyQueue.iterator();
+                        if(Protocol.isReplyById(cmd)) {
+                            synchronized(replyQueue) {
+                                i = replyQueue.iterator();
 
-                            while(i.hasNext()) {
-                                rPacket = i.next();
-//                                System.out.println("------");
-//                                System.out.println(rPacket.getCmd());
-                                if(pPacket.getCmd().equals(Protocol.getReplyOfCmd(rPacket.getCmd()))) {
-                                    i.remove();
+                                while(i.hasNext()) {
+                                    rPacket = i.next();
+                                    if(Protocol.getReplyOfCmdById(rPacket.getCmd()) == cmd) {
+                                        i.remove();
+                                    }
                                 }
                             }
                         }
 
-                        inQueue.add(pPacket);
+                        inQueue.add(packet);
                         handler.wakeUp();
                     }
                 }
@@ -154,8 +155,8 @@ public class Network {
         }
     }
 
-    private ConcurrentLinkedQueue<Packet> inQueue =
-            new ConcurrentLinkedQueue<Packet>();
+    private ConcurrentLinkedQueue<DatagramPacket> inQueue =
+            new ConcurrentLinkedQueue<DatagramPacket>();
 
     private ConcurrentLinkedQueue<DatagramPacket> outQueue =
             new ConcurrentLinkedQueue<DatagramPacket>();
@@ -181,18 +182,8 @@ public class Network {
         checker.schedule(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
     }
 
-    private boolean isValid(Packet packet) {
-        String[] p = packet.getPacket();
-
-        if(Protocol.containsCmd(p[0]) && Protocol.getArgSize(p[0]) == p.length - 1) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private synchronized void send(String cmd, DatagramPacket packet, boolean check) {
-        if(check && Protocol.hasReply(cmd)) {
+    private synchronized void send(DatagramPacket packet, boolean check) {
+        if(check && Protocol.hasReplyById(packet.getData()[0])) {
             Iterator<Packet> i;
             Packet p;
 
@@ -200,7 +191,7 @@ public class Network {
                 i = replyQueue.iterator();
                 while(i.hasNext()) {
                     p = i.next();
-                    if(p.equals(packet)) {
+                    if(p.getDatagram().equals(packet)) {
                         return;
                     }
                 }
@@ -213,17 +204,17 @@ public class Network {
         nOut.wakeUp();
     }
 
-    public synchronized boolean send(final String cmd, Object... o) {
-        String packet = Protocol.buildPacket(cmd, o);
+    public synchronized boolean send(ProtocolCmd cmd, byte[]... c) {
+        byte[] packet = Protocol.buildPacket(cmd, c);
 
         if(packet == null)
             return false;
 
         DatagramPacket p = null;
         try {
-            p = new DatagramPacket(packet.getBytes(), packet.length(), dest);
+            p = new DatagramPacket(packet, packet.length, dest);
 
-            send(cmd, p, true);
+            send(p, true);
         } catch(SocketException e) {
             return false;
         }
@@ -231,17 +222,18 @@ public class Network {
         return true;
     }
 
-    public synchronized boolean send(InetSocketAddress destination, final String cmd, Object... o) {
-        String packet = Protocol.buildPacket(cmd, o);
+    public synchronized boolean send(InetSocketAddress destination, ProtocolCmd cmd,
+            byte[]... c) {
+        byte[] packet = Protocol.buildPacket(cmd, c);
 
         if(destination == null || packet == null)
              return false;
 
         DatagramPacket p = null;
         try {
-            p = new DatagramPacket(packet.getBytes(), packet.length(), destination);
+            p = new DatagramPacket(packet, packet.length, destination);
 
-            send(cmd, p, true);
+            send(p, true);
         } catch(SocketException e) {
             return false;
         }
@@ -249,12 +241,13 @@ public class Network {
         return true;
     }
 
-    public synchronized boolean send(String host, int port, final String cmd, Object... o) {
+    public synchronized boolean send(String host, int port, ProtocolCmd cmd,
+            byte[]... c) {
         InetSocketAddress destination = new InetSocketAddress(host, port);
-        return send(destination, cmd, o);
+        return send(destination, cmd, c);
     }
    
-    public Packet getPacket() {
+    public DatagramPacket getPacket() {
         return inQueue.poll();
     }
 

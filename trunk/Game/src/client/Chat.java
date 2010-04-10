@@ -2,6 +2,7 @@ package client;
 
 import common.net.Network;
 import common.net.Protocol;
+import common.net.ProtocolCmd;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -16,7 +17,7 @@ public class Chat extends Thread{
 
     @Override
     public void run() {
-        in = new BufferedReader(new InputStreamReader(System.in));
+        /*in = new BufferedReader(new InputStreamReader(System.in));
         while(running) {
             try{
                 System.out.print("Type in your msg/cmd: ");
@@ -27,19 +28,19 @@ public class Chat extends Thread{
                 if(input.startsWith("/")){
                     // Log Off
                     if(input.startsWith("/logoff")) {
-                        net.send("localhost", 40000, Protocol.CLIENT_SERVER_LOGOFF);
+                        net.send("localhost", 40000, ProtocolCmd.CLIENT_SERVER_LOGOFF);
                         running = false;
                     }
 
                     // Show Serverlist
                     else if(input.startsWith("/serverlist") || input.startsWith("/sl")) {
-                        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_LISTREQUEST);
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
                     }
                     // join server
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
                         net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)), Protocol.CLIENT_SERVER_AUTH);
                         net.send(Network.MASTERHOST, Network.MASTERPORT,
-                                 Protocol.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
+                                 ProtocolCmd.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
                     }
                      // lobby chat
                     else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
@@ -48,7 +49,7 @@ public class Chat extends Thread{
                     // Join team
                     else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {
                         net.send("localhost", 40000, 
-                                Protocol.CLIENT_SERVER_JOINTEAM, Integer.parseInt(input.split(" ")[1]));
+                                ProtocolCmd.CLIENT_SERVER_JOINTEAM, Integer.parseInt(input.split(" ")[1]));
                     }
                     // Team Chat
                     else if(input.startsWith("/teamchat") || input.startsWith("/tc")) {
@@ -68,7 +69,7 @@ public class Chat extends Thread{
             } catch(Exception e) {
                 System.out.println(e);
             }
-        }
+        }*/
     }
 
     public Chat(common.net.Network net) {
