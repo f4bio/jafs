@@ -28,7 +28,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void m_c_newlist(InetSocketAddress adr)
     {
-        Main.serverlist.clear();
+        Main.clearServerlist();
 //        System.out.println("NewServerList:");
     }
 
@@ -36,13 +36,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         Server server = new Server(serverStr.split(":")[0], Integer.parseInt(serverStr.split(":")[1]));
         if(server != null)
-            Main.serverlist.add(server);
+            Main.addServerToServerlist(server);
 //        System.out.println(server.getHost()+":"+server.getPort());
     }
 
     public void m_c_endlist(InetSocketAddress adr)
     {
-        Main.completeServerlist(Main.serverlist);
+        Main.completeServerlist();
 //        System.out.println(":NewServerList");
     }
 
@@ -65,8 +65,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("NULL!");
         if(id != -1){
             Main.getUiLobbyChat().appendMSG("Player-"+id+": "+msg.replace("vXv", ";"));
-            Main.getUiLobbyChat().clearMsgField();
-//            System.out.println("Player-"+id+": "+msg.replace("vXv", ";"));
         }
     }
 
@@ -234,6 +232,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_latency_reply(InetSocketAddress adr)
     {
         Main.refreshLatency(adr, System.nanoTime());
+    }
+
+    public void s_c_current_map_reply(String map, InetSocketAddress adr)
+    {
+        Main.refreshCurrentMap(adr, map);
+    }
+
+    public void s_c_players_reply(String players, InetSocketAddress adr)
+    {
+        Main.refreshPlayers(adr, players);
     }
 
     public void noReplyReceived(Packet p)

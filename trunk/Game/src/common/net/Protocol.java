@@ -195,6 +195,9 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_REQUEST_NAME_REPLY, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_LATENCY, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_CURRENT_MAP, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_PLAYERS, ARG_NONE);
 
         registerCmd(ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CHAT_TEAM_OK, ARG_NONE);
@@ -208,7 +211,6 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_SERVER_LATENCY, ARG_NONE);
 
         //----- Server commands
         registerCmd(ProtocolCmd.SERVER_MASTER_PONG, ARG_NONE);
@@ -229,6 +231,8 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_INIT, ARG_STRING, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY, ARG_NONE);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, ARG_STRING);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, ARG_STRING);
 
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
