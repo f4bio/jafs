@@ -143,6 +143,12 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_SERVER_LATENCY:
                         c_s_latency(adr);
                         break;
+                    case CLIENT_SERVER_CURRENT_MAP:
+                        c_s_current_map(adr);
+                        break;
+                    case CLIENT_SERVER_PLAYERS:
+                        c_s_players(adr);
+                        break;
                     case CLIENT_SERVER_ALL_PLAYER_DATA:
                         c_s_all_player_data(adr);
                         break;
@@ -256,6 +262,13 @@ public abstract class ProtocolHandler implements Runnable {
 
                     case SERVER_CLIENT_LATENCY_REPLY:
                         s_c_latency_reply(adr);
+                        break;
+                    case SERVER_CLIENT_CURRENT_MAP_REPLY:
+                        s_c_current_map_reply(toStr(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_PLAYERS_REPLY:
+                        s_c_players_reply(toStr(data, idx[0]), adr);
+                        break;
                 }
             }
         }
@@ -304,6 +317,8 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_s_jointeam(int teamId, InetSocketAddress adr) { }
     public void c_s_event_player_joined_ok(InetSocketAddress adr) { }
     public void c_s_latency(InetSocketAddress adr) { }
+    public void c_s_current_map(InetSocketAddress adr) { }
+    public void c_s_players(InetSocketAddress adr) { }
 
     //Client
     public void m_c_newlist(InetSocketAddress adr) { }
@@ -334,5 +349,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_jointeam_reply(int reply, int team, InetSocketAddress adr) { }
     public void s_c_event_player_respawned(InetSocketAddress adr) { }
     public void s_c_latency_reply(InetSocketAddress adr) { }
+    public void s_c_current_map_reply(String map, InetSocketAddress adr) { }
+    public void s_c_players_reply(String nPlayers, InetSocketAddress adr) { }
     public void m_c_chat_ok (InetSocketAddress adr) { }
 }

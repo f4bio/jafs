@@ -181,6 +181,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY);
     }
 
+    public void c_s_current_map(InetSocketAddress adr){
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, argStr(Main.getMapName()));
+    }
+
+    public void c_s_players(InetSocketAddress adr){
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, argStr(Main.getCurPlayers()+"/"+Main.getMaxPlayers()));
+    }
+
     public void noReplyReceived(Packet p) {
         if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.SERVER_CLIENT_PING) {
             Main.removeClient(p.getAddress());

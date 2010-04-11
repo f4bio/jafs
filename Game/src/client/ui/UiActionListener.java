@@ -2,7 +2,6 @@ package client.ui;
 
 import client.Main;
 import common.net.Network;
-import common.net.Protocol;
 import common.net.ProtocolCmd;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,8 +70,9 @@ public class UiActionListener implements ActionListener {
         }
         // Lobby Chat SendMSG
         else if(e.getActionCommand().equals(CMD_LOBBYCHAT_SEND_MSG)) {
-            net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY,
-                    argStr(Main.getUiLobbyChat().getMSG()));
+            String msg = Main.getUiLobbyChat().getMSG();
+            if (msg != null && !msg.equals(""))
+                net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, argStr(msg));
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
