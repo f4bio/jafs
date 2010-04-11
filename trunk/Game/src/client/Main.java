@@ -98,6 +98,7 @@ public class Main {
         uiCredits = new Credits(screen);
         uiCredits.setLocation(screen.getWidth()/2  - uiCredits.getWidth()/2,
                               screen.getHeight()/2 - uiCredits.getHeight()/2);
+        uiCredits.addActionListener(aListener);
  
         // UIManger
         UiManager.addComponent(uiMain);
@@ -129,8 +130,7 @@ public class Main {
            }
         });
         
-//        net.connect("localhost", 40000);
-//        net.send(Protocol.CLIENT_SERVER_AUTH);
+        CLog.close();
     }
 
     public static MainScreen getScreen() {
@@ -146,25 +146,32 @@ public class Main {
     }
 
     public static void completeServerlist() {
-        /* | Server | Map | Spieler | Ping | */
-        String[][] server = new String[serverlist.size()][4];
-        latencylist = new long[serverlist.size()];
-        for(int i=0; i<serverlist.size(); i++){
-            server[i][0] = serverlist.get(i).getHost()+":"+serverlist.get(i).getPort();
-            server[i][1] = "<pending>";
-            server[i][2] = "<pending>";
-            server[i][3] = "<pending>";
-        }
-        uiBrowser.setServerlist(server);
-        // Daten aktualisieren
-        for(int i=0; i<serverlist.size(); i++){
-            String ip = serverlist.get(i).getHost();
-            int port = serverlist.get(i).getPort();
-            InetSocketAddress adr = new InetSocketAddress(ip, port);
-            latencylist[i] = System.nanoTime();
-            net.send(adr, ProtocolCmd.CLIENT_SERVER_LATENCY);       // LATENCY
-            net.send(adr, ProtocolCmd.CLIENT_SERVER_CURRENT_MAP);   // MAP
-            net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYERS);       // PLAYERS
+        if(serverlist.size() == 0){
+            String[][] list = new String[1][4];
+            list[0][0] = "No server listed";
+            list[0][1] = "";
+            list[0][2] = "";
+            list[0][3] = "";
+            uiBrowser.setServerlist(list);
+        } else {
+            /* | Server | Map | Spieler | Ping | */
+            String[][] list = new String[serverlist.size()][4];
+            latencylist = new long[serverlist.size()];
+            for(int i=0; i<serverlist.size(); i++){
+                list[i][0] = ""+serverlist.get(i).getAddress();
+                list[i][1] = "<pending>";
+                list[i][2] = "<pending>";
+                list[i][3] = "<pending>";
+            }
+            uiBrowser.setServerlist(list);
+            // map, players, latency requests
+            for(int i=0; i<serverlist.size(); i++){
+                InetSocketAddress adr = serverlist.get(i).getAddress();
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_CURRENT_MAP);   // MAP
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYERS);       // PLAYERS
+                latencylist[i] = System.nanoTime();
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_LATENCY);       // LATENCY
+            }
         }
     }
 

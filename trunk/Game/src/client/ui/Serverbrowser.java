@@ -214,7 +214,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
     public class ServerbrowserTableModel extends AbstractTableModel {
 
         private String[] columnNames = {"Server", "Map", "Spieler", "Ping"};
-        private String[][] serverList = new String [][] {  };
+        private String[][] serverList = new String [][] { {"No Masterserver", "", "", ""} };
 
         @Override
         public String getColumnName(int col) {
