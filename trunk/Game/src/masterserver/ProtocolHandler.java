@@ -23,12 +23,15 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_m_auth(InetSocketAddress adr)
     {
         Server added = Main.addServer(adr);
-        if(added != null)
+        if(added != null) {
             net.send(adr, ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
                     argInt(Protocol.REPLY_SUCCESS));
-        else
+            System.out.println("SERVER_MASTER_AUTH success -> MASTER_SERVER_AUTH_REPLY (REPLY_SUCCESS)");
+        } else {
             net.send(adr, ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
                     argInt(Protocol.REPLY_FAILURE));
+            System.out.println("SERVER_MASTER_AUTH failure -> MASTER_SERVER_AUTH_REPLY (REPLY_FAILURE)");
+        }
     }
 
     public void s_m_pong(InetSocketAddress adr)
@@ -44,7 +47,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_joinserver(String host, int port, InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY,
-                argStr("JOINED! ServerInfos: "+host+":"+port));
+                 argStr("JOINED! ServerInfos: "+host+":"+port));
+        System.out.println("CLIENT_MASTER_JOINSERVER -> MASTER_CLIENT_JOINSERVER_REPLY (JOINED! ServerInfos: "+host+":"+port+")");
 //        System.out.println("c_m_joinserver()");
     }
 
@@ -60,12 +64,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_auth(InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
-        if(client != null)
+        if(client != null) {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
                     argInt(Protocol.REPLY_SUCCESS));
-        else
+            System.out.println("CLIENT_MASTER_AUTH success -> MASTER_CLIENT_AUTH_REPLY (REPLY_SUCCESS)");
+        }
+        else {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
                     argInt(Protocol.REPLY_FAILURE));
+            System.out.println("CLIENT_MASTER_AUTH failure -> MASTER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
+        }
     }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {

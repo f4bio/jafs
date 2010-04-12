@@ -28,9 +28,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void m_s_auth_reply(int i, InetSocketAddress adr) {
         if(i == Protocol.REPLY_SUCCESS)
-            System.out.println("server succesfully listed.");
+            System.out.println("MASTER_SERVER_AUTH_REPLY success, server listed");
+//            System.out.println("server succesfully listed.");
         else
-            System.out.println("server failed to be listed.");
+            System.out.println("MASTER_SERVER_AUTH_REPLY failure");
+//            System.out.println("server failed to be listed.");
     }
 
     public void c_s_auth(InetSocketAddress adr){
@@ -39,19 +41,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(added != null) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, argInt(Protocol.REPLY_SUCCESS));
             net.send(adr, ProtocolCmd.SERVER_CLIENT_INIT, argStr(Main.getMapName()),
-                    argInt(Main.getMaxPlayers()));
-            System.out.println("Client "+added.getHost()+":"+added.getPort()+" joined server");
+                     argInt(Main.getMaxPlayers()));
+//            System.out.println("Client "+added.getHost()+":"+added.getPort()+" joined server");
+            System.out.println("CLIENT_SERVER_AUTH success -> SERVER_CLIENT_AUTH_REPLY (REPLY_SUCCESS), SERVER_CLIENT_INIT");
         } else {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, argInt(Protocol.REPLY_FAILURE));
-            System.out.println("Client "+added.getHost()+":"+added.getPort()+" not able joined server");
+//            System.out.println("Client "+added.getHost()+":"+added.getPort()+" not able joined server");
+            System.out.println("CLIENT_SERVER_AUTH failure -> SERVER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
     }
 
     public void c_s_init_reply(int i, InetSocketAddress adr) {
         if(i == Protocol.REPLY_SUCCESS) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_REQUEST_NAME);
+            System.out.println("CLIENT_SERVER_INIT_REPLY success -> SERVER_CLIENT_REQUEST_NAME");
         } else {
             Main.removeClient(adr);
+            System.out.println("CLIENT_SERVER_INIT_REPLY failure -> client removed");
         }
     }
 
@@ -70,6 +76,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
         Main.getClient(adr).setStatus(Client.STATUS_CONNECTED);
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED);
+        System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY "+name+"(no SERVER_CLIENT_FORCED_NICKCHANGE) -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
     }
 
     public void c_s_connection_established_ok(InetSocketAddress adr) {
@@ -122,6 +129,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_pong(InetSocketAddress adr) {
+//        System.out.println("CLIENT_SERVER_PONG");
     }
 
     public void c_s_clientcount(InetSocketAddress adr){

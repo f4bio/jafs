@@ -74,8 +74,10 @@ public class Main {
     private static TimerTask pinger = new TimerTask() {
         public void run() {
             for(Client cur : client) {
-                if(cur != null)
+                if(cur != null){
                     net.send(cur.getAddress(), ProtocolCmd.SERVER_CLIENT_PING);
+//                    System.out.println("SERVER_CLIENT_PING");
+                }
             }
         }
     };

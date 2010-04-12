@@ -260,6 +260,22 @@ public abstract class ProtocolHandler implements Runnable {
                         m_c_chat_ok(adr);
                         break;
 
+                        
+                    case SERVER_CLIENT_INIT:
+                        s_c_init(toStr(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_PING:
+                        s_c_ping(adr);
+                        break;
+                    case SERVER_CLIENT_AUTH_REPLY:
+                        s_c_auth_reply(toInt(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_REQUEST_NAME:
+                        s_c_request_name(adr);
+                        break;
+                    case SERVER_CLIENT_CONNECTION_ESTABLISHED:
+                        s_c_connection_established(adr);
+                        break;
                     case SERVER_CLIENT_LATENCY_REPLY:
                         s_c_latency_reply(adr);
                         break;
