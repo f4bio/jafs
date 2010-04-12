@@ -15,7 +15,7 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author Julian Sanio
  */
-public class Serverbrowser extends UiWindow implements ActionListener {
+public class Serverbrowser extends UiWindow /*implements ActionListener*/ {
 
     /** Creates new form Serverbrowser */
     public Serverbrowser(MainScreen scr) {
@@ -25,8 +25,8 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jCheckBox1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
         jTextField1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
         jTextField2.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
-        jCheckBox1.addActionListener(this);
-        jButton1.addActionListener(this);
+//        jCheckBox1.addActionListener(this);
+//        jButton1.addActionListener(this);
         setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
@@ -49,9 +49,8 @@ public class Serverbrowser extends UiWindow implements ActionListener {
 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTable1.setAutoCreateRowSorter(true);
         jTable1.setBackground(java.awt.SystemColor.controlHighlight);
-        jTable1.setFont(new java.awt.Font("Consolas", 0, 11));
+        jTable1.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
         jTable1.setModel(sModel);
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -73,14 +72,14 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jCheckBox1.setText("Filter");
         jCheckBox1.setEnabled(false);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10));
         jButton2.setText("Verbinden");
         jButton2.setMargin(new java.awt.Insets(1, 14, 1, 14));
         jButton2.setMaximumSize(new java.awt.Dimension(79, 21));
         jButton2.setMinimumSize(new java.awt.Dimension(79, 21));
         jButton2.setPreferredSize(new java.awt.Dimension(79, 21));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10));
         jButton1.setText("Aktualisieren");
         jButton1.setMargin(new java.awt.Insets(1, 14, 1, 14));
         jButton1.setMaximumSize(new java.awt.Dimension(89, 21));
@@ -172,38 +171,31 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         jButton2.addActionListener(a);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if(jCheckBox1.isSelected()){
-            jLabel1.setEnabled(true);
-            jLabel2.setEnabled(true);
-            jTextField1.setEnabled(true);
-            jTextField2.setEnabled(true);
-        } else {
-            jLabel1.setEnabled(false);
-            jLabel2.setEnabled(false);
-            jTextField1.setEnabled(false);
-            jTextField2.setEnabled(false);
-        }
-    }
+//    public void actionPerformed(ActionEvent e) {
+//        if(jCheckBox1.isSelected()){
+//            jLabel1.setEnabled(true);
+//            jLabel2.setEnabled(true);
+//            jTextField1.setEnabled(true);
+//            jTextField2.setEnabled(true);
+//        } else {
+//            jLabel1.setEnabled(false);
+//            jLabel2.setEnabled(false);
+//            jTextField1.setEnabled(false);
+//            jTextField2.setEnabled(false);
+//        }
+//    }
 
     public void setServerlist(String[][] list) {
         sModel.setServerlist(list);
-        jTable1.setModel(sModel);
-        jScrollPane1.setViewportView(jTable1);
+//        jScrollPane1.setViewportView(jTable1);
     }
 
-    public String getSelectedServer(){
-        if (jTable1.getSelectedRow() >= 0)
-            return (String) sModel.getValueAt(jTable1.getSelectedRow(), 0);
-        else
-            return null;
+    public int getSelectedServerlistIndex(){
+        return jTable1.getSelectedRow();
     }
 
     public void refreshValue(String v, int row, int col){
-//        System.out.println("refresh @" + row + "," + col + " :" + v);
         sModel.setValueAt(v, row, col);
-        jTable1.setModel(sModel);
-        jScrollPane1.setViewportView(jTable1);
     }
 
 
@@ -213,8 +205,8 @@ public class Serverbrowser extends UiWindow implements ActionListener {
      */
     public class ServerbrowserTableModel extends AbstractTableModel {
 
-        private String[] columnNames = {"Server", "Map", "Spieler", "Ping"};
-        private String[][] serverList = new String [][] { {"No Masterserver", "", "", ""} };
+        private String[] columnNames = { "Server", "Map", "Spieler", "Ping" };
+        private String[][] serverList = new String [][] { {"No Masterserver.", "", "", ""} };
 
         @Override
         public String getColumnName(int col) {
@@ -239,7 +231,7 @@ public class Serverbrowser extends UiWindow implements ActionListener {
         }
 
         public String getValueAt(int row, int col) {
-            return serverList[row][col];
+            return (String)serverList[row][col];
         }
 
         public void setServerlist(String[][] list) {

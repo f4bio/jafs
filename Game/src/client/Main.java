@@ -37,7 +37,6 @@ public class Main {
     private static UiWindow uiCredits;
 
     private static ArrayList<Server> serverlist = new ArrayList<Server>();
-    private static long[] latencylist;
     
     public static final String PATH = CUtils.getApplicationPath("Game");
 
@@ -65,7 +64,7 @@ public class Main {
 
         // Anmeldung: Client -> Masterserver
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH);
-        new Chat(net).start();
+        //new Chat(net).start();
 
         frame = new JFrame();
         frame.setIgnoreRepaint(true);
@@ -117,6 +116,7 @@ public class Main {
 
         // GameData
         data = new GameData(input);
+        data.setName("PLAYA 51 ("+net.getHost()+":"+net.getPort()+")");
 
         // UpdateLoop
         loop = new UpdateLoop(60);
@@ -145,71 +145,21 @@ public class Main {
         return net;
     }
 
-    public static void completeServerlist() {
-        if(serverlist.size() == 0){
-            String[][] list = new String[1][4];
-            list[0][0] = "No server listed";
-            list[0][1] = "";
-            list[0][2] = "";
-            list[0][3] = "";
-            uiBrowser.setServerlist(list);
-        } else {
-            /* | Server | Map | Spieler | Ping | */
-            String[][] list = new String[serverlist.size()][4];
-            latencylist = new long[serverlist.size()];
-            for(int i=0; i<serverlist.size(); i++){
-                list[i][0] = ""+serverlist.get(i).getAddress();
-                list[i][1] = "<pending>";
-                list[i][2] = "<pending>";
-                list[i][3] = "<pending>";
-            }
-            uiBrowser.setServerlist(list);
-            // map, players, latency requests
-            for(int i=0; i<serverlist.size(); i++){
-                InetSocketAddress adr = serverlist.get(i).getAddress();
-                net.send(adr, ProtocolCmd.CLIENT_SERVER_CURRENT_MAP);   // MAP
-                net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYERS);       // PLAYERS
-                latencylist[i] = System.nanoTime();
-                net.send(adr, ProtocolCmd.CLIENT_SERVER_LATENCY);       // LATENCY
-            }
-        }
-    }
-
     public static Server getServer(String host, int port) {
         for(Server cur : serverlist) {
             if(cur.getHost().equals(host) && cur.getPort() == port)
                 return cur;
         }
-
         return null;
     }
 
-    public static void refreshLatency(InetSocketAddress adr, long nanoTime){
+    public static int getServerlistIndex(InetSocketAddress adr) {
         for(int i=0; i<Main.serverlist.size(); i++){
             if(serverlist.get(i).getAddress().equals(adr)){
-                latencylist[i] = nanoTime - latencylist[i];
-                uiBrowser.refreshValue(new DecimalFormat("#0.00").format(latencylist[i]*0.000001)+"ms", i, 3);
-                break;
+                return i;
             }
         }
-    }
-
-    public static void refreshCurrentMap(InetSocketAddress adr, String map){
-        for(int i=0; i<Main.serverlist.size(); i++){
-            if(serverlist.get(i).getAddress().equals(adr)){
-                uiBrowser.refreshValue(map, i, 1);
-                break;
-            }
-        }
-    }
-
-    public static void refreshPlayers(InetSocketAddress adr, String players){
-        for(int i=0; i<Main.serverlist.size(); i++){
-            if(serverlist.get(i).getAddress().equals(adr)){
-                uiBrowser.refreshValue(players, i, 2);
-                break;
-            }
-        }
+        return -1;
     }
 
     public static UiWindow getUiMainMenu() {
@@ -235,12 +185,66 @@ public class Main {
     public static UiWindow getUiCredits() {
         return uiCredits;
     }
-
+    
     public static void addServerToServerlist(Server s){
         serverlist.add(s);
     }
 
     public static void clearServerlist(){
         serverlist.clear();
+    }
+
+    public static void completeServerlist() {
+        if(serverlist.size() == 0){
+            String[][] list = new String[1][4];
+            list[0][0] = "No server listed.";
+            list[0][1] = "";
+            list[0][2] = "";
+            list[0][3] = "";
+            uiBrowser.setServerlist(list);
+        } else {
+            String[][] list = new String[serverlist.size()][4];
+            /* | Server | Map | Spieler | Ping | */
+            for(int i=0; i<serverlist.size(); i++){
+                list[i][0] = serverlist.get(i).getHostPort();
+                list[i][1] = "<pending>";
+                list[i][2] = "<pending>";
+                list[i][3] = "<pending>";
+            }
+            uiBrowser.setServerlist(list);
+            // map, players, latency requests
+            for(int i=0; i<serverlist.size(); i++){
+                InetSocketAddress adr = serverlist.get(i).getAddress();
+                serverlist.get(i).setClientServerLatency(System.nanoTime());
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_LATENCY);       // LATENCY
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_CURRENT_MAP);   // MAP
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYERS);       // PLAYERS
+            }
+        }
+    }
+
+    public static void refreshLatency(InetSocketAddress adr, long nanoTime){
+        int i = getServerlistIndex(adr);
+        serverlist.get(i).setClientServerLatency(nanoTime);
+        uiBrowser.refreshValue(new DecimalFormat("#0.00").format(serverlist.get(i).getClientSserverLatency()*0.000001)+"ms", i, 3);
+    }
+
+    public static void refreshCurrentMap(InetSocketAddress adr, String map){
+        int i = getServerlistIndex(adr);
+        serverlist.get(i).setMap(map);
+        uiBrowser.refreshValue(map, i, 1);
+    }
+
+    public static void refreshPlayers(InetSocketAddress adr, String players){
+        int i = getServerlistIndex(adr);
+        serverlist.get(i).setCurPlayers(players);
+        uiBrowser.refreshValue(players, i, 2);
+    }
+
+    public static Server getSelectedServer(){
+        if(uiBrowser.getSelectedServerlistIndex() >= 0)
+            return new Server(serverlist.get(uiBrowser.getSelectedServerlistIndex()).getAddress());
+        else
+            return null;
     }
 }

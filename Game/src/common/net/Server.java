@@ -12,10 +12,11 @@ public class Server {
     private String map;
     private int port;
     private int limitPlayers;
-    private int curPlayers;
+    private String curPlayers = "";
     private int latency;
     private InetSocketAddress address;
     private int serverId;
+    private long c_s_latency = 0;
 
     public Server(String host, int port) {
         this.host = host;
@@ -59,5 +60,21 @@ public class Server {
 
     public String getMap(){
         return map;
+    }
+
+    public void setClientServerLatency(long latency){
+        c_s_latency = latency - c_s_latency;
+    }
+
+    public long getClientSserverLatency(){
+        return c_s_latency;
+    }
+
+    public void setCurPlayers(String n){
+        curPlayers = n;
+    }
+
+    public String getCurPlayers(){
+        return curPlayers;
     }
 }

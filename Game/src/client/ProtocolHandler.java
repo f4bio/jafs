@@ -29,21 +29,22 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_newlist(InetSocketAddress adr)
     {
         Main.clearServerlist();
-//        System.out.println("NewServerList:");
+        System.out.println("NewServerlist:");
     }
 
     public void m_c_listentry(String serverStr, InetSocketAddress adr)
     {
         Server server = new Server(serverStr.split(":")[0], Integer.parseInt(serverStr.split(":")[1]));
-        if(server != null)
+        if(server != null){
             Main.addServerToServerlist(server);
-//        System.out.println(server.getHost()+":"+server.getPort());
+            System.out.println(server.getHostPort());
+        }
     }
 
     public void m_c_endlist(InetSocketAddress adr)
     {
         Main.completeServerlist();
-//        System.out.println(":NewServerList");
+        System.out.println(":NewServerlist");
     }
 
     public void m_c_auth_reply(int i, InetSocketAddress adr)
@@ -56,7 +57,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void m_c_joinserver_reply(String s, InetSocketAddress adr)
     {
-        
+        System.out.println("MASTER_CLIENT_JOINSERVER_REPLY: "+s);
     }
 
     public void m_c_chat(int id, String msg, InetSocketAddress adr)
@@ -76,15 +77,15 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_ping(InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_PONG);
-//        System.out.println("Client ponged");
+//        System.out.println("SERVER_CLIENT_PING -> CLIENT_SERVER_PONG");
     }
 
-    public void s_c_clientcount(Integer i, InetSocketAddress adr)
+    public void s_c_clientcount(int i, InetSocketAddress adr)
     {
-        System.out.println(i+ "clients connected on this server");
+        System.out.println(i+ " clients connected on this server");
     }
 
-    public void s_c_clientid_reply(Integer id, InetSocketAddress adr)
+    public void s_c_clientid_reply(int id, InetSocketAddress adr)
     {
         CPlayer self = new CPlayer();
         self.setId(id);
@@ -95,21 +96,26 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_ALL_PLAYER_DATA);
     }
 
-    public void s_c_auth_reply(Integer i, InetSocketAddress adr)
+    public void s_c_auth_reply(int i, InetSocketAddress adr)
     {
-        if(i == Protocol.REPLY_SUCCESS)
-            System.out.println("client succesfully listed. (master)");
-        else
-            System.out.println("client failed to be listed. (master)");
+        if(i == Protocol.REPLY_SUCCESS) {
+//            System.out.println("client succesfully listed. (server)");
+            System.out.println("SERVER_CLIENT_AUTH_REPLY success, client listed");
+        }
+        else {
+//            System.out.println("client failed to be listed. (server)");
+            System.out.println("SERVER_CLIENT_AUTH_REPLY failure");
+        }
     }
 
     public void s_c_request_name(InetSocketAddress adr)
     {
         String n = Main.getGameData().getName();
         net.send(adr, ProtocolCmd.CLIENT_SERVER_REQUEST_NAME_REPLY, argStr(n));
+        System.out.println("SERVER_CLIENT_REQUEST_NAME -> CLIENT_SERVER_REQUEST_NAME_REPLY ("+n+")");
     }
 
-    public void s_c_init(String m, Integer t, InetSocketAddress adr) {
+    public void s_c_init(String m, int t, InetSocketAddress adr) {
         Main.getGameData().setMaxPlayers(t);
         boolean result = Main.getGameData().loadMap(m);
 
@@ -131,6 +137,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_connection_established(InetSocketAddress adr) {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CLIENTID);
+        System.out.println("SERVER_CLIENT_CONNECTION_ESTABLISHED -> CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, CLIENT_SERVER_CLIENTID");
     }
 
     public void s_c_connection_terminated(InetSocketAddress adr) {
@@ -138,7 +145,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK);
     }
 
-    public void s_c_player_data(String name, int id, Integer team, InetSocketAddress adr) {
+    public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) {
         if(Main.getGameData().getPlayer(id) == null) {
             CPlayer player = new CPlayer();
             player.setId(id);
