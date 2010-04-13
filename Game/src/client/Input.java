@@ -47,7 +47,6 @@ public class Input implements KeyListener, MouseMotionListener {
     }
 
     public void keyTyped(KeyEvent k) {
-
     }
 
     public void keyReleased(KeyEvent k) {
@@ -63,6 +62,9 @@ public class Input implements KeyListener, MouseMotionListener {
                 break;
             case KeyEvent.VK_D:
                 key_d = false;
+        }
+        if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
+            Main.showUi();
         }
     }
 

@@ -72,7 +72,7 @@ public class UiActionListener implements ActionListener {
                 net.send(Main.getSelectedServer().getAddress(),
                          ProtocolCmd.CLIENT_SERVER_AUTH);
                 System.out.println("CLIENT_SERVER_AUTH");
-//                Main.getUiServerbrowser().setVisible(false);
+                Main.hideUi();
             }
         }
         // Credits

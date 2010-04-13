@@ -47,12 +47,13 @@ public class Main {
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
-        //net.listen(net.getFreePort(40000, 50000));
-        net.listen(40000);
+        net.listen(net.getFreePort(40000, 50000));
+//        net.listen(40000);
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
         pingTimer = new Timer();
-        pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
+        //pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
+        pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
 
         update = new UpdateLoop(60);
         update.addUpdateObject(game);
@@ -76,7 +77,7 @@ public class Main {
             for(Client cur : client) {
                 if(cur != null){
                     net.send(cur.getAddress(), ProtocolCmd.SERVER_CLIENT_PING);
-//                    System.out.println("SERVER_CLIENT_PING");
+                    System.out.println("SERVER_CLIENT_PING -> " + cur.getAddress().getHostName());
                 }
             }
         }
@@ -115,6 +116,7 @@ public class Main {
                 c.setId(i);
                 client[i] = c;
                 game.addPlayer(c.getPlayer());
+                break;
             }
         }
 

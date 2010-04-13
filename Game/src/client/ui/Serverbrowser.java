@@ -196,6 +196,7 @@ public class Serverbrowser extends UiWindow /*implements ActionListener*/ {
 
     public void refreshValue(String v, int row, int col){
         sModel.setValueAt(v, row, col);
+        jScrollPane1.setViewportView(jTable1);
     }
 
 

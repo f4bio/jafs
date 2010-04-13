@@ -24,12 +24,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_ping(InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.CLIENT_MASTER_PONG);
+//        System.out.println("MASTER_CLIENT_PING -> CLIENT_MASTER_PONG");
     }
 
     public void m_c_newlist(InetSocketAddress adr)
     {
         Main.clearServerlist();
-        System.out.println("NewServerlist:");
+        System.out.println("MASTER_CLIENT_NEWLIST");
     }
 
     public void m_c_listentry(String serverStr, InetSocketAddress adr)
@@ -37,22 +38,22 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Server server = new Server(serverStr.split(":")[0], Integer.parseInt(serverStr.split(":")[1]));
         if(server != null){
             Main.addServerToServerlist(server);
-            System.out.println(server.getHostPort());
+            System.out.println("MASTER_CLIENT_LISTENTRY ("+server.getHostPort()+")");
         }
     }
 
     public void m_c_endlist(InetSocketAddress adr)
     {
         Main.completeServerlist();
-        System.out.println(":NewServerlist");
+        System.out.println("MASTER_CLIENT_ENDLIST");
     }
 
     public void m_c_auth_reply(int i, InetSocketAddress adr)
     {
         if(i == Protocol.REPLY_SUCCESS)
-            System.out.println("client succesfully listed. (master)");
+            System.out.println("MASTER_CLIENT_AUTH_REPLY success");
         else
-            System.out.println("client failed to be listed. (master)");
+            System.out.println("MASTER_CLIENT_AUTH_REPLY failure");
     }
 
     public void m_c_joinserver_reply(String s, InetSocketAddress adr)
@@ -63,26 +64,27 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_chat(int id, String msg, InetSocketAddress adr)
     {
         if(msg == null)
-            System.out.println("NULL!");
+            System.out.println("MASTER_CLIENT_CHAT msg=null");
         if(id != -1){
             Main.getUiLobbyChat().appendMSG("Player-"+id+": "+msg.replace("vXv", ";"));
+            System.out.println("MASTER_CLIENT_CHAT id="+id+",msg="+msg);
         }
     }
 
     public void m_c_chat_ok (InetSocketAddress adr)
     {
-
+        System.out.println("MASTER_CLIENT_CHAT_OK");
     }
 
     public void s_c_ping(InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_PONG);
-//        System.out.println("SERVER_CLIENT_PING -> CLIENT_SERVER_PONG");
+        System.out.println("SERVER_CLIENT_PING -> CLIENT_SERVER_PONG");
     }
 
     public void s_c_clientcount(int i, InetSocketAddress adr)
     {
-        System.out.println(i+ " clients connected on this server");
+        System.out.println("SERVER_CLIENT_CLIENTCOUNT "+i+" (clients connected)");
     }
 
     public void s_c_clientid_reply(int id, InetSocketAddress adr)
@@ -94,13 +96,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Main.getGameData().setSelfId(id);
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_ALL_PLAYER_DATA);
+        System.out.println("SERVER_CLIENT_CLIENTID_REPLY id="+id+" -> CLIENT_SERVER_ALL_PLAYER_DATA");
     }
 
     public void s_c_auth_reply(int i, InetSocketAddress adr)
     {
         if(i == Protocol.REPLY_SUCCESS) {
 //            System.out.println("client succesfully listed. (server)");
-            System.out.println("SERVER_CLIENT_AUTH_REPLY success, client listed");
+            System.out.println("SERVER_CLIENT_AUTH_REPLY success (client listed)");
         }
         else {
 //            System.out.println("client failed to be listed. (server)");
@@ -127,11 +130,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             rep = Protocol.REPLY_FAILURE;
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_INIT_REPLY, argInt(rep));
+        System.out.println("SERVER_CLIENT_INIT map="+m+",maxPlayer="+t+" -> CLIENT_SERVER_INIT_REPLY ("+rep+")");
     }
 
     public void s_c_forced_nickchange(String n, InetSocketAddress adr) {
         Main.getGameData().setName(n);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_FORCED_NICKCHANGE_OK);
+        System.out.println("SERVER_CLIENT_FORCED_NICKCHANGE name="+n+" -> CLIENT_SERVER_FORCED_NICKCHANGE_OK");
     }
 
     public void s_c_connection_established(InetSocketAddress adr) {
@@ -143,6 +148,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_connection_terminated(InetSocketAddress adr) {
         net.setReallyConnected(false);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK);
+        System.out.println("SERVER_CLIENT_CONNECTION_TERMINATED -> CLIENT_SERVER_CONNECTION_TERMINATED_OK");
     }
 
     public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) {
@@ -155,10 +161,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
+        System.out.println("SERVER_CLIENT_PLAYER_DATA name="+name+",id="+id+",team="+team+" -> CLIENT_SERVER_PLAYER_DATA_OK");
     }
 
     public void s_c_player_info(int id, int wep, double posX, double posY,
-            double dirX, double dirY, InetSocketAddress adr) {
+                                double dirX, double dirY, InetSocketAddress adr) {
         if(!net.isReallyConnected())
             return;
 
@@ -168,6 +175,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setCurrentWeapon(wep);
             c.setPosition(posX, posY);
             c.setDirection(dirX, dirY);
+//            System.out.println("SERVER_CLIENT_PLAYER_INFO id="+id+",weapon="+wep+",posX="+posX+",posY="+posY+",dirX="+dirX+"dirY="+dirY);
         }
     }
 
@@ -175,48 +183,49 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.setReallyConnected(true);
         net.setServer(adr);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
+        System.out.println("SERVER_CLIENT_ALL_PLAYER_DATA_OK -> CLIENT_SERVER_JOINTEAM (TEAM_BLUE)");
     }
 
     public void s_c_event_player_joined(String n, InetSocketAddress adr) {
-        System.out.println("Player " + n + " joined.");
         net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_JOINED_OK);
+        System.out.println("SERVER_CLIENT_EVENT_PLAYER_JOINED name="+n+" -> CLIENT_SERVER_EVENT_PLAYER_JOINED_OK");
     }
 
     // --- chat fkt
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
         Main.getUiLobbyChat().appendMSG(msg); // LOBBY
-        System.out.println("CHAT: "+msg);
+        System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg);
     }
 
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr)
     {
         Main.getUiLobbyChat().appendMSG(msg); // LOBBY
-        System.out.println("CHAT: "+msg);
+        System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
     }
 
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
         Main.getUiLobbyChat().appendMSG(msg); // LOBBY
-        System.out.println("CHAT: "+msg);
+        System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
     }
 
     // --- end chat
     public void s_c_logoff_reply(int reply, InetSocketAddress adr)
     {
         if(reply == Protocol.REPLY_SUCCESS)
-            System.out.println("you have been succesfully logged off.");
+            System.out.println("SERVER_CLIENT_LOGOFF_REPLY success");
         else
-            System.out.println("log off failed");
+            System.out.println("SERVER_CLIENT_LOGOFF_REPLY failure");
     }
 
     public void s_c_jointeam_reply(int reply, int team, InetSocketAddress adr)
     {
         if(reply == Protocol.REPLY_SUCCESS) {
             Main.getGameData().getSelf().setTeam(team);
-            System.out.println("joined team " + team);
+            System.out.println("SERVER_CLIENT_JOINTEAM_REPLY success (team="+team+")");
         } else
-            System.out.println("join team failed");
+            System.out.println("SERVER_CLIENT_JOINTEAM_REPLY failure");
     }
 
     public void s_c_event_player_respawned(InetSocketAddress adr) {
@@ -224,6 +233,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         CPlayer self = Main.getGameData().getSelf();
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK);
+        System.out.println("SERVER_CLIENT_PLAYER_RESPAWNED -> CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK");
 
         if(!self.isDead())
             return;
@@ -239,16 +249,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_latency_reply(InetSocketAddress adr)
     {
         Main.refreshLatency(adr, System.nanoTime());
+        System.out.println("SERVER_CLIENT_LATENCY_REPLY");
     }
 
     public void s_c_current_map_reply(String map, InetSocketAddress adr)
     {
         Main.refreshCurrentMap(adr, map);
+        System.out.println("SERVER_CLIENT_CURRENT_MAP_REPLY");
     }
 
     public void s_c_players_reply(String players, InetSocketAddress adr)
     {
         Main.refreshPlayers(adr, players);
+        System.out.println("SERVER_CLIENT_PLAYERS_REPLY");
     }
 
     public void noReplyReceived(Packet p)

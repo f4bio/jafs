@@ -19,7 +19,7 @@ public class Network {
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
-    public static final int RESEND_INTERVAL = 200;
+    public static final int RESEND_INTERVAL = 500;
 
     private InetSocketAddress dest;
     private ProtocolHandler handler;
@@ -191,7 +191,7 @@ public class Network {
                 i = replyQueue.iterator();
                 while(i.hasNext()) {
                     p = i.next();
-                    if(p.getDatagram().equals(packet)) {
+                    if(p.equals(packet)) {
                         return;
                     }
                 }
