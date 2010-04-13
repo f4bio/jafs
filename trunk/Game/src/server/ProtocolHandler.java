@@ -69,10 +69,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             changed = true;
         }
 
-        if(changed) {
-            Main.getClient(adr).getPlayer().setName(name);
+        if(changed)     
             net.send(adr, ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, argStr(name));
-        }
+
+        Main.getClient(adr).getPlayer().setName(name);
 
         Main.getClient(adr).setStatus(Client.STATUS_CONNECTED);
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED);
@@ -101,7 +101,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Client[] c = Main.getClients();
 
         for(Client client : c) {
-            if(!client.getAddress().equals(adr)) {
+            if(client != null && !client.getAddress().equals(adr)) {
                 String name = client.getPlayer().getName();
                 int team = client.getTeamId();
                 int id = client.getId();
@@ -165,9 +165,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     // --- chat end
     public void c_s_jointeam(int teamId, InetSocketAddress adr){
-        if(Main.setClientTeamId(adr, teamId) == -1)
+        if(Main.setClientTeamId(adr, teamId) == -1) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                     argInt(Protocol.REPLY_FAILURE));
+            System.out.println("CLIENT_SERVER_JOINTEAM failure -> SERVER_CLIENT_JOINTEAM_REPLY (failure)");
+        }
         else {
             Client c = Main.getClient(adr);
 
@@ -176,7 +178,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                         argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED,
-                        argInt(c.getId()));
+                        argStr(Main.getClient(adr).getPlayer().getName()), argInt(c.getId()));
+                System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
         }
     }

@@ -78,26 +78,34 @@ public class Main {
 
         // Init Interfaces
         UiActionListener aListener = new UiActionListener(net);
+        UiKeyListener kListener = new UiKeyListener();
+
         uiMain = new MainMenu(screen);
         uiMain.setLocation(10, 200);
         uiMain.addActionListener(aListener);
+        uiMain.addKeyListener(kListener);
         uiMain.setMoveable(false);
         uiCreate = new CreateServer(screen);
         uiCreate.setLocation(200, 200);
         uiCreate.addActionListener(aListener);
+        uiCreate.addKeyListener(kListener);
         uiBrowser = new Serverbrowser(screen);
         uiBrowser.setLocation(200, 200);
         uiBrowser.addActionListener(aListener);
+        uiBrowser.addKeyListener(kListener);
         uiLobbyChat = new LobbyChat(screen);
         uiLobbyChat.setLocation(200, 200);
         uiLobbyChat.addActionListener(aListener);
+        uiLobbyChat.addKeyListener(kListener);
         uiOptions = new Options(screen);
         uiOptions.setLocation(200, 200);
         uiOptions.addActionListener(aListener);
+        uiOptions.addKeyListener(kListener);
         uiCredits = new Credits(screen);
         uiCredits.setLocation(screen.getWidth()/2  - uiCredits.getWidth()/2,
                               screen.getHeight()/2 - uiCredits.getHeight()/2);
         uiCredits.addActionListener(aListener);
+        uiCredits.addKeyListener(kListener);
  
         // UIManger
         UiManager.addComponent(uiMain);
@@ -116,7 +124,7 @@ public class Main {
 
         // GameData
         data = new GameData(input);
-        data.setName("PLAYA 51 ("+net.getHost()+":"+net.getPort()+")");
+        data.setName("PLAYA 51");// ("+net.getHost()+":"+net.getPort()+")");
 
         // UpdateLoop
         loop = new UpdateLoop(60);
@@ -135,6 +143,24 @@ public class Main {
 
     public static MainScreen getScreen() {
         return screen;
+    }
+
+    public static JFrame getFrame(){
+        return frame;
+    }
+
+    public static void hideUi(){
+        uiMain.setVisible(false);
+        uiCreate.setVisible(false);
+        uiBrowser.setVisible(false);
+        uiLobbyChat.setVisible(false);
+        uiOptions.setVisible(false);
+        uiCredits.setVisible(false);
+        frame.requestFocus();
+    }
+
+    public static void showUi(){
+        uiMain.setVisible(true);
     }
 
     public static GameData getGameData() {

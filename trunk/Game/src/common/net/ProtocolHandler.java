@@ -214,6 +214,7 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
 
                     case CLIENT_SERVER_EVENT_PLAYER_JOINED_OK:
+                        c_s_event_player_joined_ok(adr);
                         break;
                     case CLIENT_SERVER_EVENT_PLAYER_LEFT_OK:
                         break;
@@ -259,8 +260,6 @@ public abstract class ProtocolHandler implements Runnable {
                     case MASTER_CLIENT_CHAT_OK:
                         m_c_chat_ok(adr);
                         break;
-
-                        
                     case SERVER_CLIENT_INIT:
                         s_c_init(toStr(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
@@ -276,6 +275,48 @@ public abstract class ProtocolHandler implements Runnable {
                     case SERVER_CLIENT_CONNECTION_ESTABLISHED:
                         s_c_connection_established(adr);
                         break;
+                    case SERVER_CLIENT_CONNECTION_TERMINATED:
+                        s_c_connection_terminated(adr);
+                        break;
+                    case SERVER_CLIENT_PLAYER_DATA:
+                        s_c_player_data(toStr(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), adr);
+                        break;
+                    case SERVER_CLIENT_PLAYER_INFO:
+                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toDouble(data, idx[2]), toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        break;
+                    case SERVER_CLIENT_ALL_PLAYER_DATA_OK:
+                        s_c_all_player_data_ok(adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_JOINED:
+                        s_c_event_player_joined(toStr(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_CHAT_ALL:
+                        s_c_chat_all(toInt(data, idx[0]), toStr(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_CHAT_TEAM:
+                        s_c_chat_team(toInt(data, idx[0]), toStr(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_CHAT_PRIVATE:
+                        s_c_chat_private(toInt(data, idx[0]), toStr(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_LOGOFF_REPLY:
+                        s_c_logoff_reply(toInt(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_JOINTEAM_REPLY:
+                        s_c_jointeam_reply(toInt(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_RESPAWN:
+                        s_c_event_player_respawned(adr);
+                        break;
+                    case SERVER_CLIENT_FORCED_NICKCHANGE:
+                        s_c_forced_nickchange(toStr(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_CLIENTID_REPLY:
+                        s_c_clientid_reply(toInt(data, idx[0]), adr);
+                        break;
+                    case SERVER_CLIENT_CLIENTCOUNT:
+                        s_c_clientcount(toInt(data, idx[0]), adr);
+                        break;
                     case SERVER_CLIENT_LATENCY_REPLY:
                         s_c_latency_reply(adr);
                         break;
@@ -284,7 +325,6 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case SERVER_CLIENT_PLAYERS_REPLY:
                         s_c_players_reply(toStr(data, idx[0]), adr);
-                        break;
                 }
             }
         }
@@ -355,7 +395,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_connection_terminated(InetSocketAddress adr) { }
     public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) { }
     public void s_c_player_info(int id, int wep, double posX, double posY,
-            double dirX, double dirY, InetSocketAddress adr) { }
+                                double dirX, double dirY, InetSocketAddress adr) { }
     public void s_c_all_player_data_ok(InetSocketAddress adr) { }
     public void s_c_event_player_joined(String n, InetSocketAddress adr) { }
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr) { }

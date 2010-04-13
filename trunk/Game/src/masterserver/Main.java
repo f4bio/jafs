@@ -66,8 +66,9 @@ public class Main {
 
     public static void removeServer(Server server) {
         serverlist.remove(server);
+        System.out.println("Server dropped.");
 
-        System.out.println("Server " + server.getHost() + ":" + server.getPort() + " dropped." );
+        //System.out.println("Server " + server.getHost() + ":" + server.getPort() + " dropped." );
     }
 
     public static void removeServer(InetSocketAddress adr) {
@@ -144,7 +145,8 @@ public class Main {
 
     public static void removeClient(Client client) {
         clientlist.remove(client);
-        System.out.println("Client " + client.getHost() + ":" + client.getPort() + " dropped");
+        //System.out.println("Client " + client.getHost() + ":" + client.getPort() + " dropped");
+        System.out.println("Client dropped.");
     }
     public static void removeClient(InetSocketAddress adr) {
         removeClient(new Client(adr));

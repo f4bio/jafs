@@ -58,4 +58,22 @@ public class Packet {
     public InetSocketAddress getAddress() {
         return (InetSocketAddress)p.getSocketAddress();
     }
+
+    public boolean equals(DatagramPacket packet) {
+        byte[] ipOwn = p.getAddress().getAddress();
+        byte[] ipOther = packet.getAddress().getAddress();
+
+        for(int i=0; i<ipOwn.length; ++i) {
+            if(ipOwn[i] != ipOther[i])
+                return false;
+        }
+
+        if(p.getData()[0] != packet.getData()[0])
+            return false;
+
+        if(p.getPort() != packet.getPort())
+            return false;
+
+        return true;
+    }
 }
