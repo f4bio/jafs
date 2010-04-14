@@ -5,15 +5,31 @@
 
 package common.engine;
 
+import client.Main;
 import common.CVector2;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 /**
  *
  * @author miracle
  */
 public class CEntity {
+    public static final CVector2 VEC_DOWN = new CVector2(0, 1);
+    public static final CVector2 VEC_UP = new CVector2(0, -1);
+    public static final CVector2 VEC_LEFT = new CVector2(-1, 0);
+    public static final CVector2 VEC_RIGHT = new CVector2(1, 0);
+
+    public static final CVector2 VEC_UP_RIGHT = new CVector2(Math.sqrt(2)/2,
+            -Math.sqrt(2)/2);
+    public static final CVector2 VEC_UP_LEFT = new CVector2(-Math.sqrt(2)/2,
+            -Math.sqrt(2)/2);
+    public static final CVector2 VEC_DOWN_RIGHT = new CVector2(Math.sqrt(2)/2,
+            Math.sqrt(2)/2);
+    public static final CVector2 VEC_DOWN_LEFT = new CVector2(-Math.sqrt(2)/2,
+            Math.sqrt(2)/2);
+
     protected CVector2 position;
     protected CVector2 direction;
     protected double speed;
@@ -94,5 +110,104 @@ public class CEntity {
 
     public void render(Graphics2D g) {
         
+    }
+
+    public int collideWall(CMap map, CVector2 p){
+        Point g = p.get();
+        Point t;
+
+        if(map == null)
+            return -1;
+
+        int sX = size.width/2;
+        int sY = size.height/2;
+
+        Point around[] = {
+            new Point(g.x, g.y + sY),
+            new Point(g.x, g.y - sY),
+            new Point(g.x + sX, g.y),
+            new Point(g.x - sX, g.y),
+            new Point(g.x + sX, g.y + sY),
+            new Point(g.x - sX, g.y + sY),
+            new Point(g.x + sX, g.y - sY),
+            new Point(g.x - sX, g.y - sY)
+        };
+
+        int colId = -1;
+
+        for (int i = 0; i < around.length; i++) {
+
+            t = map.getTileByCoords(around[i]);
+            Tile hindrance = map.getTile(t.x, t.y);
+            if (hindrance == null || hindrance.getType() == Tile.TYPE_OBSTACLE){
+                colId = i;
+                break;
+            }
+        }
+
+        return colId;
+    }
+
+    public void move(CMap map, CVector2 mov, double speedfactor){
+        CVector2 next = position;
+        CVector2 last = next;
+
+        int colId = -1;
+        double m = speed * speedfactor;
+
+        for(int i = 1; i <= (int)m + 1; i++) {
+            last = next;
+            next = (i == (int)m + 1) ? position.add_cpy(mov.mul_cpy(m)) :
+                position.add_cpy(mov.mul_cpy(i));
+
+            colId = collideWall(map, next);
+
+            if(colId != -1){
+                break;
+            } else if(i == (int)m + 1) {
+                last = next;
+            }
+        }
+
+        setPosition(last);
+
+        if(colId == -1)
+            return;
+
+        double newSpeed;
+
+        if (mov.equals(VEC_UP_RIGHT)) {
+            if (colId != 2 && colId != 6 && colId != 4) {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_RIGHT, newSpeed);
+            } else {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_UP, newSpeed);
+            }
+        } else if (mov.equals(VEC_UP_LEFT)) {
+            if (colId != 3 && colId != 5 && colId != 7) {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_LEFT, newSpeed);
+            } else {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_UP, newSpeed);
+            }
+        } else if (mov.equals(VEC_DOWN_LEFT)) {
+            if (colId != 3 && colId != 5 && colId != 7) {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_LEFT, newSpeed);
+            } else {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_DOWN, newSpeed);
+            }
+        } else if (mov.equals(VEC_DOWN_RIGHT)) {
+            if (colId != 2 && colId != 6 && colId != 4) {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_RIGHT, newSpeed);
+            } else {
+                newSpeed = 0.5 * speedfactor;
+                move(map, VEC_DOWN, newSpeed);
+            }
+        }
     }
 }

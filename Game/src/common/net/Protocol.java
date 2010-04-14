@@ -234,7 +234,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, ARG_STRING);
 
-        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_PICKED, ARG_INT);

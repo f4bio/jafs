@@ -37,6 +37,13 @@ public class CVector2 {
         y += vec.y;
     }
 
+    public CVector2 add_cpy(CVector2 vec) {
+        if(vec == null)
+            return null;
+
+        return new CVector2(x + vec.x, y + vec.y);
+    }
+
     public void add(double x, double y) {
         this.x += x;
         this.y += y;
@@ -107,5 +114,11 @@ public class CVector2 {
         double n = norm();
 
         return new CVector2(x/(n/l), y/(n/l));
+    }
+
+    public boolean equals(CVector2 c) {
+        if(x == c.getX() && y == c.getY())
+            return true;
+        return false;
     }
 }

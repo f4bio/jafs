@@ -288,7 +288,7 @@ public abstract class ProtocolHandler implements Runnable {
                         s_c_all_player_data_ok(adr);
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_JOINED:
-                        s_c_event_player_joined(toStr(data, idx[0]), adr);
+                        s_c_event_player_joined(toStr(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case SERVER_CLIENT_CHAT_ALL:
                         s_c_chat_all(toInt(data, idx[0]), toStr(data, idx[1]), adr);
@@ -307,6 +307,9 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_RESPAWN:
                         s_c_event_player_respawned(adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED:
+                        s_c_event_player_team_changed(toInt(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case SERVER_CLIENT_FORCED_NICKCHANGE:
                         s_c_forced_nickchange(toStr(data, idx[0]), adr);
@@ -397,7 +400,8 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_player_info(int id, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) { }
     public void s_c_all_player_data_ok(InetSocketAddress adr) { }
-    public void s_c_event_player_joined(String n, InetSocketAddress adr) { }
+    public void s_c_event_player_joined(String n, int i, InetSocketAddress adr) { }
+    public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) { }
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr) { }
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr) { }
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr) { }

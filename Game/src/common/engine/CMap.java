@@ -100,14 +100,14 @@ public class CMap {
         int xx, yy;
 
         if(x < 0)
-            xx = 0;
+            xx = x-1;
         else if(x > sizeX * tileSizeX)
             xx = sizeX - 1;
         else
             xx = x / tileSizeX;
 
         if(y < 0)
-            yy = 0;
+            yy = y-1;
         else if(y > sizeY * tileSizeY)
             yy = sizeY - 1;
         else
@@ -117,7 +117,10 @@ public class CMap {
     }
 
     public Tile getTile(int x, int y) {
-        return tile[x][y];
+        if(x >= 0 && x < sizeX &&
+                y >= 0 && y < sizeY)
+            return tile[x][y];
+        return null;
     }
 
     public Point getTileByCoords(Point p) {

@@ -18,20 +18,6 @@ public class CPlayer extends CEntity {
     public static final int TEAM_RED = 1;
     public static final int TEAM_BLUE = 2;
 
-    public static final CVector2 VEC_DOWN = new CVector2(0, 1);
-    public static final CVector2 VEC_UP = new CVector2(0, -1);
-    public static final CVector2 VEC_LEFT = new CVector2(-1, 0);
-    public static final CVector2 VEC_RIGHT = new CVector2(1, 0);
-
-    public static final CVector2 VEC_UP_RIGHT = new CVector2(Math.sqrt(2)/2,
-            -Math.sqrt(2)/2);
-    public static final CVector2 VEC_UP_LEFT = new CVector2(-Math.sqrt(2)/2,
-            -Math.sqrt(2)/2);
-    public static final CVector2 VEC_DOWN_RIGHT = new CVector2(Math.sqrt(2)/2,
-            Math.sqrt(2)/2);
-    public static final CVector2 VEC_DOWN_LEFT = new CVector2(-Math.sqrt(2)/2,
-            Math.sqrt(2)/2);
-
     private int team;
     private CWeapon[] weapon;
     private int currentWeapon;
@@ -45,7 +31,7 @@ public class CPlayer extends CEntity {
         size = new Dimension(50, 50);
         speed = 3.0d;
         health = 0;
-        setPosition(0, 0);
+        setPosition(50, 50);
         setDirection(1, 0);
     }
 
