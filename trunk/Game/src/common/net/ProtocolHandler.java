@@ -107,7 +107,7 @@ public abstract class ProtocolHandler implements Runnable {
                         c_m_chat_private_ok(adr);
                         break;
                     case CLIENT_MASTER_AUTH:
-                        c_m_auth(adr);
+                        c_m_auth(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_MASTER_PONG:
                         c_m_pong(adr);
@@ -342,7 +342,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_m_joinserver(String host, int port, InetSocketAddress adr) { }
     public void c_m_pong(InetSocketAddress adr) { }
     public void c_m_listrequest(InetSocketAddress adr) { }
-    public void c_m_auth(InetSocketAddress adr) { }
+    public void c_m_auth(String name, InetSocketAddress adr) { }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr) { }
     public void c_m_chat_private(int id, String msg, InetSocketAddress adr) { }
     public void c_m_chat_private_ok(InetSocketAddress adr) { }

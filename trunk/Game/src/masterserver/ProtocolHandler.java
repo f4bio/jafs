@@ -61,9 +61,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
         net.send(adr, ProtocolCmd.MASTER_CLIENT_ENDLIST);
     }
-    public void c_m_auth(InetSocketAddress adr)
+    public void c_m_auth(String name, InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
+        client.getPlayer().setName(name);
+        System.out.println(client.getPlayer().getName()+" joined");
         if(client != null) {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
                     argInt(Protocol.REPLY_SUCCESS));

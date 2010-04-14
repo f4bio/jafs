@@ -168,7 +168,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE_OK, ARG_NONE);
         // ----
-        registerCmd(ProtocolCmd.CLIENT_MASTER_AUTH, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_MASTER_AUTH, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_MASTER_JOINSERVER, ARG_STRING, ARG_INT);
         registerCmd(ProtocolCmd.CLIENT_MASTER_LOGOFF, ARG_NONE);
 
