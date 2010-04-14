@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 
+import static common.net.ProtocolCmdArgument.*;
+
 /**
  *
  * @author Julian Sanio
@@ -62,9 +64,7 @@ public class Main {
         net.setProtocolHandler(pHandler);
         net.listen(net.getFreePort(50000, 65000));
 
-        // Anmeldung: Client -> Masterserver
-        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH);
-        //new Chat(net).start();
+        
 
         frame = new JFrame();
         frame.setIgnoreRepaint(true);
@@ -124,12 +124,15 @@ public class Main {
 
         // GameData
         data = new GameData(input);
-        data.setName("PLAYA 51");// ("+net.getHost()+":"+net.getPort()+")");
-
+        data.setName(System.getProperty("user.name"));// ("+net.getHost()+":"+net.getPort()+")");
         // UpdateLoop
         loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
         loop.addUpdateObject(data);
+
+        // Anmeldung: Client -> Masterserver
+        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));
+        //new Chat(net).start();
 
         EventQueue.invokeLater(new Runnable() {
            public void run() {
