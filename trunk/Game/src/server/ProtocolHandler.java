@@ -72,10 +72,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(changed)     
             net.send(adr, ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, argStr(name));
 
-        Main.getClient(adr).getPlayer().setName(name);
+        Client c = Main.getClient(adr);
 
-        Main.getClient(adr).setStatus(Client.STATUS_CONNECTED);
+        c.getPlayer().setName(name);
+
+        c.setStatus(Client.STATUS_CONNECTED);
+
+        int team = c.getTeamId();
+        int id = c.getId();
+
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
+                argStr(name), argInt(id), argInt(team));
+
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED);
+
+        Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED,
+                        argStr(c.getPlayer().getName()), argInt(c.getId()));
+
         System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY "+name+"(no SERVER_CLIENT_FORCED_NICKCHANGE) -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
     }
 
@@ -177,15 +190,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 c.setTeamId(teamId);
                 net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                         argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
-                Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED,
-                        argStr(Main.getClient(adr).getPlayer().getName()), argInt(c.getId()));
+
+                Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
+                        argInt(c.getId()) , argInt(teamId));
                 System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
         }
-    }
-
-    public void c_s_event_player_joined_ok(InetSocketAddress adr) {
-        
     }
 
     public void c_s_latency(InetSocketAddress adr){

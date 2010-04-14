@@ -186,9 +186,22 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("SERVER_CLIENT_ALL_PLAYER_DATA_OK -> CLIENT_SERVER_JOINTEAM (TEAM_BLUE)");
     }
 
-    public void s_c_event_player_joined(String n, InetSocketAddress adr) {
+    public void s_c_event_player_joined(String n, int id, InetSocketAddress adr) {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_JOINED_OK);
+
+        CPlayer player = new CPlayer();
+        player.setId(id);
+        Main.getGameData().addPlayer(player);
+
         System.out.println("SERVER_CLIENT_EVENT_PLAYER_JOINED name="+n+" -> CLIENT_SERVER_EVENT_PLAYER_JOINED_OK");
+    }
+
+    public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) {
+        CPlayer pl = Main.getGameData().getPlayer(p);
+        if(pl != null)
+            pl.setTeam(t);
+
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
     }
 
     // --- chat fkt

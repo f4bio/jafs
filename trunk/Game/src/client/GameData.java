@@ -65,7 +65,7 @@ public class GameData implements UpdateObject {
         }
 
         if(mov != null)
-            self.move(mov, u.getSpeedfactor());
+            self.move(getMap(), mov, u.getSpeedfactor());
 
         self.setDirection(input.getDirection());
 

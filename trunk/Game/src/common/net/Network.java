@@ -19,7 +19,7 @@ public class Network {
     public static final int MASTERPORT = 30000;
 
     public static final int RESEND_COUNT = 5;
-    public static final int RESEND_INTERVAL = 500;
+    public static final int RESEND_INTERVAL = 200;
 
     private InetSocketAddress dest;
     private ProtocolHandler handler;
