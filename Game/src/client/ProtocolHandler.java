@@ -61,13 +61,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("MASTER_CLIENT_JOINSERVER_REPLY: "+s);
     }
 
-    public void m_c_chat(int id, String msg, InetSocketAddress adr)
+    public void m_c_chat(int id, String sender, String msg, InetSocketAddress adr)
     {
         if(msg == null)
             System.out.println("MASTER_CLIENT_CHAT msg=null");
         if(id != -1){
-            Main.getUiLobbyChat().appendMSG("Player-"+id+": "+msg.replace("vXv", ";"));
-            System.out.println("MASTER_CLIENT_CHAT id="+id+",msg="+msg);
+            Main.getUiLobbyChat().appendMSG(sender+" (Player-"+id+"): "+msg.replace("vXv", ";"));
+            System.out.println("MASTER_CLIENT_CHAT id="+id+",sender="+sender+",msg="+msg);
         }
     }
 

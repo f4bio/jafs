@@ -263,7 +263,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_CLIENT_NEWLIST, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_ENDLIST, ARG_NONE);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_OK, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_PING, ARG_NONE);
 

@@ -14,10 +14,11 @@ public class UiKeyListener implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
 //        System.out.println("Pressed "+e.getKeyChar());
+    }
+
+    public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
             Main.hideUi();
         }
     }
-
-    public void keyReleased(KeyEvent e) {  }
 }

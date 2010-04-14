@@ -119,7 +119,7 @@ public class Main {
         for(Client client: clientlist)
             if(!client.isInGame())
                 net.send(client.getAddress(), ProtocolCmd.MASTER_CLIENT_CHAT,
-                        argInt(sender.getId()), argStr(msg));
+                        argInt(sender.getId()), argStr(sender.getPlayer().getName()), argStr(msg));
     }
 
     public static Client getClient(InetSocketAddress adr) {

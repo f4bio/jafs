@@ -91,11 +91,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_chat_private(int id, String msg, InetSocketAddress adr)
     {
+//        System.out.println(id+" "+msg);
         Client client = Main.getClient(id);
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK);
+        net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK);        
         if(client != null)
             net.send(client.getAddress(), ProtocolCmd.MASTER_CLIENT_CHAT,
-                    argInt(id), argStr(msg));
+                    argInt(client.getId()), argStr(msg));
         else
             net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT, argInt(-1),
                     argStr("No such player"));

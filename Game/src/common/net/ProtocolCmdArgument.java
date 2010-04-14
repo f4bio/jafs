@@ -10,7 +10,7 @@ public class ProtocolCmdArgument {
     public static final String charset = "US-ASCII";
 
     public static int terminatorIndex(byte[] b, int from) {
-        for(int i=0; i<b.length; ++i) {
+        for(int i=from; i<b.length; ++i) {
             if(b[i] == Protocol.STRING_TERMINATOR)
                 return i;
         }
