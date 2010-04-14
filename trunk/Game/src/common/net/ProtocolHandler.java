@@ -69,7 +69,9 @@ public abstract class ProtocolHandler implements Runnable {
 
             for(int i=packet.getOffset(); i<packet.getLength(); ++i) {
                 data[i] = recv[i];
+                //System.out.print(recv[i] + " ");
             }
+            //System.out.println(packet.getLength());
             
             int index = 1;
             
@@ -77,7 +79,9 @@ public abstract class ProtocolHandler implements Runnable {
                 switch(param[i]) {
                     case Protocol.ARG_STRING:
                         idx[i] = index;
+                        ///System.out.println(index);
                         index = ProtocolCmdArgument.terminatorIndex(data, index) + 1;
+                        //System.out.println(index);
                         break;
                         
                     case Protocol.ARG_NONE:
@@ -85,6 +89,7 @@ public abstract class ProtocolHandler implements Runnable {
                     
                     default:
                         idx[i] = index;
+                        //System.out.println(index);
                         index += Protocol.ARG_SIZE[param[i]];
                 }
             }
@@ -101,7 +106,8 @@ public abstract class ProtocolHandler implements Runnable {
                         c_m_chat_lobby(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_MASTER_CHAT_PRIVATE:
-                        c_m_chat_private(toInt(data, idx[0]), toStr(data, idx[0]), adr);
+//                        c_m_chat_private(toInt(data, idx[0]), "test", adr);
+                        c_m_chat_private(toInt(data, idx[0]), toStr(data, idx[1]), adr);
                         break;
                     case CLIENT_MASTER_CHAT_PRIVATE_OK:
                         c_m_chat_private_ok(adr);
@@ -176,7 +182,7 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_SERVER_PLAYER_INFO:
                         c_s_player_info(toInt(data, idx[0]), toInt(data, idx[1]),
                                 toDouble(data, idx[2]), toDouble(data, idx[3]),
-                                toDouble(data, idx[3]), toDouble(data, idx[4]), adr);
+                                toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
                         break;
                     case CLIENT_SERVER_JOINTEAM:
                         c_s_jointeam(toInt(data, idx[0]), adr);
@@ -201,7 +207,7 @@ public abstract class ProtocolHandler implements Runnable {
                         c_s_chat_team(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_SERVER_CHAT_PRIVATE:
-                        c_s_chat_private(toStr(data, idx[1]), toInt(data, idx[0]), adr);
+                        c_s_chat_private(toStr(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case CLIENT_SERVER_CHAT_ALL_OK:
                         c_s_chat_all_ok(adr);
@@ -255,7 +261,7 @@ public abstract class ProtocolHandler implements Runnable {
                         m_c_endlist(adr);
                         break;
                     case MASTER_CLIENT_CHAT:
-                        m_c_chat(toInt(data, idx[0]), toStr(data, idx[1]), adr);
+                        m_c_chat(toInt(data, idx[0]), toStr(data, idx[1]), toStr(data, idx[2]), adr);
                         break;
                     case MASTER_CLIENT_CHAT_OK:
                         m_c_chat_ok(adr);
@@ -385,7 +391,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void m_c_endlist(InetSocketAddress adr) { }
     public void m_c_auth_reply(int i, InetSocketAddress adr) { }
     public void m_c_joinserver_reply(String s, InetSocketAddress adr) { }
-    public void m_c_chat(int id, String msg, InetSocketAddress adr) { }
+    public void m_c_chat(int id, String sender, String msg, InetSocketAddress adr) { }
     public void m_c_ping(InetSocketAddress adr) { }
     public void s_c_ping(InetSocketAddress adr) { }
     public void s_c_clientcount(int i, InetSocketAddress adr) { }

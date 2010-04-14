@@ -132,7 +132,7 @@ public class Main {
 
         // Anmeldung: Client -> Masterserver
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));
-        //new Chat(net).start();
+        new Chat(net).start();
 
         EventQueue.invokeLater(new Runnable() {
            public void run() {
@@ -153,17 +153,28 @@ public class Main {
     }
 
     public static void hideUi(){
-        uiMain.setVisible(false);
-        uiCreate.setVisible(false);
-        uiBrowser.setVisible(false);
-        uiLobbyChat.setVisible(false);
-        uiOptions.setVisible(false);
-        uiCredits.setVisible(false);
-        frame.requestFocus();
+        EventQueue.invokeLater(new Runnable() {
+           public void run() {
+                uiMain.setVisible(false);
+                uiCreate.setVisible(false);
+                uiBrowser.setVisible(false);
+                uiLobbyChat.setVisible(false);
+                uiOptions.setVisible(false);
+                uiCredits.setVisible(false);
+                frame.requestFocus();
+           }
+        });
+        
     }
 
     public static void showUi(){
-        uiMain.setVisible(true);
+        EventQueue.invokeLater(new Runnable() {
+           public void run() {
+                uiMain.setVisible(true);
+                uiMain.requestFocus();
+           }
+        });
+        
     }
 
     public static GameData getGameData() {

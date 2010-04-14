@@ -5,6 +5,10 @@ import common.net.Protocol;
 import common.net.ProtocolCmd;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+
+import static common.net.ProtocolCmdArgument.*;
+
 
 /**
  *
@@ -17,7 +21,7 @@ public class Chat extends Thread{
 
     @Override
     public void run() {
-        /*in = new BufferedReader(new InputStreamReader(System.in));
+        in = new BufferedReader(new InputStreamReader(System.in));
         while(running) {
             try{
                 System.out.print("Type in your msg/cmd: ");
@@ -38,29 +42,36 @@ public class Chat extends Thread{
                     }
                     // join server
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {
-                        net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), Integer.parseInt(input.substring(input.indexOf(":")+1)), Protocol.CLIENT_SERVER_AUTH);
+//                        new InetSocketAdress(input.substring(input.indexOf(" ")+1,input.indexOf(":")), argInt(Integer.parseInt(input.substring(input.indexOf(":")+1))));
+                        net.send(new InetSocketAddress(input.substring(input.indexOf(" ")+1,input.indexOf(":")),
+                                Integer.parseInt(input.substring(input.indexOf(":")+1))),
+                                ProtocolCmd.CLIENT_SERVER_AUTH);
+//                        net.send(input.substring(input.indexOf(" ")+1,input.indexOf(":")), argInt(Integer.parseInt(input.substring(input.indexOf(":")+1))), ProtocolCmd.CLIENT_SERVER_AUTH);
                         net.send(Network.MASTERHOST, Network.MASTERPORT,
-                                 ProtocolCmd.CLIENT_MASTER_JOINSERVER, input.substring(input.indexOf(" ")), Integer.parseInt(input.substring(input.indexOf(":")+1)));
+                                 ProtocolCmd.CLIENT_MASTER_JOINSERVER, argStr(input.substring(input.indexOf(" "))), argInt(Integer.parseInt(input.substring(input.indexOf(":")+1))));
                     }
                      // lobby chat
                     else if(input.startsWith("/lobbychat") || input.startsWith("/lc")) {
-                        net.send(Network.MASTERHOST, Network.MASTERPORT, Protocol.CLIENT_MASTER_CHAT_LOBBY, input.substring(input.indexOf(" ")));
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, argStr(input.substring(input.indexOf(" "))));
                     }
                     // Join team
                     else if(input.startsWith("/jointeam") || input.startsWith("/jt")) {
                         net.send("localhost", 40000, 
-                                ProtocolCmd.CLIENT_SERVER_JOINTEAM, Integer.parseInt(input.split(" ")[1]));
+                                ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(Integer.parseInt(input.split(" ")[1])));
                     }
                     // Team Chat
                     else if(input.startsWith("/teamchat") || input.startsWith("/tc")) {
                         net.send("localhost", 40000,
-                                Protocol.CLIENT_SERVER_CHAT_TEAM, input.substring(input.indexOf(" ")));
+                                ProtocolCmd.CLIENT_SERVER_CHAT_TEAM, argStr(input.substring(input.indexOf(" "))));
                     }
                     // private Chat
                     else if(input.startsWith("/private") || input.startsWith("/p")) {
                         String[] zwi = input.split(" ");
-                        net.send(Network.MASTERHOST, Network.MASTERPORT,
-                                Protocol.CLIENT_MASTER_CHAT_PRIVATE, Integer.parseInt(zwi[1]),input.substring(input.indexOf(" ", input.indexOf(zwi[1]))));
+                        System.out.println("private id:"+Integer.parseInt(zwi[1])+",msg:"+input.substring(input.indexOf(" ", input.indexOf(zwi[1]))));                        
+                        net.send(Network.MASTERHOST,
+                                 Network.MASTERPORT,
+                                 ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE,
+                                 argInt(Integer.parseInt(zwi[1])), argStr(input.substring(input.indexOf(" ", input.indexOf(zwi[1])))));
                     }
 
                 }               
@@ -69,7 +80,7 @@ public class Chat extends Thread{
             } catch(Exception e) {
                 System.out.println(e);
             }
-        }*/
+        }
     }
 
     public Chat(common.net.Network net) {

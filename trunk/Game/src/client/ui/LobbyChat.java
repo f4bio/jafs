@@ -8,6 +8,7 @@ package client.ui;
 
 import client.render.MainScreen;
 import java.awt.event.ActionListener;
+import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -19,6 +20,8 @@ public class LobbyChat extends UiWindow {
     public LobbyChat(MainScreen scr) {
         super(scr);
         initComponents();
+        DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
