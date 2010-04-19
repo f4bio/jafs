@@ -99,23 +99,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                  ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
                  argShort(Protocol.LIST_TYPE_CLIENTLIST));
     }
-    public void m_c_chat(int senderID, short type, String msg, InetSocketAddress adr)
+    public void m_c_chat(int senderID, String msg, InetSocketAddress adr)
     {
-        System.out.print("MASTER_CLIENT_CHAT senderID="+senderID+",type="+type+",msg="+msg);
+        System.out.println("MASTER_CLIENT_CHAT senderID="+senderID+",msg="+msg);
         if(msg == null)
             System.out.println(" msg=null");
         if(senderID != -1){
-            // private
-            if(type == Protocol.CHAT_TYPE_PRIVATE) {
-                System.out.println(" (private)");
-                Main.getMainMenu().appendIncommingMSG(true, senderID, msg);
-            }
-            // public
-            else {
-                System.out.println(" (public)");
-                Main.getMainMenu().appendIncommingMSG(false, senderID, msg);
-            }
+            Main.getMainMenu().appendIncommingMSG(false, senderID, -1, msg);
         }
+    }
+
+    public void m_c_chat_private(int senderID, int recieverID, String msg, InetSocketAddress adr) {
+        System.out.println("MASTER_CLIENT_CHAT senderID="+senderID+",receiverID="+recieverID+"msg="+msg);
+        Main.getMainMenu().appendIncommingMSG(true, senderID, recieverID, msg);
     }
 
     public void m_c_chat_ok (InetSocketAddress adr)

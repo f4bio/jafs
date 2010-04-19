@@ -50,9 +50,6 @@ public class Protocol {
     public static final short LIST_TYPE_SERVERLIST = 1;
     public static final short LIST_TYPE_CLIENTLIST = 2;
 
-    public static final short CHAT_TYPE_PUBLIC = 1;
-    public static final short CHAT_TYPE_PRIVATE = 2;
-
     public static void registerCmd(ProtocolCmd command, byte... arg) {
         cmdTable.put(command, arg);
     }
@@ -270,7 +267,8 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY_SERVER, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY_CLIENT, ARG_STRING, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_ENDLIST, ARG_SHORT);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_SHORT, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_PRIVATE, ARG_INT, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_OK, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_PING, ARG_NONE);
 

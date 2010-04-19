@@ -92,7 +92,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     private void openPrivateChatTab(int id) {
         jTabbedPane1.addTab(clientlist.get(id).getName(), clientlist.get(id).getTextArea());
-        jTabbedPane1.setToolTipTextAt(id, "Doubleclick to close private chat tab.");
+//        jTabbedPane1.setToolTipTextAt(id, "Doubleclick to close private chat tab.");
         jTabbedPane1.setSelectedIndex(jTabbedPane1.getTabCount()-1);
     }
 
@@ -110,9 +110,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
-    private int getPrivateChatTabId(int clientID){
-        if(Main.getGameData().getSelfId() == clientID)
-            return Main.getGameData().getSelfId();
+    private int getClientlistIndex(int clientID){
         for(int i=0; i<clientlist.size(); i++) {
             if(clientlist.get(i).getID() == clientID)
                 return i;
@@ -121,16 +119,20 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         return -1;
     }
 
-    public void appendIncommingMSG(boolean privateMsg, int senderID, String msg){
+    public void appendIncommingMSG(boolean privateMsg, int senderID, int recieverID, String msg){
         System.out.print("appendIncommingMSG(...)");
         // PRIVATE
         if(privateMsg) {
-            System.out.println(" (private msg, senderID="+senderID+")");
-            openPrivateChatTab(getPrivateChatTabId(senderID));
-            System.out.println("bla");
-
-            // Integer.parseInt(jTabbedPane1.getSelectedComponent().getName())
-//            clientlist.get(getPrivateChatTabId(senderID)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
+            System.out.println(" (private msg, id"+senderID+" to id "+recieverID+" :"+msg+")");
+            if(recieverID == Main.getGameData().getSelfId()) {
+//                System.out.println("msg to this client -> from id"+senderID);
+                openPrivateChatTab(getClientlistIndex(senderID));
+                clientlist.get(getClientlistIndex(senderID)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
+            } else {
+//                System.out.println("msg to other client -> to id"+recieverID);
+                openPrivateChatTab(getClientlistIndex(recieverID));
+                clientlist.get(getClientlistIndex(recieverID)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
+            }
         }
         // PUBLIC
         else {
@@ -407,16 +409,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private ServerbrowserTableModel sModel;
     private DefaultListModel listModel;
 
-   /**
-    * @param args the command line arguments
-    */
-//    public static void main(String args[]) {
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new MainMenu().setVisible(true);
-//            }
-//        });
-//    }
 
     public void actionPerformed(ActionEvent e) {
         // Senden
@@ -456,8 +448,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     public void mouseClicked(MouseEvent e) {
         // Open private tab
-        if (e.getSource() == jList1 && e.getClickCount() == 2) {
+        if (e.getSource() == jList1 && !listModel.isEmpty() && e.getClickCount() == 2) {
             openPrivateChatTab(jList1.locationToIndex(e.getPoint()));
+            System.out.println("opening tab index "+jList1.locationToIndex(e.getPoint()));
         }
         // Close private tab
         else if (e.getSource() == jTabbedPane1 && jTabbedPane1.getSelectedIndex() != 0 && e.getClickCount() == 2) {
