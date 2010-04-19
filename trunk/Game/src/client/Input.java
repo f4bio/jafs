@@ -64,7 +64,7 @@ public class Input implements KeyListener, MouseMotionListener {
                 key_d = false;
         }
         if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
-            Main.showUi();
+//            Main.showUi();
         }
     }
 

@@ -100,7 +100,7 @@ public abstract class ProtocolHandler implements Runnable {
                         c_m_joinserver(toStr(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case CLIENT_MASTER_LISTREQUEST:
-                        c_m_listrequest(adr);
+                        c_m_listrequest(toShort(data, idx[0]), adr);
                         break;
                     case CLIENT_MASTER_CHAT_LOBBY:
                         c_m_chat_lobby(toStr(data, idx[0]), adr);
@@ -249,19 +249,25 @@ public abstract class ProtocolHandler implements Runnable {
                         m_c_joinserver_reply(toStr(data, idx[0]), adr);
                         break;
                     case MASTER_CLIENT_AUTH_REPLY:
-                        m_c_auth_reply(toInt(data, idx[0]), adr);
+                        m_c_auth_reply(toInt(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case MASTER_CLIENT_CLIENTLIST_CHANGED:
+                        m_c_clientlist_changed(adr);
                         break;
                     case MASTER_CLIENT_NEWLIST:
-                        m_c_newlist(adr);
+                        m_c_newlist(toShort(data, idx[0]), adr);
                         break;
-                    case MASTER_CLIENT_LISTENTRY:
-                        m_c_listentry(toStr(data, idx[0]), adr);
+                    case MASTER_CLIENT_LISTENTRY_SERVER:
+                        m_c_listentry_server(toStr(data, idx[0]), adr);
+                        break;
+                    case MASTER_CLIENT_LISTENTRY_CLIENT:
+                        m_c_listentry_client(toStr(data, idx[0]), toInt(data, idx[1]), toStr(data, idx[2]), adr);
                         break;
                     case MASTER_CLIENT_ENDLIST:
-                        m_c_endlist(adr);
+                        m_c_endlist(toShort(data, idx[0]), adr);
                         break;
                     case MASTER_CLIENT_CHAT:
-                        m_c_chat(toInt(data, idx[0]), toStr(data, idx[1]), toStr(data, idx[2]), adr);
+                        m_c_chat(toInt(data, idx[0]), toShort(data, idx[1]), toStr(data, idx[2]), adr);
                         break;
                     case MASTER_CLIENT_CHAT_OK:
                         m_c_chat_ok(adr);
@@ -347,7 +353,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_m_servercount(InetSocketAddress adr) { }
     public void c_m_joinserver(String host, int port, InetSocketAddress adr) { }
     public void c_m_pong(InetSocketAddress adr) { }
-    public void c_m_listrequest(InetSocketAddress adr) { }
+    public void c_m_listrequest(short type, InetSocketAddress adr) { }
     public void c_m_auth(String name, InetSocketAddress adr) { }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr) { }
     public void c_m_chat_private(int id, String msg, InetSocketAddress adr) { }
@@ -386,12 +392,14 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_s_players(InetSocketAddress adr) { }
 
     //Client
-    public void m_c_newlist(InetSocketAddress adr) { }
-    public void m_c_listentry(String server, InetSocketAddress adr) { }
-    public void m_c_endlist(InetSocketAddress adr) { }
-    public void m_c_auth_reply(int i, InetSocketAddress adr) { }
+    public void m_c_newlist(short type, InetSocketAddress adr) { }
+    public void m_c_listentry_server(String serverAdr, InetSocketAddress adr) { }
+    public void m_c_listentry_client(String clientAdr, int id, String name, InetSocketAddress adr) { }
+    public void m_c_endlist(short type, InetSocketAddress adr) { }
+    public void m_c_auth_reply(int i, int id, InetSocketAddress adr) { }
     public void m_c_joinserver_reply(String s, InetSocketAddress adr) { }
-    public void m_c_chat(int id, String sender, String msg, InetSocketAddress adr) { }
+    public void m_c_chat(int senderID, short type, String msg, InetSocketAddress adr) { }
+    public void m_c_clientlist_changed(InetSocketAddress adr) { }
     public void m_c_ping(InetSocketAddress adr) { }
     public void s_c_ping(InetSocketAddress adr) { }
     public void s_c_clientcount(int i, InetSocketAddress adr) { }

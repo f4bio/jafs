@@ -2,6 +2,7 @@ package client.ui;
 
 import client.Main;
 import common.net.Network;
+import common.net.Protocol;
 import common.net.ProtocolCmd;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,29 +36,32 @@ public class UiActionListener implements ActionListener {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
         
         // Server erstellen
-        if(e.getActionCommand().equals(CMD_TOGGLE_CREATESERVER)) {
-            Main.getUiCreateServer().setVisible(Main.getUiCreateServer().isVisible() ? false : true);
-        }
+//        if(e.getActionCommand().equals(CMD_TOGGLE_CREATESERVER)) {
+//            Main.getUiCreateServer().setVisible(Main.getUiCreateServer().isVisible() ? false : true);
+//        }
         // Serverbrowser
-        else if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
+        if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
+            System.out.println("CMD_TOGGLE_SERVERBROWSER");
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
-                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
-            Main.getUiServerbrowser().setVisible(Main.getUiServerbrowser().isVisible() ? false : true);
+                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
+                     argShort(Protocol.LIST_TYPE_SERVERLIST));
+//            Main.getUiServerbrowser().setVisible(Main.getUiServerbrowser().isVisible() ? false : true);
         }
         // Lobby Chat
-        else if(e.getActionCommand().equals(CMD_TOGGLE_LOBBYCHAT)) {
-            Main.getUiLobbyChat().setVisible(Main.getUiLobbyChat().isVisible() ? false : true);
-        }
+//        else if(e.getActionCommand().equals(CMD_TOGGLE_LOBBYCHAT)) {
+//            Main.getUiLobbyChat().setVisible(Main.getUiLobbyChat().isVisible() ? false : true);
+//        }
         // Options
-        else if(e.getActionCommand().equals(CMD_TOGGLE_OPTIONS)) {
-            Main.getUiOptions().setVisible(Main.getUiOptions().isVisible() ? false : true);
-        }
+//        else if(e.getActionCommand().equals(CMD_TOGGLE_OPTIONS)) {
+//            Main.getUiOptions().setVisible(Main.getUiOptions().isVisible() ? false : true);
+//        }
         // Serverliste aktualisieren
         else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
-                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
+                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
+                     argShort(Protocol.LIST_TYPE_SERVERLIST));
         }
         // Mit Server verbinden
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
@@ -72,20 +76,18 @@ public class UiActionListener implements ActionListener {
                 net.send(Main.getSelectedServer().getAddress(),
                          ProtocolCmd.CLIENT_SERVER_AUTH);
                 System.out.println("CLIENT_SERVER_AUTH");
-                Main.hideUi();
+                Main.getScreen().setVisible(true);
+                Main.getFrame().setVisible(true);
+//                Main.hideUi();
             }
         }
         // Credits
-        else if(e.getActionCommand().equals(CMD_TOGGLE_CREDITS)) {
-            Main.getUiCredits().setVisible(Main.getUiCredits().isVisible() ? false : true);
-        }
+//        else if(e.getActionCommand().equals(CMD_TOGGLE_CREDITS)) {
+//            Main.getUiCredits().setVisible(Main.getUiCredits().isVisible() ? false : true);
+//        }
         // Lobby Chat SendMSG
         else if(e.getActionCommand().equals(CMD_LOBBYCHAT_SEND_MSG)) {
-            String msg = Main.getUiLobbyChat().getMSG();
-            if (msg != null && !msg.equals(""))
-                net.send(Network.MASTERHOST,
-                         Network.MASTERPORT,
-                         ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, argStr(msg));
+            Main.getMainMenu().sendLobbyMsg();
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {

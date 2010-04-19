@@ -38,7 +38,11 @@ public class Chat extends Thread{
 
                     // Show Serverlist
                     else if(input.startsWith("/serverlist") || input.startsWith("/sl")) {
-                        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST);
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST, argShort(Protocol.LIST_TYPE_SERVERLIST));
+                    }
+                    // Show Clientlist
+                    else if(input.startsWith("/clientlist") || input.startsWith("/cl")) {
+                        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_LISTREQUEST, argShort(Protocol.LIST_TYPE_CLIENTLIST));
                     }
                     // join server
                     else if(input.startsWith("/joinserver") || input.startsWith("/js")) {

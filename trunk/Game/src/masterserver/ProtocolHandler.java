@@ -24,12 +24,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         Server added = Main.addServer(adr);
         if(added != null) {
-            net.send(adr, ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
-                    argInt(Protocol.REPLY_SUCCESS));
+            net.send(adr,
+                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
+                     argInt(Protocol.REPLY_SUCCESS));
             System.out.println("SERVER_MASTER_AUTH success -> MASTER_SERVER_AUTH_REPLY (REPLY_SUCCESS)");
         } else {
-            net.send(adr, ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
-                    argInt(Protocol.REPLY_FAILURE));
+            net.send(adr,
+                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
+                     argInt(Protocol.REPLY_FAILURE));
             System.out.println("SERVER_MASTER_AUTH failure -> MASTER_SERVER_AUTH_REPLY (REPLY_FAILURE)");
         }
     }
@@ -52,33 +54,60 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        System.out.println("c_m_joinserver()");
     }
 
-    public void c_m_listrequest(InetSocketAddress adr)
+    public void c_m_listrequest(short type, InetSocketAddress adr)
     {
-        String[] list = Main.getServerlist();
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_NEWLIST);
-        for(String i : list) {
-            net.send(adr, ProtocolCmd.MASTER_CLIENT_LISTENTRY, argStr(i));
+        System.out.print("CLIENT_MASTER_LISTREQUEST");
+        if(type == Protocol.LIST_TYPE_SERVERLIST){
+            System.out.println(" (LIST_TYPE_SERVERLIST)");
+            String[] list = Main.getServerlist();
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_NEWLIST, argShort(Protocol.LIST_TYPE_SERVERLIST));
+            for(String i : list) {
+                net.send(adr, ProtocolCmd.MASTER_CLIENT_LISTENTRY_SERVER, argStr(i));
+            }
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_ENDLIST, argShort(Protocol.LIST_TYPE_SERVERLIST));
+        } else {
+            System.out.println(" (LIST_TYPE_CLIENTLIST)");
+            Client[] list = Main.getClientlist();
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_NEWLIST, argShort(Protocol.LIST_TYPE_CLIENTLIST));
+            for(Client i : list) {
+                if(!i.getAddress().equals(adr))
+                    net.send(adr, ProtocolCmd.MASTER_CLIENT_LISTENTRY_CLIENT,
+                             argStr(i.getHost()+":"+i.getPort()),
+                             argInt(i.getId()),
+                             argStr(i.getPlayer().getName()));
+            }
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_ENDLIST, argShort(Protocol.LIST_TYPE_CLIENTLIST));
+            System.out.println("MASTER_CLIENT_ENDLIST");
         }
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_ENDLIST);
+        
     }
     public void c_m_auth(String name, InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
         client.getPlayer().setName(name);
-        System.out.println(client.getPlayer().getName()+" joined");
         if(client != null) {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
-                    argInt(Protocol.REPLY_SUCCESS));
-            System.out.println("CLIENT_MASTER_AUTH success -> MASTER_CLIENT_AUTH_REPLY (REPLY_SUCCESS)");
+                     argInt(Protocol.REPLY_SUCCESS),
+                     argInt(client.getId()));
+            System.out.println("CLIENT_MASTER_AUTH success (id="+client.getId()+") -> MASTER_CLIENT_AUTH_REPLY (REPLY_SUCCESS)");
+            System.out.println("Client \""+client.getPlayer().getName()+"\" joined!");
+            System.out.println("MASTER_CLIENT_CLIENTLIST_CHANGED");
+
+            Client[] list = Main.getClientlist();
+            for(Client i : list) {
+                net.send(i.getAddress(), ProtocolCmd.MASTER_CLIENT_CLIENTLIST_CHANGED);
+            }
         }
         else {
-            net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
-                    argInt(Protocol.REPLY_FAILURE));
+            net.send(adr,
+                     ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
+                     argInt(Protocol.REPLY_FAILURE));
             System.out.println("CLIENT_MASTER_AUTH failure -> MASTER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
     }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {
+        System.out.println("CLIENT_MASTER_CHAT_LOBBY msg="+msg);
         net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK);
         Main.broadcast(msg, adr);
     }
@@ -91,19 +120,40 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_chat_private(int id, String msg, InetSocketAddress adr)
     {
-//        System.out.println(id+" "+msg);
+        System.out.println("CLIENT_MASTER_CHAT_PRIVATE id="+id+", msg="+msg);
         Client client = Main.getClient(id);
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK);        
-        if(client != null)
-            net.send(client.getAddress(), ProtocolCmd.MASTER_CLIENT_CHAT,
-                    argInt(client.getId()), argStr(msg));
-        else
-            net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT, argInt(-1),
-                    argStr("No such player"));
+        Client sender = Main.getClient(adr);
+        net.send(sender.getAddress(),
+                 ProtocolCmd.MASTER_CLIENT_CHAT_OK);
+        if(client != null) {
+            // to sender
+            net.send(sender.getAddress(),
+                     ProtocolCmd.MASTER_CLIENT_CHAT,
+                     argInt(sender.getId()),
+                     argShort(Protocol.CHAT_TYPE_PRIVATE),
+                     argStr(msg));
+            // to id
+            net.send(client.getAddress(),
+                     ProtocolCmd.MASTER_CLIENT_CHAT,
+                     argInt(sender.getId()),
+                     argShort(Protocol.CHAT_TYPE_PRIVATE),
+                     argStr(msg));
+        } else {
+            net.send(adr,
+                     ProtocolCmd.MASTER_CLIENT_CHAT,
+                     argInt(-1),
+                     argShort(Protocol.CHAT_TYPE_PRIVATE),
+                     argStr("No such player"));
+        }
     }
 
     public void c_m_logoff(InetSocketAddress adr){
+        System.out.println("CLIENT_MASTER_LOGOFF");
         Main.removeClient(adr);
+        Client[] list = Main.getClientlist();
+        for(Client i : list) {
+            net.send(i.getAddress(), ProtocolCmd.MASTER_CLIENT_CLIENTLIST_CHANGED);
+        }
     }
 
     public void noReplyReceived(Packet p)
