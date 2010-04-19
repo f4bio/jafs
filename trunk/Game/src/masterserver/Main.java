@@ -133,7 +133,6 @@ public class Main {
                 net.send(client.getAddress(),
                          ProtocolCmd.MASTER_CLIENT_CHAT,
                          argInt(sender.getId()),
-                         argShort(Protocol.CHAT_TYPE_PUBLIC),
                          argStr(msg));
     }
 

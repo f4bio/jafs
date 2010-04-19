@@ -267,7 +267,10 @@ public abstract class ProtocolHandler implements Runnable {
                         m_c_endlist(toShort(data, idx[0]), adr);
                         break;
                     case MASTER_CLIENT_CHAT:
-                        m_c_chat(toInt(data, idx[0]), toShort(data, idx[1]), toStr(data, idx[2]), adr);
+                        m_c_chat(toInt(data, idx[0]), toStr(data, idx[1]), adr);
+                        break;
+                    case MASTER_CLIENT_CHAT_PRIVATE:
+                        m_c_chat_private(toInt(data, idx[0]), toInt(data, idx[1]), toStr(data, idx[2]), adr);
                         break;
                     case MASTER_CLIENT_CHAT_OK:
                         m_c_chat_ok(adr);
@@ -356,7 +359,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_m_listrequest(short type, InetSocketAddress adr) { }
     public void c_m_auth(String name, InetSocketAddress adr) { }
     public void c_m_chat_lobby(String msg, InetSocketAddress adr) { }
-    public void c_m_chat_private(int id, String msg, InetSocketAddress adr) { }
+    public void c_m_chat_private(int receiverID, String msg, InetSocketAddress adr) { }
     public void c_m_chat_private_ok(InetSocketAddress adr) { }
     public void c_m_logoff(InetSocketAddress adr) { }
 
@@ -398,7 +401,10 @@ public abstract class ProtocolHandler implements Runnable {
     public void m_c_endlist(short type, InetSocketAddress adr) { }
     public void m_c_auth_reply(int i, int id, InetSocketAddress adr) { }
     public void m_c_joinserver_reply(String s, InetSocketAddress adr) { }
-    public void m_c_chat(int senderID, short type, String msg, InetSocketAddress adr) { }
+    public void m_c_chat(int senderID, String msg, InetSocketAddress adr) { }
+    public void m_c_chat_private(int senderID, int recieverID, String msg, InetSocketAddress adr) { }
+
+
     public void m_c_clientlist_changed(InetSocketAddress adr) { }
     public void m_c_ping(InetSocketAddress adr) { }
     public void s_c_ping(InetSocketAddress adr) { }

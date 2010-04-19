@@ -118,31 +118,30 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //    }
 
 
-    public void c_m_chat_private(int id, String msg, InetSocketAddress adr)
+    public void c_m_chat_private(int receiverID, String msg, InetSocketAddress adr)
     {
-        System.out.println("CLIENT_MASTER_CHAT_PRIVATE id="+id+", msg="+msg);
-        Client client = Main.getClient(id);
+        System.out.println("CLIENT_MASTER_CHAT_PRIVATE receiverID="+receiverID+", msg="+msg);
+        Client receiver = Main.getClient(receiverID);
         Client sender = Main.getClient(adr);
         net.send(sender.getAddress(),
                  ProtocolCmd.MASTER_CLIENT_CHAT_OK);
-        if(client != null) {
+        if(receiver != null) {
             // to sender
             net.send(sender.getAddress(),
-                     ProtocolCmd.MASTER_CLIENT_CHAT,
+                     ProtocolCmd.MASTER_CLIENT_CHAT_PRIVATE,
                      argInt(sender.getId()),
-                     argShort(Protocol.CHAT_TYPE_PRIVATE),
+                     argInt(receiver.getId()),
                      argStr(msg));
             // to id
-            net.send(client.getAddress(),
-                     ProtocolCmd.MASTER_CLIENT_CHAT,
+            net.send(receiver.getAddress(),
+                     ProtocolCmd.MASTER_CLIENT_CHAT_PRIVATE,
                      argInt(sender.getId()),
-                     argShort(Protocol.CHAT_TYPE_PRIVATE),
+                     argInt(receiver.getId()),
                      argStr(msg));
         } else {
             net.send(adr,
                      ProtocolCmd.MASTER_CLIENT_CHAT,
                      argInt(-1),
-                     argShort(Protocol.CHAT_TYPE_PRIVATE),
                      argStr("No such player"));
         }
     }
