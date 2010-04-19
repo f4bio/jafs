@@ -49,7 +49,7 @@ public class UiManager {
 
     public static void setForeground(UiWindow u) {
         for(int i=0; i<content.size(); i++) {
-            if(content.get(i) != Main.getUiMainMenu())
+//            if(content.get(i) != Main.getUiMainMenu())
                 content.get(i).setBackground(UiWindow.UI_COLOR_IN_BACKGROUND);
         }
 

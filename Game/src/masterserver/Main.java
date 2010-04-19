@@ -103,6 +103,18 @@ public class Main {
 
         return srv;
     }
+
+    public static Client[] getClientlist() {
+        Client[] cl = new Client[clientlist.size()];
+        int i = 0;
+        for(Client current : clientlist) {
+            cl[i] = current;
+            i++;
+        }
+
+        return cl;
+    }
+
     public static Client getClient(int id){
         for(Client client: clientlist)
             if(client.getId() == id)
@@ -118,8 +130,11 @@ public class Main {
         Client sender = getClient(adr);
         for(Client client: clientlist)
             if(!client.isInGame())
-                net.send(client.getAddress(), ProtocolCmd.MASTER_CLIENT_CHAT,
-                        argInt(sender.getId()), argStr(sender.getPlayer().getName()), argStr(msg));
+                net.send(client.getAddress(),
+                         ProtocolCmd.MASTER_CLIENT_CHAT,
+                         argInt(sender.getId()),
+                         argShort(Protocol.CHAT_TYPE_PUBLIC),
+                         argStr(msg));
     }
 
     public static Client getClient(InetSocketAddress adr) {

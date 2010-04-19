@@ -2,6 +2,7 @@ package client;
 
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.net.Client;
 import common.net.Network;
 import common.net.Packet;
 import common.net.Protocol;
@@ -17,6 +18,7 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
+
     public ProtocolHandler(Network net) {
         super(net, ProtocolHandler.MODE_CLIENT);
     }
@@ -27,47 +29,92 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        System.out.println("MASTER_CLIENT_PING -> CLIENT_MASTER_PONG");
     }
 
-    public void m_c_newlist(InetSocketAddress adr)
+    public void m_c_newlist(short type, InetSocketAddress adr)
     {
-        Main.clearServerlist();
-        System.out.println("MASTER_CLIENT_NEWLIST");
-    }
-
-    public void m_c_listentry(String serverStr, InetSocketAddress adr)
-    {
-        Server server = new Server(serverStr.split(":")[0], Integer.parseInt(serverStr.split(":")[1]));
-        if(server != null){
-            Main.addServerToServerlist(server);
-            System.out.println("MASTER_CLIENT_LISTENTRY ("+server.getHostPort()+")");
+        if(type == Protocol.LIST_TYPE_SERVERLIST){
+            Main.clearServerlist();
+            System.out.println("MASTER_CLIENT_NEWLIST (server)");
+        } else {
+            Main.clearClientlist();
+            System.out.println("MASTER_CLIENT_NEWLIST (client)");
         }
     }
 
-    public void m_c_endlist(InetSocketAddress adr)
+    public void m_c_listentry_server(String serverAdr, InetSocketAddress adr)
     {
-        Main.completeServerlist();
-        System.out.println("MASTER_CLIENT_ENDLIST");
+        System.out.print("MASTER_CLIENT_LISTENTRY_SERVER");
+        Server server = new Server(serverAdr.split(":")[0], Integer.parseInt(serverAdr.split(":")[1]));
+        if(server != null){
+            Main.addServerToServerlist(server);
+            System.out.println(" ("+server.getHostPort()+")");
+        }
+    }
+    
+    public void m_c_listentry_client(String clientAdr, int id, String name, InetSocketAddress adr)
+    {
+        System.out.print("MASTER_CLIENT_LISTENTRY_CLIENT");
+        Client client = new Client(clientAdr.split(":")[0], Integer.parseInt(clientAdr.split(":")[1]));
+        client.setId(id);
+        client.getPlayer().setName(name);
+        if(client != null){
+            Main.addClientToClientlist(client);
+            System.out.println(" ("+client.getHost()+":"+ client.getPort() +")");
+        }
     }
 
-    public void m_c_auth_reply(int i, InetSocketAddress adr)
+    public void m_c_endlist(short type, InetSocketAddress adr)
     {
-        if(i == Protocol.REPLY_SUCCESS)
-            System.out.println("MASTER_CLIENT_AUTH_REPLY success");
-        else
+        if(type == Protocol.LIST_TYPE_SERVERLIST){
+            Main.completeServerlist();
+            System.out.println("MASTER_CLIENT_ENDLIST (server)");
+        } else {
+            // complete clientlist
+            System.out.println("MASTER_CLIENT_ENDLIST (client)");
+        }
+        
+    }
+
+    public void m_c_auth_reply(int i, int id, InetSocketAddress adr)
+    {
+        if(i == Protocol.REPLY_SUCCESS){
+//            net.send(Network.MASTERHOST,
+//                     Network.MASTERPORT,
+//                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
+//                     argShort(Protocol.LIST_TYPE_CLIENTLIST));
+            Main.getGameData().setSelfId(id);
+            System.out.println("MASTER_CLIENT_AUTH_REPLY success (id="+id+")");
+        } else
             System.out.println("MASTER_CLIENT_AUTH_REPLY failure");
     }
 
     public void m_c_joinserver_reply(String s, InetSocketAddress adr)
     {
-        System.out.println("MASTER_CLIENT_JOINSERVER_REPLY: "+s);
+        System.out.println("MASTER_CLIENT_JOINSERVER_REPLY ("+s+")");
     }
 
-    public void m_c_chat(int id, String sender, String msg, InetSocketAddress adr)
+    public void m_c_clientlist_changed(InetSocketAddress adr) {
+        System.out.println("MASTER_CLIENT_CLIENTLIST_CHANGED -> CLIENT_MASTER_LISTREQUEST (clientlist)");
+        net.send(Network.MASTERHOST,
+                 Network.MASTERPORT,
+                 ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
+                 argShort(Protocol.LIST_TYPE_CLIENTLIST));
+    }
+    public void m_c_chat(int senderID, short type, String msg, InetSocketAddress adr)
     {
+        System.out.print("MASTER_CLIENT_CHAT senderID="+senderID+",type="+type+",msg="+msg);
         if(msg == null)
-            System.out.println("MASTER_CLIENT_CHAT msg=null");
-        if(id != -1){
-            Main.getUiLobbyChat().appendMSG(sender+" (Player-"+id+"): "+msg.replace("vXv", ";"));
-            System.out.println("MASTER_CLIENT_CHAT id="+id+",sender="+sender+",msg="+msg);
+            System.out.println(" msg=null");
+        if(senderID != -1){
+            // private
+            if(type == Protocol.CHAT_TYPE_PRIVATE) {
+                System.out.println(" (private)");
+                Main.getMainMenu().appendIncommingMSG(true, senderID, msg);
+            }
+            // public
+            else {
+                System.out.println(" (public)");
+                Main.getMainMenu().appendIncommingMSG(false, senderID, msg);
+            }
         }
     }
 
@@ -207,19 +254,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat fkt
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg);
     }
 
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
     }
 
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
     }
 

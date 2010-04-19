@@ -18,7 +18,7 @@ public class UiKeyListener implements KeyListener {
 
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            Main.hideUi();
+//            Main.hideUi();
         }
     }
 }

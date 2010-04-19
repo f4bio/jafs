@@ -47,6 +47,11 @@ public class Protocol {
     public static final String ARG_SEPERATOR = ";";
     public static final char STRING_TERMINATOR = 3;
 
+    public static final short LIST_TYPE_SERVERLIST = 1;
+    public static final short LIST_TYPE_CLIENTLIST = 2;
+
+    public static final short CHAT_TYPE_PUBLIC = 1;
+    public static final short CHAT_TYPE_PRIVATE = 2;
 
     public static void registerCmd(ProtocolCmd command, byte... arg) {
         cmdTable.put(command, arg);
@@ -162,7 +167,7 @@ public class Protocol {
     public static void init() {
         //----- Client commands
         registerCmd(ProtocolCmd.CLIENT_MASTER_PONG, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_MASTER_LISTREQUEST, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_MASTER_LISTREQUEST, ARG_SHORT);
         // chat
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
@@ -259,11 +264,13 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_SERVER_SERVERCOUNT, ARG_INT);
 
         registerCmd(ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY, ARG_STRING);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, ARG_INT);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_NEWLIST, ARG_NONE);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY, ARG_STRING);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_ENDLIST, ARG_NONE);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_STRING, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_CLIENTLIST_CHANGED, ARG_NONE);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, ARG_INT, ARG_INT);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_NEWLIST, ARG_SHORT);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY_SERVER, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY_CLIENT, ARG_STRING, ARG_INT, ARG_STRING);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_ENDLIST, ARG_SHORT);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT, ARG_INT, ARG_SHORT, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_OK, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_PING, ARG_NONE);
 
