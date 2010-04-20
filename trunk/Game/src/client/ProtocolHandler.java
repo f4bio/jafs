@@ -262,8 +262,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat fkt
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
-        System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg);
+        System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg+" -> CLIENT_SERVER_CHAT_ALL_OK");
         Main.getUiInGameChat().appendMSG(Main.getClientName(id)+": "+msg);
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK);
     }
 
     public void s_c_chat_all_ok(InetSocketAddress adr) {

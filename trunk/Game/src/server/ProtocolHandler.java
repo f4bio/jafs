@@ -165,10 +165,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat fkt
     public void c_s_chat_all(String msg, InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_CHAT_ALL (msg="+msg+")-> SERVER_CLIENT_CHAT_ALL_OK");
-        
-        Main.broadcast_chat(msg, adr);
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK);
+        Main.broadcast_chat(msg, adr);
 //        net.send(adr, Protocol.server_client_chat, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+adr.getHostName()+":"+adr.getPort()+"): "+msg);
+    }
+    
+    public void c_s_chat_all_ok(InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_CHAT_ALL_OK");
     }
 
     // team wird aus der clientlist geholt, muss nicht übergeben werden

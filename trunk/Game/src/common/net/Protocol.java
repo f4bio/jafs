@@ -226,7 +226,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_PING, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, ARG_INT);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_ALL, ARG_STRING);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_ALL, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_TEAM, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE, ARG_STRING, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK, ARG_NONE);
@@ -326,6 +326,8 @@ public class Protocol {
                 ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
                 ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK);
+        registerCmdReply(ProtocolCmd.SERVER_CLIENT_CHAT_ALL,
+                ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_TEAM,
                 ProtocolCmd.SERVER_CLIENT_CHAT_TEAM_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE,
