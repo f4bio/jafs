@@ -7,24 +7,30 @@
 package client.ui;
 
 import client.render.MainScreen;
+import common.net.Client;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.DefaultListModel;
 import javax.swing.text.DefaultCaret;
 
 /**
  *
  * @author Julian Sanio
  */
-public class InGameChat extends UiWindow {
+public class InGameChat extends UiWindow implements MouseListener {
 
     /** Creates new form LobbyChat */
     public InGameChat(MainScreen scr) {
         super(scr);
+        listModel = new DefaultListModel();
         initComponents();
         jList1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
+        jList1.addMouseListener(this);
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         setUndecorated(true);
         setMoveable(false);
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         setSize(getPreferredSize().width, getPreferredSize().height);
     }
 
@@ -72,11 +78,8 @@ public class InGameChat extends UiWindow {
         add(jButton1);
         jButton1.setBounds(229, 398, 81, 21);
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        jList1.setModel(listModel);
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jList1);
 
         add(jScrollPane2);
@@ -90,6 +93,10 @@ public class InGameChat extends UiWindow {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+    private DefaultListModel listModel;
+    private int[] idlist = new int[16];
+    private int privateChatID = 0;
+    private boolean privateChatMode = false;
 
     @Override
     public void addActionListener(ActionListener a) {
@@ -97,6 +104,25 @@ public class InGameChat extends UiWindow {
         jButton1.addActionListener(a);
         jTextField1.setActionCommand(UiActionListener.CMD_INGAMECHAT_SEND_MSG);
         jTextField1.addActionListener(a);
+    }
+
+    public int getSelectedPrivateChatID(){
+        return privateChatID;
+    }
+
+    public boolean isPrivateChatMode(){
+        return privateChatMode;
+    }
+
+    public void clearClientlist(){
+        listModel.clear();
+        repaint();
+    }
+
+    public void addClientToList(Client client){
+        idlist[listModel.size()] = client.getId();
+        listModel.addElement(client.getPlayer().getName());
+        repaint();
     }
 
     public String getMSG() {
@@ -112,4 +138,22 @@ public class InGameChat extends UiWindow {
     public void clearMsgField() {
         jTextField1.setText("");
     }
+
+    
+    public void mouseClicked(MouseEvent e) {
+        // Open private tab
+        if (e.getSource() == jList1 && !listModel.isEmpty()) {
+            privateChatID = idlist[jList1.locationToIndex(e.getPoint())];
+            System.out.println("selected id="+privateChatID);
+            privateChatMode = true;
+        }
+    }
+
+    public void mousePressed(MouseEvent e) {  }
+
+    public void mouseReleased(MouseEvent e) {  }
+
+    public void mouseEntered(MouseEvent e) {  }
+
+    public void mouseExited(MouseEvent e) {  }
 }

@@ -179,8 +179,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Main.broadcast_chat_team(msg, adr);
     }
     
-    public void c_s_chat_private(String msg, int to, InetSocketAddress adr){
+    public void c_s_chat_private(int to, String msg, InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_CHAT_PRIVATE -> SERVER_CLIENT_CHAT_PRIVATE_OK");
         Main.broadcast_chat_private(msg, to, adr);
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE_OK);
+    }
+
+    public void c_s_chat_private_ok(InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_CHAT_PRIVATE_OK");
     }
 
     // --- chat end

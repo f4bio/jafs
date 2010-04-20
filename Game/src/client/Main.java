@@ -182,6 +182,7 @@ public class Main {
     public static void addClientToClientlist(Client c){
         clientlist.add(c);
         mainMenu.addClientToList(c);
+        uiInGameChat.addClientToList(c);
     }
 
     public static void clearServerlist(){
@@ -191,6 +192,7 @@ public class Main {
     public static void clearClientlist(){
         clientlist.clear();
         mainMenu.clearClientlist();
+        uiInGameChat.clearClientlist();
     }
 
     public static void completeServerlist() {

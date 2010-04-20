@@ -213,7 +213,7 @@ public abstract class ProtocolHandler implements Runnable {
                         c_s_chat_team(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_SERVER_CHAT_PRIVATE:
-                        c_s_chat_private(toStr(data, idx[0]), toInt(data, idx[1]), adr);
+                        c_s_chat_private(toInt(data, idx[0]), toStr(data, idx[1]), adr);
                         break;
                     case CLIENT_SERVER_CHAT_ALL_OK:
                         c_s_chat_all_ok(adr);
@@ -224,7 +224,6 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_SERVER_CHAT_PRIVATE_OK:
                         c_s_chat_private_ok(adr);
                         break;
-
                     case CLIENT_SERVER_EVENT_PLAYER_JOINED_OK:
                         c_s_event_player_joined_ok(adr);
                         break;
@@ -326,6 +325,9 @@ public abstract class ProtocolHandler implements Runnable {
                     case SERVER_CLIENT_CHAT_PRIVATE:
                         s_c_chat_private(toInt(data, idx[0]), toStr(data, idx[1]), adr);
                         break;
+                    case SERVER_CLIENT_CHAT_PRIVATE_OK:
+                        s_c_chat_private_ok(adr);
+                        break;
                     case SERVER_CLIENT_LOGOFF_REPLY:
                         s_c_logoff_reply(toInt(data, idx[0]), adr);
                         break;
@@ -400,7 +402,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_s_chat_all_ok(InetSocketAddress adr) { }
     public void c_s_chat_team(String msg, InetSocketAddress adr) { }
     public void c_s_chat_team_ok(InetSocketAddress adr) { }
-    public void c_s_chat_private(String msg, int to, InetSocketAddress adr) { }
+    public void c_s_chat_private(int to, String msg, InetSocketAddress adr) { }
     public void c_s_chat_private_ok(InetSocketAddress adr) { }
     public void c_s_jointeam(int teamId, InetSocketAddress adr) { }
     public void c_s_event_player_joined_ok(InetSocketAddress adr) { }
@@ -439,6 +441,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_chat_all_ok(InetSocketAddress adr) { }
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr) { }
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr) { }
+    public void s_c_chat_private_ok(InetSocketAddress adr) { }
     public void s_c_logoff_reply(int reply, InetSocketAddress adr) { }
     public void s_c_jointeam_reply(int reply, int team, InetSocketAddress adr) { }
     public void s_c_event_player_respawned(InetSocketAddress adr) { }

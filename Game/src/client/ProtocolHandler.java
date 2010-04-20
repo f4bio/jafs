@@ -273,14 +273,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiInGameChat().appendMSG("(TEAM)"+Main.getClientName(id)+": "+msg);
+        Main.getUiInGameChat().appendMSG("(TEAM) "+Main.getClientName(id)+": "+msg);
         System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
     }
 
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiInGameChat().appendMSG(msg); // LOBBY
+        Main.getUiInGameChat().appendMSG("(PRIVAT) " + Main.getClientName(id) + ": " + msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE_OK);
+    }
+
+    public void s_c_chat_private_ok(InetSocketAddress adr) {
+        System.out.println("SERVER_CLIENT_CHAT_PRIVATE_OK");
     }
 
     // --- end chat

@@ -81,10 +81,25 @@ public class UiActionListener implements ActionListener {
         // InGame Chat senden
         else if(e.getActionCommand().equals(CMD_INGAMECHAT_SEND_MSG)) {
             String msg = Main.getUiInGameChat().getMSG();
-            System.out.println("CLIENT_SERVER_CHAT_ALL (server="+net.getServer()+", msg="+msg+")");
-            net.send(net.getServer(),
-                     ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
-                     argStr(msg));
+            // private chat
+            if(Main.getUiInGameChat().isPrivateChatMode()){
+                System.out.println("CLIENT_SERVER_CHAT_PRIVATE (server="+net.getServer()+", msg="+msg+")");
+                net.send(net.getServer(),
+                         ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE,
+                         argInt(Main.getUiInGameChat().getSelectedPrivateChatID()),
+                         argStr(msg));
+            }
+            // team chat
+//            else if(msg.startsWith("/t")){
+//                //
+//            }
+            // public chat
+            else {
+                System.out.println("CLIENT_SERVER_CHAT_ALL (server="+net.getServer()+", msg="+msg+")");
+                net.send(net.getServer(),
+                         ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
+                         argStr(msg));
+            }
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
