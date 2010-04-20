@@ -21,6 +21,7 @@ public class UiActionListener implements ActionListener {
     public static final String CMD_CONNECT                  = "3";
     public static final String CMD_REFRESH_SERVERBROWSER    = "4";
     public static final String CMD_LOBBYCHAT_SEND_MSG       = "5";
+    public static final String CMD_NICKCHANGE               = "6";
 
     private Network net;
 
@@ -45,6 +46,14 @@ public class UiActionListener implements ActionListener {
                      ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
                      argShort(Protocol.LIST_TYPE_SERVERLIST));
         }
+        // Nick change
+        else if(e.getActionCommand().equals(CMD_NICKCHANGE)) {
+            net.send(Network.MASTERHOST,
+                     Network.MASTERPORT,
+                     ProtocolCmd.CLIENT_MASTER_NICKCHANGE,
+                     argStr(Main.getMainMenu().getPlayerName()));
+            Main.getMainMenu().enableOptions(false);
+        }
         // Mit Server verbinden
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
             if(Main.getSelectedServer() != null) {
@@ -58,6 +67,8 @@ public class UiActionListener implements ActionListener {
                 net.send(Main.getSelectedServer().getAddress(),
                          ProtocolCmd.CLIENT_SERVER_AUTH);
                 System.out.println("CLIENT_SERVER_AUTH");
+                Main.getMainMenu().enableLobby(false);
+                Main.getMainMenu().setVisible(false);
                 Main.getScreen().setVisible(true);
                 Main.getFrame().setVisible(true);
             }
@@ -68,10 +79,6 @@ public class UiActionListener implements ActionListener {
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
-            if(net.getServer() != null)
-                net.send(net.getServer().getHostName(),
-                         net.getServer().getPort(),
-                         ProtocolCmd.CLIENT_SERVER_LOGOFF);
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LOGOFF);

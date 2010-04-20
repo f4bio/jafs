@@ -29,6 +29,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        System.out.println("MASTER_CLIENT_PING -> CLIENT_MASTER_PONG");
     }
 
+    public void m_c_nickchange_ok(InetSocketAddress adr)
+    {
+        System.out.println("MASTER_CLIENT_NICKCHANGE_OK");
+        Main.getGameData().setName(Main.getMainMenu().getPlayerName());
+        Main.getMainMenu().enableOptions(true);
+    }
+
+    public void m_c_forced_nickchange(String forcedNick, InetSocketAddress adr)
+    {
+        System.out.print("MASTER_CLIENT_FORCED_NICKCHANGE");
+        Main.getGameData().setName(forcedNick);
+        Main.getMainMenu().setPlayerName(forcedNick);
+        Main.getMainMenu().enableOptions(true);
+        System.out.println(" -> CLIENT_MASTER_FORCED_NICKCHANGE_OK");
+        net.send(adr, ProtocolCmd.CLIENT_MASTER_FORCED_NICKCHANGE_OK);
+    }
+
     public void m_c_newlist(short type, InetSocketAddress adr)
     {
         if(type == Protocol.LIST_TYPE_SERVERLIST){
@@ -83,7 +100,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //                     argShort(Protocol.LIST_TYPE_CLIENTLIST));
             Main.getGameData().setSelfId(id);
             Main.getMainMenu().enableLobby(true);
-            Main.getMainMenu().appendIncommingMSG(false, -1, id, "Connection established!\n");
+//            Main.getMainMenu().appendIncommingMSG(false, -1, id, "Connection established!\n");
             System.out.println("MASTER_CLIENT_AUTH_REPLY success (id="+id+")");
         } else
             System.out.println("MASTER_CLIENT_AUTH_REPLY failure");
@@ -199,7 +216,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
-        System.out.println("SERVER_CLIENT_PLAYER_DATA name="+name+",id="+id+",team="+team+" -> CLIENT_SERVER_PLAYER_DATA_OK");
+        System.out.println("SERVER_CLIENT_PLAYER_DATA name="+name+",id="+id+",teamid="+team+" -> CLIENT_SERVER_PLAYER_DATA_OK");
     }
 
     public void s_c_player_info(int id, int wep, double posX, double posY,

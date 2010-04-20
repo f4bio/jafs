@@ -173,4 +173,46 @@ public class Main {
             handler.c_m_listrequest(Protocol.LIST_TYPE_CLIENTLIST, i.getAddress());
         }
     }
+
+    public static boolean nameExists(String name, String ignoreName) {
+        if(ignoreName != null){
+            for(Client c : clientlist) {
+                if(c != null && !c.getPlayer().getName().equals(ignoreName)) {
+                    if(name.equalsIgnoreCase(c.getPlayer().getName()))
+                        return true;
+                }
+            }
+            return false;
+        } else {
+            for(Client c : clientlist) {
+                if(c != null) {
+                    if(name.equalsIgnoreCase(c.getPlayer().getName()))
+                        return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public static String checkNick(String nick, InetSocketAddress adr){
+        System.out.print("CLIENT_MASTER_NICKCHANGE ("+nick+")");
+
+        boolean changed = false;
+
+        while(Main.nameExists(nick, getClient(adr).getPlayer().getName())) {
+            nick = nick.concat("*");
+            changed = true;
+        }
+
+        if(changed) {
+            System.out.println(" -> MASTER_CLIENT_FORCED_NICKCHANGE ("+nick+")");
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_FORCED_NICKCHANGE, argStr(nick));
+        } else {
+            System.out.println(" -> MASTER_CLIENT_NICKCHANGE_OK");
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK);
+        }
+        Main.getClient(adr).getPlayer().setName(nick);
+        Main.broadcastClientlist();
+        return nick;
+    }
 }

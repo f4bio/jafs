@@ -147,18 +147,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_s_clientcount(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT,
-                argInt(Main.clientCount()));
+                 argInt(Main.clientCount()));
     }
 
     public void c_s_clientid(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY,
-                argInt(Main.getClient(adr).getId()));
+                 argInt(Main.getClient(adr).getId()));
     }
 
     public void c_s_logoff(InetSocketAddress adr){
+        System.out.println("CLIENT_SERVER_LOGOFF");
         Main.removeClient(adr);
         net.send(adr, ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY,
-                argInt(Protocol.REPLY_SUCCESS));
+                 argInt(Protocol.REPLY_SUCCESS));
     }
 
     // --- chat fkt
@@ -187,7 +188,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             Client c = Main.getClient(adr);
 
             if(c != null) {
-                c.setTeamId(teamId);
+
+                if(Main.getClients().length % 2 == 1)
+                    c.setTeamId(0);
+                else
+                    c.setTeamId(1);
+
+//                c.setTeamId(teamId);
                 net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                         argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
 

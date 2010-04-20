@@ -165,6 +165,10 @@ public class Protocol {
         //----- Client commands
         registerCmd(ProtocolCmd.CLIENT_MASTER_PONG, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_MASTER_LISTREQUEST, ARG_SHORT);
+        registerCmd(ProtocolCmd.CLIENT_MASTER_NICKCHANGE, ARG_STRING);
+        registerCmd(ProtocolCmd.CLIENT_MASTER_FORCED_NICKCHANGE_OK, ARG_NONE);
+
+
         // chat
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE, ARG_INT, ARG_STRING);
@@ -270,6 +274,9 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_PRIVATE, ARG_INT, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.MASTER_CLIENT_CHAT_OK, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_PING, ARG_NONE);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK, ARG_NONE);
+        registerCmd(ProtocolCmd.MASTER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
+
 
         //----- Associate commands with replies
         registerCmdReply(ProtocolCmd.SERVER_MASTER_AUTH,
@@ -292,10 +299,16 @@ public class Protocol {
                 ProtocolCmd.CLIENT_MASTER_PONG);
         registerCmdReply(ProtocolCmd.MASTER_SERVER_PING,
                 ProtocolCmd.SERVER_MASTER_PONG);
+        registerCmdReply(ProtocolCmd.MASTER_CLIENT_FORCED_NICKCHANGE,
+                ProtocolCmd.CLIENT_MASTER_FORCED_NICKCHANGE_OK);
         // Ping <-> Pong
 
         registerCmdReply(ProtocolCmd.CLIENT_MASTER_JOINSERVER,
                 ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY);
+
+        registerCmdReply(ProtocolCmd.CLIENT_MASTER_NICKCHANGE,
+                ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK);
+
 
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_INIT,
                 ProtocolCmd.CLIENT_SERVER_INIT_REPLY);
