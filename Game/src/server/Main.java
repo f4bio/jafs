@@ -199,7 +199,7 @@ public class Main {
             return;
 
         for(Client c: client) {
-            System.out.print("broadcast_chat(...)");
+            System.out.print(" broadcast_chat(...)");
             if(c != null && c.getStatus() != Client.STATUS_PENDING) {
                 net.send(c.getAddress(),
                          ProtocolCmd.SERVER_CLIENT_CHAT_ALL,

@@ -80,10 +80,11 @@ public class UiActionListener implements ActionListener {
         }
         // InGame Chat senden
         else if(e.getActionCommand().equals(CMD_INGAMECHAT_SEND_MSG)) {
-            System.out.println("connected server "+net.getServer());
+            String msg = Main.getUiInGameChat().getMSG();
+            System.out.println("CLIENT_SERVER_CHAT_ALL (server="+net.getServer()+", msg="+msg+")");
             net.send(net.getServer(),
                      ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
-                     argStr(Main.getUiInGameChat().getMSG()));
+                     argStr(msg));
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
