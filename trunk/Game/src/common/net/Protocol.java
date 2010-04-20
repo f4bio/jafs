@@ -330,8 +330,6 @@ public class Protocol {
                 ProtocolCmd.SERVER_CLIENT_CHAT_TEAM_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE,
                 ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE_OK);
-        registerCmdReply(ProtocolCmd.SERVER_CLIENT_CHAT_ALL,
-                ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK);
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_CHAT_TEAM,
                 ProtocolCmd.CLIENT_SERVER_CHAT_TEAM_OK);
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,

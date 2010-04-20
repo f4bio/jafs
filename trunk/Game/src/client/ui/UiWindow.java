@@ -76,7 +76,7 @@ public abstract class UiWindow extends JPanel
         isMousePressed = false;
         isUndecorated = false;
 
-        setBackground(UI_COLOR_ON_TOP);
+//        setBackground(UI_COLOR_ON_TOP);
         addMouseListener(this);
         addMouseMotionListener(this);
         createBuffer();
@@ -150,7 +150,7 @@ public abstract class UiWindow extends JPanel
         
         if(gc != null)
             buffer = gc.createCompatibleVolatileImage(getWidth(),
-                    getHeight(), Transparency.TRANSLUCENT);
+                     getHeight(), Transparency.TRANSLUCENT);
     }
 
     public VolatileImage getBuffer() {

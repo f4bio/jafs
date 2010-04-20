@@ -200,7 +200,7 @@ public class Network {
             }
         }
 
-        System.out.println("Sending: " + Protocol.getCmdById(packet.getData()[0]));
+//        System.out.println("Sending: " + Protocol.getCmdById(packet.getData()[0]));
         outQueue.add(packet);
         nOut.wakeUp();
     }

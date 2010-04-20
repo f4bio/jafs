@@ -199,9 +199,15 @@ public class Main {
             return;
 
         for(Client c: client) {
-            if(c != null && c.getStatus() != Client.STATUS_PENDING)
-                net.send(c.getAddress(), ProtocolCmd.SERVER_CLIENT_CHAT_ALL,
-                        argInt(from.getId()), argStr(msg));
+            System.out.print("broadcast_chat(...)");
+            if(c != null && c.getStatus() != Client.STATUS_PENDING) {
+                net.send(c.getAddress(),
+                         ProtocolCmd.SERVER_CLIENT_CHAT_ALL,
+                         argInt(from.getId()),
+                         argStr(msg));
+                System.out.println(" !Client.STATUS_PENDING ("+c.getAddress()+") -> SERVER_CLIENT_CHAT_ALL (id="+from.getId()+", msg="+msg+")");
+            } else
+                System.out.println(" Client.STATUS_PENDING -> no broadcast.");
         }
     }
 
