@@ -251,9 +251,6 @@ public abstract class ProtocolHandler implements Runnable {
                     case MASTER_CLIENT_AUTH_REPLY:
                         m_c_auth_reply(toInt(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
-                    case MASTER_CLIENT_CLIENTLIST_CHANGED:
-                        m_c_clientlist_changed(adr);
-                        break;
                     case MASTER_CLIENT_NEWLIST:
                         m_c_newlist(toShort(data, idx[0]), adr);
                         break;
@@ -403,9 +400,6 @@ public abstract class ProtocolHandler implements Runnable {
     public void m_c_joinserver_reply(String s, InetSocketAddress adr) { }
     public void m_c_chat(int senderID, String msg, InetSocketAddress adr) { }
     public void m_c_chat_private(int senderID, int recieverID, String msg, InetSocketAddress adr) { }
-
-
-    public void m_c_clientlist_changed(InetSocketAddress adr) { }
     public void m_c_ping(InetSocketAddress adr) { }
     public void s_c_ping(InetSocketAddress adr) { }
     public void s_c_clientcount(int i, InetSocketAddress adr) { }

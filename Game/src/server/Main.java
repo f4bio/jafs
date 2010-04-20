@@ -51,6 +51,7 @@ public class Main {
 //        net.listen(40000);
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
+        System.out.println("### SERVER STARTET ###\n");
         pingTimer = new Timer();
         //pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
         pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);

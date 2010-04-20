@@ -91,8 +91,8 @@ public abstract class UiWindow extends JPanel
     @Override
     public void setVisible(boolean aFlag) {
         super.setVisible(aFlag);
-        if(aFlag)
-            UiManager.setForeground(this);
+//        if(aFlag)
+//            UiManager.setForeground(this);
     }
     
     public abstract void addActionListener(ActionListener a);
