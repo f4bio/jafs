@@ -22,6 +22,7 @@ public class UiActionListener implements ActionListener {
     public static final String CMD_REFRESH_SERVERBROWSER    = "4";
     public static final String CMD_LOBBYCHAT_SEND_MSG       = "5";
     public static final String CMD_NICKCHANGE               = "6";
+    public static final String CMD_INGAMECHAT_SEND_MSG      = "7";
 
     private Network net;
 
@@ -76,6 +77,13 @@ public class UiActionListener implements ActionListener {
         // Lobby Chat senden
         else if(e.getActionCommand().equals(CMD_LOBBYCHAT_SEND_MSG)) {
             Main.getMainMenu().sendLobbyMsg();
+        }
+        // InGame Chat senden
+        else if(e.getActionCommand().equals(CMD_INGAMECHAT_SEND_MSG)) {
+            System.out.println("connected server "+net.getServer());
+            net.send(net.getServer(),
+                     ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
+                     argStr(Main.getUiInGameChat().getMSG()));
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {

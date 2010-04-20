@@ -311,6 +311,9 @@ public abstract class ProtocolHandler implements Runnable {
                     case SERVER_CLIENT_ALL_PLAYER_DATA_OK:
                         s_c_all_player_data_ok(adr);
                         break;
+                    case SERVER_CLIENT_CHAT_ALL_OK:
+                        s_c_chat_all_ok(adr);
+                        break;
                     case SERVER_CLIENT_EVENT_PLAYER_JOINED:
                         s_c_event_player_joined(toStr(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
@@ -433,6 +436,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_event_player_joined(String n, int i, InetSocketAddress adr) { }
     public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) { }
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr) { }
+    public void s_c_chat_all_ok(InetSocketAddress adr) { }
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr) { }
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr) { }
     public void s_c_logoff_reply(int reply, InetSocketAddress adr) { }

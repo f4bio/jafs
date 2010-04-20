@@ -48,13 +48,13 @@ public class UiManager {
     }
 
     public static void setForeground(UiWindow u) {
-        for(int i=0; i<content.size(); i++) {
+//        for(int i=0; i<content.size(); i++) {
 //            if(content.get(i) != Main.getUiMainMenu())
-                content.get(i).setBackground(UiWindow.UI_COLOR_IN_BACKGROUND);
-        }
+//                content.get(i).setBackground(UiWindow.UI_COLOR_IN_BACKGROUND);
+//        }
 
         content.remove(u);
-        u.setBackground(UiWindow.UI_COLOR_ON_TOP);
+//        u.setBackground(UiWindow.UI_COLOR_ON_TOP);
         content.add(u);
 
         Main.getScreen().getContentPane().setComponentZOrder(u, 0);
