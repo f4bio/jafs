@@ -82,6 +82,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
 //                     argShort(Protocol.LIST_TYPE_CLIENTLIST));
             Main.getGameData().setSelfId(id);
+            Main.getMainMenu().enableLobby(true);
+            Main.getMainMenu().appendIncommingMSG(false, -1, id, "Connection established!\n");
             System.out.println("MASTER_CLIENT_AUTH_REPLY success (id="+id+")");
         } else
             System.out.println("MASTER_CLIENT_AUTH_REPLY failure");
@@ -92,13 +94,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("MASTER_CLIENT_JOINSERVER_REPLY ("+s+")");
     }
 
-    public void m_c_clientlist_changed(InetSocketAddress adr) {
-        System.out.println("MASTER_CLIENT_CLIENTLIST_CHANGED -> CLIENT_MASTER_LISTREQUEST (clientlist)");
-        net.send(Network.MASTERHOST,
-                 Network.MASTERPORT,
-                 ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
-                 argShort(Protocol.LIST_TYPE_CLIENTLIST));
-    }
     public void m_c_chat(int senderID, String msg, InetSocketAddress adr)
     {
         System.out.println("MASTER_CLIENT_CHAT senderID="+senderID+",msg="+msg);
@@ -250,19 +245,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     // --- chat fkt
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
-//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+        Main.getUiInGameChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg);
     }
 
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr)
     {
-//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+        Main.getUiInGameChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
     }
 
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
-//        Main.getUiLobbyChat().appendMSG(msg); // LOBBY
+        Main.getUiInGameChat().appendMSG(msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
     }
 

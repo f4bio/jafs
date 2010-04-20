@@ -14,6 +14,11 @@ public class UiKeyListener implements KeyListener {
 
     public void keyPressed(KeyEvent e) {
 //        System.out.println("Pressed "+e.getKeyChar());
+        
+        // InGame Chat
+        if(e.getKeyCode() == KeyEvent.VK_Y) {
+            Main.getUiInGameChat().setVisible(Main.getUiInGameChat().isVisible() ? false : true);
+        }
     }
 
     public void keyReleased(KeyEvent e) {

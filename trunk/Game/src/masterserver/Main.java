@@ -46,7 +46,7 @@ public class Main {
         net.setProtocolHandler(handler);
         net.listen(Network.MASTERPORT);
 
-        System.out.println("Masterserver startet");
+        System.out.println("### MASTERSERVER STARTET ###\n");
         pingTimer = new Timer();
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
     }
@@ -158,11 +158,19 @@ public class Main {
     }
 
     public static void removeClient(Client client) {
-        clientlist.remove(client);
-        //System.out.println("Client " + client.getHost() + ":" + client.getPort() + " dropped");
-        System.out.println("Client dropped.");
+        if(clientlist.remove(client))
+            System.out.println("removeClient(...) Client dropped.");
+        else
+            System.out.println("removeClient(...) Couldn't find client to drop.");
     }
+    
     public static void removeClient(InetSocketAddress adr) {
-        removeClient(new Client(adr));
+        removeClient(getClient(adr));
+    }
+
+    public static void broadcastClientlist(){
+        for(Client i : clientlist) {
+            handler.c_m_listrequest(Protocol.LIST_TYPE_CLIENTLIST, i.getAddress());
+        }
     }
 }

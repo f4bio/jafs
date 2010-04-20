@@ -34,11 +34,7 @@ public class Main {
     // GUI
     private static MainMenu mainMenu;
     // UI
-//    private static UiWindow uiCreate;
-//    private static Serverbrowser uiBrowser;
-//    private static LobbyChat uiLobbyChat;
-//    private static UiWindow uiOptions;
-//    private static UiWindow uiCredits;
+    private static InGameChat uiInGameChat;
 
     private static ArrayList<Server> serverlist = new ArrayList<Server>();
     private static ArrayList<Client> clientlist = new ArrayList<Client>();
@@ -73,55 +69,32 @@ public class Main {
         screen = new MainScreen(frame);
         screen.setVisible(false);
         
-        // Input
-        input = new Input(screen);
-        frame.addKeyListener(input);
-        screen.addMouseMotionListener(input);
-
-        // Init Interfaces
         UiActionListener aListener = new UiActionListener(net);
         UiKeyListener kListener = new UiKeyListener();
 
+        // Input
+        input = new Input(screen);
+        frame.addKeyListener(input);
+        frame.addKeyListener(kListener);
+        screen.addMouseMotionListener(input);
+
+        // Init Interfaces
         mainMenu = new MainMenu(aListener, net);
 
-//        uiCreate = new CreateServer(screen);
-//        uiCreate.setLocation(200, 200);
-//        uiCreate.addActionListener(aListener);
-//        uiCreate.addKeyListener(kListener);
-//        uiBrowser = new Serverbrowser(screen);
-//        uiBrowser.setLocation(200, 200);
-//        uiBrowser.addActionListener(aListener);
-//        uiBrowser.addKeyListener(kListener);
-//        uiLobbyChat = new LobbyChat(screen);
-//        uiLobbyChat.setLocation(200, 200);
-//        uiLobbyChat.addActionListener(aListener);
-//        uiLobbyChat.addKeyListener(kListener);
-//        uiOptions = new Options(screen);
-//        uiOptions.setLocation(200, 200);
-//        uiOptions.addActionListener(aListener);
-//        uiOptions.addKeyListener(kListener);
-//        uiCredits = new Credits(screen);
-//        uiCredits.setLocation(screen.getWidth()/2  - uiCredits.getWidth()/2,
-//                              screen.getHeight()/2 - uiCredits.getHeight()/2);
-//        uiCredits.addActionListener(aListener);
-//        uiCredits.addKeyListener(kListener);
+        uiInGameChat = new InGameChat(screen);
+        uiInGameChat.setLocation(10, screen.getHeight()-uiInGameChat.getHeight()-10);
+        uiInGameChat.addActionListener(aListener);
+        uiInGameChat.addKeyListener(kListener);
  
         // UIManger
-//        UiManager.addComponent(uiCreate);
-//        UiManager.addComponent(uiBrowser);
-//        UiManager.addComponent(uiLobbyChat);
-//        UiManager.addComponent(uiOptions);
-//        UiManager.addComponent(uiCredits);
+        UiManager.addComponent(uiInGameChat);
 
-//        screen.getContentPane().add(uiCreate);
-//        screen.getContentPane().add(uiBrowser);
-//        screen.getContentPane().add(uiLobbyChat);
-//        screen.getContentPane().add(uiOptions);
-//        screen.getContentPane().add(uiCredits);
+        screen.getContentPane().add(uiInGameChat);
 
         // GameData
         data = new GameData(input);
         data.setName(System.getProperty("user.name"));
+        mainMenu.setPlayerName(data.getName());
         // UpdateLoop
         loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
@@ -153,10 +126,6 @@ public class Main {
 //        EventQueue.invokeLater(new Runnable() {
 //           public void run() {
 //                uiCreate.setVisible(false);
-//                uiBrowser.setVisible(false);
-//                uiLobbyChat.setVisible(false);
-//                uiOptions.setVisible(false);
-//                uiCredits.setVisible(false);
 //                frame.requestFocus();
 //           }
 //        });
@@ -202,25 +171,9 @@ public class Main {
         return mainMenu;
     }
 
-//    public static UiWindow getUiCreateServer() {
-//        return uiCreate;
-//    }
-
-//    public static Serverbrowser getUiServerbrowser() {
-//        return uiBrowser;
-//    }
-
-//    public static LobbyChat getUiLobbyChat() {
-//        return uiLobbyChat;
-//    }
-
-//    public static UiWindow getUiOptions() {
-//        return uiOptions;
-//    }
-
-//    public static UiWindow getUiCredits() {
-//        return uiCredits;
-//    }
+    public static InGameChat getUiInGameChat() {
+        return uiInGameChat;
+    }
     
     public static void addServerToServerlist(Server s){
         serverlist.add(s);
@@ -297,6 +250,8 @@ public class Main {
     public static String getClientName(int id){
         if(id == data.getSelfId()){
             return data.getName();
+        } else if(id == -1){
+            return "Masterserver";
         }
         for(Client client: clientlist)
             if(client.getId() == id)

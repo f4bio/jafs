@@ -261,7 +261,6 @@ public class Protocol {
         registerCmd(ProtocolCmd.MASTER_SERVER_SERVERCOUNT, ARG_INT);
 
         registerCmd(ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY, ARG_STRING);
-        registerCmd(ProtocolCmd.MASTER_CLIENT_CLIENTLIST_CHANGED, ARG_NONE);
         registerCmd(ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.MASTER_CLIENT_NEWLIST, ARG_SHORT);
         registerCmd(ProtocolCmd.MASTER_CLIENT_LISTENTRY_SERVER, ARG_STRING);
