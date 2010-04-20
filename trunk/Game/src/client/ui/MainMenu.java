@@ -47,25 +47,22 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jButton1.addActionListener(this);
         jButton2.setBackground(btn_bg_normal);
         jButton2.addActionListener(this);
+        jButton3.setActionCommand(UiActionListener.CMD_LOBBYCHAT_SEND_MSG);
+        jButton3.addActionListener(uiaListener);
         jButton4.setBackground(btn_bg_normal);
         jButton4.addActionListener(this);
-
         jButton4.setActionCommand(UiActionListener.CMD_EXIT);
         jButton4.addActionListener(uiaListener);
-
+        jButton5.setActionCommand(UiActionListener.CMD_REFRESH_SERVERBROWSER);
+        jButton5.addActionListener(uiaListener);
+        jButton6.setActionCommand(UiActionListener.CMD_CONNECT);
+        jButton6.addActionListener(uiaListener);
         jButton7.setBackground(btn_bg_normal);
         jButton7.addActionListener(this);
         jButton7.setActionCommand(UiActionListener.CMD_TOGGLE_SERVERBROWSER);
         jButton7.addActionListener(uiaListener);
-
-        jButton5.setActionCommand(UiActionListener.CMD_REFRESH_SERVERBROWSER);
-        jButton5.addActionListener(uiaListener);
-
-        jButton6.setActionCommand(UiActionListener.CMD_CONNECT);
-        jButton6.addActionListener(uiaListener);
-
-        jButton3.setActionCommand(UiActionListener.CMD_LOBBYCHAT_SEND_MSG);
-        jButton3.addActionListener(uiaListener);
+        jButton8.setActionCommand(UiActionListener.CMD_NICKCHANGE);
+        jButton8.addActionListener(uiaListener);
         jList1.addMouseListener(this);
         jTabbedPane1.addMouseListener(this);
 
@@ -128,6 +125,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jList1.setEnabled(b);
     }
 
+    public void enableOptions(boolean b){
+        jPanel5.setEnabled(b);
+    }
+
     public void appendIncommingMSG(boolean privateMsg, int senderID, int recieverID, String msg){
         System.out.print("appendIncommingMSG(...)");
         // PRIVATE
@@ -152,6 +153,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     public void setPlayerName(String name){
         jTextField4.setText(name);
+    }
+
+    public String getPlayerName(){
+        return jTextField4.getText();
     }
 
     public void sendLobbyMsg(){
@@ -194,6 +199,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jPanel6 = new javax.swing.JPanel();
         jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jButton8 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jTextField6 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -201,8 +207,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jTextField5 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
+        jButton9 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
-        jButton8 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
@@ -290,15 +296,21 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         jLabel1.setText("Spielername");
 
+        jButton8.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jButton8.setText("Übernehmen");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(29, 29, 29)
-                .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(29, 29, 29)
+                        .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                    .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -308,7 +320,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addComponent(jButton8)
+                .addContainerGap())
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Netzwerk"));
@@ -322,6 +336,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jLabel4.setText("Benutzername");
 
         jPasswordField1.setText("jPasswordField1");
+
+        jButton9.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jButton9.setText("Übernehmen");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -341,7 +358,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                         .addGap(18, 18, 18)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))))
+                            .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)))
+                    .addComponent(jButton9, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -359,7 +377,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addComponent(jButton9)
+                .addContainerGap())
         );
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Spieleinstellungen"));
@@ -375,9 +395,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             .addGap(0, 158, Short.MAX_VALUE)
         );
 
-        jButton8.setFont(new java.awt.Font("Tahoma", 0, 10));
-        jButton8.setText("Übernehmen");
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -387,13 +404,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton8)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -404,9 +416,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                     .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton8))
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -521,6 +531,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

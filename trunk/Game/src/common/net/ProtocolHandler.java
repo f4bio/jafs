@@ -121,6 +121,12 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_MASTER_LOGOFF:
                         c_m_logoff(adr);
                         break;
+                    case CLIENT_MASTER_NICKCHANGE:
+                        c_m_nickchange(toStr(data, idx[0]), adr);
+                        break;
+                    case CLIENT_MASTER_FORCED_NICKCHANGE_OK:
+                        c_m_forced_nickchange_ok(adr);
+                        break;
 
                     case SERVER_MASTER_PONG:
                         s_m_pong(adr);
@@ -263,6 +269,9 @@ public abstract class ProtocolHandler implements Runnable {
                     case MASTER_CLIENT_ENDLIST:
                         m_c_endlist(toShort(data, idx[0]), adr);
                         break;
+                    case MASTER_CLIENT_FORCED_NICKCHANGE:
+                        m_c_forced_nickchange(toStr(data, idx[0]), adr);
+                        break;
                     case MASTER_CLIENT_CHAT:
                         m_c_chat(toInt(data, idx[0]), toStr(data, idx[1]), adr);
                         break;
@@ -271,6 +280,9 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case MASTER_CLIENT_CHAT_OK:
                         m_c_chat_ok(adr);
+                        break;
+                    case MASTER_CLIENT_NICKCHANGE_OK:
+                        m_c_nickchange_ok(adr);
                         break;
                     case SERVER_CLIENT_INIT:
                         s_c_init(toStr(data, idx[0]), toInt(data, idx[1]), adr);
@@ -359,6 +371,8 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_m_chat_private(int receiverID, String msg, InetSocketAddress adr) { }
     public void c_m_chat_private_ok(InetSocketAddress adr) { }
     public void c_m_logoff(InetSocketAddress adr) { }
+    public void c_m_nickchange(String newNick, InetSocketAddress adr) {  }
+    public void c_m_forced_nickchange_ok(InetSocketAddress adr) {  }
 
     //Server
     public void m_s_ping(InetSocketAddress adr) { }
@@ -401,6 +415,8 @@ public abstract class ProtocolHandler implements Runnable {
     public void m_c_chat(int senderID, String msg, InetSocketAddress adr) { }
     public void m_c_chat_private(int senderID, int recieverID, String msg, InetSocketAddress adr) { }
     public void m_c_ping(InetSocketAddress adr) { }
+    public void m_c_nickchange_ok(InetSocketAddress adr) { }
+    public void m_c_forced_nickchange(String forcedNick, InetSocketAddress adr) { }
     public void s_c_ping(InetSocketAddress adr) { }
     public void s_c_clientcount(int i, InetSocketAddress adr) { }
     public void s_c_clientid_reply(int id, InetSocketAddress adr) { }

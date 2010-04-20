@@ -28,6 +28,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        System.out.println("c_m_joinserver()");
     }
 
+    public void c_m_forced_nickchange_ok(InetSocketAddress adr)
+    {
+        System.out.println("CLIENT_MASTER_FORCED_NICKCHANGE_OK");
+    }
+
+    public void c_m_nickchange(String newNick, InetSocketAddress adr)
+    {
+        Main.checkNick(newNick, adr);
+    }
+
     public void c_m_listrequest(short type, InetSocketAddress adr)
     {
         System.out.print("CLIENT_MASTER_LISTREQUEST");
@@ -59,7 +69,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_auth(String name, InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
-        client.getPlayer().setName(name);
+        client.getPlayer().setName(Main.checkNick(name, adr));
         if(client != null) {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
                      argInt(Protocol.REPLY_SUCCESS),
