@@ -222,12 +222,14 @@ public class Main {
     }
     
     //well, not really a bradcast, is it?
-    public synchronized static void broadcast_chat_private(String msg, Integer to, InetSocketAddress adr) {
+    public synchronized static void broadcast_chat_private(String msg, int to, InetSocketAddress adr) {
         Client from = getClient(adr);
         Client recv = client[to];
-        
-        net.send(recv.getAddress(), ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,
-                argInt(from.getId()), argStr(msg));
+        System.out.println("SERVER_CLIENT_CHAT_PRIVATE (to id="+to+", msg="+msg+")");
+        net.send(recv.getAddress(),
+                 ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,
+                 argInt(from.getId()),
+                 argStr(msg));
     }
 
     public static int getClientTeamId(InetSocketAddress adr) {

@@ -114,7 +114,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             if(clientlist.get(i).getID() == clientID)
                 return i;
         }
-        System.out.println("no id matched");
+        System.out.println("getClientlistIndex(...) no id matched");
         return -1;
     }
 
@@ -521,7 +521,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -605,6 +604,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
+
     public void mouseClicked(MouseEvent e) {
         // Open private tab
         if (e.getSource() == jList1 && !listModel.isEmpty() && e.getClickCount() == 2) {
@@ -625,6 +625,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     public void mouseExited(MouseEvent e) {  }
 
+    
     public void keyTyped(KeyEvent e) {  }
 
     public void keyPressed(KeyEvent e) {
