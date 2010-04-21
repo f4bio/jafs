@@ -272,7 +272,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY,
             double orgX, double orgY, InetSocketAddress adr) {
-        CWeapon wep = Main.getGameData().getSelf().getWeapon(id);
+        CWeapon wep = Main.getGameData().getSelf().getWeapon(wepId);
         if(wep != null && id != Main.getGameData().getSelfId()) {
             CVector2 dir = new CVector2(dirX, dirY);
             CVector2 org = new CVector2(orgX, orgY);

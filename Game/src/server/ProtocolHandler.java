@@ -220,10 +220,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
             if(c != null) {
 
-                if(c.getId() % 2 == 1)
-                    c.setTeamId(1);
+                if((c.getId()+1) % 2 == 0)
+                    teamId = 1;
                 else
-                    c.setTeamId(2);
+                    teamId = 2;
 
 //                c.setTeamId(teamId);
                 net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
@@ -231,6 +231,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
                         argInt(c.getId()) , argInt(teamId));
+                c.setTeamId(teamId);
                 System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
         }
