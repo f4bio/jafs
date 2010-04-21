@@ -18,7 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.image.VolatileImage;
-import java.util.Iterator;
+import java.util.Vector;
 
 /**
  *
@@ -164,37 +164,43 @@ public class Viewport {
         }
 
         // ----- Projectiles
+        Vector<CProjectile> list = ProjectileManager.getProjectiles();
 
-        Iterator<CProjectile> i = ProjectileManager.getIterator();
-        while(i.hasNext()) {
-            CProjectile cp = i.next();
+        //synchronized (list) {
 
-            Point pos = cp.getPosition().get();
-            Point loc = map.getTileByCoords(pos);
+        //    Iterator<CProjectile> i = list.iterator();
+        //    while (i.hasNext()) {
+        for(int i=0; i<list.size(); ++i) {
+                CProjectile cp = list.get(i);
 
-            double dist = cp.getPosition().getDistanceTo(cp.getOrigin());
-            if(dist > 300)
-                dist = 300;
+                Point pos = cp.getPosition().get();
+                Point loc = map.getTileByCoords(pos);
 
-            CVector2 tmp = cp.getDirection().invert_cpy();
-            tmp.resize(dist);
-            Point end = tmp.get();
+                double dist = cp.getPosition().getDistanceTo(cp.getOrigin());
+                if (dist > 300) {
+                    dist = 300;
+                }
 
-            int pXS = pos.x % map.getTileSize().width;
-            int pYS = pos.y % map.getTileSize().height;
+                CVector2 tmp = cp.getDirection().invert_cpy();
+                tmp.resize(dist);
+                Point end = tmp.get();
 
-            if (loc.x >= upperLeft.x && loc.x <= bottomRight.x &&
-                    loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
+                int pXS = pos.x % map.getTileSize().width;
+                int pYS = pos.y % map.getTileSize().height;
 
-                int posX = initCntX + pXS +
-                        (loc.x - upperLeft.x) * map.getTileSize().width;
-                int posY = initCntY + pYS +
-                        (loc.y - upperLeft.y) * map.getTileSize().height;
+                if (loc.x >= upperLeft.x && loc.x <= bottomRight.x
+                        && loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
 
-                g.setColor(Color.YELLOW);
-                g.drawLine(posX, posY, posX + end.x, posY + end.y);
-                //g.fillRect(posX, posY, 30, 30);
-            }
+                    int posX = initCntX + pXS
+                            + (loc.x - upperLeft.x) * map.getTileSize().width;
+                    int posY = initCntY + pYS
+                            + (loc.y - upperLeft.y) * map.getTileSize().height;
+
+                    g.setColor(Color.YELLOW);
+                    g.drawLine(posX, posY, posX + end.x, posY + end.y);
+                    //g.fillRect(posX, posY, 30, 30);
+                }
+            //}
         }
     }
 }

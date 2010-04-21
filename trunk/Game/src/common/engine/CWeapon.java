@@ -105,7 +105,7 @@ public class CWeapon {
             shotLast = u.getCurrentTime();
             CVector2 offset = player.getDirection().resize_cpy(25);
             CVector2 pos = player.getPosition().add_cpy(offset);
-            return new CProjectile(player.getId(), speed, this, player.getDirection().cpy(), pos);
+            return new CProjectile(player.getId(), speed, this, offset, pos);
         }
         return null;
     }

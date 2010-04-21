@@ -188,16 +188,17 @@ public class CEntity {
 
             colId = collideWall(map, next);
 
-            if(i == (int)m + 1) {
-                last = next;
-            }
-
             if(colId != -1){
                 ret = -1;
                 break;
             } else if(pc && p != null) {
                 ret = collidePlayer(p, next);
-                break;
+                if(ret > -1)
+                    break;
+            }
+
+            if(i == (int)m + 1) {
+                last = next;
             }
         }
 

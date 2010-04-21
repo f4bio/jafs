@@ -8,6 +8,7 @@ package common.engine;
 import client.anim.UpdateLoop;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import server.Game;
 
 /**
@@ -15,7 +16,7 @@ import server.Game;
  * @author miracle
  */
 public class ProjectileManager {
-    private static ArrayList<CProjectile> projectiles = new ArrayList<CProjectile>();
+    private static Vector<CProjectile> projectiles = new Vector<CProjectile>();
     private static Game game = null;
 
     public static void addProjectile(CProjectile p) {
@@ -34,7 +35,7 @@ public class ProjectileManager {
                 if (pr != null) {
                     int retC;
                     if ((retC = pr.move(map, pr.getDirection().resize_cpy(1.0d),
-                            u.getSpeedfactor(), true, p)) != -2) {
+                            u.getSpeedfactor(), false, p)) != -2) {
                         if (game != null && retC > -1) {
                             game.hitPlayer(retC, pr);
                         }
@@ -45,8 +46,8 @@ public class ProjectileManager {
         }
     }
 
-    public static Iterator<CProjectile> getIterator() {
-        return projectiles.iterator();
+    public static Vector<CProjectile> getProjectiles() {
+        return projectiles;
     }
 
     public static void setGame(Game g) {

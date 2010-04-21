@@ -57,6 +57,12 @@ public class Main {
         pingTimer = new Timer();
         pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
 
+        respawnTimer = new Timer();
+        respawnTimer.scheduleAtFixedRate(respawner, respawntime, respawntime);
+
+        roundTimer = new Timer();
+        roundTimer.scheduleAtFixedRate(gameTimer, gameTime, gameTime);
+
         update = new UpdateLoop(60);
         update.addUpdateObject(game);
 
@@ -99,15 +105,16 @@ public class Main {
 
     private static TimerTask gameTimer = new TimerTask() {
         public void run() {
-            //broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
-            //        argInt(game.getWinnerTeam()));
-            //reset();
+            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
+                    argInt(game.getWinnerTeam()));
+            reset();
         }
     };
 
     private static Timer pingTimer;
     private static Timer respawnTimer;
     private static Timer itemRespawnTimer;
+    private static Timer roundTimer;
 
     public synchronized static Client addClient(InetSocketAddress adr) {
         Client c = null;
