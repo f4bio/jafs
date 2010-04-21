@@ -35,6 +35,7 @@ public class CEntity {
     protected double speed;
     protected Dimension size;
     protected String name;
+    protected int id;
 
     public CEntity() {
         position = null;
@@ -108,8 +109,32 @@ public class CEntity {
         return name;
     }
 
+    public void setId(int i) {
+        id = i;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public void render(Graphics2D g) {
         
+    }
+
+    private int collidePlayer(CPlayer[] player, CVector2 hit) {
+        for(int i=0; i<player.length; i++){
+            if(player[i] == null)
+                continue;
+
+            CVector2 p = player[i].getPosition();
+            double distance = hit.getDistanceTo(p);
+            if(!player[i].isDead() && player[i].getId() != getId()
+                    && distance <= (player[i].getSize().width/2)){
+                player[i].hit(this);
+                return i;
+            }
+        }
+        return -1;
     }
 
     public int collideWall(CMap map, CVector2 p){
@@ -148,10 +173,11 @@ public class CEntity {
         return colId;
     }
 
-    public void move(CMap map, CVector2 mov, double speedfactor){
+    public int move(CMap map, CVector2 mov, double speedfactor, boolean pc, CPlayer[] p){
         CVector2 next = position;
         CVector2 last = next;
 
+        int ret = -2;
         int colId = -1;
         double m = speed * speedfactor;
 
@@ -162,52 +188,60 @@ public class CEntity {
 
             colId = collideWall(map, next);
 
-            if(colId != -1){
-                break;
-            } else if(i == (int)m + 1) {
+            if(i == (int)m + 1) {
                 last = next;
+            }
+
+            if(colId != -1){
+                ret = -1;
+                break;
+            } else if(pc && p != null) {
+                ret = collidePlayer(p, next);
+                break;
             }
         }
 
         setPosition(last);
 
-        if(colId == -1)
-            return;
+        if(colId == -1 || pc)
+            return ret;
 
         double newSpeed;
 
         if (mov.equals(VEC_UP_RIGHT)) {
             if (colId != 2 && colId != 6 && colId != 4) {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_RIGHT, newSpeed);
+                return move(map, VEC_RIGHT, newSpeed, pc, p);
             } else {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_UP, newSpeed);
+                return move(map, VEC_UP, newSpeed, pc, p);
             }
         } else if (mov.equals(VEC_UP_LEFT)) {
             if (colId != 3 && colId != 5 && colId != 7) {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_LEFT, newSpeed);
+                return move(map, VEC_LEFT, newSpeed, pc, p);
             } else {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_UP, newSpeed);
+                return move(map, VEC_UP, newSpeed, pc, p);
             }
         } else if (mov.equals(VEC_DOWN_LEFT)) {
             if (colId != 3 && colId != 5 && colId != 7) {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_LEFT, newSpeed);
+                return move(map, VEC_LEFT, newSpeed, pc, p);
             } else {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_DOWN, newSpeed);
+                return move(map, VEC_DOWN, newSpeed, pc, p);
             }
         } else if (mov.equals(VEC_DOWN_RIGHT)) {
             if (colId != 2 && colId != 6 && colId != 4) {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_RIGHT, newSpeed);
+                return move(map, VEC_RIGHT, newSpeed, pc, p);
             } else {
                 newSpeed = 0.5 * speedfactor;
-                move(map, VEC_DOWN, newSpeed);
+                return move(map, VEC_DOWN, newSpeed, pc, p);
             }
         }
+
+        return ret;
     }
 }

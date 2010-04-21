@@ -5,6 +5,11 @@ import client.anim.UpdateObject;
 import client.resource.MapLoader;
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.engine.CProjectile;
+import common.engine.CWeapon;
+import common.engine.CWeaponPistol;
+import common.engine.CWeaponRifle;
+import common.engine.ProjectileManager;
 import common.net.ProtocolCmd;
 
 import static common.net.ProtocolCmdArgument.*;
@@ -19,8 +24,12 @@ public class Game implements UpdateObject {
     private CPlayer[] player = new CPlayer[Main.getMaxPlayers()];
     private int scoreRed;
     private int scoreBlue;
+    private CWeapon weapon[];
 
     public Game(String map) {
+        weapon = new CWeapon[2];
+        weapon[0] = new CWeaponPistol();
+        weapon[1] = new CWeaponRifle();
         loader = new MapLoader(null, null);
         this.map = map;
         scoreRed = 0;
@@ -37,16 +46,19 @@ public class Game implements UpdateObject {
             if(player[i] != null) {
                 int id = player[i].getId();
             int weapon = player[i].getCurrentWeapon();
+            int t = player[i].getTeam();
             double posX = player[i].getPosition().getX();
             double posY = player[i].getPosition().getY();
             double dirX = player[i].getDirection().getX();
             double dirY = player[i].getDirection().getY();
 
-            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id),
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id), argInt(t),
                     argInt(weapon), argDouble(posX), argDouble(posY),
                     argDouble(dirX), argDouble(dirY));
             }
         }
+
+        ProjectileManager.checkProjectiles(u, player, getMap());
     }
 
     public boolean load() {
@@ -101,5 +113,23 @@ public class Game implements UpdateObject {
             return CPlayer.TEAM_BLUE;
         else
             return -1; // DRAW
+    }
+
+    public CWeapon getWeapon(int id) {
+        if(id > -1 && id < weapon.length)
+            return weapon[id];
+        return null;
+    }
+
+    public void hitPlayer(int pId, CProjectile c) {
+        CPlayer p = player[pId];
+        CWeapon w = getWeapon(c.getWeaponId());
+        if(p != null && w != null && !p.isDead()) {
+            p.setHealth(p.getHealth() - w.getDamage());
+            if(p.isDead()) {
+                Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, argInt(pId),
+                        argInt(c.getOwner()));
+            }
+        }
     }
 }

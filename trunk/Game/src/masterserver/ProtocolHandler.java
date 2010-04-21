@@ -69,8 +69,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_auth(String name, InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
-        client.getPlayer().setName(Main.checkNick(name, adr));
+        
         if(client != null) {
+            client.getPlayer().setName(Main.checkNick(name, adr));
             net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
                      argInt(Protocol.REPLY_SUCCESS),
                      argInt(client.getId()));

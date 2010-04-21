@@ -28,6 +28,10 @@ public class ProtocolCmdArgument {
     }
 
     public static byte[] argStr(String str) {
+        if(str == null) {
+            return new byte[] { Protocol.STRING_TERMINATOR };
+        }
+        
         byte[] ret = new byte[str.length() + 1];
 
         for(int i=0; i<str.length(); ++i) {

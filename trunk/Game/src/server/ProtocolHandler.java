@@ -1,5 +1,9 @@
 package server;
 
+import common.CVector2;
+import common.engine.CProjectile;
+import common.engine.CWeapon;
+import common.engine.ProjectileManager;
 import common.net.Client;
 import common.net.Network;
 import common.net.Packet;
@@ -139,6 +143,21 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void c_s_player_data_ok(InetSocketAddress adr) {
+
+    }
+
+    public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX, double orgY,
+            InetSocketAddress adr) {
+        CWeapon wep = Main.getGame().getWeapon(id);
+        if(wep != null) {
+            CVector2 dir = new CVector2(dirX, dirY);
+            CVector2 org = new CVector2(orgX, orgY);
+            CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
+            ProjectileManager.addProjectile(c);
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT, argInt(id),
+                    argInt(wepId), argInt(dirX), argInt(dirY), argDouble(orgX),
+                    argDouble(orgY));
+        }
     }
 
     public void c_s_pong(InetSocketAddress adr) {
@@ -201,10 +220,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
             if(c != null) {
 
-                if(Main.getClients().length % 2 == 1)
-                    c.setTeamId(0);
-                else
+                if(c.getId() % 2 == 1)
                     c.setTeamId(1);
+                else
+                    c.setTeamId(2);
 
 //                c.setTeamId(teamId);
                 net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
