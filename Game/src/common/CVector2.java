@@ -97,7 +97,16 @@ public class CVector2 {
                 x*Math.sin(a) + y*Math.cos(a));
     }
 
-    public void trim(double l) {
+    public void invert() {
+        x = -x;
+        y = -y;
+    }
+
+    public CVector2 invert_cpy() {
+        return new CVector2(-x, -y);
+    }
+
+    public void resize(double l) {
         if(l <= 0)
             return;
 
@@ -107,13 +116,22 @@ public class CVector2 {
         y /= n / l;
     }
 
-    public CVector2 trim_cpy(double l) {
+    public CVector2 resize_cpy(double l) {
         if(l <= 0)
             return null;
 
         double n = norm();
 
         return new CVector2(x/(n/l), y/(n/l));
+    }
+
+    public CVector2 cpy() {
+        return new CVector2(x, y);
+    }
+
+    public double getDistanceTo(CVector2 vec) {
+        double diffX = x - vec.x, diffY = y - vec.y;
+        return Math.sqrt((diffX * diffX) + (diffY * diffY));
     }
 
     public boolean equals(CVector2 c) {

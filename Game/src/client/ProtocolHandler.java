@@ -1,7 +1,11 @@
 package client;
 
+import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.engine.CProjectile;
+import common.engine.CWeapon;
+import common.engine.ProjectileManager;
 import common.net.Client;
 import common.net.Network;
 import common.net.Packet;
@@ -174,6 +178,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void s_c_init(String m, int t, InetSocketAddress adr) {
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_INIT_REPLY, argInt(Protocol.REPLY_SUCCESS));
+
         Main.getGameData().setMaxPlayers(t);
         boolean result = Main.getGameData().loadMap(m);
 
@@ -184,7 +190,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         else
             rep = Protocol.REPLY_FAILURE;
 
-        net.send(adr, ProtocolCmd.CLIENT_SERVER_INIT_REPLY, argInt(rep));
         System.out.println("SERVER_CLIENT_INIT map="+m+",maxPlayer="+t+" -> CLIENT_SERVER_INIT_REPLY ("+rep+")");
     }
 
@@ -207,19 +212,24 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) {
-        if(Main.getGameData().getPlayer(id) == null) {
-            CPlayer player = new CPlayer();
+        CPlayer player = Main.getGameData().getPlayer(id);
+        if(player == null) {
+            player = new CPlayer();
             player.setId(id);
             player.setTeam(team);
             player.setName(name);
             Main.getGameData().addPlayer(player);
+        } else {
+            player.setId(id);
+            player.setTeam(team);
+            player.setName(name);
         }
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
         System.out.println("SERVER_CLIENT_PLAYER_DATA name="+name+",id="+id+",teamid="+team+" -> CLIENT_SERVER_PLAYER_DATA_OK");
     }
 
-    public void s_c_player_info(int id, int wep, double posX, double posY,
+    public void s_c_player_info(int id, int team, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) {
         if(!net.isReallyConnected())
             return;
@@ -230,8 +240,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setCurrentWeapon(wep);
             c.setPosition(posX, posY);
             c.setDirection(dirX, dirY);
-//            System.out.println("SERVER_CLIENT_PLAYER_INFO id="+id+",weapon="+wep+",posX="+posX+",posY="+posY+",dirX="+dirX+"dirY="+dirY);
-        }
+            c.setTeam(team);
+                    //            System.out.println("SERVER_CLIENT_PLAYER_INFO id="+id+",weapon="+wep+",posX="+posX+",posY="+posY+",dirX="+dirX+"dirY="+dirY);
+        } 
     }
 
     public void s_c_all_player_data_ok(InetSocketAddress adr) {
@@ -257,6 +268,22 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             pl.setTeam(t);
 
         net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
+    }
+
+    public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY,
+            double orgX, double orgY, InetSocketAddress adr) {
+        CWeapon wep = Main.getGameData().getSelf().getWeapon(id);
+        if(wep != null && id != Main.getGameData().getSelfId()) {
+            CVector2 dir = new CVector2(dirX, dirY);
+            CVector2 org = new CVector2(orgX, orgY);
+            CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
+            ProjectileManager.addProjectile(c);
+        }
+    }
+
+    public void s_c_event_player_killed(int who, int by, InetSocketAddress adr) {
+        Main.getGameData().getPlayer(who).setHealth(0);
+        net.send(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_KILLED_OK);
     }
 
     // --- chat fkt

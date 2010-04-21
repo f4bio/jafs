@@ -227,6 +227,10 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_SERVER_EVENT_PLAYER_JOINED_OK:
                         c_s_event_player_joined_ok(adr);
                         break;
+                    case CLIENT_SERVER_SHOOT:
+                        c_s_shoot(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
+                                toInt(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        break;
                     case CLIENT_SERVER_EVENT_PLAYER_LEFT_OK:
                         break;
                     case CLIENT_SERVER_EVENT_ITEM_SPAWNED_OK:
@@ -305,7 +309,9 @@ public abstract class ProtocolHandler implements Runnable {
                         s_c_player_data(toStr(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), adr);
                         break;
                     case SERVER_CLIENT_PLAYER_INFO:
-                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toDouble(data, idx[2]), toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
+                                toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]),
+                                toDouble(data, idx[6]), adr);
                         break;
                     case SERVER_CLIENT_ALL_PLAYER_DATA_OK:
                         s_c_all_player_data_ok(adr);
@@ -339,6 +345,13 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED:
                         s_c_event_player_team_changed(toInt(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_SHOT:
+                        s_c_event_player_shot(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
+                                toInt(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_KILLED:
+                        s_c_event_player_killed(toInt(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case SERVER_CLIENT_FORCED_NICKCHANGE:
                         s_c_forced_nickchange(toStr(data, idx[0]), adr);
@@ -409,6 +422,8 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_s_latency(InetSocketAddress adr) { }
     public void c_s_current_map(InetSocketAddress adr) { }
     public void c_s_players(InetSocketAddress adr) { }
+    public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX,
+            double orgY, InetSocketAddress adr) { }
 
     //Client
     public void m_c_newlist(short type, InetSocketAddress adr) { }
@@ -432,11 +447,14 @@ public abstract class ProtocolHandler implements Runnable {
     public void s_c_connection_established(InetSocketAddress adr) { }
     public void s_c_connection_terminated(InetSocketAddress adr) { }
     public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) { }
-    public void s_c_player_info(int id, int wep, double posX, double posY,
+    public void s_c_player_info(int id, int team, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) { }
     public void s_c_all_player_data_ok(InetSocketAddress adr) { }
     public void s_c_event_player_joined(String n, int i, InetSocketAddress adr) { }
     public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) { }
+    public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY, double orgX,
+            double orgY, InetSocketAddress adr) { }
+    public void s_c_event_player_killed(int who, int by, InetSocketAddress adr) { }
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr) { }
     public void s_c_chat_all_ok(InetSocketAddress adr) { }
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr) { }

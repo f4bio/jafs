@@ -6,8 +6,11 @@ import client.resource.MapLoader;
 import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.engine.CProjectile;
+import common.engine.ProjectileManager;
 import common.net.ProtocolCmd;
 
+import java.util.ArrayList;
 import static common.net.ProtocolCmdArgument.*;
 
 /**
@@ -18,12 +21,14 @@ public class GameData implements UpdateObject {
     private MapLoader loader = new MapLoader(null, null);
     private String name;
     private CPlayer[] player;
+    private ArrayList<CProjectile> projectiles;
     private int selfId;
     private Input input;
     private boolean loaded;
 
     public GameData(Input input) {
         this.input = input;
+        this.projectiles = new ArrayList<CProjectile>(100);
     }
 
     public boolean loadMap(String map) {
@@ -32,7 +37,7 @@ public class GameData implements UpdateObject {
         loaded = loader.load(map);
         return loaded;
     }
-    
+
     private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
         
@@ -65,7 +70,7 @@ public class GameData implements UpdateObject {
         }
 
         if(mov != null)
-            self.move(getMap(), mov, u.getSpeedfactor());
+            self.move(getMap(), mov, u.getSpeedfactor(), false, player);
 
         self.setDirection(input.getDirection());
 
@@ -80,10 +85,22 @@ public class GameData implements UpdateObject {
         Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_PLAYER_INFO, argInt(id),
                 argInt(weapon), argDouble(posX), argDouble(posY), argDouble(dirX),
                 argDouble(dirY));
+
+        if(input.isKeyM1Pressed()) {
+            CProjectile c = null;
+            if((c = self.shoot(u)) != null) {
+                ProjectileManager.addProjectile(c);
+                Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_SHOOT, argInt(c.getId()),
+                        argInt(self.getCurrentWeapon()), argInt((int)c.getDirection().getX()),
+                        argInt((int)c.getDirection().getY()), argDouble(c.getOrigin().getX()),
+                        argDouble(c.getOrigin().getY()));
+            }
+        }
     }
 
     public void update(UpdateLoop u) {
         checkPlayerInput(u);
+        ProjectileManager.checkProjectiles(u, player, getMap());
     }
 
     public CMap getMap() {

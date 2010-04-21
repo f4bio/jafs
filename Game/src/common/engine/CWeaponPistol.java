@@ -5,15 +5,19 @@
 
 package common.engine;
 
-import common.CVector2;
-
 /**
  *
  * @author miracle
  */
-public class CWeaponPistol extends CWeapon{
-
-    public void shoot(CVector2 direction) {
-
+public class CWeaponPistol extends CWeapon {
+    public CWeaponPistol() {
+        id = 0;
+        setDamage(7);
+        setCriticalRate(0.15);
+        setCoolDown(500000000L);
+        setSpread(10);
+        setSpeed(150);
+        setMaxBullets(-1);
+        setBullets(1);
     }
 }

@@ -9,6 +9,8 @@ import client.Main;
 import common.CVector2;
 import common.engine.CMap;
 import common.engine.CPlayer;
+import common.engine.CProjectile;
+import common.engine.ProjectileManager;
 import common.engine.Tile;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -16,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.image.VolatileImage;
+import java.util.Iterator;
 
 /**
  *
@@ -153,7 +156,7 @@ public class Viewport {
                             posY - (player[i].getSize().height/2),
                             pSize.width, pSize.height);
 
-                    CVector2 dir = player[i].getDirection().trim_cpy(50);
+                    CVector2 dir = player[i].getDirection().resize_cpy(25);
                     g.drawLine(posX, posY, posX + (int)dir.getX(),
                             posY + (int)dir.getY());
                 }
@@ -162,6 +165,36 @@ public class Viewport {
 
         // ----- Projectiles
 
+        Iterator<CProjectile> i = ProjectileManager.getIterator();
+        while(i.hasNext()) {
+            CProjectile cp = i.next();
 
+            Point pos = cp.getPosition().get();
+            Point loc = map.getTileByCoords(pos);
+
+            double dist = cp.getPosition().getDistanceTo(cp.getOrigin());
+            if(dist > 300)
+                dist = 300;
+
+            CVector2 tmp = cp.getDirection().invert_cpy();
+            tmp.resize(dist);
+            Point end = tmp.get();
+
+            int pXS = pos.x % map.getTileSize().width;
+            int pYS = pos.y % map.getTileSize().height;
+
+            if (loc.x >= upperLeft.x && loc.x <= bottomRight.x &&
+                    loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
+
+                int posX = initCntX + pXS +
+                        (loc.x - upperLeft.x) * map.getTileSize().width;
+                int posY = initCntY + pYS +
+                        (loc.y - upperLeft.y) * map.getTileSize().height;
+
+                g.setColor(Color.YELLOW);
+                g.drawLine(posX, posY, posX + end.x, posY + end.y);
+                //g.fillRect(posX, posY, 30, 30);
+            }
+        }
     }
 }

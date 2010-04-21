@@ -179,7 +179,7 @@ public class Network {
         sConnected = false;
 
         checker = new Timer();
-        checker.schedule(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
+        checker.scheduleAtFixedRate(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
     }
 
     private synchronized void send(DatagramPacket packet, boolean check) {

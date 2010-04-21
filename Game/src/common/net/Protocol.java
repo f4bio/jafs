@@ -204,6 +204,8 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_LATENCY, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CURRENT_MAP, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_PLAYERS, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_SHOOT, ARG_INT, ARG_INT, ARG_INT, ARG_INT,
+                ARG_DOUBLE, ARG_DOUBLE);
 
         registerCmd(ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CHAT_TEAM_OK, ARG_NONE);
@@ -244,8 +246,9 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_PICKED, ARG_INT);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, ARG_INT);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT, ARG_INT, ARG_INT,
+                ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED, ARG_INT, ARG_INT);
@@ -256,7 +259,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA, ARG_STRING, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_NAME, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE,
+        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_INT, ARG_DOUBLE,
                     ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
 
         //----- Master Server commands

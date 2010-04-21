@@ -2,6 +2,7 @@ package server;
 
 import client.anim.UpdateLoop;
 import common.engine.CPlayer;
+import common.engine.ProjectileManager;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -39,6 +40,7 @@ public class Main {
         game = new Game(map);
 
         boolean loaded = game.load();
+        ProjectileManager.setGame(game);
 
         if(!loaded)
             System.exit(0);
@@ -53,7 +55,6 @@ public class Main {
 
         System.out.println("### SERVER STARTET ###\n");
         pingTimer = new Timer();
-        //pingTimer.schedule(pinger, PING_INTERVAL, PING_INTERVAL);
         pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
 
         update = new UpdateLoop(60);
@@ -98,9 +99,9 @@ public class Main {
 
     private static TimerTask gameTimer = new TimerTask() {
         public void run() {
-            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
-                    argInt(game.getWinnerTeam()));
-            reset();
+            //broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
+            //        argInt(game.getWinnerTeam()));
+            //reset();
         }
     };
 
@@ -281,5 +282,9 @@ public class Main {
 
     public static Network getNetwork() {
         return net;
+    }
+
+    public static Game getGame() {
+        return game;
     }
 }

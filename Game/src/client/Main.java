@@ -77,6 +77,7 @@ public class Main {
         frame.addKeyListener(input);
         frame.addKeyListener(kListener);
         screen.addMouseMotionListener(input);
+        screen.addMouseListener(input);
 
         // Init Interfaces
         mainMenu = new MainMenu(aListener, net);
