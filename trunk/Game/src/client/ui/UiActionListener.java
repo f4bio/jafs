@@ -81,25 +81,30 @@ public class UiActionListener implements ActionListener {
         // InGame Chat senden
         else if(e.getActionCommand().equals(CMD_INGAMECHAT_SEND_MSG)) {
             String msg = Main.getUiInGameChat().getMSG();
-            // private chat
-            if(Main.getUiInGameChat().isPrivateChatMode()){
-                System.out.println("CLIENT_SERVER_CHAT_PRIVATE (server="+net.getServer()+", msg="+msg+")");
-                net.send(net.getServer(),
-                         ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE,
-                         argInt(Main.getUiInGameChat().getSelectedPrivateChatID()),
-                         argStr(msg));
+            if(!msg.equals("") && msg != null) {
+                // private chat
+                if(Main.getUiInGameChat().isPrivateChatMode()){
+                    System.out.println("CLIENT_SERVER_CHAT_PRIVATE (server="+net.getServer()+", msg="+msg+")");
+                    net.send(net.getServer(),
+                             ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE,
+                             argInt(Main.getUiInGameChat().getSelectedPrivateChatID()),
+                             argStr(msg));
+                }
+                // team chat
+    //            else if(msg.startsWith("/t")){
+    //                //
+    //            }
+                // public chat
+                else {
+                    System.out.println("CLIENT_SERVER_CHAT_ALL (server="+net.getServer()+", msg="+msg+")");
+                    net.send(net.getServer(),
+                             ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
+                             argStr(msg));
+                }
             }
-            // team chat
-//            else if(msg.startsWith("/t")){
-//                //
-//            }
-            // public chat
-            else {
-                System.out.println("CLIENT_SERVER_CHAT_ALL (server="+net.getServer()+", msg="+msg+")");
-                net.send(net.getServer(),
-                         ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
-                         argStr(msg));
-            }
+            Main.getUiInGameChat().setVisible(false);
+            Main.getScreen().requestFocus();
+            Main.getFrame().requestFocus();
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {

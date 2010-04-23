@@ -4,6 +4,7 @@ import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
 import common.CLog;
+import common.engine.CPlayer;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -72,15 +73,14 @@ public class Main {
         UiActionListener aListener = new UiActionListener(net);
         UiKeyListener kListener = new UiKeyListener();
 
+        // Init Interfaces
+        mainMenu = new MainMenu(aListener, net);
         // Input
         input = new Input(screen);
         frame.addKeyListener(input);
         frame.addKeyListener(kListener);
         screen.addMouseMotionListener(input);
         screen.addMouseListener(input);
-
-        // Init Interfaces
-        mainMenu = new MainMenu(aListener, net);
 
         uiInGameChat = new InGameChat(screen);
         uiInGameChat.setLocation(10, screen.getHeight()-uiInGameChat.getHeight()-10);
@@ -95,7 +95,7 @@ public class Main {
         // GameData
         data = new GameData(input);
         data.setName(System.getProperty("user.name"));
-        mainMenu.setPlayerName(data.getName());
+        mainMenu.setPlayerName(Main.getGameData().getName());
         // UpdateLoop
         loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
@@ -122,26 +122,6 @@ public class Main {
     public static JFrame getFrame(){
         return frame;
     }
-
-//    public static void hideUi(){
-//        EventQueue.invokeLater(new Runnable() {
-//           public void run() {
-//                uiCreate.setVisible(false);
-//                frame.requestFocus();
-//           }
-//        });
-//
-//    }
-//
-//    public static void showUi(){
-//        EventQueue.invokeLater(new Runnable() {
-//           public void run() {
-//                uiMain.setVisible(true);
-//                uiMain.requestFocus();
-//           }
-//        });
-//
-//    }
 
     public static GameData getGameData() {
         return data;
@@ -180,10 +160,23 @@ public class Main {
         serverlist.add(s);
     }
 
+    public static void refInGameClientlist(){
+        System.out.print("refInGameClientlist()");
+        clientlist.clear();
+        uiInGameChat.clearClientlist();
+        CPlayer[] p = data.getPlayers();
+        for(int i=0; i<p.length; i++){
+            if(p[i] != null){ // && !p[i].getName().equals(data.getName())) {
+                uiInGameChat.addClientToList(p[i].getId(), p[i].getName());
+                System.out.println(" -> added \""+p[i].getName()+"\" (id="+p[i].getId()+")");
+            }
+        }
+        System.out.println(" finished!");
+    }
+
     public static void addClientToClientlist(Client c){
         clientlist.add(c);
         mainMenu.addClientToList(c);
-        uiInGameChat.addClientToList(c);
     }
 
     public static void clearServerlist(){
@@ -193,7 +186,6 @@ public class Main {
     public static void clearClientlist(){
         clientlist.clear();
         mainMenu.clearClientlist();
-        uiInGameChat.clearClientlist();
     }
 
     public static void completeServerlist() {
