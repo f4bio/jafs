@@ -6,6 +6,7 @@
 
 package client.ui;
 
+import client.Main;
 import client.render.MainScreen;
 import common.net.Client;
 import java.awt.event.ActionListener;
@@ -95,6 +96,7 @@ public class InGameChat extends UiWindow implements MouseListener {
     // End of variables declaration//GEN-END:variables
     private DefaultListModel listModel;
     private int[] idlist = new int[16];
+    private String[] namelist = new String[16];
     private int privateChatID = 0;
     private boolean privateChatMode = false;
 
@@ -104,6 +106,15 @@ public class InGameChat extends UiWindow implements MouseListener {
         jButton1.addActionListener(a);
         jTextField1.setActionCommand(UiActionListener.CMD_INGAMECHAT_SEND_MSG);
         jTextField1.addActionListener(a);
+    }
+
+    public String getClientName(int clientID){
+        if(clientID == -1)
+            return "Masterserver";
+        else if(clientID == Main.getGameData().getSelfId())
+            return Main.getGameData().getName();
+        else
+            return namelist[clientID];
     }
 
     public int getSelectedPrivateChatID(){
@@ -116,12 +127,14 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     public void clearClientlist(){
         listModel.clear();
+        idlist = new int[16];
         repaint();
     }
 
-    public void addClientToList(Client client){
-        idlist[listModel.size()] = client.getId();
-        listModel.addElement(client.getPlayer().getName());
+    public void addClientToList(int clientID, String playerName){
+        idlist[listModel.size()] = clientID;
+        namelist[clientID] = playerName;
+        listModel.addElement(playerName);
         repaint();
     }
 
@@ -146,6 +159,11 @@ public class InGameChat extends UiWindow implements MouseListener {
             privateChatID = idlist[jList1.locationToIndex(e.getPoint())];
             System.out.println("selected id="+privateChatID);
             privateChatMode = true;
+        }
+        else {
+            //jList1.setSelectedIndex(-1);
+            jList1.clearSelection();
+            privateChatMode = false;
         }
     }
 

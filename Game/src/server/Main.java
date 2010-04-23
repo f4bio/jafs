@@ -234,10 +234,18 @@ public class Main {
         Client from = getClient(adr);
         Client recv = client[to];
         System.out.println("SERVER_CLIENT_CHAT_PRIVATE (to id="+to+", msg="+msg+")");
+        // to receiver
         net.send(recv.getAddress(),
                  ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,
                  argInt(from.getId()),
                  argStr(msg));
+        if(!recv.getAddress().equals(from.getAddress())) {
+            // to sender
+            net.send(from.getAddress(),
+                     ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE,
+                     argInt(from.getId()),
+                     argStr(msg));
+        }
     }
 
     public static int getClientTeamId(InetSocketAddress adr) {

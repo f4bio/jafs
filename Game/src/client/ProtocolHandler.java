@@ -37,6 +37,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         System.out.println("MASTER_CLIENT_NICKCHANGE_OK");
         Main.getGameData().setName(Main.getMainMenu().getPlayerName());
+        Main.getMainMenu().setPlayerName(Main.getMainMenu().getPlayerName());
         Main.getMainMenu().enableOptions(true);
     }
 
@@ -98,11 +99,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_auth_reply(int i, int id, InetSocketAddress adr)
     {
         if(i == Protocol.REPLY_SUCCESS){
-//            net.send(Network.MASTERHOST,
-//                     Network.MASTERPORT,
-//                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
-//                     argShort(Protocol.LIST_TYPE_CLIENTLIST));
             Main.getGameData().setSelfId(id);
+            Main.getMainMenu().setPlayerName(Main.getGameData().getName());
             Main.getMainMenu().enableLobby(true);
 //            Main.getMainMenu().appendIncommingMSG(false, -1, id, "Connection established!\n");
             System.out.println("MASTER_CLIENT_AUTH_REPLY success (id="+id+")");
@@ -200,8 +198,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     public void s_c_connection_established(InetSocketAddress adr) {
+        net.send(Network.MASTERHOST,
+                 Network.MASTERPORT,
+                 ProtocolCmd.CLIENT_MASTER_LOGOFF);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CLIENTID);
+        Main.refInGameClientlist();
         System.out.println("SERVER_CLIENT_CONNECTION_ESTABLISHED -> CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, CLIENT_SERVER_CLIENTID");
     }
 
@@ -249,6 +251,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.setReallyConnected(true);
         net.setServer(adr);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
+        Main.refInGameClientlist();
         System.out.println("SERVER_CLIENT_ALL_PLAYER_DATA_OK -> CLIENT_SERVER_JOINTEAM (TEAM_BLUE)");
     }
 
@@ -257,7 +260,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
         CPlayer player = new CPlayer();
         player.setId(id);
+        player.setName(n);
         Main.getGameData().addPlayer(player);
+
+        Main.refInGameClientlist();
 
         System.out.println("SERVER_CLIENT_EVENT_PLAYER_JOINED name="+n+" -> CLIENT_SERVER_EVENT_PLAYER_JOINED_OK");
     }
@@ -290,7 +296,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
         System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg+" -> CLIENT_SERVER_CHAT_ALL_OK");
-        Main.getUiInGameChat().appendMSG(Main.getClientName(id)+": "+msg);
+        Main.getUiInGameChat().appendMSG(Main.getUiInGameChat().getClientName(id)+": "+msg);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK);
     }
 
@@ -306,7 +312,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiInGameChat().appendMSG("(PRIVAT) " + Main.getClientName(id) + ": " + msg); // LOBBY
+        Main.getUiInGameChat().appendMSG("(PRIVAT) " + Main.getUiInGameChat().getClientName(id) + ": " + msg); // LOBBY
         System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE_OK);
     }

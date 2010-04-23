@@ -123,6 +123,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jTextField1.setEnabled(b);
         jButton3.setEnabled(b);
         jList1.setEnabled(b);
+        jLabel7.setEnabled(b);
     }
 
     public void enableOptions(boolean b){
@@ -153,6 +154,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     public void setPlayerName(String name){
         jTextField4.setText(name);
+        jLabel7.setText(" "+name);
     }
 
     public String getPlayerName(){
@@ -216,8 +218,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel9 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
+        jLabel7 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
@@ -422,7 +426,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("J.A.F.S.");
-        setResizable(false);
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 4));
 
@@ -449,13 +452,35 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         jSplitPane1.setDividerLocation(610);
         jSplitPane1.setDividerSize(3);
 
+        jPanel9.setAlignmentX(0.0F);
+        jPanel9.setAlignmentY(0.0F);
+
         jList1.setModel(listModel);
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setToolTipText("Doubleclick to open private chat tab.");
+        jList1.setAlignmentX(0.0F);
+        jList1.setAlignmentY(0.0F);
         jList1.setEnabled(false);
         jScrollPane1.setViewportView(jList1);
 
-        jSplitPane1.setRightComponent(jScrollPane1);
+        jLabel7.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE))
+        );
+
+        jSplitPane1.setRightComponent(jPanel9);
 
         jTextField1.setEnabled(false);
         jTextField1.setMinimumSize(new java.awt.Dimension(6, 21));
@@ -538,6 +563,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -547,6 +573,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

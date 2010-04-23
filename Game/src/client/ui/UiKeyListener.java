@@ -23,7 +23,8 @@ public class UiKeyListener implements KeyListener {
     public void keyReleased(KeyEvent e) {
         // InGame Chat
         if(e.getKeyCode() == KeyEvent.VK_Y) {
-            Main.getUiInGameChat().setVisible(Main.getUiInGameChat().isVisible() ? false : true);
+            Main.getUiInGameChat().setVisible(true);
+            Main.getUiInGameChat().requestFocus();
         }
         // MainMenu
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
@@ -35,12 +36,13 @@ public class UiKeyListener implements KeyListener {
                                        Main.getNetwork().getServer().getPort(),
                                        ProtocolCmd.CLIENT_SERVER_LOGOFF);
             Main.getNetwork().send(Network.MASTERHOST,
-                                     Network.MASTERPORT,
-                                     ProtocolCmd.CLIENT_MASTER_LOGOFF);
+                                   Network.MASTERPORT,
+                                   ProtocolCmd.CLIENT_MASTER_LOGOFF);
             Main.getNetwork().send(Network.MASTERHOST,
-                                Network.MASTERPORT,
-                                ProtocolCmd.CLIENT_MASTER_AUTH, argStr(Main.getGameData().getName()));
-
+                                   Network.MASTERPORT,
+                                   ProtocolCmd.CLIENT_MASTER_AUTH,
+                                   argStr(Main.getGameData().getName()));
+            Main.getNetwork().send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(Main.getGameData().getName()));
             Main.getMainMenu().enableLobby(true);
             Main.getMainMenu().setVisible(true);
             Main.getMainMenu().requestFocus();
