@@ -74,7 +74,7 @@ public class Main {
         UiKeyListener kListener = new UiKeyListener();
 
         // Init Interfaces
-        mainMenu = new MainMenu(aListener, net);
+        mainMenu = new MainMenu(aListener);
         // Input
         input = new Input(screen);
         frame.addKeyListener(input);
