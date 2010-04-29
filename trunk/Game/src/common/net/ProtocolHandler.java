@@ -9,15 +9,41 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public abstract class ProtocolHandler implements Runnable {
+    /**
+     *
+     */
     public static final int MODE_CLIENT = 0;
+    /**
+     *
+     */
     public static final int MODE_SERVER = 1;
+    /**
+     *
+     */
     public static final int MODE_MASTER = 2;
 
+    /**
+     *
+     */
     protected Network net;
+    /**
+     *
+     */
     protected Thread thread;
+    /**
+     *
+     */
     protected boolean ready;
+    /**
+     *
+     */
     protected int mode;
 
+    /**
+     *
+     * @param net
+     * @param mode
+     */
     public ProtocolHandler(Network net, int mode) {
         this.mode = mode;
         this.net = net;
@@ -37,6 +63,9 @@ public abstract class ProtocolHandler implements Runnable {
         }
     }
 
+    /**
+     *
+     */
     public void wakeUp() {
         if(!ready) {
             ready = true;
@@ -375,96 +404,507 @@ public abstract class ProtocolHandler implements Runnable {
         }
     }
 
+    /**
+     *
+     * @param p
+     */
     public abstract void noReplyReceived(Packet p);
     
     //Masterserver
+    /**
+     *
+     * @param adr
+     */
     public void s_m_auth(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_m_pong(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_m_servercount(InetSocketAddress adr) { }
+    /**
+     *
+     * @param host
+     * @param port
+     * @param adr
+     */
     public void c_m_joinserver(String host, int port, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_m_pong(InetSocketAddress adr) { }
+    /**
+     *
+     * @param type
+     * @param adr
+     */
     public void c_m_listrequest(short type, InetSocketAddress adr) { }
+    /**
+     *
+     * @param name
+     * @param adr
+     */
     public void c_m_auth(String name, InetSocketAddress adr) { }
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public void c_m_chat_lobby(String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param receiverID
+     * @param msg
+     * @param adr
+     */
     public void c_m_chat_private(int receiverID, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_m_chat_private_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_m_logoff(InetSocketAddress adr) { }
+    /**
+     *
+     * @param newNick
+     * @param adr
+     */
     public void c_m_nickchange(String newNick, InetSocketAddress adr) {  }
+    /**
+     *
+     * @param adr
+     */
     public void c_m_forced_nickchange_ok(InetSocketAddress adr) {  }
 
     //Server
+    /**
+     *
+     * @param adr
+     */
     public void m_s_ping(InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param adr
+     */
     public void m_s_servercount(int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param adr
+     */
     public void m_s_auth_reply(int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_auth(InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param adr
+     */
     public void c_s_init_reply(int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param name
+     * @param adr
+     */
     public void c_s_request_name_reply(String name, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_connection_established_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_connection_terminated_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_forced_nickchange_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_request_server_info(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_all_player_data(InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param wep
+     * @param posX
+     * @param posY
+     * @param dirX
+     * @param dirY
+     * @param adr
+     */
     public void c_s_player_info(int id, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_player_data_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_pong(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_clientcount(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_clientid(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_logoff(InetSocketAddress adr) { }
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public void c_s_chat_all(String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_chat_all_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public void c_s_chat_team(String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_chat_team_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param to
+     * @param msg
+     * @param adr
+     */
     public void c_s_chat_private(int to, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_chat_private_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param teamId
+     * @param adr
+     */
     public void c_s_jointeam(int teamId, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_event_player_joined_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_latency(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_current_map(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void c_s_players(InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param wepId
+     * @param dirX
+     * @param dirY
+     * @param orgX
+     * @param orgY
+     * @param adr
+     */
     public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX,
             double orgY, InetSocketAddress adr) { }
 
     //Client
+    /**
+     *
+     * @param type
+     * @param adr
+     */
     public void m_c_newlist(short type, InetSocketAddress adr) { }
+    /**
+     *
+     * @param serverAdr
+     * @param adr
+     */
     public void m_c_listentry_server(String serverAdr, InetSocketAddress adr) { }
+    /**
+     *
+     * @param clientAdr
+     * @param id
+     * @param name
+     * @param adr
+     */
     public void m_c_listentry_client(String clientAdr, int id, String name, InetSocketAddress adr) { }
+    /**
+     *
+     * @param type
+     * @param adr
+     */
     public void m_c_endlist(short type, InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param id
+     * @param adr
+     */
     public void m_c_auth_reply(int i, int id, InetSocketAddress adr) { }
+    /**
+     *
+     * @param s
+     * @param adr
+     */
     public void m_c_joinserver_reply(String s, InetSocketAddress adr) { }
+    /**
+     *
+     * @param senderID
+     * @param msg
+     * @param adr
+     */
     public void m_c_chat(int senderID, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param senderID
+     * @param recieverID
+     * @param msg
+     * @param adr
+     */
     public void m_c_chat_private(int senderID, int recieverID, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void m_c_ping(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void m_c_nickchange_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param forcedNick
+     * @param adr
+     */
     public void m_c_forced_nickchange(String forcedNick, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_ping(InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param adr
+     */
     public void s_c_clientcount(int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param adr
+     */
     public void s_c_clientid_reply(int id, InetSocketAddress adr) { }
+    /**
+     *
+     * @param i
+     * @param adr
+     */
     public void s_c_auth_reply(int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_request_name(InetSocketAddress adr) { }
+    /**
+     *
+     * @param m
+     * @param t
+     * @param adr
+     */
     public void s_c_init(String m, int t, InetSocketAddress adr) { }
+    /**
+     *
+     * @param n
+     * @param adr
+     */
     public void s_c_forced_nickchange(String n, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_connection_established(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_connection_terminated(InetSocketAddress adr) { }
+    /**
+     *
+     * @param name
+     * @param id
+     * @param team
+     * @param adr
+     */
     public void s_c_player_data(String name, int id, int team, InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param team
+     * @param wep
+     * @param posX
+     * @param posY
+     * @param dirX
+     * @param dirY
+     * @param adr
+     */
     public void s_c_player_info(int id, int team, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_all_player_data_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param n
+     * @param i
+     * @param adr
+     */
     public void s_c_event_player_joined(String n, int i, InetSocketAddress adr) { }
+    /**
+     *
+     * @param p
+     * @param t
+     * @param adr
+     */
     public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param wepId
+     * @param dirX
+     * @param dirY
+     * @param orgX
+     * @param orgY
+     * @param adr
+     */
     public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY, double orgX,
             double orgY, InetSocketAddress adr) { }
+    /**
+     *
+     * @param who
+     * @param by
+     * @param adr
+     */
     public void s_c_event_player_killed(int who, int by, InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param msg
+     * @param adr
+     */
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_chat_all_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param msg
+     * @param adr
+     */
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param id
+     * @param msg
+     * @param adr
+     */
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_chat_private_ok(InetSocketAddress adr) { }
+    /**
+     *
+     * @param reply
+     * @param adr
+     */
     public void s_c_logoff_reply(int reply, InetSocketAddress adr) { }
+    /**
+     *
+     * @param reply
+     * @param team
+     * @param adr
+     */
     public void s_c_jointeam_reply(int reply, int team, InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_event_player_respawned(InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
     public void s_c_latency_reply(InetSocketAddress adr) { }
+    /**
+     *
+     * @param map
+     * @param adr
+     */
     public void s_c_current_map_reply(String map, InetSocketAddress adr) { }
+    /**
+     *
+     * @param nPlayers
+     * @param adr
+     */
     public void s_c_players_reply(String nPlayers, InetSocketAddress adr) { }
-    public void m_c_chat_ok (InetSocketAddress adr) { }
+    /**
+     *
+     * @param adr
+     */
+    public void m_c_chat_ok(InetSocketAddress adr) { }
 }

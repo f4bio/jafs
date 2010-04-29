@@ -22,6 +22,10 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private CVector2 direction;
     private MainScreen scrn;
     
+    /**
+     *
+     * @param scrn
+     */
     public Input(MainScreen scrn) {
         key_w = false;
         key_a = false;
@@ -106,26 +110,50 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
         key_m_1 = false;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKeyWPressed() {
         return key_w;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKeyAPressed() {
         return key_a;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKeySPressed() {
         return key_s;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKeyDPressed() {
         return key_d;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isKeyM1Pressed() {
         return key_m_1;
     }
 
+    /**
+     *
+     * @return
+     */
     public CVector2 getDirection() {
         return direction;
     }

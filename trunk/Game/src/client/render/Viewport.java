@@ -25,17 +25,28 @@ import java.util.Vector;
  * @author miracle
  */
 public class Viewport {
+    /**
+     *
+     */
     public static final Dimension size = new Dimension(1024, 768);
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
     private float aspectRatio = (float)size.width / size.height;
 
+    /**
+     *
+     * @param gc
+     */
     public Viewport(GraphicsConfiguration gc) {
         this.gc = gc;
         createBuffer();
     }
 
+    /**
+     *
+     * @param g
+     */
     public void clear(Graphics2D g) {
         if(buffer != null) {
             g.setColor(Color.BLACK);
@@ -47,10 +58,18 @@ public class Viewport {
         buffer = gc.createCompatibleVolatileImage(size.width, size.height);
     }
 
+    /**
+     *
+     * @return
+     */
     public VolatileImage getBuffer() {
         return buffer;
     }
 
+    /**
+     *
+     * @param g2
+     */
     public void renderScene(Graphics2D g2) {
         do {
             Graphics2D g = buffer.createGraphics();
@@ -84,6 +103,10 @@ public class Viewport {
         } while(buffer.contentsLost());
     }
 
+    /**
+     *
+     * @param g
+     */
     public void render(Graphics2D g) {
         CMap map = Main.getGameData().getMap();
 

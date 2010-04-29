@@ -19,6 +19,10 @@ import java.util.Date;
 public class CLog {
     private static BufferedWriter bw = null;
 
+    /**
+     *
+     * @param file
+     */
     public static void init(String file) {
         try {
             bw = new BufferedWriter(new FileWriter(file));
@@ -29,6 +33,10 @@ public class CLog {
         }
     }
 
+    /**
+     *
+     * @param str
+     */
     public static void log(String str) {
         if(bw != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("[HH:mm:ss]");
@@ -45,6 +53,9 @@ public class CLog {
         }
     }
 
+    /**
+     *
+     */
     public static void close() {
         if(bw != null) {
             try {
@@ -56,6 +67,10 @@ public class CLog {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isInitialized() {
         if(bw != null)
             return true;

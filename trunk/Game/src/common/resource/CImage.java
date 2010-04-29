@@ -17,6 +17,9 @@ import javax.imageio.ImageIO;
  * @author miracle
  */
 public class CImage {
+    /**
+     *
+     */
     public static final Color transparency = new Color(255, 0, 255);
 
     private BufferedImage image;
@@ -24,6 +27,11 @@ public class CImage {
     private CArchive archive;
     private byte[] data;
 
+    /**
+     *
+     * @param archive
+     * @param path
+     */
     public CImage(CArchive archive, String path) {
         this.data = null;
         this.image = null;
@@ -32,6 +40,9 @@ public class CImage {
         init();
     }
 
+    /**
+     *
+     */
     public void init() {
         data = archive.getFileData(path);
 
@@ -40,6 +51,10 @@ public class CImage {
         }
     }
 
+    /**
+     *
+     * @param data
+     */
     public void load(byte[] data) {
         BufferedImage tmp = null;
         try {
@@ -71,6 +86,10 @@ public class CImage {
         archive = null;
     }
 
+    /**
+     *
+     * @return
+     */
     public BufferedImage getImage() {
         return image;
     }

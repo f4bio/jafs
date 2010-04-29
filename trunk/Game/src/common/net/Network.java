@@ -15,10 +15,22 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author miracle
  */
 public class Network {
+    /**
+     *
+     */
     public static final String MASTERHOST = "localhost";
+    /**
+     *
+     */
     public static final int MASTERPORT = 30000;
 
+    /**
+     *
+     */
     public static final int RESEND_COUNT = 5;
+    /**
+     *
+     */
     public static final int RESEND_INTERVAL = 500;
 
     private InetSocketAddress dest;
@@ -170,6 +182,9 @@ public class Network {
     private boolean sConnected;
     private boolean connected;
 
+    /**
+     *
+     */
     public Network() {
         dest =  null;
         nIn = null;
@@ -205,6 +220,12 @@ public class Network {
         nOut.wakeUp();
     }
 
+    /**
+     *
+     * @param cmd
+     * @param c
+     * @return
+     */
     public synchronized boolean send(ProtocolCmd cmd, byte[]... c) {
         byte[] packet = Protocol.buildPacket(cmd, c);
 
@@ -223,6 +244,13 @@ public class Network {
         return true;
     }
 
+    /**
+     *
+     * @param destination
+     * @param cmd
+     * @param c
+     * @return
+     */
     public synchronized boolean send(InetSocketAddress destination, ProtocolCmd cmd,
             byte[]... c) {
         byte[] packet = Protocol.buildPacket(cmd, c);
@@ -242,36 +270,65 @@ public class Network {
         return true;
     }
 
+    /**
+     *
+     * @param host
+     * @param port
+     * @param cmd
+     * @param c
+     * @return
+     */
     public synchronized boolean send(String host, int port, ProtocolCmd cmd,
             byte[]... c) {
         InetSocketAddress destination = new InetSocketAddress(host, port);
         return send(destination, cmd, c);
     }
    
+    /**
+     *
+     * @return
+     */
     public DatagramPacket getPacket() {
         return inQueue.poll();
     }
 
+    /**
+     *
+     */
     public void clear() {
         inQueue.clear();
         outQueue.clear();
         replyQueue.clear();
     }
 
+    /**
+     *
+     */
     public void clearReplyQueue() {
         synchronized(replyQueue) {
             replyQueue.clear();
         }
     }
 
+    /**
+     *
+     * @param con
+     */
     public void setReallyConnected(boolean con) {
         sConnected = con;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isReallyConnected() {
         return sConnected;
     }
 
+    /**
+     *
+     */
     public void disconnect() {
         if(connected) {
             inQueue.clear();
@@ -287,10 +344,19 @@ public class Network {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isConnected() {
         return connected;
     }
 
+    /**
+     *
+     * @param server
+     * @param port
+     */
     public void connect(String server, int port) {
         dest = new InetSocketAddress(server, port);
 //
@@ -304,26 +370,49 @@ public class Network {
 //        }
     }
 
+    /**
+     *
+     * @param adr
+     */
     public void setServer(InetSocketAddress adr) {
         dest = adr;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetSocketAddress getServer() {
         return dest;
     }
 
+    /**
+     *
+     */
     public void connect() {
         connect(MASTERHOST, MASTERPORT);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPort(){
         return port;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getHost(){
         return MASTERHOST;
     }
 
+    /**
+     *
+     * @param port
+     */
     public void listen(int port) {
         try {
             this.port = port;
@@ -337,10 +426,20 @@ public class Network {
         }
     }
 
+    /**
+     *
+     * @param handler
+     */
     public void setProtocolHandler(ProtocolHandler handler) {
         this.handler = handler;
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @return
+     */
     public int getFreePort(int from, int to){
         DatagramSocket testSocket;
             for(int i = from; i<to;i++)

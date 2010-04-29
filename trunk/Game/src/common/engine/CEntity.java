@@ -16,27 +16,72 @@ import java.awt.Point;
  * @author miracle
  */
 public class CEntity {
+    /**
+     *
+     */
     public static final CVector2 VEC_DOWN = new CVector2(0, 1);
+    /**
+     *
+     */
     public static final CVector2 VEC_UP = new CVector2(0, -1);
+    /**
+     *
+     */
     public static final CVector2 VEC_LEFT = new CVector2(-1, 0);
+    /**
+     *
+     */
     public static final CVector2 VEC_RIGHT = new CVector2(1, 0);
 
+    /**
+     *
+     */
     public static final CVector2 VEC_UP_RIGHT = new CVector2(Math.sqrt(2)/2,
             -Math.sqrt(2)/2);
+    /**
+     *
+     */
     public static final CVector2 VEC_UP_LEFT = new CVector2(-Math.sqrt(2)/2,
             -Math.sqrt(2)/2);
+    /**
+     *
+     */
     public static final CVector2 VEC_DOWN_RIGHT = new CVector2(Math.sqrt(2)/2,
             Math.sqrt(2)/2);
+    /**
+     *
+     */
     public static final CVector2 VEC_DOWN_LEFT = new CVector2(-Math.sqrt(2)/2,
             Math.sqrt(2)/2);
 
+    /**
+     *
+     */
     protected CVector2 position;
+    /**
+     *
+     */
     protected CVector2 direction;
+    /**
+     *
+     */
     protected double speed;
+    /**
+     *
+     */
     protected Dimension size;
+    /**
+     *
+     */
     protected String name;
+    /**
+     *
+     */
     protected int id;
 
+    /**
+     *
+     */
     public CEntity() {
         position = null;
         direction = null;
@@ -45,12 +90,21 @@ public class CEntity {
         name = null;
     }
 
+    /**
+     *
+     * @param vec2
+     */
     public void setPosition(CVector2 vec2) {
         if(vec2 == null)
             return;
         position = vec2;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setPosition(double x, double y) {
         if(position == null)
             position = new CVector2(x, y);
@@ -58,16 +112,29 @@ public class CEntity {
             position.set(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public CVector2 getPosition() {
         return position;
     }
 
+    /**
+     *
+     * @param vec2
+     */
     public void setDirection(CVector2 vec2) {
         if(vec2 == null)
             return;
         direction = vec2;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setDirection(double x, double y) {
         if(direction == null)
             direction = new CVector2(x, y);
@@ -75,48 +142,93 @@ public class CEntity {
             direction.set(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public CVector2 getDirection() {
         return direction;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setSpeed(double s) {
         speed = s;
     }
 
+    /**
+     *
+     * @return
+     */
     public double getSpeed() {
         return speed;
     }
 
+    /**
+     *
+     * @param s
+     */
     public void setSize(Dimension s) {
         if(s == null)
             return;
         size = s;
     }
 
+    /**
+     *
+     * @param w
+     * @param h
+     */
     public void setSize(int w, int h) {
         size.setSize(w, h);
     }
 
+    /**
+     *
+     * @return
+     */
     public Dimension getSize() {
         return size;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param i
+     */
     public void setId(int i) {
         id = i;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param g
+     */
     public void render(Graphics2D g) {
         
     }
@@ -137,6 +249,12 @@ public class CEntity {
         return -1;
     }
 
+    /**
+     *
+     * @param map
+     * @param p
+     * @return
+     */
     public int collideWall(CMap map, CVector2 p){
         Point g = p.get();
         Point t;
@@ -173,6 +291,15 @@ public class CEntity {
         return colId;
     }
 
+    /**
+     *
+     * @param map
+     * @param mov
+     * @param speedfactor
+     * @param pc
+     * @param p
+     * @return
+     */
     public int move(CMap map, CVector2 mov, double speedfactor, boolean pc, CPlayer[] p){
         CVector2 next = position;
         CVector2 last = next;

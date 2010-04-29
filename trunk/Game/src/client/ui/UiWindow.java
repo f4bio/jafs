@@ -42,27 +42,79 @@ import javax.swing.JPanel;
 public abstract class UiWindow extends JPanel
                                implements MouseListener, MouseMotionListener {
 
+    /**
+     *
+     */
     public static final int BORDER_WIDTH = 6;
+    /**
+     *
+     */
     public static final Color UI_COLOR_ON_TOP = new Color(218, 218, 218);
+    /**
+     *
+     */
     public static final Color UI_COLOR_IN_BACKGROUND = new Color(240, 240, 240);
+    /**
+     *
+     */
     public static final Color UI_COLOR_TRANSPARENT = new Color(1, 1, 1, 0);
 
+    /**
+     *
+     */
     protected Point location;
+    /**
+     *
+     */
     protected GradientPaint gradLeft;
+    /**
+     *
+     */
     protected GradientPaint gradRight;
+    /**
+     *
+     */
     protected GradientPaint gradTop;
+    /**
+     *
+     */
     protected GradientPaint gradBottom;
 
+    /**
+     *
+     */
     protected boolean isMoveable;
+    /**
+     *
+     */
     protected boolean isMousePressed;
+    /**
+     *
+     */
     protected boolean isUndecorated;
 
+    /**
+     *
+     */
     protected int tX = 0;
+    /**
+     *
+     */
     protected int tY = 0;
 
+    /**
+     *
+     */
     protected MainScreen scr;
+    /**
+     *
+     */
     protected VolatileImage buffer;
 
+    /**
+     *
+     * @param scr
+     */
     public UiWindow(MainScreen scr) {
         super();
 
@@ -95,8 +147,15 @@ public abstract class UiWindow extends JPanel
 //            UiManager.setForeground(this);
     }
     
+    /**
+     *
+     * @param a
+     */
     public abstract void addActionListener(ActionListener a);
 
+    /**
+     *
+     */
     public void initDecoration(){
         Color from = getBackground();
         Color to = new Color(from.getRed(), from.getGreen(), from.getBlue(), 0);
@@ -107,6 +166,9 @@ public abstract class UiWindow extends JPanel
         gradBottom = new GradientPaint(0, 0, from, 0, BORDER_WIDTH, to, true);
     }
 
+    /**
+     *
+     */
     public void render() {
         if(buffer == null) {
             createBuffer();
@@ -144,6 +206,9 @@ public abstract class UiWindow extends JPanel
         //}
     }
 
+    /**
+     *
+     */
     public void createBuffer() {
         GraphicsConfiguration gc = null;
         gc = this.getGraphicsConfiguration();
@@ -153,6 +218,10 @@ public abstract class UiWindow extends JPanel
                      getHeight(), Transparency.TRANSLUCENT);
     }
 
+    /**
+     *
+     * @return
+     */
     public VolatileImage getBuffer() {
         return buffer;
     }
@@ -167,6 +236,10 @@ public abstract class UiWindow extends JPanel
         paint(g);
     }
  */
+    /**
+     *
+     * @param g
+     */
     public void renderDecoration(Graphics2D g) {
         g.setColor(Color.LIGHT_GRAY);
         g.drawLine(0, 0, 0, getHeight());                         // Left
@@ -186,18 +259,34 @@ public abstract class UiWindow extends JPanel
         g.fillRect(0, getHeight(), getWidth(), BORDER_WIDTH);     */
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isMoveable(){
         return isMoveable;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setMoveable(boolean b){
         isMoveable = b;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isUndecorated(){
         return isUndecorated;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void setUndecorated(boolean b){
         isUndecorated = b;
     }

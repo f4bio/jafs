@@ -10,5 +10,9 @@ package client.anim;
  * @author sanjul00
  */
 public interface UpdateObject {
+    /**
+     *
+     * @param u
+     */
     public void update(UpdateLoop u);
 }

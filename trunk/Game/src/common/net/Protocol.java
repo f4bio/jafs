@@ -28,68 +28,159 @@ public class Protocol {
     //private static
 
     //----- Argument definitions
+    /**
+     *
+     */
     public static final byte ARG_BYTE   = 0;
+    /**
+     *
+     */
     public static final byte ARG_SHORT  = 1;
+    /**
+     *
+     */
     public static final byte ARG_INT    = 2;
+    /**
+     *
+     */
     public static final byte ARG_LONG   = 3;
+    /**
+     *
+     */
     public static final byte ARG_FLOAT  = 4;
+    /**
+     *
+     */
     public static final byte ARG_DOUBLE = 5;
+    /**
+     *
+     */
     public static final byte ARG_STRING = 6;
+    /**
+     *
+     */
     public static final byte ARG_NONE   = 7;
 
+    /**
+     *
+     */
     public static final byte[] ARG_SIZE = {
         1, 2, 4, 8, 4, 8, 0, 0
     };
 
+    /**
+     *
+     */
     public static final byte REPLY_SUCCESS = 0;
+    /**
+     *
+     */
     public static final byte REPLY_FAILURE = 1;
     
+    /**
+     *
+     */
     public static final String ARG_SEPERATOR = ";";
+    /**
+     *
+     */
     public static final char STRING_TERMINATOR = 3;
 
+    /**
+     *
+     */
     public static final short LIST_TYPE_SERVERLIST = 1;
+    /**
+     *
+     */
     public static final short LIST_TYPE_CLIENTLIST = 2;
 
+    /**
+     *
+     * @param command
+     * @param arg
+     */
     public static void registerCmd(ProtocolCmd command, byte... arg) {
         cmdTable.put(command, arg);
     }
 
+    /**
+     *
+     * @param command
+     * @param reply
+     */
     public static void registerCmdReply(ProtocolCmd command, ProtocolCmd reply) {
         cmdReplyTable.put(command, reply);
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static boolean hasReply(ProtocolCmd command) {
         if(cmdReplyTable.containsKey(command))
             return true;
         return false;
     }
     
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static boolean hasReplyById(byte command) {
         if(cmdReplyTableId.containsKey(command))
             return true;
         return false;
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static boolean isReply(ProtocolCmd command) {
         if(cmdReplyTable.containsValue(command))
             return true;
         return false;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean isReplyById(byte id) {
         if(cmdReplyTableId.containsValue(id))
             return true;
         return false;
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static ProtocolCmd getReplyOfCmd(ProtocolCmd command) {
         return cmdReplyTable.get(command);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static byte getReplyOfCmdById(byte id) {
         return cmdReplyTableId.get(id);
     }
 
+    /**
+     *
+     * @param command
+     * @param c
+     * @return
+     */
     public static byte[] buildPacket(ProtocolCmd command, byte[]... c) {
         byte[] args = getArgType(command);
 
@@ -122,10 +213,20 @@ public class Protocol {
         return packet;
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static byte[] buildPacket(ProtocolCmd command) {
         return buildPacket(command, new byte[0]);
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static int getArgSize(ProtocolCmd command) {
         byte[] args = cmdTable.get(command);
         if(args != null) {
@@ -137,30 +238,63 @@ public class Protocol {
         return -1;
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static byte[] getArgType(ProtocolCmd command) {
         return cmdTable.get(command);
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static boolean containsCmd(ProtocolCmd command) {
         return cmdTable.containsKey(command);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean containsCmdId(byte id) {
         return indexCmdTable.containsKey(id);
     }
 
+    /**
+     *
+     * @param command
+     * @return
+     */
     public static byte getIdByCmd(ProtocolCmd command) {
         return cmdIndexTable.get(command);
     }
     
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static ProtocolCmd getCmdById(byte id) {
         return indexCmdTable.get(id);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static boolean containsId(byte id) {
         return cmdIndexTable.containsValue(id);
     }
 
+    /**
+     *
+     */
     public static void init() {
         //----- Client commands
         registerCmd(ProtocolCmd.CLIENT_MASTER_PONG, ARG_NONE);

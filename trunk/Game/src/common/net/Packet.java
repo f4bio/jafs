@@ -13,6 +13,9 @@ import java.net.InetSocketAddress;
  * @author miracle
  */
 public class Packet {
+    /**
+     *
+     */
     public static final byte CHECK_COUNTER = 5;
 
     private DatagramPacket p;
@@ -20,6 +23,10 @@ public class Packet {
     private byte ttl;
     private byte resent;
 
+    /**
+     *
+     * @param packet
+     */
     public Packet(DatagramPacket packet) {
         if(packet != null) {
             p = packet;
@@ -29,36 +36,67 @@ public class Packet {
         ttl = CHECK_COUNTER;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte getCmd() {
         return cmd;
     }
 
+    /**
+     *
+     * @return
+     */
     public DatagramPacket getDatagram() {
         return p;
     }
     
+    /**
+     *
+     */
     public void resetTimeToLive() {
         ttl = CHECK_COUNTER;
     }
 
+    /**
+     *
+     */
     public void decreaseTimeToLive() {
         ttl--;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasTimeToLive() {
         if(ttl < 0)
             return false;
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte decreaseResentCounter() {
         return --resent;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetSocketAddress getAddress() {
         return (InetSocketAddress)p.getSocketAddress();
     }
 
+    /**
+     *
+     * @param packet
+     * @return
+     */
     public boolean equals(DatagramPacket packet) {
         byte[] ipOwn = p.getAddress().getAddress();
         byte[] ipOther = packet.getAddress().getAddress();

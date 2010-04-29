@@ -26,6 +26,10 @@ public class Game implements UpdateObject {
     private int scoreBlue;
     private CWeapon weapon[];
 
+    /**
+     *
+     * @param map
+     */
     public Game(String map) {
         weapon = new CWeapon[2];
         weapon[0] = new CWeaponPistol();
@@ -36,6 +40,10 @@ public class Game implements UpdateObject {
         scoreBlue = 0;
     }
 
+    /**
+     *
+     * @param u
+     */
     public void update(UpdateLoop u) {
         /*
          * Do magic. Collision detection for instance :3
@@ -61,22 +69,38 @@ public class Game implements UpdateObject {
         ProjectileManager.checkProjectiles(u, player, getMap());
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean load() {
         loader.setMap(map);
 
         return loader.load(map);
     }
 
+    /**
+     *
+     * @return
+     */
     public CMap getMap() {
         return loader.getMap();
     }
 
+    /**
+     *
+     * @param p
+     */
     public void addPlayer(CPlayer p) {
         int idx = p.getId();
         if(idx >= 0 && idx < player.length)
             player[idx] = p;
     }
 
+    /**
+     *
+     * @param p
+     */
     public void removePlayer(CPlayer p) {
         int idx = p.getId();
         if(idx >= 0 && idx < player.length)
@@ -84,28 +108,53 @@ public class Game implements UpdateObject {
     }
 
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public CPlayer getPlayer(int i) {
         if(player != null && i < player.length && i > -1)
             return player[i];
         return null;
     }
 
+    /**
+     *
+     * @param score
+     */
     public void setScoreBlue(int score) {
         scoreBlue = score;
     }
 
+    /**
+     *
+     * @param score
+     */
     public void setScoreRed(int score) {
         scoreRed = score;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getScoreBlue() {
         return scoreBlue;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getScoreRed() {
         return scoreRed;
     }
 
+    /**
+     *
+     * @return
+     */
     public final int getWinnerTeam() {
         if(scoreBlue < scoreRed)
             return CPlayer.TEAM_RED;
@@ -115,12 +164,22 @@ public class Game implements UpdateObject {
             return -1; // DRAW
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public CWeapon getWeapon(int id) {
         if(id > -1 && id < weapon.length)
             return weapon[id];
         return null;
     }
 
+    /**
+     *
+     * @param pId
+     * @param c
+     */
     public void hitPlayer(int pId, CProjectile c) {
         CPlayer p = player[pId];
         CWeapon w = getWeapon(c.getWeaponId());

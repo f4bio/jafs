@@ -18,62 +18,119 @@ public class Server {
     private int serverId;
     private long c_s_latency = 0;
 
+    /**
+     *
+     * @param host
+     * @param port
+     */
     public Server(String host, int port) {
         this.host = host;
         this.port = port;
         address = new InetSocketAddress(host, port);
     }
 
+    /**
+     *
+     * @param adr
+     */
     public Server(InetSocketAddress adr) {
         this.host = adr.getHostName();
         this.port = adr.getPort();
         address = adr;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     *
+     * @return
+     */
     public InetSocketAddress getAddress() {
         return address;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getHostPort() {
         return host+":"+port;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setServerId(int id){
         this.serverId = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getServerId(){
         return serverId;
     }
 
+    /**
+     *
+     * @param map
+     */
     public void setMap(String map){
        this.map = map;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMap(){
         return map;
     }
 
+    /**
+     *
+     * @param latency
+     */
     public void setClientServerLatency(long latency){
         c_s_latency = latency - c_s_latency;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getClientSserverLatency(){
         return c_s_latency;
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setCurPlayers(String n){
         curPlayers = n;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getCurPlayers(){
         return curPlayers;
     }

@@ -10,6 +10,9 @@ package common.engine;
  * @author miracle
  */
 public class CWeaponPistol extends CWeapon {
+    /**
+     *
+     */
     public CWeaponPistol() {
         id = 0;
         setDamage(7);
