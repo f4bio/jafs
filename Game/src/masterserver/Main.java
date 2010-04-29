@@ -150,9 +150,17 @@ public class Main {
                 return null;
 
         Client client = new Client(adr);
-        client.setId(clientlist.size());
+        // id generation
+        int id=0;
+        for(int i=0; i<clientlist.size(); i++){
+            if(clientlist.get(i).getId() == id){
+                id++;
+                i=-1;
+            }
+        }
+        client.setId(id);
         clientlist.add(client);
-        System.out.println("Client "+client.getHost()+":"+client.getPort()+" listed.");
+        System.out.println("Client "+client.getHost()+":"+client.getPort()+" (id="+id+") listed.");
         
         return client;
     }
@@ -195,7 +203,7 @@ public class Main {
     }
 
     public static String checkNick(String nick, InetSocketAddress adr){
-        System.out.print("CLIENT_MASTER_NICKCHANGE ("+nick+")");
+        System.out.print("CLIENT_MASTER_NICKCHANGE (nick="+nick+", id="+getClient(adr).getId()+")");
 
         boolean changed = false;
 

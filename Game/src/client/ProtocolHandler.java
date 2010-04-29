@@ -90,8 +90,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             Main.completeServerlist();
             System.out.println("MASTER_CLIENT_ENDLIST (server)");
         } else {
-            // complete clientlist
             System.out.println("MASTER_CLIENT_ENDLIST (client)");
+            Main.getMainMenu().completeClientlist();
         }
         
     }
