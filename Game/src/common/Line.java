@@ -15,6 +15,13 @@ public class Line {
     private double endX;
     private double endY;
 
+    /**
+     *
+     * @param sX
+     * @param sY
+     * @param eX
+     * @param eY
+     */
     public Line(double sX, double sY, double eX, double eY) {
         startX = sX;
         startY = sY;
@@ -22,6 +29,9 @@ public class Line {
         endY = eY;
     }
 
+    /**
+     *
+     */
     public Line() {
         startX = 0;
         startY = 0;
@@ -29,21 +39,39 @@ public class Line {
         endY = 0;
     }
 
+    /**
+     *
+     * @param sX
+     * @param sY
+     */
     public void setStart(double sX, double sY) {
         startX = sX;
         startY = sY;
     }
 
+    /**
+     *
+     * @param p
+     */
     public void setStart(CVector2 p) {
         startX = p.getX();
         startY = p.getY();
     }
 
+    /**
+     *
+     * @param eX
+     * @param eY
+     */
     public void setEnd(double eX, double eY) {
         endX = eX;
         endY = eY;
     }
 
+    /**
+     *
+     * @param p
+     */
     public void setEnd(CVector2 p) {
         endX = p.getX();
         endY = p.getY();

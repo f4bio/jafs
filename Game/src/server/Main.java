@@ -18,6 +18,9 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public class Main {
+    /**
+     *
+     */
     public static final int PING_INTERVAL = 10000;
 
     private static int maxClients = 16;
@@ -34,6 +37,10 @@ public class Main {
     private static Game game;
     private static UpdateLoop update;
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         name = "Test";
         map = "map";
@@ -73,6 +80,9 @@ public class Main {
         }
     }
 
+    /**
+     *
+     */
     public static void reset() {
         net.clear();
         game.setScoreBlue(0);
@@ -116,6 +126,11 @@ public class Main {
     private static Timer itemRespawnTimer;
     private static Timer roundTimer;
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public synchronized static Client addClient(InetSocketAddress adr) {
         Client c = null;
 
@@ -132,6 +147,10 @@ public class Main {
         return c;
     }
 
+    /**
+     *
+     * @param c
+     */
     public synchronized static void removeClient(Client c) {
         try {
             if(client[c.getId()] != null) {
@@ -145,28 +164,54 @@ public class Main {
         
     }
 
+    /**
+     *
+     * @param adr
+     */
     public synchronized static void removeClient(InetSocketAddress adr) {
         removeClient(getClient(adr));
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public static Client getClient(int i) {
         if(i < 0 || i > client.length - 1)
             return null;
         return client[i];
     }
 
+    /**
+     *
+     * @return
+     */
     public static Client[] getClients() {
         return client;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getServerId(){
         return serverId;
     }
 
+    /**
+     *
+     * @param id
+     */
     public static void setServerId(int id){
         serverId = id;
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static Client getClient(InetSocketAddress adr) {
         for(Client cur : client) {
             if(cur != null && cur.getAddress().equals(adr))
@@ -176,6 +221,10 @@ public class Main {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int clientCount() {
         int cnt = 0;
         for(Client c : client) {
@@ -185,6 +234,11 @@ public class Main {
         return cnt;
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static int getClientId(InetSocketAddress adr){
         for(Client c: client)
             if(c != null && c.getAddress().equals(adr))
@@ -192,6 +246,11 @@ public class Main {
         return -1;
     }
     
+    /**
+     *
+     * @param cmd
+     * @param d
+     */
     public synchronized static void broadcast(ProtocolCmd cmd, byte[]... d) {
         for(Client c : client) {
             if(c != null && c.getStatus() != Client.STATUS_PENDING &&
@@ -200,6 +259,11 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public synchronized static void broadcast_chat(String msg, InetSocketAddress adr){
         Client from = getClient(adr);
 
@@ -219,6 +283,11 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public synchronized static void broadcast_chat_team(String msg, InetSocketAddress adr) {
         Client from = getClient(adr);
 
@@ -230,6 +299,12 @@ public class Main {
     }
     
     //well, not really a bradcast, is it?
+    /**
+     *
+     * @param msg
+     * @param to
+     * @param adr
+     */
     public synchronized static void broadcast_chat_private(String msg, int to, InetSocketAddress adr) {
         Client from = getClient(adr);
         Client recv = client[to];
@@ -248,6 +323,11 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static int getClientTeamId(InetSocketAddress adr) {
         Client c = getClient(adr);
 
@@ -258,6 +338,12 @@ public class Main {
     }
 
     // wenn teamid schon gesetzt nicht nehr setzten?!  xD
+    /**
+     *
+     * @param adr
+     * @param teamId
+     * @return
+     */
     public static int setClientTeamId(InetSocketAddress adr, int teamId) {
         Client c = getClient(adr);
 
@@ -268,6 +354,11 @@ public class Main {
             return -1;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static boolean nameExists(String name) {
         for(Client c : client) {
             if(c != null) {
@@ -279,26 +370,50 @@ public class Main {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getServerName() {
         return name;
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getMapName() {
         return map;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getMaxPlayers() {
         return maxClients;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getCurPlayers() {
         return clientCount();
     }
 
+    /**
+     *
+     * @return
+     */
     public static Network getNetwork() {
         return net;
     }
 
+    /**
+     *
+     * @return
+     */
     public static Game getGame() {
         return game;
     }

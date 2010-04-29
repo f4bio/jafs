@@ -24,15 +24,28 @@ public class CArchive {
     private Hashtable<String, byte[]> m_conContents = new Hashtable<String, byte[]>();
     private String m_conFileName;
 
+    /**
+     *
+     * @param conFile
+     */
     public CArchive(String conFile) {
         this.m_conFileName = conFile;
         initialize();
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     public byte[] getFileData(String file) {
         return m_conContents.get(file);
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getContent() {
         String[] result = new String[m_conContents.size()];
         Enumeration keys = m_conContents.keys();
@@ -47,6 +60,11 @@ public class CArchive {
         return result;
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     public boolean contains(String file) {
         Enumeration keys = m_conContents.keys();
 

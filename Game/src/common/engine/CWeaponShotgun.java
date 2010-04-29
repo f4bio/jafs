@@ -13,6 +13,10 @@ import common.CVector2;
  */
 public class CWeaponShotgun extends CWeapon {
 
+    /**
+     *
+     * @param direction
+     */
     public void shoot(CVector2 direction) {
 
     }

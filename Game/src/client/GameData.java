@@ -26,11 +26,20 @@ public class GameData implements UpdateObject {
     private Input input;
     private boolean loaded;
 
+    /**
+     *
+     * @param input
+     */
     public GameData(Input input) {
         this.input = input;
         this.projectiles = new ArrayList<CProjectile>(100);
     }
 
+    /**
+     *
+     * @param map
+     * @return
+     */
     public boolean loadMap(String map) {
         loader.setMap(map);
 
@@ -98,57 +107,106 @@ public class GameData implements UpdateObject {
         }
     }
 
+    /**
+     *
+     * @param u
+     */
     public void update(UpdateLoop u) {
         checkPlayerInput(u);
         ProjectileManager.checkProjectiles(u, player, getMap());
     }
 
+    /**
+     *
+     * @return
+     */
     public CMap getMap() {
         return loader.getMap();
     }
 
+    /**
+     *
+     * @return
+     */
     public CPlayer getSelf() {
         return getPlayer(selfId);
     }
 
+    /**
+     *
+     * @param p
+     */
     public void addPlayer(CPlayer p) {
         int idx = p.getId();
         if(idx >= 0 && idx < player.length)
             player[idx] = p;
     }
 
+    /**
+     *
+     * @param p
+     */
     public void removePlayer(CPlayer p) {
         int idx = p.getId();
         if(idx >= 0 && idx < player.length)
             player[idx] = null;
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public CPlayer getPlayer(int i) {
         if(player != null && i < player.length)
             return player[i];
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public CPlayer[] getPlayers() {
         return player;
     }
 
+    /**
+     *
+     * @param max
+     */
     public void setMaxPlayers(int max) {
         player = new CPlayer[max];
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setSelfId(int id) {
         selfId = id;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSelfId() {
         return selfId;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setName(String n) {
         name = n;
 
@@ -159,6 +217,10 @@ public class GameData implements UpdateObject {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isLoaded() {
         return loaded;
     }

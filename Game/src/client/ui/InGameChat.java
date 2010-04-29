@@ -21,7 +21,9 @@ import javax.swing.text.DefaultCaret;
  */
 public class InGameChat extends UiWindow implements MouseListener {
 
-    /** Creates new form LobbyChat */
+    /** Creates new form LobbyChat
+     * @param scr
+     */
     public InGameChat(MainScreen scr) {
         super(scr);
         listModel = new DefaultListModel();
@@ -100,6 +102,10 @@ public class InGameChat extends UiWindow implements MouseListener {
     private int privateChatID = 0;
     private boolean privateChatMode = false;
 
+    /**
+     *
+     * @param a
+     */
     @Override
     public void addActionListener(ActionListener a) {
         jButton1.setActionCommand(UiActionListener.CMD_INGAMECHAT_SEND_MSG);
@@ -108,6 +114,11 @@ public class InGameChat extends UiWindow implements MouseListener {
         jTextField1.addActionListener(a);
     }
 
+    /**
+     *
+     * @param clientID
+     * @return
+     */
     public String getClientName(int clientID){
         if(clientID == -1)
             return "Masterserver";
@@ -117,20 +128,36 @@ public class InGameChat extends UiWindow implements MouseListener {
             return namelist[clientID];
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSelectedPrivateChatID(){
         return privateChatID;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPrivateChatMode(){
         return privateChatMode;
     }
 
+    /**
+     *
+     */
     public void clearClientlist(){
         listModel.clear();
         idlist = new int[16];
         repaint();
     }
 
+    /**
+     *
+     * @param clientID
+     * @param playerName
+     */
     public void addClientToList(int clientID, String playerName){
         idlist[listModel.size()] = clientID;
         namelist[clientID] = playerName;
@@ -138,21 +165,33 @@ public class InGameChat extends UiWindow implements MouseListener {
         repaint();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getMSG() {
         String str = jTextField1.getText();
         clearMsgField();
         return str;
     }
 
+    /**
+     *
+     * @param msg
+     */
     public void appendMSG(String msg) {
         jTextArea1.append(msg + "\n");
     }
 
+    /**
+     *
+     */
     public void clearMsgField() {
         jTextField1.setText("");
     }
 
     
+    @Override
     public void mouseClicked(MouseEvent e) {
         // Open private tab
         if (e.getSource() == jList1 && !listModel.isEmpty()) {
@@ -167,11 +206,15 @@ public class InGameChat extends UiWindow implements MouseListener {
         }
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {  }
 
+    @Override
     public void mouseReleased(MouseEvent e) {  }
 
+    @Override
     public void mouseEntered(MouseEvent e) {  }
 
+    @Override
     public void mouseExited(MouseEvent e) {  }
 }

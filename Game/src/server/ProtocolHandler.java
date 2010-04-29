@@ -18,18 +18,39 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
+    /**
+     *
+     * @param net
+     */
     public ProtocolHandler(Network net) {
         super(net, ProtocolHandler.MODE_SERVER);
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void m_s_ping(InetSocketAddress adr) {
         net.send(adr, ProtocolCmd.SERVER_MASTER_PONG);
     }
 
+    /**
+     *
+     * @param i
+     * @param adr
+     */
+    @Override
     public void m_s_servercount(int i, InetSocketAddress adr){
         Main.setServerId(i);
     }
 
+    /**
+     *
+     * @param i
+     * @param adr
+     */
+    @Override
     public void m_s_auth_reply(int i, InetSocketAddress adr) {
         if(i == Protocol.REPLY_SUCCESS)
             System.out.println("MASTER_SERVER_AUTH_REPLY success, server listed");
@@ -39,6 +60,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //            System.out.println("server failed to be listed.");
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_auth(InetSocketAddress adr){
         Client added = Main.addClient(adr);
 
@@ -55,6 +81,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    /**
+     *
+     * @param i
+     * @param adr
+     */
+    @Override
     public void c_s_init_reply(int i, InetSocketAddress adr) {
         if(i == Protocol.REPLY_SUCCESS) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_REQUEST_NAME);
@@ -65,6 +97,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param adr
+     */
+    @Override
     public void c_s_request_name_reply(String name, InetSocketAddress adr) {
         boolean changed = false;
 
@@ -96,14 +134,29 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY "+name+"(no SERVER_CLIENT_FORCED_NICKCHANGE) -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_connection_established_ok(InetSocketAddress adr) {
 
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_forced_nickchange_ok(InetSocketAddress adr) {
 
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_request_server_info(InetSocketAddress adr) {
         String name = Main.getServerName();
         String map = Main.getMapName();
@@ -114,6 +167,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 argStr(name), argStr(map), argInt(cur), argInt(max));
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_all_player_data(InetSocketAddress adr) {
         Client[] c = Main.getClients();
 
@@ -131,6 +189,17 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.send(adr, ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK);
     }
 
+    /**
+     *
+     * @param id
+     * @param wep
+     * @param posX
+     * @param posY
+     * @param dirX
+     * @param dirY
+     * @param adr
+     */
+    @Override
     public void c_s_player_info(int id, int wep, double posX, double posY,
                                 double dirX, double dirY, InetSocketAddress adr) {
         Client c = Main.getClient(id);
@@ -142,10 +211,26 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_player_data_ok(InetSocketAddress adr) {
 
     }
 
+    /**
+     *
+     * @param id
+     * @param wepId
+     * @param dirX
+     * @param dirY
+     * @param orgX
+     * @param orgY
+     * @param adr
+     */
+    @Override
     public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX, double orgY,
             InetSocketAddress adr) {
         CWeapon wep = Main.getGame().getWeapon(id);
@@ -160,20 +245,40 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_pong(InetSocketAddress adr) {
 //        System.out.println("CLIENT_SERVER_PONG");
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_clientcount(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT,
                  argInt(Main.clientCount()));
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_clientid(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY,
                  argInt(Main.getClient(adr).getId()));
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_logoff(InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_LOGOFF");
         Main.removeClient(adr);
@@ -182,6 +287,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
     // --- chat fkt
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
+    @Override
     public void c_s_chat_all(String msg, InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_CHAT_ALL (msg="+msg+")-> SERVER_CLIENT_CHAT_ALL_OK");
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK);
@@ -189,26 +300,55 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        net.send(adr, Protocol.server_client_chat, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+adr.getHostName()+":"+adr.getPort()+"): "+msg);
     }
     
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_chat_all_ok(InetSocketAddress adr) {
         System.out.println("CLIENT_SERVER_CHAT_ALL_OK");
     }
 
     // team wird aus der clientlist geholt, muss nicht übergeben werden
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
+    @Override
     public void c_s_chat_team(String msg, InetSocketAddress adr){
         Main.broadcast_chat_team(msg, adr);
     }
     
+    /**
+     *
+     * @param to
+     * @param msg
+     * @param adr
+     */
+    @Override
     public void c_s_chat_private(int to, String msg, InetSocketAddress adr) {
         System.out.println("CLIENT_SERVER_CHAT_PRIVATE -> SERVER_CLIENT_CHAT_PRIVATE_OK");
         Main.broadcast_chat_private(msg, to, adr);
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE_OK);
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_chat_private_ok(InetSocketAddress adr) {
         System.out.println("CLIENT_SERVER_CHAT_PRIVATE_OK");
     }
 
     // --- chat end
+    /**
+     *
+     * @param teamId
+     * @param adr
+     */
+    @Override
     public void c_s_jointeam(int teamId, InetSocketAddress adr){
         if(Main.setClientTeamId(adr, teamId) == -1) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
@@ -237,18 +377,37 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_latency(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY);
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_current_map(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, argStr(Main.getMapName()));
     }
 
+    /**
+     *
+     * @param adr
+     */
+    @Override
     public void c_s_players(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, argStr(Main.getCurPlayers()+"/"+Main.getMaxPlayers()));
     }
 
+    /**
+     *
+     * @param p
+     */
     public void noReplyReceived(Packet p) {
         if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.SERVER_CLIENT_PING) {
             Main.removeClient(p.getAddress());

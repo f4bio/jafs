@@ -28,10 +28,18 @@ public class CMap {
     private Point spawnRed;
     private Point spawnBlue;
 
+    /**
+     *
+     */
     public CMap() {
         textures = new ArrayList<CImage>();
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setSize(int x, int y) {
         sizeX = x;
         sizeY = y;
@@ -39,6 +47,12 @@ public class CMap {
         tile = new Tile[x][y];
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param t
+     */
     public void setTile(int x, int y, Tile t) {
         try {
             tile[x][y] = t;
@@ -47,55 +61,113 @@ public class CMap {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Dimension getSize() {
         return new Dimension(sizeX, sizeY);
     }
 
+    /**
+     *
+     * @return
+     */
     public Dimension getRealSize() {
         return new Dimension(sizeX * tileSizeX, sizeY * tileSizeY);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setTileSize(int x, int y) {
         tileSizeX = x;
         tileSizeY = y;
     }
 
+    /**
+     *
+     * @return
+     */
     public Dimension getTileSize() {
         return new Dimension(tileSizeX, tileSizeY);
     }
 
+    /**
+     *
+     * @param texture
+     */
     public void addTexture(CImage texture) {
         textures.add(texture);
     }
 
+    /**
+     *
+     * @param i
+     * @return
+     */
     public CImage getTexture(int i) {
         return textures.get(i);
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setSpawnRed(int x, int y) {
         spawnRed = new Point(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getSpawnRed() {
         return spawnRed;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setSpawnBlue(int x, int y) {
         spawnBlue = new Point(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public Point getSpawnBlue() {
         return spawnBlue;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Point getTileByCoords(int x, int y) {
         int xx, yy;
 
@@ -116,6 +188,12 @@ public class CMap {
         return new Point(xx, yy);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Tile getTile(int x, int y) {
         if(x >= 0 && x < sizeX &&
                 y >= 0 && y < sizeY)
@@ -123,10 +201,19 @@ public class CMap {
         return null;
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
     public Point getTileByCoords(Point p) {
         return getTileByCoords(p.x, p.y);
     }
 
+    /**
+     *
+     * @param g
+     */
     public void render(Graphics2D g) {
         for (int x = 0; x < tile.length; ++x) {
             for (int y = 0; y < tile[x].length; ++y) {
@@ -136,6 +223,11 @@ public class CMap {
         }
     }
 
+    /**
+     *
+     * @param g
+     * @param entity
+     */
     public void renderEntity(Graphics2D g, CEntity entity) {
         
     }

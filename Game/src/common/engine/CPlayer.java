@@ -15,8 +15,17 @@ import java.awt.Graphics2D;
  * @author miracle
  */
 public class CPlayer extends CEntity {
+    /**
+     *
+     */
     public static final int TEAM_NONE = 0;
+    /**
+     *
+     */
     public static final int TEAM_RED = 1;
+    /**
+     *
+     */
     public static final int TEAM_BLUE = 2;
 
     private int team;
@@ -24,6 +33,9 @@ public class CPlayer extends CEntity {
     private int currentWeapon;
     private int health;
 
+    /**
+     *
+     */
     public CPlayer() {
         team = TEAM_NONE;
         weapon = new CWeapon[2];
@@ -37,57 +49,108 @@ public class CPlayer extends CEntity {
         setDirection(1, 0);
     }
 
+    /**
+     *
+     * @param team
+     */
     public void setTeam(final int team) {
         this.team = team;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTeam() {
         return team;
     }
 
+    /**
+     *
+     * @param health
+     */
     public void setHealth(int health) {
         this.health = health;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isDead() {
         if(health <= 0)
             return true;
         return false;
     }
 
+    /**
+     *
+     * @param i
+     */
     public void setCurrentWeapon(int i) {
         if(i < 0 || i > weapon.length - 1)
             return;
         currentWeapon = i;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCurrentWeapon() {
         return currentWeapon;
     }
 
+    /**
+     *
+     * @param idx
+     * @return
+     */
     public CWeapon getWeapon(int idx) {
         if(idx > -1 && idx < weapon.length)
             return weapon[idx];
         return null;
     }
 
+    /**
+     *
+     * @param g
+     */
     @Override
     public void render(Graphics2D g) {
 
     }
 
+    /**
+     *
+     * @param ent
+     */
     public void hit(CEntity ent) {
         CProjectile c = (CProjectile)ent;
     }
 
+    /**
+     *
+     * @param mov
+     * @param factor
+     */
     public void move(CVector2 mov, double factor) {
         position.add(mov.mul_cpy(factor*speed));
     }
 
+    /**
+     *
+     * @param u
+     * @return
+     */
     public CProjectile shoot(UpdateLoop u) {
         return weapon[currentWeapon].shoot(this, u);
     }

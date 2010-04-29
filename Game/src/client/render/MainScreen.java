@@ -33,6 +33,10 @@ public  class MainScreen extends JWindow implements UpdateObject {
     private Color clr = new Color(0, 0, 0, 255);
     private int cntUiRepaint = 0;
 
+    /**
+     *
+     * @param owner
+     */
     public MainScreen(JFrame owner) {
         super(owner);
         this.setIgnoreRepaint(false);
@@ -49,11 +53,19 @@ public  class MainScreen extends JWindow implements UpdateObject {
         setVisible(true);
     }
 
+    /**
+     *
+     * @param a
+     */
     public void update(UpdateLoop a) {
         renderOffscreen(a);
         render(a);
     }
 
+    /**
+     *
+     * @param u
+     */
     public void render(UpdateLoop u) {
         Graphics2D g = null;
         try {
@@ -78,6 +90,10 @@ public  class MainScreen extends JWindow implements UpdateObject {
         }
     }
 
+    /**
+     *
+     * @param u
+     */
     public void renderOffscreen(UpdateLoop u) {
         loop = u;
         Graphics2D g = buffer.createGraphics();
@@ -113,20 +129,34 @@ public  class MainScreen extends JWindow implements UpdateObject {
         UiManager.preRender();
     }
 
+    /**
+     *
+     */
     public void createBuffer() {
         buffer = getGraphicsConfiguration().createCompatibleVolatileImage(screenSize.width, 
                 screenSize.height, Transparency.TRANSLUCENT);
     }
 
+    /**
+     *
+     * @param g
+     */
     public void clear(Graphics g) {
         g.setColor(clr);
         g.fillRect(0, 0, screenSize.width, screenSize.height);
     }
 
+    /**
+     *
+     * @return
+     */
     public Graphics2D getBuffer() {
         return buffer.createGraphics();
     }
 
+    /**
+     *
+     */
     public void createGameScene() {
         gamescene = new Viewport(getGraphicsConfiguration());
     }

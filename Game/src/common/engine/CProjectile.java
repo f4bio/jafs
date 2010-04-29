@@ -18,6 +18,14 @@ public class CProjectile extends CEntity {
     private CVector2 origin;
     private int owner;
 
+    /**
+     *
+     * @param owner
+     * @param speed
+     * @param weapon
+     * @param direction
+     * @param org
+     */
     public CProjectile(int owner, int speed, CWeapon weapon, CVector2 direction, CVector2 org) {
          size = new Dimension(1,1);
          this.speed = speed;
@@ -29,6 +37,14 @@ public class CProjectile extends CEntity {
          this.owner = owner;
     }
 
+    /**
+     *
+     * @param owner
+     * @param speed
+     * @param weapon
+     * @param direction
+     * @param org
+     */
     public CProjectile(int owner, int speed, int weapon, CVector2 direction, CVector2 org) {
          size = new Dimension(1,1);
          this.speed = speed;
@@ -40,22 +56,42 @@ public class CProjectile extends CEntity {
          this.owner = owner;
     }
 
+    /**
+     *
+     * @param owner
+     */
     public void setOwner(int owner) {
         this.owner = owner;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getOwner() {
         return owner;
     }
 
+    /**
+     *
+     * @param v
+     */
     public void setOrigin(CVector2 v) {
         origin = v;
     }
 
+    /**
+     *
+     * @return
+     */
     public CVector2 getOrigin() {
         return origin;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getWeaponId() {
         return weapon;
     }

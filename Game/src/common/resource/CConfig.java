@@ -20,9 +20,21 @@ import java.util.Hashtable;
  * @author miracle
  */
 public class CConfig {
+    /**
+     *
+     */
     public static final int ERROR_NONE = 0;
+    /**
+     *
+     */
     public static final int ERROR_NOT_FOUND = 1;
+    /**
+     *
+     */
     public static final int ERROR_UNABLE_TO_READ = 2;
+    /**
+     *
+     */
     public static final int ERROR_UNABLE_TO_WRITE = 3;
 
     private File file;
@@ -33,21 +45,36 @@ public class CConfig {
     private String tableKey;
     private String inLine;
 
+    /**
+     *
+     */
     public CConfig() {
         initRead(null);
     }
 
+    /**
+     *
+     * @param file
+     */
     public CConfig(String file) {
         File f = new File(file);
         initRead(f);
         read(f);
     }
 
+    /**
+     *
+     * @param file
+     */
     public CConfig(File file) {
         initRead(file);
         read(file);
     }
 
+    /**
+     *
+     * @param data
+     */
     public CConfig(byte[] data) {
         initRead(null);
         read(data);
@@ -135,6 +162,10 @@ public class CConfig {
         return ERROR_NONE;
     }
 
+    /**
+     *
+     * @return
+     */
     public int save() {
         if(file == null)
             return ERROR_NOT_FOUND;
@@ -183,6 +214,11 @@ public class CConfig {
         return ERROR_NONE;
     }
 
+    /**
+     *
+     * @param filePath
+     * @return
+     */
     public int save(String filePath) {
         if(filePath == null)
             return ERROR_NOT_FOUND;
@@ -194,6 +230,11 @@ public class CConfig {
         return result;
     }
 
+    /**
+     *
+     * @param sFile
+     * @return
+     */
     public int save(File sFile) {
         if(sFile == null)
             return ERROR_NOT_FOUND;
@@ -205,6 +246,10 @@ public class CConfig {
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     public String[] getSections() {
         String[] result = new String[table.size()];
         Enumeration keys = table.keys();
@@ -219,6 +264,11 @@ public class CConfig {
         return result;
     }
 
+    /**
+     *
+     * @param section
+     * @return
+     */
     public String[] getVariablesOf(String section) {
         if(table.get(section) == null) 
             return null;
@@ -236,6 +286,12 @@ public class CConfig {
         return result;
     }
 
+    /**
+     *
+     * @param section
+     * @param variable
+     * @param value
+     */
     public void setValue(String section, String variable, Object value) {
         if(table.containsKey(section)) {
             table.get(section).remove(variable);
@@ -247,10 +303,22 @@ public class CConfig {
         }
     }
 
+    /**
+     *
+     * @param section
+     * @param variable
+     * @return
+     */
     public String getValue(String section, String variable) {
         return table.get(section).get(variable);
     }
 
+    /**
+     *
+     * @param key
+     * @param subkey
+     * @return
+     */
     public Integer getValueI(String key, String subkey) {
         Integer result = null;
 
@@ -263,6 +331,12 @@ public class CConfig {
         return result;
     }
 
+    /**
+     *
+     * @param key
+     * @param subkey
+     * @return
+     */
     public Float getValueF(String key, String subkey) {
         Float result = null;
 

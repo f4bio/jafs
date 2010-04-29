@@ -87,6 +87,10 @@ public class Chat extends Thread{
         }
     }
 
+    /**
+     *
+     * @param net
+     */
     public Chat(common.net.Network net) {
         this.net = net;
     }

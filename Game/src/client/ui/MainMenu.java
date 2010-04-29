@@ -38,7 +38,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private ArrayList<PrivateChatTab> clientlist = new ArrayList<PrivateChatTab>();
     private ArrayList<PrivateChatTab> clientlistOld = new ArrayList<PrivateChatTab>();
     
-    /** Creates new form Gui */
+    /** Creates new form Gui
+     * @param uiaListener
+     */
     public MainMenu(UiActionListener uiaListener) {
         sModel = new ServerbrowserTableModel();
         listModel = new DefaultListModel();
@@ -73,6 +75,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
     }
 
+    /**
+     *
+     */
     public void clearClientlist(){
         clientlistOld.clear();
         for(int i=0; i<clientlist.size(); i++){
@@ -84,6 +89,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
+    /**
+     *
+     * @param client
+     */
     public void addClientToList(Client client){
         clientlist.add(new PrivateChatTab(client));
         listModel.addElement(client.getPlayer().getName());
@@ -91,6 +100,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
+    /**
+     *
+     */
     public void completeClientlist(){
         System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
         System.out.print(" sync clientlist with old data...");
@@ -148,14 +160,28 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         tbpLobbyChat.setSelectedIndex(tbpLobbyChat.getTabCount()-1);
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setServerlist(String[][] list) {
         sModel.setServerlist(list);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSelectedServerlistIndex(){
         return tblServerlist.getSelectedRow();
     }
 
+    /**
+     *
+     * @param v
+     * @param row
+     * @param col
+     */
     public void refreshValue(String v, int row, int col){
         sModel.setValueAt(v, row, col);
         repaint();
@@ -174,6 +200,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         return -1;
     }
 
+    /**
+     *
+     * @param b
+     */
     public void enableLobby(boolean b){
         tbpLobbyChat.setEnabled(b);
         tfLobbyChat.setEnabled(b);
@@ -182,10 +212,21 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lblLobbyChatPlayerName.setEnabled(b);
     }
 
+    /**
+     *
+     * @param b
+     */
     public void enableOptions(boolean b){
         pnlOptions.setEnabled(b);
     }
 
+    /**
+     *
+     * @param privateMsg
+     * @param senderID
+     * @param recieverID
+     * @param msg
+     */
     public void appendIncommingMSG(boolean privateMsg, int senderID, int recieverID, String msg){
         System.out.print("appendIncommingMSG(...)");
         // PRIVATE
@@ -209,15 +250,26 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         }
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setPlayerName(String name){
         tfPlayerName.setText(name);
         lblLobbyChatPlayerName.setText(" "+name);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPlayerName(){
         return tfPlayerName.getText();
     }
 
+    /**
+     *
+     */
     public void sendLobbyMsg(){
         if(!tfLobbyChat.getText().equals("")){
             // PRIVATE LOBBY CHAT
@@ -683,6 +735,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         private JTextArea txt;
         private JScrollPane sp;
 
+        /**
+         *
+         * @param client
+         */
         public PrivateChatTab(Client client){
             cl = client;
             txt = new JTextArea();
@@ -694,16 +750,40 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         }
 
+        /**
+         *
+         * @return
+         */
         public int getID(){ return cl.getId(); }
 
+        /**
+         *
+         * @return
+         */
         public String getName(){ return cl.getPlayer().getName(); }
 
+        /**
+         *
+         * @return
+         */
         public JTextArea getTextArea(){ return txt; }
 
+        /**
+         *
+         * @param s
+         */
         public void appendText(String s){ txt.append(s);}
 
+        /**
+         *
+         * @return
+         */
         public JScrollPane getScrollPane(){ return sp; }
 
+        /**
+         *
+         * @return
+         */
         public Client getClient(){ return cl; }
     }
 
@@ -735,6 +815,12 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             return serverList.length;
         }
 
+        /**
+         *
+         * @param value
+         * @param row
+         * @param col
+         */
         public void setValueAt(String value, int row, int col) {
             serverList[row][col] = value;
         }
@@ -743,10 +829,18 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             return (String)serverList[row][col];
         }
 
+        /**
+         *
+         * @param list
+         */
         public void setServerlist(String[][] list) {
             this.serverList = list;
         }
 
+        /**
+         *
+         * @return
+         */
         public String[][] getServerlist() {
             return serverList;
         }

@@ -10,19 +10,39 @@ import java.util.Vector;
  */
 public class UiManager {
 
+    /**
+     *
+     */
     public static final int DECO_HEIGHT = 0;
+    /**
+     *
+     */
     public static final int DECO_WIDTH = 1;
 
     private static Vector<UiWindow> content = new Vector<UiWindow>();
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static boolean addComponent(UiWindow c) {
         return content.add(c);
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     public static boolean removeComponent(UiWindow c) {
         return content.remove(c);
     }
 
+    /**
+     *
+     * @param g
+     */
     public static void renderAll(Graphics2D g) {
         UiWindow w;
 
@@ -37,7 +57,10 @@ public class UiManager {
         }
     }
 
-     public static void preRender() {
+    /**
+     *
+     */
+    public static void preRender() {
         UiWindow w;
 
         for(int i=0; i<content.size(); ++i) {
@@ -47,6 +70,10 @@ public class UiManager {
         }
     }
 
+    /**
+     *
+     * @param u
+     */
     public static void setForeground(UiWindow u) {
 //        for(int i=0; i<content.size(); i++) {
 //            if(content.get(i) != Main.getUiMainMenu())

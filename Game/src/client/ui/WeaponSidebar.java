@@ -31,6 +31,12 @@ public class WeaponSidebar extends UiWindow implements UpdateObject {
     private int focus_border;
     private Color focus_color;
 
+    /**
+     *
+     * @param scr
+     * @param width
+     * @param focus_height
+     */
     public WeaponSidebar(MainScreen scr, int width, int focus_height){
         super(scr);
         URL[] url = new URL[3];
@@ -83,19 +89,35 @@ public class WeaponSidebar extends UiWindow implements UpdateObject {
         g.fillRect(focus_x, focus_y2, focus_width, focus_border);                   // bottom
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setAktiveWeapon(int n){
         if(n < nWeapons && n >= 0)
             aktiv_weapon = n;
 //        System.out.println("Aktive Weapon: "+aktiv_weapon);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getAktiveWeapon(){
         return aktiv_weapon;
     }
 
+    /**
+     *
+     * @param a
+     */
     @Override
     public void addActionListener(ActionListener a) {  }
 
+    /**
+     *
+     * @param u
+     */
     public void update(UpdateLoop u) {
         if(slot_position < aktiv_weapon*focus_height) {
             slot_position += 10;

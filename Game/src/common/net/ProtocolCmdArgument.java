@@ -7,8 +7,17 @@ import java.nio.ByteBuffer;
  * @author miracle
  */
 public class ProtocolCmdArgument {
+    /**
+     *
+     */
     public static final String charset = "US-ASCII";
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static int terminatorIndex(byte[] b, int from) {
         for(int i=from; i<b.length; ++i) {
             if(b[i] == Protocol.STRING_TERMINATOR)
@@ -17,6 +26,12 @@ public class ProtocolCmdArgument {
         return -1;
     }
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static String toStr(byte[] b, int from) {
         String str = null;
         try {
@@ -27,6 +42,11 @@ public class ProtocolCmdArgument {
         return str;
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public static byte[] argStr(String str) {
         if(str == null) {
             return new byte[] { Protocol.STRING_TERMINATOR };
@@ -47,6 +67,12 @@ public class ProtocolCmdArgument {
         return ret;
     }
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static double toDouble(byte[] b, int from) {
         if(b.length - from < 8)
             throw new IllegalArgumentException("Range *has* to be 8 bytes");
@@ -56,6 +82,11 @@ public class ProtocolCmdArgument {
         return buffer.getDouble(0);
     }
 
+    /**
+     *
+     * @param d
+     * @return
+     */
     public static byte[] argDouble(double d) {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.putDouble(d);
@@ -65,6 +96,12 @@ public class ProtocolCmdArgument {
         return ret;
     }
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static float toFloat(byte[] b, int from) {
         if(b.length - from < 4)
             throw new IllegalArgumentException("Range *has* to be 4 bytes");
@@ -75,6 +112,11 @@ public class ProtocolCmdArgument {
         return buffer.getFloat(0);
     }
 
+    /**
+     *
+     * @param f
+     * @return
+     */
     public static byte[] argFloat(float f) {
         ByteBuffer buffer = ByteBuffer.allocate(4);
         buffer.putFloat(f);
@@ -84,6 +126,12 @@ public class ProtocolCmdArgument {
         return ret;
     }
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static long toLong(byte[] b, int from) {
         if(b.length - from < 8)
             throw new IllegalArgumentException("Range *has* to be 8 bytes");
@@ -94,6 +142,11 @@ public class ProtocolCmdArgument {
         return buffer.getLong(0);
     }
 
+    /**
+     *
+     * @param l
+     * @return
+     */
     public static byte[] argLong(long l) {
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.putLong(l);
@@ -103,7 +156,13 @@ public class ProtocolCmdArgument {
         return ret;
     }
 
-     public static int toInt(byte[] b, int from) {
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
+    public static int toInt(byte[] b, int from) {
         if(b.length - from < 4)
             throw new IllegalArgumentException("Range *has* to be 4 bytes");
 
@@ -113,7 +172,12 @@ public class ProtocolCmdArgument {
         return buffer.getInt(0);
     }
 
-    public static byte[] argInt(int i) {
+     /**
+      *
+      * @param i
+      * @return
+      */
+     public static byte[] argInt(int i) {
         ByteBuffer buffer = ByteBuffer.allocate(4);
         buffer.putInt(i);
         byte[] ret = buffer.array();
@@ -122,6 +186,12 @@ public class ProtocolCmdArgument {
         return ret;
     }
 
+    /**
+     *
+     * @param b
+     * @param from
+     * @return
+     */
     public static short toShort(byte[] b, int from) {
         if(b.length - from < 2)
             throw new IllegalArgumentException("Range *has* to be 2 bytes");
@@ -132,6 +202,11 @@ public class ProtocolCmdArgument {
         return buffer.getShort(0);
     }
 
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static byte[] argShort(short s) {
         ByteBuffer buffer = ByteBuffer.allocate(2);
         buffer.putShort(s);

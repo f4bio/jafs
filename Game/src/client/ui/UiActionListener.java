@@ -16,16 +16,41 @@ import static common.net.ProtocolCmdArgument.*;
 public class UiActionListener implements ActionListener {
 
     // Command list
+    /**
+     *
+     */
     public static final String CMD_TOGGLE_SERVERBROWSER     = "1";
+    /**
+     *
+     */
     public static final String CMD_EXIT                     = "2";
+    /**
+     *
+     */
     public static final String CMD_CONNECT                  = "3";
+    /**
+     *
+     */
     public static final String CMD_REFRESH_SERVERBROWSER    = "4";
+    /**
+     *
+     */
     public static final String CMD_LOBBYCHAT_SEND_MSG       = "5";
+    /**
+     *
+     */
     public static final String CMD_NICKCHANGE               = "6";
+    /**
+     *
+     */
     public static final String CMD_INGAMECHAT_SEND_MSG      = "7";
 
     private Network net;
 
+    /**
+     *
+     * @param net
+     */
     public UiActionListener(Network net) {
         this.net = net;
     }

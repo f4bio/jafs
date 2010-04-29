@@ -14,6 +14,12 @@ import java.util.Hashtable;
 public class CVarManager {
     private static Hashtable<String, CVar> list = new Hashtable<String, CVar>();
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @return
+     */
     public static boolean registerCvar(String key, CVar value) {
         CVar last = null;
 
@@ -25,7 +31,18 @@ public class CVarManager {
         return true;
     }
 
-    public static <T extends java.lang.Comparable<T>> 
+    /**
+     *
+     * @param <T>
+     * @param key
+     * @param standard
+     * @param max
+     * @param min
+     * @param ro
+     * @return
+     * @throws Exception
+     */
+    public static <T extends java.lang.Comparable<T>>
             boolean registerCVar(String key, T standard, T max, T min, boolean ro)
             throws Exception {
 
@@ -40,6 +57,13 @@ public class CVarManager {
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     * @return
+     * @throws Exception
+     */
     public static boolean setValueOf(String key, Comparable value) throws Exception {
         if(!list.containsKey(key))
             return false;
@@ -50,6 +74,11 @@ public class CVarManager {
         return true;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public Comparable getValueOf(String key) {
         if(!list.containsKey(key))
             return null;
@@ -57,6 +86,11 @@ public class CVarManager {
         return list.get(key).getValue();
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String getDatatypeOf(String key) {
         if(!list.containsKey(key))
             return null;

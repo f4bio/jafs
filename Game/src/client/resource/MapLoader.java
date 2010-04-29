@@ -19,6 +19,9 @@ import java.awt.event.ActionListener;
  * @author miracle
  */
 public class MapLoader extends Thread {
+    /**
+     *
+     */
     public static final String mapFolder = "maps";
 
     private CMap map;
@@ -26,6 +29,11 @@ public class MapLoader extends Thread {
     private String mapName;
     private ActionListener al;
 
+    /**
+     *
+     * @param map
+     * @param al
+     */
     public MapLoader(String map, ActionListener al) {
         this.map = null;
         this.mapName = map;
@@ -33,6 +41,11 @@ public class MapLoader extends Thread {
         this.al = al;
     }
 
+    /**
+     *
+     * @param m
+     * @return
+     */
     public boolean load(String m) {
         String path = Main.PATH + mapFolder + "\\" + m + ".map";
 
@@ -84,20 +97,33 @@ public class MapLoader extends Thread {
         return true;
     }
 
+    /**
+     *
+     * @param al
+     */
     public void setActionListener(ActionListener al) {
         this.al = al;
     }
     
+    /**
+     *
+     * @param map
+     */
     public void setMap(String map) {
         map = null;
         mapName = map;
         archive = null;
     }
 
+    /**
+     *
+     * @return
+     */
     public CMap getMap() {
         return map;
     }
 
+    @Override
     public final void run() {
         boolean loaded = load(mapName);
         ActionEvent ae = new ActionEvent(this, 0x7A69, "maploaded" + loaded);

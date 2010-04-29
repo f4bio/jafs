@@ -10,6 +10,11 @@ package common.utils;
  * @author miracle
  */
 public class CUtils {
+    /**
+     *
+     * @param programName
+     * @return
+     */
     public static String getApplicationPath(String programName) {
         programName += ".jar";
 

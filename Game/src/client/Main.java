@@ -40,10 +40,20 @@ public class Main {
     private static ArrayList<Server> serverlist = new ArrayList<Server>();
     private static ArrayList<Client> clientlist = new ArrayList<Client>();
     
+    /**
+     *
+     */
     public static final String PATH = CUtils.getApplicationPath("Game");
 
     
+    /**
+     *
+     */
     public static class Handler {
+        /**
+         *
+         * @param t
+         */
         public void handler(Throwable t) {
             try {
                 CLog.log(t.getMessage());
@@ -53,6 +63,10 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         CLog.init("debug.txt");
         System.setProperty("sun.awt.exception.handler", Handler.class.getName());
@@ -115,22 +129,44 @@ public class Main {
         CLog.close();
     }
 
+    /**
+     *
+     * @return
+     */
     public static MainScreen getScreen() {
         return screen;
     }
 
+    /**
+     *
+     * @return
+     */
     public static JFrame getFrame(){
         return frame;
     }
 
+    /**
+     *
+     * @return
+     */
     public static GameData getGameData() {
         return data;
     }
 
+    /**
+     *
+     * @return
+     */
     public static Network getNetwork() {
         return net;
     }
 
+    /**
+     *
+     * @param host
+     * @param port
+     * @return
+     */
     public static Server getServer(String host, int port) {
         for(Server cur : serverlist) {
             if(cur.getHost().equals(host) && cur.getPort() == port)
@@ -139,6 +175,11 @@ public class Main {
         return null;
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static int getServerlistIndex(InetSocketAddress adr) {
         for(int i=0; i<Main.serverlist.size(); i++){
             if(serverlist.get(i).getAddress().equals(adr)){
@@ -148,18 +189,33 @@ public class Main {
         return -1;
     }
 
+    /**
+     *
+     * @return
+     */
     public static MainMenu getMainMenu() {
         return mainMenu;
     }
 
+    /**
+     *
+     * @return
+     */
     public static InGameChat getUiInGameChat() {
         return uiInGameChat;
     }
     
+    /**
+     *
+     * @param s
+     */
     public static void addServerToServerlist(Server s){
         serverlist.add(s);
     }
 
+    /**
+     *
+     */
     public static void refInGameClientlist(){
         System.out.print("refInGameClientlist()");
         clientlist.clear();
@@ -174,20 +230,33 @@ public class Main {
         System.out.println(" finished!");
     }
 
+    /**
+     *
+     * @param c
+     */
     public static void addClientToClientlist(Client c){
         clientlist.add(c);
         mainMenu.addClientToList(c);
     }
 
+    /**
+     *
+     */
     public static void clearServerlist(){
         serverlist.clear();
     }
 
+    /**
+     *
+     */
     public static void clearClientlist(){
         clientlist.clear();
         mainMenu.clearClientlist();
     }
 
+    /**
+     *
+     */
     public static void completeServerlist() {
         if(serverlist.size() == 0){
             String[][] list = new String[1][4];
@@ -217,24 +286,43 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param adr
+     * @param nanoTime
+     */
     public static void refreshLatency(InetSocketAddress adr, long nanoTime){
         int i = getServerlistIndex(adr);
         serverlist.get(i).setClientServerLatency(nanoTime);
         mainMenu.refreshValue(new DecimalFormat("#0.00").format(serverlist.get(i).getClientSserverLatency()*0.000001)+"ms", i, 3);
     }
 
+    /**
+     *
+     * @param adr
+     * @param map
+     */
     public static void refreshCurrentMap(InetSocketAddress adr, String map){
         int i = getServerlistIndex(adr);
         serverlist.get(i).setMap(map);
         mainMenu.refreshValue(map, i, 1);
     }
 
+    /**
+     *
+     * @param adr
+     * @param players
+     */
     public static void refreshPlayers(InetSocketAddress adr, String players){
         int i = getServerlistIndex(adr);
         serverlist.get(i).setCurPlayers(players);
         mainMenu.refreshValue(players, i, 2);
     }
 
+    /**
+     *
+     * @return
+     */
     public static Server getSelectedServer(){
         if(mainMenu.getSelectedServerlistIndex() >= 0)
             return new Server(serverlist.get(mainMenu.getSelectedServerlistIndex()).getAddress());
@@ -242,6 +330,11 @@ public class Main {
             return null;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static String getClientName(int id){
         if(id == data.getSelfId()){
             return data.getName();

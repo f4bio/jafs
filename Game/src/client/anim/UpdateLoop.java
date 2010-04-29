@@ -16,6 +16,10 @@ public class UpdateLoop implements Runnable{
     private int curUPS;
     private double speedfactor;
 
+    /**
+     *
+     * @param ups
+     */
     public UpdateLoop(int ups) {
         setUPS(ups);
         list = new Vector<UpdateObject>();
@@ -74,39 +78,74 @@ public class UpdateLoop implements Runnable{
         }
     }
 
+    /**
+     *
+     * @param ups
+     */
     public void setUPS(int ups) {
         this.ups = ups;
         period = 1000.0d / ups;
     }
     
+    /**
+     *
+     * @return
+     */
     public int getUPS() {
         return ups;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getCurrentUPS() {
         return curUPS;
     }
 
+    /**
+     *
+     * @return
+     */
     public long getCurrentTime() {
         return curTime;
     }
 
+    /**
+     *
+     * @param u
+     */
     public void addUpdateObject(UpdateObject u) {
         list.add(u);
     }
 
+    /**
+     *
+     * @param u
+     * @return
+     */
     public UpdateObject removeUpdateObject(UpdateObject u) {
         return list.remove(list.indexOf(u));
     }
 
+    /**
+     *
+     * @return
+     */
     public double getSpeedfactor() {
         return speedfactor;
     }
 
+    /**
+     *
+     */
     public void pause() {
         paused = true;
     }
 
+    /**
+     *
+     */
     public void wakeUp() {
         if(paused) {
             paused = false;
@@ -116,14 +155,26 @@ public class UpdateLoop implements Runnable{
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isPaused() {
         return paused;
     }
 
+    /**
+     *
+     * @param priority
+     */
     public void setPriority(int priority) {
         thread.setPriority(priority);
     }
 
+    /**
+     *
+     * @return
+     */
     public int getPriority() {
         return thread.getPriority();
     }
