@@ -274,14 +274,14 @@ public class Main {
                 list[i][2] = "<pending>";
                 list[i][3] = "<pending>";
             }
+            mainMenu.clearServerinfoPanel();
             mainMenu.setServerlist(list);
             // map, players, latency requests
             for(int i=0; i<serverlist.size(); i++){
                 InetSocketAddress adr = serverlist.get(i).getAddress();
                 serverlist.get(i).setClientServerLatency(System.nanoTime());
                 net.send(adr, ProtocolCmd.CLIENT_SERVER_LATENCY);       // LATENCY
-                net.send(adr, ProtocolCmd.CLIENT_SERVER_CURRENT_MAP);   // MAP
-                net.send(adr, ProtocolCmd.CLIENT_SERVER_PLAYERS);       // PLAYERS
+                net.send(adr, ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO, argStr(data.getName()));
             }
         }
     }
@@ -302,21 +302,16 @@ public class Main {
      * @param adr
      * @param map
      */
-    public static void refreshCurrentMap(InetSocketAddress adr, String map){
+    public static void refreshServerInfo(String name, String map, String players, int highscore, InetSocketAddress adr){
         int i = getServerlistIndex(adr);
+        serverlist.get(i).setName(name);
+        mainMenu.refreshValue(name, i, 0);
         serverlist.get(i).setMap(map);
         mainMenu.refreshValue(map, i, 1);
-    }
-
-    /**
-     *
-     * @param adr
-     * @param players
-     */
-    public static void refreshPlayers(InetSocketAddress adr, String players){
-        int i = getServerlistIndex(adr);
         serverlist.get(i).setCurPlayers(players);
         mainMenu.refreshValue(players, i, 2);
+        serverlist.get(i).setClientHighscore(highscore);
+        mainMenu.refreshServerinfoPanel();
     }
 
     /**
@@ -325,7 +320,8 @@ public class Main {
      */
     public static Server getSelectedServer(){
         if(mainMenu.getSelectedServerlistIndex() >= 0)
-            return new Server(serverlist.get(mainMenu.getSelectedServerlistIndex()).getAddress());
+//            return new Server(serverlist.get(mainMenu.getSelectedServerlistIndex()).getAddress());
+            return serverlist.get(mainMenu.getSelectedServerlistIndex());
         else
             return null;
     }

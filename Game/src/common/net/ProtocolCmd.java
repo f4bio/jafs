@@ -63,14 +63,6 @@ public enum ProtocolCmd {
     /**
      *
      */
-    CLIENT_SERVER_CURRENT_MAP,
-    /**
-     *
-     */
-    CLIENT_SERVER_PLAYERS,
-    /**
-     *
-     */
     CLIENT_SERVER_ALL_PLAYER_DATA,
     /**
      *
@@ -230,15 +222,6 @@ public enum ProtocolCmd {
      *
      */
     SERVER_CLIENT_LATENCY_REPLY,
-    /**
-     *
-     */
-    SERVER_CLIENT_CURRENT_MAP_REPLY,
-    /**
-     *
-     */
-    SERVER_CLIENT_PLAYERS_REPLY,
-
     /**
      *
      */

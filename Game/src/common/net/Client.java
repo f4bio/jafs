@@ -22,6 +22,7 @@ public class Client {
     private boolean inGame;
     private InetSocketAddress address;
     private int status;
+    private int highscore = 0;
     private CPlayer player;
     
     /**
@@ -143,5 +144,13 @@ public class Client {
      */
     public int getStatus() {
         return status;
+    }
+
+    public void setHighscore(int n){
+        highscore = n;
+    }
+
+    public int getHighscore(){
+        return highscore;
     }
 }

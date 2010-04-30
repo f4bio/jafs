@@ -10,6 +10,7 @@ import client.Main;
 import common.net.Client;
 import common.net.Network;
 import common.net.ProtocolCmd;
+import common.net.Server;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.text.DefaultCaret;
 
@@ -33,7 +36,7 @@ import static common.net.ProtocolCmdArgument.*;
  *
  * @author Julian Sanio
  */
-public class MainMenu extends javax.swing.JFrame implements ActionListener, MouseListener, KeyListener {
+public class MainMenu extends javax.swing.JFrame implements ActionListener, MouseListener, KeyListener, ListSelectionListener {
 
     private ArrayList<PrivateChatTab> clientlist = new ArrayList<PrivateChatTab>();
     private ArrayList<PrivateChatTab> clientlistOld = new ArrayList<PrivateChatTab>();
@@ -45,8 +48,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         sModel = new ServerbrowserTableModel();
         listModel = new DefaultListModel();
         initComponents();
+        clearServerinfoPanel();
         DefaultCaret caret = (DefaultCaret)taLobbyChatPublic.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        tblServerlist.getSelectionModel().addListSelectionListener(this);
         btnMenuLobby.setBackground(btn_bg_aktive);
         btnMenuLobby.addActionListener(this);
         btnMenuOptions.setBackground(btn_bg_normal);
@@ -61,6 +66,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         btnRefresh.addActionListener(uiaListener);
         btnConnect.setActionCommand(UiActionListener.CMD_CONNECT);
         btnConnect.addActionListener(uiaListener);
+        btnCreate.setActionCommand(UiActionListener.CMD_CREATE_SERVER);
+        btnCreate.addActionListener(uiaListener);
         btnMenuServerbrowser.setBackground(btn_bg_normal);
         btnMenuServerbrowser.addActionListener(this);
         btnMenuServerbrowser.setActionCommand(UiActionListener.CMD_TOGGLE_SERVERBROWSER);
@@ -70,7 +77,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lClientlist.addMouseListener(this);
         tbpLobbyChat.addMouseListener(this);
         tfLobbyChat.addKeyListener(this);
-
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
     }
@@ -104,22 +110,22 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
      *
      */
     public void completeClientlist(){
-        System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
-        System.out.print(" sync clientlist with old data...");
+        //System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
+        //System.out.print(" sync clientlist with old data...");
         for(int i=0; i<clientlist.size(); i++){
             for(int j=0; j<clientlistOld.size(); j++){
                 if(clientlist.get(i).getID() == clientlistOld.get(j).getID()){
-                    System.out.print("id"+clientlistOld.get(j).getID()+" ");
+                    //System.out.print("id"+clientlistOld.get(j).getID()+" ");
                     clientlist.get(i).appendText(clientlistOld.get(j).getTextArea().getText());
                     break;
                 }
             }
         }
-        System.out.println("done!\n correcting opened tabs...");
+        //System.out.println("done!\n correcting opened tabs...");
         for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
             if(!tbpLobbyChat.getComponentAt(i).getName().equals("offline")){
                 int id = Integer.parseInt(tbpLobbyChat.getComponentAt(i).getName());
-                System.out.print("id"+id+" ");
+                //System.out.print("id"+id+" ");
                 int index = getClientlistIndex(id, clientlist);
                 if(index == -1) { // not in clientlist -> in clientlistOld
                     int indexOld = getClientlistIndex(id, clientlistOld);
@@ -140,21 +146,21 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 }
             }
         }
-        System.out.println("done!");
+        //System.out.println("done!");
     }
 
     private void openPrivateChatTab(int clientID) {
-        System.out.print("openPrivateChatTab(...) clientID="+clientID+" -> ");
-        System.out.print(""+(tbpLobbyChat.getComponentCount()-1)+" private tabs opened -> ");
+        //System.out.print("openPrivateChatTab(...) clientID="+clientID+" -> ");
+        //System.out.print(""+(tbpLobbyChat.getComponentCount()-1)+" private tabs opened -> ");
         for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
-            System.out.println(" tab"+i+": "+tbpLobbyChat.getTitleAt(i));
+            //System.out.println(" tab"+i+": "+tbpLobbyChat.getTitleAt(i));
             if(tbpLobbyChat.getTitleAt(i).equals(Main.getClientName(clientID))){
                 tbpLobbyChat.setSelectedIndex(i);
-                System.out.println("tab allready opened -> nothing to do!");
+                //System.out.println("tab allready opened -> nothing to do!");
                 return;
             }
         }
-        System.out.println("specific tab not opened -> opening new tab!");
+        //System.out.println("specific tab not opened -> opening new tab!");
         tbpLobbyChat.addTab(clientlist.get(clientID).getName(), clientlist.get(clientID).getScrollPane());
         tbpLobbyChat.setToolTipTextAt(tbpLobbyChat.getTabCount()-1, "Doubleclick to close private chat tab.");
         tbpLobbyChat.setSelectedIndex(tbpLobbyChat.getTabCount()-1);
@@ -166,6 +172,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
      */
     public void setServerlist(String[][] list) {
         sModel.setServerlist(list);
+        repaint();
+        pack();
     }
 
     /**
@@ -188,15 +196,34 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
+    public void clearServerinfoPanel(){
+        lblServerinfoName.setText("-");
+        lblServerinfoMap.setText("-");
+        lblServerinfoPlayers.setText("-");
+        lblServerinfoIpPort.setText("-");
+        lblServerinfoHighscore.setText("-");
+    }
+
+    public void refreshServerinfoPanel(){
+        Server s = Main.getSelectedServer();
+        if(s != null){
+            lblServerinfoName.setText(s.getName());
+            lblServerinfoMap.setText(s.getMap());
+            lblServerinfoPlayers.setText(s.getCurPlayers());
+            lblServerinfoIpPort.setText(s.getHostPort());
+            lblServerinfoHighscore.setText(""+s.getClientHighscore());
+        }
+    }
+
     private int getClientlistIndex(int clientID, ArrayList<PrivateChatTab> list){
-        System.out.print(" getClientlistIndex(...) -> ");
+        //System.out.print(" getClientlistIndex(...) -> ");
         for(int i=0; i<list.size(); i++) {
             if(list.get(i).getID() == clientID){
-                System.out.println("found index:"+i);
+                //System.out.println("found index:"+i);
                 return i;
             }
         }
-        System.out.println("no id matched");
+        //System.out.println("no id matched");
         return -1;
     }
 
@@ -228,24 +255,24 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
      * @param msg
      */
     public void appendIncommingMSG(boolean privateMsg, int senderID, int recieverID, String msg){
-        System.out.print("appendIncommingMSG(...)");
+        //System.out.print("appendIncommingMSG(...)");
         // PRIVATE
         if(privateMsg) {
-            System.out.print(" (private msg, id"+senderID+" to id"+recieverID+" :"+msg+")");
+            //System.out.print(" (private msg, id"+senderID+" to id"+recieverID+" :"+msg+")");
             if(recieverID == Main.getGameData().getSelfId()) {
-                System.out.println(" (recieverID==SefID)");
-//                System.out.println("msg to this client -> from id"+senderID);
+                //System.out.println(" (recieverID==SefID)");
+//                //System.out.println("msg to this client -> from id"+senderID);
                 openPrivateChatTab(getClientlistIndex(senderID, clientlist));
                 clientlist.get(getClientlistIndex(senderID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
             } else {
-                System.out.println("");
-//                System.out.println("msg to other client -> to id"+recieverID);
+                //System.out.println("");
+//                //System.out.println("msg to other client -> to id"+recieverID);
                 clientlist.get(getClientlistIndex(recieverID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
             }
         }
         // PUBLIC
         else {
-            System.out.println(" (public msg, senderID="+senderID+")");
+            //System.out.println(" (public msg, senderID="+senderID+")");
             taLobbyChatPublic.append(Main.getClientName(senderID) + ": " + msg + "\n");
         }
     }
@@ -301,6 +328,19 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         tblServerlist = new javax.swing.JTable();
         btnRefresh = new javax.swing.JButton();
         btnConnect = new javax.swing.JButton();
+        scpServerinfo = new javax.swing.JScrollPane();
+        pnlServerinfo = new javax.swing.JPanel();
+        lblServerinfoNameTxt = new javax.swing.JLabel();
+        lblServerinfoName = new javax.swing.JLabel();
+        lblServerinfoMapTxt = new javax.swing.JLabel();
+        lblServerinfoMap = new javax.swing.JLabel();
+        lblServerinfoPlayersTxt = new javax.swing.JLabel();
+        lblServerinfoPlayers = new javax.swing.JLabel();
+        lblServerinfoIpPortTxt = new javax.swing.JLabel();
+        lblServerinfoIpPort = new javax.swing.JLabel();
+        lblServerinfoHighscoreTxt = new javax.swing.JLabel();
+        lblServerinfoHighscore = new javax.swing.JLabel();
+        btnCreate = new javax.swing.JButton();
         pnlOptions = new javax.swing.JPanel();
         pnlOptionsPlayer = new javax.swing.JPanel();
         tfPlayerName = new javax.swing.JTextField();
@@ -333,46 +373,155 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         scpLobbyChat = new javax.swing.JScrollPane();
         taLobbyChatPublic = new javax.swing.JTextArea();
 
-        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10));
+        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         tblServerlist.setModel(sModel);
         tblServerlist.getTableHeader().setReorderingAllowed(false);
         scpServerlist.setViewportView(tblServerlist);
 
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRefresh.setText("Aktualisieren");
 
-        btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnConnect.setText("Verbinden");
+
+        scpServerinfo.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        lblServerinfoNameTxt.setText("Servername");
+
+        lblServerinfoName.setForeground(new java.awt.Color(102, 102, 102));
+        lblServerinfoName.setText("<Servername>");
+
+        lblServerinfoMapTxt.setText("Map");
+
+        lblServerinfoMap.setForeground(new java.awt.Color(102, 102, 102));
+        lblServerinfoMap.setText("<Map>");
+
+        lblServerinfoPlayersTxt.setText("Spieler");
+
+        lblServerinfoPlayers.setForeground(new java.awt.Color(102, 102, 102));
+        lblServerinfoPlayers.setText("<Spieler>");
+
+        lblServerinfoIpPortTxt.setText("Server-IP");
+
+        lblServerinfoIpPort.setForeground(new java.awt.Color(102, 102, 102));
+        lblServerinfoIpPort.setText("<IP:Port>");
+
+        lblServerinfoHighscoreTxt.setText("Highscore");
+
+        lblServerinfoHighscore.setForeground(new java.awt.Color(102, 102, 102));
+        lblServerinfoHighscore.setText("<Highscore>");
+
+        javax.swing.GroupLayout pnlServerinfoLayout = new javax.swing.GroupLayout(pnlServerinfo);
+        pnlServerinfo.setLayout(pnlServerinfoLayout);
+        pnlServerinfoLayout.setHorizontalGroup(
+            pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblServerinfoNameTxt)
+                            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblServerinfoName))))
+                    .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblServerinfoIpPort))
+                            .addComponent(lblServerinfoIpPortTxt)))
+                    .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblServerinfoMap))
+                            .addComponent(lblServerinfoMapTxt)))
+                    .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblServerinfoPlayers))
+                            .addComponent(lblServerinfoPlayersTxt)))
+                    .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblServerinfoHighscore))
+                            .addComponent(lblServerinfoHighscoreTxt))))
+                .addContainerGap(70, Short.MAX_VALUE))
+        );
+        pnlServerinfoLayout.setVerticalGroup(
+            pnlServerinfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlServerinfoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblServerinfoNameTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServerinfoName)
+                .addGap(18, 18, 18)
+                .addComponent(lblServerinfoIpPortTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServerinfoIpPort)
+                .addGap(18, 18, 18)
+                .addComponent(lblServerinfoMapTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServerinfoMap)
+                .addGap(18, 18, 18)
+                .addComponent(lblServerinfoPlayersTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServerinfoPlayers)
+                .addGap(18, 18, 18)
+                .addComponent(lblServerinfoHighscoreTxt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblServerinfoHighscore)
+                .addContainerGap(53, Short.MAX_VALUE))
+        );
+
+        scpServerinfo.setViewportView(pnlServerinfo);
+
+        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnCreate.setText("Erstellen");
 
         javax.swing.GroupLayout pnlServerbrowserLayout = new javax.swing.GroupLayout(pnlServerbrowser);
         pnlServerbrowser.setLayout(pnlServerbrowserLayout);
         pnlServerbrowserLayout.setHorizontalGroup(
             pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerbrowserLayout.createSequentialGroup()
-                .addGap(448, 448, 448)
-                .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(scpServerlist, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnConnect)
+                .addGroup(pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(scpServerinfo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnCreate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConnect, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(scpServerlist, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
         );
         pnlServerbrowserLayout.setVerticalGroup(
             pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerbrowserLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(scpServerlist, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnConnect)
-                    .addComponent(btnRefresh))
-                .addContainerGap())
+            .addGroup(pnlServerbrowserLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlServerbrowserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlServerbrowserLayout.createSequentialGroup()
+                        .addComponent(scpServerinfo, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scpServerlist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)))
         );
 
         pnlOptionsPlayer.setBorder(javax.swing.BorderFactory.createTitledBorder("Spieler"));
 
         lblPlayerName.setText("Spielername");
 
-        btnApplyOptionsPlayer.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnApplyOptionsPlayer.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnApplyOptionsPlayer.setText("Übernehmen");
 
         javax.swing.GroupLayout pnlOptionsPlayerLayout = new javax.swing.GroupLayout(pnlOptionsPlayer);
@@ -497,7 +646,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("J.A.F.S.");
+        setTitle("J.A.F.S. Client");
+        setResizable(false);
 
         pnlMenu.setLayout(new java.awt.GridLayout(1, 4));
 
@@ -622,6 +772,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JButton btnApplyOptionsNetwork;
     private javax.swing.JButton btnApplyOptionsPlayer;
     private javax.swing.JButton btnConnect;
+    private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnMenuExit;
     private javax.swing.JButton btnMenuLobby;
     private javax.swing.JButton btnMenuOptions;
@@ -633,6 +784,16 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JLabel lblMasterserverIP;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblPlayerName;
+    private javax.swing.JLabel lblServerinfoHighscore;
+    private javax.swing.JLabel lblServerinfoHighscoreTxt;
+    private javax.swing.JLabel lblServerinfoIpPort;
+    private javax.swing.JLabel lblServerinfoIpPortTxt;
+    private javax.swing.JLabel lblServerinfoMap;
+    private javax.swing.JLabel lblServerinfoMapTxt;
+    private javax.swing.JLabel lblServerinfoName;
+    private javax.swing.JLabel lblServerinfoNameTxt;
+    private javax.swing.JLabel lblServerinfoPlayers;
+    private javax.swing.JLabel lblServerinfoPlayersTxt;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JPasswordField pfPassword;
     private javax.swing.JPanel pnlLobbyChat;
@@ -644,8 +805,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JPanel pnlOptionsNetwork;
     private javax.swing.JPanel pnlOptionsPlayer;
     private javax.swing.JPanel pnlServerbrowser;
+    private javax.swing.JPanel pnlServerinfo;
     private javax.swing.JScrollPane scpClientlist;
     private javax.swing.JScrollPane scpLobbyChat;
+    private javax.swing.JScrollPane scpServerinfo;
     private javax.swing.JScrollPane scpServerlist;
     private javax.swing.JSplitPane sppLobbyChat;
     private javax.swing.JTextArea taLobbyChatPublic;
@@ -723,6 +886,11 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     }
 
     public void keyReleased(KeyEvent e) {  }
+
+    public void valueChanged(ListSelectionEvent e) {
+        //System.out.println("refreshServerinfoPanel()");
+        refreshServerinfoPanel();
+    }
 
 
     /**

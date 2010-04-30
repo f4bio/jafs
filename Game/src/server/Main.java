@@ -7,7 +7,13 @@ import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
 import common.net.ProtocolCmd;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,15 +43,23 @@ public class Main {
     private static Game game;
     private static UpdateLoop update;
 
+    private static String pathHighscore = System.getProperty("user.dir")+"\\highscores.ini";
+    private static Properties highscores = new Properties();
+
     /**
      *
      * @param args
      */
     public static void main(String[] args) {
-        name = "Test";
-        map = "map";
-        game = new Game(map);
+        if(args.length == 2) {
+            name = args[0];
+            map = args[1];
+        } else {
+            name = "Server";
+            map = "map";
+        }
 
+        game = new Game(map);
         boolean loaded = game.load();
         ProjectileManager.setGame(game);
 
@@ -57,7 +71,6 @@ public class Main {
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
         net.listen(net.getFreePort(40000, 50000));
-//        net.listen(40000);
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
         System.out.println("### SERVER STARTET ###\n");
@@ -75,9 +88,7 @@ public class Main {
 
         try {
             Thread.sleep(1000);
-        } catch(Exception e) {
-
-        }
+        } catch(Exception e) { }
     }
 
     /**
@@ -88,6 +99,39 @@ public class Main {
         game.setScoreBlue(0);
         game.setScoreRed(0);
         broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+    }
+
+    public static void setPlayerHighscore(String playerName, int highscore){
+        readHighscores();
+        highscores.setProperty(playerName, ""+highscore);
+        writeHighscores();
+    }
+
+    public static int getPlayerHighscore(String playerName){
+        readHighscores();
+        return Integer.parseInt(highscores.getProperty(playerName, "0"));
+    }
+
+    private static void readHighscores() {
+        FileInputStream fis;
+        try {
+            fis = new FileInputStream(new File(pathHighscore));
+            highscores.load(fis);
+            fis.close();
+        }
+        catch (FileNotFoundException ex) { }
+        catch (IOException ex){ }
+    }
+
+    private static void writeHighscores() {
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(new File(pathHighscore));
+            highscores.store(fos, "");
+            fos.close();
+        }
+        catch (FileNotFoundException ex) { }
+        catch (IOException ex){ }
     }
 
     private static TimerTask pinger = new TimerTask() {
