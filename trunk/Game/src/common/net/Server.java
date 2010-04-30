@@ -8,12 +8,13 @@ import java.net.InetSocketAddress;
  */
 public class Server {
     private String host;
-    private String name;
+    private String name = "J.A.F.S. Server";
     private String map;
     private int port;
     private int limitPlayers;
     private String curPlayers = "";
     private int latency;
+    private int clienthighscore;
     private InetSocketAddress address;
     private int serverId;
     private long c_s_latency = 0;
@@ -53,6 +54,14 @@ public class Server {
      */
     public int getPort() {
         return port;
+    }
+
+    public void setName(String n){
+        name = n;
+    }
+
+    public String getName(){
+        return name;
     }
 
     /**
@@ -133,5 +142,13 @@ public class Server {
      */
     public String getCurPlayers(){
         return curPlayers;
+    }
+
+    public int getClientHighscore(){
+        return clienthighscore;
+    }
+
+    public void setClientHighscore(int h){
+        clienthighscore = h;
     }
 }

@@ -326,7 +326,7 @@ public class Protocol {
 
         registerCmd(ProtocolCmd.CLIENT_SERVER_ALL_PLAYER_DATA, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO, ARG_STRING);
         registerCmd(ProtocolCmd.CLIENT_SERVER_INIT_REPLY, ARG_INT);
         registerCmd(ProtocolCmd.CLIENT_SERVER_PLAYER_INFO, ARG_INT, ARG_INT, ARG_DOUBLE,
                     ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
@@ -336,8 +336,6 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_LATENCY, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_SERVER_CURRENT_MAP, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_SERVER_PLAYERS, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_SHOOT, ARG_INT, ARG_INT, ARG_INT, ARG_INT,
                 ARG_DOUBLE, ARG_DOUBLE);
 
@@ -371,10 +369,8 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_INIT, ARG_STRING, ARG_INT);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_NONE);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, ARG_STRING, ARG_STRING, ARG_INT, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY, ARG_NONE);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, ARG_STRING);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, ARG_STRING);
 
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
@@ -461,6 +457,8 @@ public class Protocol {
                 ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK);
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
                 ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
+        registerCmdReply(ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO,
+                ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
                 ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK);
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_CHAT_ALL,

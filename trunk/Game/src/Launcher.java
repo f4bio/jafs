@@ -110,7 +110,8 @@ public class Launcher extends javax.swing.JDialog implements ActionListener {
         else {
             // launch server
             dispose();
-            server.Main.main(new String[0]);
+            new server.GUI().setVisible(true);
+//            server.Main.main(new String[0]);
         }
     }
 

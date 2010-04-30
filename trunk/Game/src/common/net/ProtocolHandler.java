@@ -184,12 +184,6 @@ public abstract class ProtocolHandler implements Runnable {
                     case CLIENT_SERVER_LATENCY:
                         c_s_latency(adr);
                         break;
-                    case CLIENT_SERVER_CURRENT_MAP:
-                        c_s_current_map(adr);
-                        break;
-                    case CLIENT_SERVER_PLAYERS:
-                        c_s_players(adr);
-                        break;
                     case CLIENT_SERVER_ALL_PLAYER_DATA:
                         c_s_all_player_data(adr);
                         break;
@@ -197,7 +191,7 @@ public abstract class ProtocolHandler implements Runnable {
                         c_s_player_data_ok(adr);
                         break;
                     case CLIENT_SERVER_REQUEST_SERVER_INFO:
-                        c_s_request_server_info(adr);
+                        c_s_request_server_info(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_SERVER_PONG:
                         c_s_pong(adr);
@@ -342,6 +336,9 @@ public abstract class ProtocolHandler implements Runnable {
                                 toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]),
                                 toDouble(data, idx[6]), adr);
                         break;
+                    case SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY:
+                        s_c_request_server_info_reply(toStr(data, idx[0]), toStr(data, idx[1]), toInt(data, idx[2]), toInt(data, idx[3]), toInt(data, idx[4]), adr);
+                        break;
                     case SERVER_CLIENT_ALL_PLAYER_DATA_OK:
                         s_c_all_player_data_ok(adr);
                         break;
@@ -393,12 +390,6 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case SERVER_CLIENT_LATENCY_REPLY:
                         s_c_latency_reply(adr);
-                        break;
-                    case SERVER_CLIENT_CURRENT_MAP_REPLY:
-                        s_c_current_map_reply(toStr(data, idx[0]), adr);
-                        break;
-                    case SERVER_CLIENT_PLAYERS_REPLY:
-                        s_c_players_reply(toStr(data, idx[0]), adr);
                 }
             }
         }
@@ -539,7 +530,7 @@ public abstract class ProtocolHandler implements Runnable {
      *
      * @param adr
      */
-    public void c_s_request_server_info(InetSocketAddress adr) { }
+    public void c_s_request_server_info(String playerName, InetSocketAddress adr) { }
     /**
      *
      * @param adr
@@ -632,16 +623,6 @@ public abstract class ProtocolHandler implements Runnable {
      * @param adr
      */
     public void c_s_latency(InetSocketAddress adr) { }
-    /**
-     *
-     * @param adr
-     */
-    public void c_s_current_map(InetSocketAddress adr) { }
-    /**
-     *
-     * @param adr
-     */
-    public void c_s_players(InetSocketAddress adr) { }
     /**
      *
      * @param id
@@ -829,6 +810,11 @@ public abstract class ProtocolHandler implements Runnable {
      */
     public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY, double orgX,
             double orgY, InetSocketAddress adr) { }
+
+
+    public void s_c_request_server_info_reply(String name, String map, int curPlayers, int maxPlayers, int highscore, InetSocketAddress adr){ }
+
+
     /**
      *
      * @param who
@@ -890,18 +876,6 @@ public abstract class ProtocolHandler implements Runnable {
      * @param adr
      */
     public void s_c_latency_reply(InetSocketAddress adr) { }
-    /**
-     *
-     * @param map
-     * @param adr
-     */
-    public void s_c_current_map_reply(String map, InetSocketAddress adr) { }
-    /**
-     *
-     * @param nPlayers
-     * @param adr
-     */
-    public void s_c_players_reply(String nPlayers, InetSocketAddress adr) { }
     /**
      *
      * @param adr

@@ -157,14 +157,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void c_s_request_server_info(InetSocketAddress adr) {
+    public void c_s_request_server_info(String playerName, InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_REQUEST_SERVER_INFO -> SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY");
         String name = Main.getServerName();
         String map = Main.getMapName();
         int cur = Main.getCurPlayers();
         int max = Main.getMaxPlayers();
-
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY,
-                argStr(name), argStr(map), argInt(cur), argInt(max));
+        int high = Main.getPlayerHighscore(playerName);
+        net.send(adr,
+                 ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY,
+                 argStr(name), argStr(map), argInt(cur), argInt(max), argInt(high));
     }
 
     /**
@@ -181,8 +183,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 int team = client.getTeamId();
                 int id = client.getId();
 
-                net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
-                        argStr(name), argInt(id), argInt(team));
+                net.send(adr,
+                         ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
+                         argStr(name), argInt(id), argInt(team));
             }
         }
 
@@ -232,16 +235,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX, double orgY,
-            InetSocketAddress adr) {
+                          InetSocketAddress adr) {
         CWeapon wep = Main.getGame().getWeapon(id);
         if(wep != null) {
             CVector2 dir = new CVector2(dirX, dirY);
             CVector2 org = new CVector2(orgX, orgY);
             CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
             ProjectileManager.addProjectile(c);
-            Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT, argInt(id),
-                    argInt(wepId), argInt(dirX), argInt(dirY), argDouble(orgX),
-                    argDouble(orgY));
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT,
+                           argInt(id), argInt(wepId), argInt(dirX),
+                           argInt(dirY), argDouble(orgX), argDouble(orgY));
         }
     }
 
@@ -260,7 +263,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_clientcount(InetSocketAddress adr){
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT,
+        net.send(adr,
+                 ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT,
                  argInt(Main.clientCount()));
     }
 
@@ -270,7 +274,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_clientid(InetSocketAddress adr){
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY,
+        net.send(adr,
+                 ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY,
                  argInt(Main.getClient(adr).getId()));
     }
 
@@ -282,7 +287,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_logoff(InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_LOGOFF");
         Main.removeClient(adr);
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY,
+        net.send(adr,
+                 ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY,
                  argInt(Protocol.REPLY_SUCCESS));
     }
 
@@ -351,8 +357,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_jointeam(int teamId, InetSocketAddress adr){
         if(Main.setClientTeamId(adr, teamId) == -1) {
-            net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
-                    argInt(Protocol.REPLY_FAILURE));
+            net.send(adr,
+                     ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
+                     argInt(Protocol.REPLY_FAILURE));
             System.out.println("CLIENT_SERVER_JOINTEAM failure -> SERVER_CLIENT_JOINTEAM_REPLY (failure)");
         }
         else {
@@ -366,11 +373,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                     teamId = 2;
 
 //                c.setTeamId(teamId);
-                net.send(adr, ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
-                        argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
+                net.send(adr,
+                         ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
+                         argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
 
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
-                        argInt(c.getId()) , argInt(teamId));
+                               argInt(c.getId()) , argInt(teamId));
                 c.setTeamId(teamId);
                 System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
@@ -384,24 +392,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_latency(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY);
-    }
-
-    /**
-     *
-     * @param adr
-     */
-    @Override
-    public void c_s_current_map(InetSocketAddress adr){
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_CURRENT_MAP_REPLY, argStr(Main.getMapName()));
-    }
-
-    /**
-     *
-     * @param adr
-     */
-    @Override
-    public void c_s_players(InetSocketAddress adr){
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYERS_REPLY, argStr(Main.getCurPlayers()+"/"+Main.getMaxPlayers()));
     }
 
     /**

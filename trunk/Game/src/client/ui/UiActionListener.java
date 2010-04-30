@@ -44,6 +44,10 @@ public class UiActionListener implements ActionListener {
      *
      */
     public static final String CMD_INGAMECHAT_SEND_MSG      = "7";
+    /**
+     *
+     */
+    public static final String CMD_CREATE_SERVER            = "8";
 
     private Network net;
 
@@ -71,6 +75,10 @@ public class UiActionListener implements ActionListener {
                      Network.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
                      argShort(Protocol.LIST_TYPE_SERVERLIST));
+        }
+        // Server erstellen
+        else if(e.getActionCommand().equals(CMD_CREATE_SERVER)) {
+            new server.GUI().setVisible(true);
         }
         // Nick change
         else if(e.getActionCommand().equals(CMD_NICKCHANGE)) {

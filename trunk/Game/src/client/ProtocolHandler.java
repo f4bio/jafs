@@ -604,30 +604,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("SERVER_CLIENT_LATENCY_REPLY");
     }
 
-    /**
-     *
-     * @param map
-     * @param adr
-     */
-    @Override
-    public void s_c_current_map_reply(String map, InetSocketAddress adr)
-    {
-        Main.refreshCurrentMap(adr, map);
-        System.out.println("SERVER_CLIENT_CURRENT_MAP_REPLY");
-    }
 
-    /**
-     *
-     * @param players
-     * @param adr
-     */
-    @Override
-    public void s_c_players_reply(String players, InetSocketAddress adr)
-    {
-        Main.refreshPlayers(adr, players);
-        System.out.println("SERVER_CLIENT_PLAYERS_REPLY");
+    public void s_c_request_server_info_reply(String name, String map, int curPlayers, int maxPlayers, int highscore, InetSocketAddress adr){
+        System.out.println("SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY");
+        Main.refreshServerInfo(name, map, curPlayers+"/"+maxPlayers, highscore, adr);
     }
-
     /**
      *
      * @param p
