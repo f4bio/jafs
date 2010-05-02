@@ -56,7 +56,7 @@ public class Main {
             map = args[1];
         } else {
             name = "Server";
-            map = "map";
+            map = "rhein2";
         }
 
         game = new Game(map);
