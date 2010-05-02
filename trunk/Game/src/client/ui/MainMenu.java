@@ -779,6 +779,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         pack();
     }
 
+    /**
+     *
+     */
     public void clearServerinfoPanel(){
         lblServerinfoName.setText("-");
         lblServerinfoMap.setText("-");
@@ -787,6 +790,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lblServerinfoHighscore.setText("-");
     }
 
+    /**
+     *
+     */
     public void refreshServerinfoPanel(){
         Server s = Main.getSelectedServer();
         if(s != null){
@@ -800,7 +806,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param b
+     * @param enabled
      */
     public void enableLobby(boolean enabled){
         tbpLobbyChat.setEnabled(enabled);
@@ -812,7 +818,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param b
+     * @param enabled
      */
     public void enableOptions(boolean enabled){
         pnlOptions.setEnabled(enabled);
@@ -820,7 +826,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param privateMsg
+     * @param isPrivateMsg
      * @param senderID
      * @param recieverID
      * @param msg

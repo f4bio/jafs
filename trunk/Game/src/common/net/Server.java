@@ -56,10 +56,18 @@ public class Server {
         return port;
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setName(String n){
         name = n;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName(){
         return name;
     }
@@ -144,10 +152,18 @@ public class Server {
         return curPlayers;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getClientHighscore(){
         return clienthighscore;
     }
 
+    /**
+     *
+     * @param h
+     */
     public void setClientHighscore(int h){
         clienthighscore = h;
     }

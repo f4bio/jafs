@@ -146,10 +146,18 @@ public class Client {
         return status;
     }
 
+    /**
+     *
+     * @param n
+     */
     public void setHighscore(int n){
         highscore = n;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHighscore(){
         return highscore;
     }
