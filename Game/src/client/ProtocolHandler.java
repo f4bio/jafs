@@ -19,20 +19,21 @@ import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
- * @author miracle
+ * @author J.A.F.S
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
 
     /**
-     *
-     * @param net
+     * Constructs an ProtocolHandler object.
+     * Overrides every needed method of ProtocolHandler
+     * @param net Network
      */
     public ProtocolHandler(Network net) {
         super(net, ProtocolHandler.MODE_CLIENT);
     }
 
     /**
-     *
+     * 
      * @param adr
      */
     @Override
@@ -605,6 +606,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     }
 
 
+    /**
+     *
+     * @param name
+     * @param map
+     * @param curPlayers
+     * @param maxPlayers
+     * @param highscore
+     * @param adr
+     */
+    @Override
     public void s_c_request_server_info_reply(String name, String map, int curPlayers, int maxPlayers, int highscore, InetSocketAddress adr){
         System.out.println("SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY");
         Main.refreshServerInfo(name, map, curPlayers+"/"+maxPlayers, highscore, adr);

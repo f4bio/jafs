@@ -528,6 +528,7 @@ public abstract class ProtocolHandler implements Runnable {
     public void c_s_forced_nickchange_ok(InetSocketAddress adr) { }
     /**
      *
+     * @param playerName
      * @param adr
      */
     public void c_s_request_server_info(String playerName, InetSocketAddress adr) { }
@@ -812,6 +813,15 @@ public abstract class ProtocolHandler implements Runnable {
             double orgY, InetSocketAddress adr) { }
 
 
+    /**
+     *
+     * @param name
+     * @param map
+     * @param curPlayers
+     * @param maxPlayers
+     * @param highscore
+     * @param adr
+     */
     public void s_c_request_server_info_reply(String name, String map, int curPlayers, int maxPlayers, int highscore, InetSocketAddress adr){ }
 
 

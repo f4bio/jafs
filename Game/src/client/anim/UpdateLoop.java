@@ -4,7 +4,7 @@ import java.util.Vector;
 
 /**
  *
- * @author sanjul00
+ * @author J.A.F.S
  */
 public class UpdateLoop implements Runnable{
     private Thread thread;

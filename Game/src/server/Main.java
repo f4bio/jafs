@@ -101,12 +101,22 @@ public class Main {
         broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
     }
 
+    /**
+     *
+     * @param playerName
+     * @param highscore
+     */
     public static void setPlayerHighscore(String playerName, int highscore){
         readHighscores();
         highscores.setProperty(playerName, ""+highscore);
         writeHighscores();
     }
 
+    /**
+     *
+     * @param playerName
+     * @return
+     */
     public static int getPlayerHighscore(String playerName){
         readHighscores();
         return Integer.parseInt(highscores.getProperty(playerName, "0"));

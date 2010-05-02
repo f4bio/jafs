@@ -18,7 +18,7 @@ public class Network {
     /**
      *
      */
-    public static final String MASTERHOST = "localhost";
+    public static final String MASTERHOST = "secureit.ath.cx";
     /**
      *
      */

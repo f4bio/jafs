@@ -10,7 +10,7 @@ import java.awt.event.MouseMotionListener;
 
 /**
  *
- * @author miracle
+ * @author J.A.F.S
  */
 public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private boolean key_w;
@@ -23,8 +23,8 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private MainScreen scrn;
     
     /**
-     *
-     * @param scrn
+     * Constructs an Input object
+     * @param scrn MainScreen
      */
     public Input(MainScreen scrn) {
         key_w = false;
@@ -112,7 +112,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return true if 'W' is pressed, otherwise false
      */
     public boolean isKeyWPressed() {
         return key_w;
@@ -120,7 +120,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return true if 'A' is pressed, otherwise false
      */
     public boolean isKeyAPressed() {
         return key_a;
@@ -128,7 +128,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return true if 'S' is pressed, otherwise false
      */
     public boolean isKeySPressed() {
         return key_s;
@@ -136,7 +136,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return true if 'D' is pressed, otherwise false
      */
     public boolean isKeyDPressed() {
         return key_d;
@@ -144,7 +144,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return true if 'M1' (Mouse 1) is pressed, otherwise false
      */
     public boolean isKeyM1Pressed() {
         return key_m_1;

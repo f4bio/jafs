@@ -21,7 +21,7 @@ import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
- * @author Julian Sanio
+ * @author J.A.F.S
  *
  */
 public class Main {
@@ -64,8 +64,9 @@ public class Main {
     }
 
     /**
-     *
-     * @param args
+     * Clients main method.
+     * Start menu, screen, network connection and other utils
+     * @param args (String[])
      */
     public static void main(String[] args) {
         CLog.init("debug.txt");
@@ -134,7 +135,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return screen
      */
     public static MainScreen getScreen() {
         return screen;
@@ -142,7 +143,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return frame
      */
     public static JFrame getFrame(){
         return frame;
@@ -150,7 +151,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return GameData
      */
     public static GameData getGameData() {
         return data;
@@ -158,7 +159,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Network
      */
     public static Network getNetwork() {
         return net;
@@ -166,7 +167,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return MainMenu
      */
     public static MainMenu getMainMenu() {
         return mainMenu;
@@ -174,7 +175,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return InGameChat
      */
     public static InGameChat getUiInGameChat() {
         return uiInGameChat;
@@ -184,10 +185,10 @@ public class Main {
 // --- Server ---
 
     /**
-     *
+     * Get specified server by host and port
      * @param host
      * @param port
-     * @return
+     * @return Server
      */
     public static Server getServer(String host, int port) {
         for(Server cur : serverlist) {
@@ -198,9 +199,9 @@ public class Main {
     }
 
     /**
-     *
+     * 
      * @param adr
-     * @return
+     * @return i index of server in serverlist
      */
     public static int getServerlistIndex(InetSocketAddress adr) {
         for(int i=0; i<Main.serverlist.size(); i++){
@@ -212,22 +213,22 @@ public class Main {
     }
     
     /**
-     *
-     * @param s
+     *  Adds server to Serverlist
+     * @param s Server
      */
     public static void addServerToServerlist(Server s){
         serverlist.add(s);
     }
     
     /**
-     *
+     * Clears Serverlist
      */
     public static void clearServerlist(){
         serverlist.clear();
     }
 
     /**
-     *
+     * Completes serverlist
      */
     public static void completeServerlist() {
         if(serverlist.size() == 0){
@@ -259,9 +260,9 @@ public class Main {
     }
 
     /**
-     *
+     * Refreshes Latency
      * @param adr
-     * @param nanoTime
+     * @param nanoTime long
      */
     public static void refreshLatency(InetSocketAddress adr, long nanoTime){
         int i = getServerlistIndex(adr);
@@ -270,9 +271,12 @@ public class Main {
     }
 
     /**
-     *
+     * Refreshes Serverinfo
+     * @param name
      * @param adr
+     * @param players 
      * @param map
+     * @param highscore
      */
     public static void refreshServerInfo(String name, String map, String players, int highscore, InetSocketAddress adr){
         int i = getServerlistIndex(adr);
@@ -288,7 +292,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Server
      */
     public static Server getSelectedServer(){
         if(mainMenu.getSelectedServerlistIndex() >= 0)
@@ -302,8 +306,8 @@ public class Main {
 // --- Client ---
 
     /**
-     *
-     * @param c
+     * adds client to clientlist
+     * @param c Client
      */
     public static void addClientToClientlist(Client c){
         clientlist.add(c);
@@ -311,7 +315,7 @@ public class Main {
     }
 
     /**
-     *
+     * Clears clientlist
      */
     public static void clearClientlist(){
         clientlist.clear();
@@ -319,7 +323,7 @@ public class Main {
     }
 
     /**
-     *
+     * Refreshes InGameClientlist
      */
     public static void refInGameClientlist(){
         System.out.print("refInGameClientlist()");
@@ -338,7 +342,7 @@ public class Main {
     /**
      *
      * @param id
-     * @return
+     * @return clientname
      */
     public static String getClientName(int id){
         if(id == data.getSelfId()){

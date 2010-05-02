@@ -15,7 +15,7 @@ import static common.net.ProtocolCmdArgument.*;
 
 /**
  *
- * @author miracle
+ * @author J.A.F.S
  */
 public class GameData implements UpdateObject {
     private MapLoader loader = new MapLoader(null, null);
@@ -27,7 +27,7 @@ public class GameData implements UpdateObject {
     private boolean loaded;
 
     /**
-     *
+     * Constructs an GameData object
      * @param input
      */
     public GameData(Input input) {
@@ -37,8 +37,8 @@ public class GameData implements UpdateObject {
 
     /**
      *
-     * @param map
-     * @return
+     * @param map mapname
+     * @return specified map
      */
     public boolean loadMap(String map) {
         loader.setMap(map);
@@ -109,7 +109,7 @@ public class GameData implements UpdateObject {
 
     /**
      *
-     * @param u
+     * @param u UpdateLoop
      */
     public void update(UpdateLoop u) {
         checkPlayerInput(u);
@@ -117,24 +117,24 @@ public class GameData implements UpdateObject {
     }
 
     /**
-     *
-     * @return
+     * Get Map
+     * @return CMap
      */
     public CMap getMap() {
         return loader.getMap();
     }
 
     /**
-     *
-     * @return
+     * Get self
+     * @return CPlayer
      */
     public CPlayer getSelf() {
         return getPlayer(selfId);
     }
 
     /**
-     *
-     * @param p
+     * Add a Player
+     * @param p CPlayer
      */
     public void addPlayer(CPlayer p) {
         int idx = p.getId();
@@ -143,8 +143,8 @@ public class GameData implements UpdateObject {
     }
 
     /**
-     *
-     * @param p
+     * Remove a player
+     * @param p CPlayer
      */
     public void removePlayer(CPlayer p) {
         int idx = p.getId();
@@ -153,9 +153,9 @@ public class GameData implements UpdateObject {
     }
 
     /**
-     *
-     * @param i
-     * @return
+     * Get player
+     * @param i player id
+     * @return CPlayer
      */
     public CPlayer getPlayer(int i) {
         if(player != null && i < player.length)
@@ -164,23 +164,23 @@ public class GameData implements UpdateObject {
     }
 
     /**
-     *
-     * @return
+     * Get all players
+     * @return CPlayer (array)
      */
     public CPlayer[] getPlayers() {
         return player;
     }
 
     /**
-     *
-     * @param max
+     * Set maximum players
+     * @param max maximum amount of players
      */
     public void setMaxPlayers(int max) {
         player = new CPlayer[max];
     }
 
     /**
-     *
+     * Set self id
      * @param id
      */
     public void setSelfId(int id) {
@@ -188,24 +188,24 @@ public class GameData implements UpdateObject {
     }
 
     /**
-     *
-     * @return
+     * Get self id
+     * @return selfId (int)
      */
     public int getSelfId() {
         return selfId;
     }
 
     /**
-     *
-     * @return
+     * Get name
+     * @return name (String)
      */
     public String getName() {
         return name;
     }
 
     /**
-     *
-     * @param n
+     * Set name
+     * @param n (String)
      */
     public void setName(String n) {
         name = n;
