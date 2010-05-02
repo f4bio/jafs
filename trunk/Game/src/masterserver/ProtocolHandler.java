@@ -15,11 +15,17 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
+    /**
+     * Constructs a ProtocolHandler object.
+     * Overrides every needed method of ProtocolHandler
+     * @param net Network
+     */
     public ProtocolHandler(Network net)
     {
         super(net, ProtocolHandler.MODE_MASTER);
     }
 
+    @Override
     public void c_m_joinserver(String host, int port, InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY,
@@ -29,16 +35,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //        System.out.println("c_m_joinserver()");
     }
 
+    @Override
     public void c_m_forced_nickchange_ok(InetSocketAddress adr)
     {
         System.out.println("CLIENT_MASTER_FORCED_NICKCHANGE_OK");
     }
 
+    @Override
     public void c_m_nickchange(String newNick, InetSocketAddress adr)
     {
         Main.checkNick(newNick, adr);
     }
 
+    @Override
     public void c_m_listrequest(short type, InetSocketAddress adr)
     {
         System.out.print("CLIENT_MASTER_LISTREQUEST");
@@ -67,6 +76,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         
     }
 
+    @Override
     public void c_m_auth(String name, InetSocketAddress adr)
     {
         Client client = Main.addClient(adr);
@@ -88,6 +98,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("CLIENT_MASTER_AUTH failure -> MASTER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
     }
+    @Override
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {
         System.out.println("CLIENT_MASTER_CHAT_LOBBY msg="+msg);
@@ -95,6 +106,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Main.broadcast(msg, adr);
     }
 
+    @Override
     public void c_m_chat_private(int receiverID, String msg, InetSocketAddress adr)
     {
         System.out.println("CLIENT_MASTER_CHAT_PRIVATE receiverID="+receiverID+", msg="+msg);
@@ -123,16 +135,19 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    @Override
     public void c_m_logoff(InetSocketAddress adr){
         System.out.println("CLIENT_MASTER_LOGOFF");
         Client c = Main.getClient(adr);
-        
-        String clLoggedOff = Main.getClient(adr).getPlayer().getName();
-        Main.removeClient(adr);
-        Main.broadcastClientlist();
-        Main.broadcast(clLoggedOff + " hat sich abgemeldet!", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
+        if(c != null){
+            String clLoggedOff = Main.getClient(adr).getPlayer().getName();
+            Main.removeClient(adr);
+            Main.broadcastClientlist();
+            Main.broadcast(clLoggedOff + " hat sich abgemeldet!", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
+        }
     }
 
+    @Override
     public void s_m_auth(InetSocketAddress adr)
     {
         Server added = Main.addServer(adr);
@@ -149,11 +164,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
     }
 
+    @Override
     public void s_m_pong(InetSocketAddress adr)
     {
 
     }
 
+    @Override
     public void s_m_servercount(InetSocketAddress adr)
     {
         net.send(adr, ProtocolCmd.MASTER_SERVER_SERVERCOUNT, argInt(Main.serverCount()));

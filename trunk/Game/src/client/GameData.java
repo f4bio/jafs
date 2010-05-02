@@ -34,7 +34,7 @@ public class GameData implements UpdateObject {
     private int scoreBlue;
 
     /**
-     * Constructs an GameData object
+     * Constructs a GameData object
      * @param input
      */
     public GameData(Input input) {

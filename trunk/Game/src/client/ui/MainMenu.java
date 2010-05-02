@@ -248,6 +248,11 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnCreate.setText("Erstellen");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlServerbrowserLayout = new javax.swing.GroupLayout(pnlServerbrowser);
         pnlServerbrowser.setLayout(pnlServerbrowserLayout);
@@ -519,6 +524,11 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCreateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApplyOptionsNetwork;
     private javax.swing.JButton btnApplyOptionsPlayer;

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client.resource;
 
 import client.Main;
@@ -16,7 +11,7 @@ import java.awt.event.ActionListener;
 
 /**
  *
- * @author miracle
+ * @author J.A.F.S
  */
 public class MapLoader extends Thread {
     /**

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package client.render;
 
 import client.Main;
@@ -21,7 +16,7 @@ import javax.swing.JWindow;
 
 /**
  *
- * @author miracle
+ * @author J.A.F.S
  */
 public  class MainScreen extends JWindow implements UpdateObject {
     private VolatileImage buffer;
@@ -34,7 +29,7 @@ public  class MainScreen extends JWindow implements UpdateObject {
     private int cntUiRepaint = 0;
 
     /**
-     *
+     * Constructs an GameData object
      * @param owner
      */
     public MainScreen(JFrame owner) {
