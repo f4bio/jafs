@@ -74,9 +74,12 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         btnMenuServerbrowser.addActionListener(uiaListener);
         btnApplyOptionsPlayer.setActionCommand(UiActionListener.CMD_NICKCHANGE);
         btnApplyOptionsPlayer.addActionListener(uiaListener);
+        btnApplyOptionsNetwork.setActionCommand(UiActionListener.CMD_APPLY_NETWORK_SETTINGS);
+        btnApplyOptionsNetwork.addActionListener(uiaListener);
         lClientlist.addMouseListener(this);
         tbpLobbyChat.addMouseListener(this);
         tfLobbyChat.addKeyListener(this);
+        tfMasterserverIP.setText(Network.MASTERHOST+":"+Network.MASTERPORT);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
     }
@@ -116,7 +119,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lblUsername = new javax.swing.JLabel();
         pfPassword = new javax.swing.JPasswordField();
         btnApplyOptionsNetwork = new javax.swing.JButton();
-        pnlOptionsGameplay = new javax.swing.JPanel();
         pnlMenu = new javax.swing.JPanel();
         btnMenuLobby = new javax.swing.JButton();
         btnMenuServerbrowser = new javax.swing.JButton();
@@ -135,15 +137,15 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         scpLobbyChat = new javax.swing.JScrollPane();
         taLobbyChatPublic = new javax.swing.JTextArea();
 
-        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10));
         tblServerlist.setModel(sModel);
         tblServerlist.getTableHeader().setReorderingAllowed(false);
         scpServerlist.setViewportView(tblServerlist);
 
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnRefresh.setText("Aktualisieren");
 
-        btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnConnect.setText("Verbinden");
 
         scpServerinfo.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -244,7 +246,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         scpServerinfo.setViewportView(pnlServerinfo);
 
-        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnCreate.setText("Erstellen");
 
         javax.swing.GroupLayout pnlServerbrowserLayout = new javax.swing.GroupLayout(pnlServerbrowser);
@@ -319,12 +321,16 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lblMasterserverIP.setText("Masterserver");
 
         lblPassword.setText("Passwort");
+        lblPassword.setEnabled(false);
+
+        tfUsername.setEnabled(false);
 
         lblUsername.setText("Benutzername");
+        lblUsername.setEnabled(false);
 
-        pfPassword.setText("jPasswordField1");
+        pfPassword.setEnabled(false);
 
-        btnApplyOptionsNetwork.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnApplyOptionsNetwork.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnApplyOptionsNetwork.setText("Übernehmen");
 
         javax.swing.GroupLayout pnlOptionsNetworkLayout = new javax.swing.GroupLayout(pnlOptionsNetwork);
@@ -369,28 +375,13 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 .addContainerGap())
         );
 
-        pnlOptionsGameplay.setBorder(javax.swing.BorderFactory.createTitledBorder("Spieleinstellungen"));
-
-        javax.swing.GroupLayout pnlOptionsGameplayLayout = new javax.swing.GroupLayout(pnlOptionsGameplay);
-        pnlOptionsGameplay.setLayout(pnlOptionsGameplayLayout);
-        pnlOptionsGameplayLayout.setHorizontalGroup(
-            pnlOptionsGameplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 280, Short.MAX_VALUE)
-        );
-        pnlOptionsGameplayLayout.setVerticalGroup(
-            pnlOptionsGameplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 158, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout pnlOptionsLayout = new javax.swing.GroupLayout(pnlOptions);
         pnlOptions.setLayout(pnlOptionsLayout);
         pnlOptionsLayout.setHorizontalGroup(
             pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlOptionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(pnlOptionsGameplay, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlOptionsPlayer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(pnlOptionsPlayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pnlOptionsNetwork, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -402,9 +393,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
                 .addGroup(pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(pnlOptionsNetwork, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlOptionsPlayer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlOptionsGameplay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(207, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -563,7 +552,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private javax.swing.JPanel pnlLobbyChatTabs;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlOptions;
-    private javax.swing.JPanel pnlOptionsGameplay;
     private javax.swing.JPanel pnlOptionsNetwork;
     private javax.swing.JPanel pnlOptionsPlayer;
     private javax.swing.JPanel pnlServerbrowser;
@@ -911,6 +899,14 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
      */
     public String getSelfName(){
         return tfPlayerName.getText();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMasterHostPortSettings(){
+        return this.tfMasterserverIP.getText();
     }
 
 

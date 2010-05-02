@@ -403,5 +403,5 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.SERVER_CLIENT_PING) {
             Main.removeClient(p.getAddress());
         }
-    }   
+    }
 }
