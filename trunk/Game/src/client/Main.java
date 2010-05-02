@@ -28,7 +28,6 @@ import static common.net.ProtocolCmdArgument.*;
  *
  */
 public class Main {
-
     private static JFrame frame;
     private static MainScreen screen;
     private static Network net;

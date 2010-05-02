@@ -229,6 +229,10 @@ public class Game implements UpdateObject, UpdateCountdownObject {
             if(p.isDead()) {
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, argInt(pId),
                         argInt(c.getId()));
+                if(a.getTeam() == CPlayer.TEAM_BLUE)
+                    scoreBlue++;
+                else
+                    scoreRed++;
                 p.setDeaths(p.getDeaths() + 1);
                 a.setKills(a.getKills() + 1);
             }

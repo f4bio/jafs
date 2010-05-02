@@ -15,7 +15,7 @@ public class CWeaponPistol extends CWeapon {
      */
     public CWeaponPistol() {
         id = 0;
-        setDamage(7);
+        setDamage(10);
         setCriticalRate(0.15);
         setCoolDown(500000000L);
         setSpread(10);

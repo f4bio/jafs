@@ -7,6 +7,7 @@ package common.engine;
 
 import common.CVector2;
 import common.resource.CImage;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -17,7 +18,7 @@ public class CWeapon {
     /**
      *
      */
-    protected CImage texture;
+    protected Color color;
     /**
      *
      */
@@ -147,16 +148,16 @@ public class CWeapon {
      *
      * @param img
      */
-    public void setTexture(CImage img) {
-        texture = img;
+    public void setColor(Color img) {
+        color = img;
     }
 
     /**
      *
      * @return
      */
-    public BufferedImage getTexture() {
-        return texture.getImage();
+    public Color getColor() {
+        return color;
     }
 
     /**
