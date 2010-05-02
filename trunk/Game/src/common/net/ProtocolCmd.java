@@ -298,6 +298,11 @@ public enum ProtocolCmd {
     /**
      *
      */
+    SERVER_CLIENT_GAME_INFO,
+
+    /**
+     *
+     */
     SERVER_CLIENT_EVENT_PLAYER_JOINED,
     /**
      *

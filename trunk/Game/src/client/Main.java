@@ -1,11 +1,10 @@
 package client;
 
-import client.ui.DlgMasterserver;
-import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
 import common.CLog;
 import common.engine.CPlayer;
+import common.engine.UpdateLoop;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -119,8 +118,8 @@ public class Main {
         mainMenu.setSelfName(Main.getGameData().getName());
         // UpdateLoop
         loop = new UpdateLoop(60);
-        loop.addUpdateObject(screen);
         loop.addUpdateObject(data);
+        loop.addUpdateObject(screen);
 
         // Anmeldung: Client -> Masterserver
 //        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));

@@ -17,6 +17,7 @@ public class CProjectile extends CEntity {
     private CWeapon weaponObj;
     private CVector2 origin;
     private int owner;
+    private boolean collided;
 
     /**
      *
@@ -28,13 +29,14 @@ public class CProjectile extends CEntity {
      */
     public CProjectile(int owner, int speed, CWeapon weapon, CVector2 direction, CVector2 org) {
          size = new Dimension(1,1);
+         collided = false;
          this.speed = speed;
          this.origin = org;
 
          this.direction = direction;
          this.setPosition(org);
          this.weaponObj = weapon;
-         this.owner = owner;
+         this.id = owner;
     }
 
     /**
@@ -47,29 +49,14 @@ public class CProjectile extends CEntity {
      */
     public CProjectile(int owner, int speed, int weapon, CVector2 direction, CVector2 org) {
          size = new Dimension(1,1);
+         collided = false;
          this.speed = speed;
          this.origin = org;
 
          this.direction = direction;
          this.setPosition(org);
          this.weapon = weapon;
-         this.owner = owner;
-    }
-
-    /**
-     *
-     * @param owner
-     */
-    public void setOwner(int owner) {
-        this.owner = owner;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getOwner() {
-        return owner;
+         this.id = owner;
     }
 
     /**
@@ -94,5 +81,13 @@ public class CProjectile extends CEntity {
      */
     public int getWeaponId() {
         return weapon;
+    }
+
+    public void setCollided(boolean col) {
+        collided = col;
+    }
+
+    public boolean isCollided() {
+        return collided;
     }
 }

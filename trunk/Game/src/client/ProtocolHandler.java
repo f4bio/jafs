@@ -382,8 +382,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void s_c_player_info(int id, int team, int wep, double posX, double posY,
-                                double dirX, double dirY, InetSocketAddress adr) {
+    public void s_c_player_info(int id, int health, int kills, int deaths, int team,
+            int wep, double posX, double posY, double dirX, double dirY, InetSocketAddress adr) {
         if(!net.isReallyConnected())
             return;
 
@@ -394,8 +394,25 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setPosition(posX, posY);
             c.setDirection(dirX, dirY);
             c.setTeam(team);
-                    //            System.out.println("SERVER_CLIENT_PLAYER_INFO id="+id+",weapon="+wep+",posX="+posX+",posY="+posY+",dirX="+dirX+"dirY="+dirY);
-        } 
+            c.setHealth(health);
+            c.setKills(kills);
+            c.setDeaths(deaths);
+        }
+        if(c != null && c.getId() == Main.getGameData().getSelfId()) {
+            c.setHealth(health);
+            c.setKills(kills);
+            c.setDeaths(deaths);
+        }
+    }
+
+    @Override
+    public void s_c_game_info(long roundTime, long respawnTime, int scoreRed, int scoreBlue,
+            InetSocketAddress adr) {
+        GameData data = Main.getGameData();
+        data.setRoundTime(roundTime);
+        data.setRespawnTime(respawnTime);
+        data.setScoreRed(scoreRed);
+        data.setScoreBlue(scoreBlue);
     }
 
     /**
@@ -428,7 +445,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
         Main.refInGameClientlist();
 
-        System.out.println("SERVER_CLIENT_EVENT_PLAYER_JOINED name="+n+" -> CLIENT_SERVER_EVENT_PLAYER_JOINED_OK");
+        Main.getGameData().addGameEvent(new Event(Event.EVENT_SYSTEM, "Player " + n
+                + " joined the server."));
     }
 
     /**
@@ -439,11 +457,21 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void s_c_event_player_team_changed(int p, int t, InetSocketAddress adr) {
-        CPlayer pl = Main.getGameData().getPlayer(p);
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
+        GameData g = Main.getGameData();
+
+        CPlayer pl = g.getPlayer(p);
         if(pl != null)
             pl.setTeam(t);
+        
+        String team = "";
+        
+        if(t == CPlayer.TEAM_BLUE)
+            team = "Blue";
+        else
+            team = "Red";
 
-        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
+        g.addGameEvent(new Event(t, "Player " + g.getPlayer(p).getName() + " joined team " + team));
     }
 
     /**
@@ -457,8 +485,9 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY,
+    public void s_c_event_player_shot(int id, int wepId, double dirX, double dirY,
             double orgX, double orgY, InetSocketAddress adr) {
+        
         CWeapon wep = Main.getGameData().getSelf().getWeapon(wepId);
         if(wep != null && id != Main.getGameData().getSelfId()) {
             CVector2 dir = new CVector2(dirX, dirY);
@@ -476,8 +505,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void s_c_event_player_killed(int who, int by, InetSocketAddress adr) {
-        Main.getGameData().getPlayer(who).setHealth(0);
         net.send(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_KILLED_OK);
+
+        GameData g = Main.getGameData();
+
+        int t = g.getPlayer(by).getTeam();
+
+        g.addGameEvent(new Event(t, "" + g.getPlayer(who).getName() + " got marked by " +
+                g.getPlayer(by).getName()));
     }
 
     // --- chat fkt
@@ -490,9 +525,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void s_c_chat_all(int id, String msg, InetSocketAddress adr)
     {
-        System.out.println("SERVER_CLIENT_CHAT_ALL id="+id+",msg="+msg+" -> CLIENT_SERVER_CHAT_ALL_OK");
-        Main.getUiInGameChat().appendMSG(Main.getUiInGameChat().getClientName(id)+": "+msg);
+        //Main.getUiInGameChat().appendMSG(Main.getUiInGameChat().getClientName(id)+": "+msg);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK);
+
+        GameData g = Main.getGameData();
+
+        g.addChatEvent(new Event(Event.EVENT_SYSTEM, "" + g.getPlayer(id).getName()
+                + ": " + msg));
+        System.out.println(msg);
     }
 
     /**
@@ -513,8 +553,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void s_c_chat_team(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiInGameChat().appendMSG("(TEAM) "+Main.getClientName(id)+": "+msg);
-        System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
+        //Main.getUiInGameChat().appendMSG("(TEAM) "+Main.getClientName(id)+": "+msg);
+        //System.out.println("SERVER_CLIENT_CHAT_TEAM id="+id+",msg="+msg);
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_TEAM_OK);
+
+        GameData g = Main.getGameData();
+
+        g.addChatEvent(new Event(g.getPlayer(id).getTeam(), "" + g.getPlayer(id).getName()
+                +": " + msg));
     }
 
     /**
@@ -526,9 +572,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void s_c_chat_private(int id, String msg, InetSocketAddress adr)
     {
-        Main.getUiInGameChat().appendMSG("(PRIVAT) " + Main.getUiInGameChat().getClientName(id) + ": " + msg); // LOBBY
-        System.out.println("SERVER_CLIENT_CHAT_PRIVATE id="+id+",msg="+msg);
         net.send(adr, ProtocolCmd.CLIENT_SERVER_CHAT_PRIVATE_OK);
+
+        GameData g = Main.getGameData();
+
+        g.addChatEvent(new Event(g.getPlayer(id).getTeam(), "(Private) " + g.getPlayer(id).getName()
+                +": " + msg));
     }
 
     /**
@@ -577,21 +626,44 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void s_c_event_player_respawned(InetSocketAddress adr) {
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK);
+
         CMap map = Main.getGameData().getMap();
         CPlayer self = Main.getGameData().getSelf();
 
-        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK);
         System.out.println("SERVER_CLIENT_PLAYER_RESPAWNED -> CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK");
 
         if(!self.isDead())
             return;
 
-        Point p = (self.getTeam() == CPlayer.TEAM_BLUE) ? map.getSpawnBlue() :
-            map.getSpawnRed();
-        int x = p.x * map.getTileSize().width + map.getTileSize().width/2;
-        int y = p.y * map.getTileSize().height + map.getTileSize().height/2;
+        self.moveToSpawn(map);
+    }
 
-        Main.getGameData().getSelf().setPosition(x, y);
+    @Override
+    public void s_c_event_team_won(int teamId, int bestPlayerId, InetSocketAddress adr) {
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_TEAM_WON_OK);
+
+        String team = "";
+        teamId++;
+
+        if(teamId == CPlayer.TEAM_BLUE)
+            team = "Blue team is victorious.";
+        else if(teamId == CPlayer.TEAM_RED)
+            team = "Red team is victorious.";
+        else
+            team = "Rounds ends in a draw.";
+
+        Main.getGameData().addGameEvent(new Event(Event.EVENT_SYSTEM, team));
+    }
+
+    @Override
+    public void s_c_event_player_left(int id, InetSocketAddress adr) {
+        net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_LEFT_OK);
+
+        GameData g = Main.getGameData();
+        g.addGameEvent(new Event(Event.EVENT_SYSTEM, "" + g.getPlayer(id).getName()
+                + " left the server."));
+        g.removePlayer(g.getPlayer(id));
     }
 
     /**

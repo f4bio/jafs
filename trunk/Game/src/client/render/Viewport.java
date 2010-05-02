@@ -5,6 +5,7 @@
 
 package client.render;
 
+import client.Event;
 import client.Main;
 import common.CVector2;
 import common.engine.CMap;
@@ -14,10 +15,13 @@ import common.engine.ProjectileManager;
 import common.engine.Tile;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.VolatileImage;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -29,6 +33,7 @@ public class Viewport {
      *
      */
     public static final Dimension size = new Dimension(1024, 768);
+    public static final Color background = new Color(128, 128, 128, 64);
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
@@ -81,6 +86,7 @@ public class Viewport {
 
                 clear(g);
                 render(g);
+                renderHud(g);
 
                 int sizeX = Main.getScreen().getSize().width;
                 int sizeY = Main.getScreen().getSize().height;
@@ -182,6 +188,15 @@ public class Viewport {
                     CVector2 dir = player[i].getDirection().resize_cpy(25);
                     g.drawLine(posX, posY, posX + (int)dir.getX(),
                             posY + (int)dir.getY());
+
+                    g.setColor(Color.BLACK);
+                    if(player[i].isDead()) {
+                        g.drawLine(posX - player[i].getSize().width/2, posY,
+                                posX + player[i].getSize().width/2, posY);
+
+                        g.drawLine(posX, posY + player[i].getSize().height/2,
+                                posX, posY - player[i].getSize().height/2);
+                    }
                 }
             }
         }
@@ -189,41 +204,167 @@ public class Viewport {
         // ----- Projectiles
         Vector<CProjectile> list = ProjectileManager.getProjectiles();
 
-        //synchronized (list) {
+        for (int i = 0; i < list.size(); ++i) {
+            CProjectile cp = list.get(i);
 
-        //    Iterator<CProjectile> i = list.iterator();
-        //    while (i.hasNext()) {
-        for(int i=0; i<list.size(); ++i) {
-                CProjectile cp = list.get(i);
+            Point pos = cp.getPosition().get();
+            Point loc = map.getTileByCoords(pos);
 
-                Point pos = cp.getPosition().get();
-                Point loc = map.getTileByCoords(pos);
+            double dist = cp.getPosition().getDistanceTo(cp.getOrigin());
+            if (dist > 300) {
+                dist = 300;
+            }
 
-                double dist = cp.getPosition().getDistanceTo(cp.getOrigin());
-                if (dist > 300) {
-                    dist = 300;
-                }
+            CVector2 tmp = cp.getDirection().invert_cpy();
+            tmp.resize(dist);
+            Point end = tmp.get();
 
-                CVector2 tmp = cp.getDirection().invert_cpy();
-                tmp.resize(dist);
-                Point end = tmp.get();
+            int pXS = pos.x % map.getTileSize().width;
+            int pYS = pos.y % map.getTileSize().height;
 
-                int pXS = pos.x % map.getTileSize().width;
-                int pYS = pos.y % map.getTileSize().height;
+            if (loc.x >= upperLeft.x && loc.x <= bottomRight.x && loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
 
-                if (loc.x >= upperLeft.x && loc.x <= bottomRight.x
-                        && loc.y >= upperLeft.y && loc.y <= bottomRight.y) {
+                int posX = initCntX + pXS + (loc.x - upperLeft.x) * map.getTileSize().width;
+                int posY = initCntY + pYS + (loc.y - upperLeft.y) * map.getTileSize().height;
 
-                    int posX = initCntX + pXS
-                            + (loc.x - upperLeft.x) * map.getTileSize().width;
-                    int posY = initCntY + pYS
-                            + (loc.y - upperLeft.y) * map.getTileSize().height;
-
-                    g.setColor(Color.YELLOW);
-                    g.drawLine(posX, posY, posX + end.x, posY + end.y);
-                    //g.fillRect(posX, posY, 30, 30);
-                }
-            //}
+                g.setColor(Color.YELLOW);
+                g.drawLine(posX, posY, posX + end.x, posY + end.y);
+            }
         }
+    }
+
+    public static String getTime(long millis) {
+        long time = millis / 1000;
+
+        String seconds = Integer.toString((int) (time % 60));
+        String minutes = Integer.toString((int) ((time % 3600) / 60));
+        String hours = Integer.toString((int) (time / 3600));
+
+        for (int i = 0; i < 2; i++) {
+            if (seconds.length() < 2) {
+                seconds = "0" + seconds;
+            }
+            if (minutes.length() < 2) {
+                minutes = "0" + minutes;
+            }
+            if (hours.length() < 2) {
+                hours = "0" + hours;
+            }
+        }
+
+        return hours + ":" + minutes + ":" + seconds;
+    }
+
+    public static void drawCenteredString(Graphics2D g, String s, int x, int y) {
+        FontMetrics fm = g.getFontMetrics(g.getFont());
+
+        int textWidth = (int)Math.round(fm.getStringBounds(s, g).getWidth());
+        int textHeight = (int)Math.round(fm.getStringBounds(s, g).getHeight());
+        int textAscent = fm.getAscent();
+
+        int textX = x - (textWidth / 2);
+        int textY = y - (textHeight / 2) + textAscent;
+
+        g.drawString(s, textX, textY);
+    }
+    
+    public Rectangle2D getStringMetrics(String s, Graphics2D g) {
+        FontMetrics fm = g.getFontMetrics(g.getFont());
+        
+        return fm.getStringBounds(s, g);
+    }
+    
+    public void renderBox(int x, int y, int width, int height, Graphics2D g) {
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, width, height);
+        g.setColor(background);
+        g.fillRect(x+1, y+1, width-2, height-2);
+    }
+    
+    public void renderHealthBox(Graphics2D g) {
+        int w = 100;
+        int h = 50;
+        CPlayer self = Main.getGameData().getSelf();
+        renderBox(buffer.getWidth() - 5 - w, buffer.getHeight() - 5 - h, w, h, g);
+
+        if(self != null) {
+            Color c = Color.WHITE;
+            int health = self.getHealth();
+            if(health <= 33)
+                c = Color.RED;
+            else if(health <= 66)
+                c = Color.YELLOW;
+
+            g.setColor(c);
+            
+            drawCenteredString(g, "" + self.getHealth(), buffer.getWidth() - (w+5)/2,
+                    buffer.getHeight() - (h+5)/2);
+        }
+    }
+
+    public void renderGameEvents(Graphics2D g) {
+        ArrayList<Event> events = Main.getGameData().getGameEvents();
+
+        synchronized(events) {
+            int y = 0;
+            for(int i=0; i<events.size(); ++i) {
+                Event e = events.get(i);
+                y += (int)getStringMetrics(e.getMsg(), g).getHeight() + 5;
+                g.setColor(e.getColor());
+                g.drawString(e.getMsg(), 5, y);
+            }
+        }
+    }
+
+    public void renderChatEvents(Graphics2D g) {
+        ArrayList<Event> events = Main.getGameData().getChatEvents();
+
+        synchronized(events) {
+            int y = buffer.getHeight();
+
+            for(int i=events.size()-1; i>=0; --i) {
+                Event e = events.get(i);
+                y = y - 5 - (int)getStringMetrics(e.getMsg(), g).getHeight();
+
+                g.setColor(e.getColor());
+                g.drawString(e.getMsg(), 5, y);
+            }
+        }
+    }
+
+    public void renderRoundTime(Graphics2D g) {
+        long time = Main.getGameData().getRoundTime();
+
+        int x = buffer.getWidth()/2;
+        int y = 0;
+        int w = 100;
+        int h = 50;
+
+        renderBox(x - 5 - w, y + 5, w, h, g);
+
+        g.setColor(Color.WHITE);
+        drawCenteredString(g, getTime(time), x - 5 - w/2, y + 5 + h/2);
+    }
+
+    public void renderRespawnTime(Graphics2D g) {
+        long time = Main.getGameData().getRespawnTime();
+
+        int x = buffer.getWidth()/2;
+        int y = 0;
+        int w = 100;
+        int h = 50;
+
+        renderBox(x + 5, y + 5, w, h, g);
+
+        g.setColor(Color.WHITE);
+        drawCenteredString(g, getTime(time), x + 5 + w/2, y + 5 + h/2);
+    }
+
+    public void renderHud(Graphics2D g) {
+        renderHealthBox(g);
+        renderRoundTime(g);
+        renderRespawnTime(g);
+        renderGameEvents(g);
+        renderChatEvents(g);
     }
 }

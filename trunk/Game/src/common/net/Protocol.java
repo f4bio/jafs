@@ -336,7 +336,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_CONNECTION_ESTABLISHED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_LATENCY, ARG_NONE);
-        registerCmd(ProtocolCmd.CLIENT_SERVER_SHOOT, ARG_INT, ARG_INT, ARG_INT, ARG_INT,
+        registerCmd(ProtocolCmd.CLIENT_SERVER_SHOOT, ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE,
                 ARG_DOUBLE, ARG_DOUBLE);
 
         registerCmd(ProtocolCmd.CLIENT_SERVER_CHAT_ALL_OK, ARG_NONE);
@@ -373,15 +373,16 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY, ARG_NONE);
 
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED, ARG_STRING, ARG_INT);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_STRING);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_SPAWNED, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_PICKED, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT, ARG_INT, ARG_INT,
-                ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE);
+                ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_NICK_CHANGED, ARG_INT, ARG_STRING);
         registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED, ARG_INT, ARG_INT);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON, ARG_INT, ARG_INT);
 
         registerCmd(ProtocolCmd.SERVER_CLIENT_CONNECTION_TERMINATED, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED, ARG_NONE);
@@ -389,8 +390,9 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA, ARG_STRING, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_NAME, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_INT, ARG_DOUBLE,
-                    ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_INT, ARG_INT,
+                ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_GAME_INFO, ARG_LONG, ARG_LONG, ARG_INT, ARG_INT);
 
         //----- Master Server commands
         registerCmd(ProtocolCmd.MASTER_SERVER_AUTH_REPLY, ARG_INT);
@@ -488,6 +490,8 @@ public class Protocol {
                 ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK);
         registerCmdReply(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
                 ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK);
+        registerCmdReply(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
+                ProtocolCmd.CLIENT_SERVER_EVENT_TEAM_WON_OK);
 
         //Create enum index table
         for(ProtocolCmd c : ProtocolCmd.values()) {

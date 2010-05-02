@@ -251,8 +251,8 @@ public abstract class ProtocolHandler implements Runnable {
                         c_s_event_player_joined_ok(adr);
                         break;
                     case CLIENT_SERVER_SHOOT:
-                        c_s_shoot(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
-                                toInt(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        c_s_shoot(toInt(data, idx[0]), toInt(data, idx[1]), toDouble(data, idx[2]),
+                                toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
                         break;
                     case CLIENT_SERVER_EVENT_PLAYER_LEFT_OK:
                         break;
@@ -332,9 +332,14 @@ public abstract class ProtocolHandler implements Runnable {
                         s_c_player_data(toStr(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), adr);
                         break;
                     case SERVER_CLIENT_PLAYER_INFO:
-                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
-                                toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]),
-                                toDouble(data, idx[6]), adr);
+                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), 
+                                toInt(data, idx[3]), toInt(data, idx[4]), toInt(data, idx[5]),
+                                toDouble(data, idx[6]), toDouble(data, idx[7]), toDouble(data, idx[8]),
+                                toDouble(data, idx[9]), adr);
+                        break;
+                    case SERVER_CLIENT_GAME_INFO:
+                        s_c_game_info(toLong(data, idx[0]), toLong(data, idx[1]), toInt(data, idx[2]),
+                                toInt(data, idx[3]), adr);
                         break;
                     case SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY:
                         s_c_request_server_info_reply(toStr(data, idx[0]), toStr(data, idx[1]), toInt(data, idx[2]), toInt(data, idx[3]), toInt(data, idx[4]), adr);
@@ -347,6 +352,9 @@ public abstract class ProtocolHandler implements Runnable {
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_JOINED:
                         s_c_event_player_joined(toStr(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_PLAYER_LEFT:
+                        s_c_event_player_left(toInt(data, idx[0]), adr);
                         break;
                     case SERVER_CLIENT_CHAT_ALL:
                         s_c_chat_all(toInt(data, idx[0]), toStr(data, idx[1]), adr);
@@ -373,11 +381,14 @@ public abstract class ProtocolHandler implements Runnable {
                         s_c_event_player_team_changed(toInt(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_SHOT:
-                        s_c_event_player_shot(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]),
-                                toInt(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
+                        s_c_event_player_shot(toInt(data, idx[0]), toInt(data, idx[1]), toDouble(data, idx[2]),
+                                toDouble(data, idx[3]), toDouble(data, idx[4]), toDouble(data, idx[5]), adr);
                         break;
                     case SERVER_CLIENT_EVENT_PLAYER_KILLED:
                         s_c_event_player_killed(toInt(data, idx[0]), toInt(data, idx[1]), adr);
+                        break;
+                    case SERVER_CLIENT_EVENT_TEAM_WON:
+                        s_c_event_team_won(toInt(data, idx[0]), toInt(data, idx[1]), adr);
                         break;
                     case SERVER_CLIENT_FORCED_NICKCHANGE:
                         s_c_forced_nickchange(toStr(data, idx[0]), adr);
@@ -634,7 +645,7 @@ public abstract class ProtocolHandler implements Runnable {
      * @param orgY
      * @param adr
      */
-    public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX,
+    public void c_s_shoot(int id, int wepId, double dirX, double dirY, double orgX,
             double orgY, InetSocketAddress adr) { }
 
     //Client
@@ -778,8 +789,12 @@ public abstract class ProtocolHandler implements Runnable {
      * @param dirY
      * @param adr
      */
-    public void s_c_player_info(int id, int team, int wep, double posX, double posY,
-                                double dirX, double dirY, InetSocketAddress adr) { }
+    public void s_c_player_info(int id, int health, int kills, int deaths, int team,
+            int wep, double posX, double posY, double dirX, double dirY, InetSocketAddress adr) { }
+
+    public void s_c_game_info(long roundTime, long respawnTime, int scoreRed, int scoreBlue,
+            InetSocketAddress adr) { }
+    
     /**
      *
      * @param adr
@@ -792,6 +807,8 @@ public abstract class ProtocolHandler implements Runnable {
      * @param adr
      */
     public void s_c_event_player_joined(String n, int i, InetSocketAddress adr) { }
+
+    public void s_c_event_player_left(int i, InetSocketAddress adr) { }
     /**
      *
      * @param p
@@ -809,9 +826,10 @@ public abstract class ProtocolHandler implements Runnable {
      * @param orgY
      * @param adr
      */
-    public void s_c_event_player_shot(int id, int wepId, int dirX, int dirY, double orgX,
+    public void s_c_event_player_shot(int id, int wepId, double dirX, double dirY, double orgX,
             double orgY, InetSocketAddress adr) { }
 
+    public void s_c_event_team_won(int teamId, int bestPlayerId, InetSocketAddress adr) { }
 
     /**
      *

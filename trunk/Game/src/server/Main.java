@@ -1,8 +1,9 @@
 package server;
 
-import client.anim.UpdateLoop;
+import common.engine.UpdateLoop;
 import common.engine.CPlayer;
 import common.engine.ProjectileManager;
+import common.engine.UpdateCountdown;
 import common.net.Client;
 import common.net.Network;
 import common.net.Protocol;
@@ -14,8 +15,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static common.net.ProtocolCmdArgument.*;
 
@@ -31,7 +30,6 @@ public class Main {
 
     private static int maxClients = 16;
     private static int respawntime = 10000;
-    private static int respawntimeItems = 5000;
     private static int gameTime = 60*10000;
 
     private static String map;
@@ -42,6 +40,11 @@ public class Main {
     private static Network net;
     private static Game game;
     private static UpdateLoop update;
+
+
+    private static UpdateCountdown pingTimer;
+    private static UpdateCountdown respawnTimer;
+    private static UpdateCountdown roundTimer;
 
     private static String pathHighscore = System.getProperty("user.dir")+"\\highscores.ini";
     private static Properties highscores = new Properties();
@@ -74,17 +77,22 @@ public class Main {
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
         System.out.println("### SERVER STARTET ###\n");
-        pingTimer = new Timer();
-        pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
+        pingTimer = new UpdateCountdown("ping", PING_INTERVAL);
+        //pingTimer.
+        //pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
 
-        respawnTimer = new Timer();
-        respawnTimer.scheduleAtFixedRate(respawner, respawntime, respawntime);
+        respawnTimer = new UpdateCountdown("respawn", respawntime);
+        //respawnTimer.scheduleAtFixedRate(respawner, respawntime, respawntime);
 
-        roundTimer = new Timer();
-        roundTimer.scheduleAtFixedRate(gameTimer, gameTime, gameTime);
+        roundTimer = new UpdateCountdown("round", gameTime);
+        //roundTimer.scheduleAtFixedRate(gameTimer, gameTime, gameTime);
 
         update = new UpdateLoop(60);
         update.addUpdateObject(game);
+        update.addUpdateCountdownObject(game);
+        update.addUpdateCountdown(pingTimer);
+        update.addUpdateCountdown(respawnTimer);
+        update.addUpdateCountdown(roundTimer);
 
         try {
             Thread.sleep(1000);
@@ -95,10 +103,21 @@ public class Main {
      *
      */
     public static void reset() {
-        net.clear();
+        //net.clear();
         game.setScoreBlue(0);
         game.setScoreRed(0);
-        broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+
+        CPlayer[] p = game.getPlayer();
+        for(int i=0; i<p.length; ++i) {
+            if(p[i] == null)
+                continue;
+
+            p[i].setKills(0);
+            p[i].setDeaths(0);
+            p[i].setHealth(0);
+        }
+
+        update.resetCountdown(respawnTimer);
     }
 
     /**
@@ -144,41 +163,29 @@ public class Main {
         catch (IOException ex){ }
     }
 
-    private static TimerTask pinger = new TimerTask() {
-        public void run() {
-            for(Client cur : client) {
+    public static void ping() {
+        for(Client cur : client) {
                 if(cur != null){
                     net.send(cur.getAddress(), ProtocolCmd.SERVER_CLIENT_PING);
                     System.out.println("SERVER_CLIENT_PING -> " + cur.getAddress().getHostName());
                 }
             }
-        }
-    };
+    }
 
-    private static TimerTask respawner = new TimerTask() {
-        public void run() {
-            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+    public static void respawn() {
+        CPlayer[] p = game.getPlayer();
+        for(CPlayer c : p) {
+            if(c != null && c.isDead())
+                c.setHealth(100);
         }
-    };
+        broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
+    }
 
-    private static TimerTask itemRespawner = new TimerTask() {
-        public void run() {
-            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_ITEM_SPAWNED);
-        }
-    };
-
-    private static TimerTask gameTimer = new TimerTask() {
-        public void run() {
-            broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
-                    argInt(game.getWinnerTeam()));
-            reset();
-        }
-    };
-
-    private static Timer pingTimer;
-    private static Timer respawnTimer;
-    private static Timer itemRespawnTimer;
-    private static Timer roundTimer;
+    public static void end() {
+        broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
+                    argInt(game.getWinnerTeam()), argInt(game.getBestPlayer()));
+        reset();
+    }
 
     /**
      *
@@ -207,9 +214,10 @@ public class Main {
      */
     public synchronized static void removeClient(Client c) {
         try {
-            if(client[c.getId()] != null) {
+            if(c != null) {
                 game.removePlayer(c.getPlayer());
                 client[c.getId()] = null;
+                broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, argInt(c.getId()));
             }
             System.out.println("Client " + c.getHost() + ":" + c.getPort() + " dropped from Server-"+serverId+"." );
         } catch(Exception e) {
@@ -470,5 +478,13 @@ public class Main {
      */
     public static Game getGame() {
         return game;
+    }
+
+    public static long getRoundTimeLeft() {
+        return roundTimer.getTimeLeft();
+    }
+
+    public static long getRespawnTimeLeft() {
+        return respawnTimer.getTimeLeft();
     }
 }

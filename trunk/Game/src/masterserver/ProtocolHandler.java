@@ -124,6 +124,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_logoff(InetSocketAddress adr){
         System.out.println("CLIENT_MASTER_LOGOFF");
+        Client c = Main.getClient(adr);
+        
         String clLoggedOff = Main.getClient(adr).getPlayer().getName();
         Main.removeClient(adr);
         Main.broadcastClientlist();

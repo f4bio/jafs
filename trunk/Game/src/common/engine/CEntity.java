@@ -242,11 +242,10 @@ public class CEntity {
             double distance = hit.getDistanceTo(p);
             if(!player[i].isDead() && player[i].getId() != getId()
                     && distance <= (player[i].getSize().width/2)){
-                player[i].hit(this);
                 return i;
             }
         }
-        return -1;
+        return -2;
     }
 
     /**
@@ -304,14 +303,18 @@ public class CEntity {
         CVector2 next = position;
         CVector2 last = next;
 
+        double m = speed * speedfactor;
+        CVector2 end = position.add_cpy(mov.resize_cpy(m));
+        CVector2 step = mov.resize_cpy(m);
+        step.div(m);
+
         int ret = -2;
         int colId = -1;
-        double m = speed * speedfactor;
 
         for(int i = 1; i <= (int)m + 1; i++) {
             last = next;
-            next = (i == (int)m + 1) ? position.add_cpy(mov.mul_cpy(m)) :
-                position.add_cpy(mov.mul_cpy(i));
+            next = (i == (int)m + 1) ? end :
+                position.add_cpy(step.mul_cpy(i));
 
             colId = collideWall(map, next);
 
@@ -322,9 +325,7 @@ public class CEntity {
                 ret = collidePlayer(p, next);
                 if(ret > -1)
                     break;
-            }
-
-            if(i == (int)m + 1) {
+            } else if(i == (int)m + 1) {
                 last = next;
             }
         }

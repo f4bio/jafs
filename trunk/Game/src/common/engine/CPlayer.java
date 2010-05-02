@@ -5,10 +5,9 @@
 
 package common.engine;
 
-import client.anim.UpdateLoop;
-import common.CVector2;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 /**
  *
@@ -32,6 +31,8 @@ public class CPlayer extends CEntity {
     private CWeapon[] weapon;
     private int currentWeapon;
     private int health;
+    private int kills;
+    private int deaths;
 
     /**
      *
@@ -44,9 +45,11 @@ public class CPlayer extends CEntity {
         currentWeapon = 0;
         size = new Dimension(50, 50);
         speed = 3.0d;
-        health = 100;
+        health = 0;
         setPosition(50, 50);
         setDirection(1, 0);
+        kills = 0;
+        deaths = 0;
     }
 
     /**
@@ -134,18 +137,9 @@ public class CPlayer extends CEntity {
      * @param ent
      */
     public void hit(CEntity ent) {
-        CProjectile c = (CProjectile)ent;
+        System.out.println("hit player " + id);
     }
-
-    /**
-     *
-     * @param mov
-     * @param factor
-     */
-    public void move(CVector2 mov, double factor) {
-        position.add(mov.mul_cpy(factor*speed));
-    }
-
+    
     /**
      *
      * @param u
@@ -153,5 +147,29 @@ public class CPlayer extends CEntity {
      */
     public CProjectile shoot(UpdateLoop u) {
         return weapon[currentWeapon].shoot(this, u);
+    }
+
+    public void setKills(int k) {
+        kills = k;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void setDeaths(int d) {
+        deaths = d;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void moveToSpawn(CMap map) {
+        Point p = (team == CPlayer.TEAM_BLUE) ? map.getSpawnBlue() :
+            map.getSpawnRed();
+        int x = p.x * map.getTileSize().width + map.getTileSize().width/2;
+        int y = p.y * map.getTileSize().height + map.getTileSize().height/2;
+        setPosition(x, y);
     }
 }

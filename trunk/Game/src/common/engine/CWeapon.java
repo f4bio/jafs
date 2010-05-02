@@ -5,7 +5,6 @@
 
 package common.engine;
 
-import client.anim.UpdateLoop;
 import common.CVector2;
 import common.resource.CImage;
 import java.awt.image.BufferedImage;
@@ -211,9 +210,10 @@ public class CWeapon {
             if(maxBullets != -1)
                 bullets--;
             shotLast = u.getCurrentTime();
-            CVector2 offset = player.getDirection().resize_cpy(25);
+            CVector2 offset = player.getDirection().resize_cpy(25.0d);
             CVector2 pos = player.getPosition().add_cpy(offset);
-            return new CProjectile(player.getId(), speed, this, offset, pos);
+            CVector2 dir = player.getDirection().cpy();
+            return new CProjectile(player.getId(), speed, this, dir, pos);
         }
         return null;
     }

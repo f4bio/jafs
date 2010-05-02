@@ -1,7 +1,7 @@
 package client.ui;
 
-import client.anim.UpdateLoop;
-import client.anim.UpdateObject;
+import common.engine.UpdateLoop;
+import common.engine.UpdateObject;
 import client.render.MainScreen;
 import java.awt.Color;
 import java.awt.Graphics;
