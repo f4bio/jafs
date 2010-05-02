@@ -73,7 +73,7 @@ public class Main {
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
         net.setProtocolHandler(protocol);
-        net.listen(net.getFreePort(40000, 50000));
+        net.listen(Network.getFreePort(40000, 50000));
         net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.SERVER_MASTER_AUTH);
 
         System.out.println("### SERVER STARTET ###\n");

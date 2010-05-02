@@ -24,6 +24,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         net.send(adr, ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY,
                  argStr("JOINED! ServerInfos: "+host+":"+port));
+        Main.broadcast(Main.getClient(adr).getPlayer().getName()+" betritt den Server: "+Main.getServer(host, port).getName()+" ("+host+":"+port+")", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
         System.out.println("CLIENT_MASTER_JOINSERVER -> MASTER_CLIENT_JOINSERVER_REPLY (JOINED! ServerInfos: "+host+":"+port+")");
 //        System.out.println("c_m_joinserver()");
     }

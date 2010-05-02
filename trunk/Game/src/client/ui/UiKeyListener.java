@@ -31,13 +31,11 @@ public class UiKeyListener implements KeyListener {
             Main.getFrame().setVisible(false);
             Main.getScreen().setVisible(false);
             // server logoff
-            if(Main.getNetwork().isReallyConnected() && Main.getNetwork().getServer() != null)
+            if(Main.getNetwork().isReallyConnected() && Main.getNetwork().getServer() != null) {
                 Main.getNetwork().send(Main.getNetwork().getServer().getHostName(),
                                        Main.getNetwork().getServer().getPort(),
                                        ProtocolCmd.CLIENT_SERVER_LOGOFF);
-            Main.getNetwork().send(Network.MASTERHOST,
-                                   Network.MASTERPORT,
-                                   ProtocolCmd.CLIENT_MASTER_LOGOFF);
+            }
             Main.getNetwork().send(Network.MASTERHOST,
                                    Network.MASTERPORT,
                                    ProtocolCmd.CLIENT_MASTER_AUTH,
