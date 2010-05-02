@@ -19,35 +19,39 @@ public class UiActionListener implements ActionListener {
     /**
      * ActionCommand
      */
-    public static final String CMD_EXIT                     = "2";
+    public static final String CMD_EXIT                     = "1";
     /**
      * ActionCommand
      */
-    public static final String CMD_CONNECT                  = "3";
+    public static final String CMD_CONNECT                  = "2";
     /**
      * ActionCommand
      */
-    public static final String CMD_REFRESH_SERVERBROWSER    = "4";
+    public static final String CMD_REFRESH_SERVERBROWSER    = "3";
     /**
      * ActionCommand
      */
-    public static final String CMD_LOBBYCHAT_SEND_MSG       = "5";
+    public static final String CMD_LOBBYCHAT_SEND_MSG       = "4";
     /**
      * ActionCommand
      */
-    public static final String CMD_NICKCHANGE               = "6";
+    public static final String CMD_NICKCHANGE               = "5";
     /**
      * ActionCommand
      */
-    public static final String CMD_INGAMECHAT_SEND_MSG      = "7";
+    public static final String CMD_INGAMECHAT_SEND_MSG      = "6";
     /**
      * ActionCommand
      */
-    public static final String CMD_CREATE_SERVER            = "8";
+    public static final String CMD_CREATE_SERVER            = "7";
     /**
      * ActionCommand
      */
-    public static final String CMD_AUTH_MASTERSERVER        = "9";
+    public static final String CMD_AUTH_MASTERSERVER        = "8";
+    /**
+     * ActionCommand
+     */
+    public static final String CMD_APPLY_NETWORK_SETTINGS   = "9";
 
     private Network net;
 
@@ -143,6 +147,26 @@ public class UiActionListener implements ActionListener {
             Main.getUiInGameChat().setVisible(false);
             Main.getScreen().requestFocus();
             Main.getFrame().requestFocus();
+        }
+        // Netwerk Einstellungen übernehmen
+        else if(e.getActionCommand().equals(CMD_APPLY_NETWORK_SETTINGS)) {
+            String hostPort = Main.getMainMenu().getMasterHostPortSettings();
+            if(!Network.MASTERHOST.equals(hostPort.split(":")[0]) ||
+                    Network.MASTERPORT != Integer.parseInt(hostPort.split(":")[1])){
+                Main.getMainMenu().enableLobby(false);
+                // Logoff old masterserver
+                net.send(Network.MASTERHOST,
+                         Network.MASTERPORT,
+                         ProtocolCmd.CLIENT_MASTER_LOGOFF);
+                // apply new settings
+                Network.MASTERHOST = hostPort.split(":")[0];
+                Network.MASTERPORT = Integer.parseInt(hostPort.split(":")[1]);
+                // login new masterserver
+                net.send(Network.MASTERHOST,
+                     Network.MASTERPORT,
+                     ProtocolCmd.CLIENT_MASTER_AUTH,
+                     argStr(Main.getGameData().getName()));
+            }
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {

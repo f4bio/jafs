@@ -127,12 +127,16 @@ public class Main {
     }
 
     public static void broadcast(String msg, InetSocketAddress adr){
-        Client sender = getClient(adr);
+        int senderID = -2;
+        if(!adr.getHostName().equals(Network.MASTERHOST) && adr.getPort() != Network.MASTERPORT) {
+            Client sender = getClient(adr);
+            senderID = sender.getId();
+        }
         for(Client client: clientlist)
             if(!client.isInGame())
                 net.send(client.getAddress(),
                          ProtocolCmd.MASTER_CLIENT_CHAT,
-                         argInt(sender.getId()),
+                         argInt(senderID),
                          argStr(msg));
     }
 
@@ -204,6 +208,7 @@ public class Main {
 
     public static String checkNick(String nick, InetSocketAddress adr){
         System.out.print("CLIENT_MASTER_NICKCHANGE (nick="+nick+", id="+getClient(adr).getId()+")");
+        String nameOld = getClient(adr).getPlayer().getName();
 
         boolean changed = false;
 
@@ -219,8 +224,10 @@ public class Main {
             System.out.println(" -> MASTER_CLIENT_NICKCHANGE_OK");
             net.send(adr, ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK);
         }
-        Main.getClient(adr).getPlayer().setName(nick);
-        Main.broadcastClientlist();
+        getClient(adr).getPlayer().setName(nick);
+        broadcastClientlist();
+        if(nameOld != null)
+            broadcast(nameOld + " aendert den Namen zu: " + nick, new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
         return nick;
     }
 }

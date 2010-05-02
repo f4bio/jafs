@@ -78,6 +78,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("CLIENT_MASTER_AUTH success (id="+client.getId()+") -> MASTER_CLIENT_AUTH_REPLY (REPLY_SUCCESS)");
             System.out.println("Client \""+client.getPlayer().getName()+"\" joined!");
             Main.broadcastClientlist();
+            Main.broadcast(client.getPlayer().getName()+" ist nun online!", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
         }
         else {
             net.send(adr,
@@ -123,8 +124,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
     public void c_m_logoff(InetSocketAddress adr){
         System.out.println("CLIENT_MASTER_LOGOFF");
+        String clLoggedOff = Main.getClient(adr).getPlayer().getName();
         Main.removeClient(adr);
         Main.broadcastClientlist();
+        Main.broadcast(clLoggedOff + " hat sich abgemeldet!", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
     }
 
     public void s_m_auth(InetSocketAddress adr)
@@ -159,6 +162,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             Main.removeServer(p.getAddress());
         } else if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.MASTER_CLIENT_PING) {
             Main.removeClient(Main.getClient(p.getAddress()));
+        } else if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.MASTER_SERVER_PING) {
+            Main.removeServer(Main.getServer(p.getAddress()));
         }
     }
 }

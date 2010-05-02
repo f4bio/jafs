@@ -359,8 +359,8 @@ public class Main {
     public static String getClientName(int id){
         if(id == data.getSelfId()){
             return data.getName();
-        } else if(id == -1){
-            return "Masterserver";
+        } else if(id == -2){ // Masterserver
+            return ">>";
         }
         for(Client client: clientlist)
             if(client.getId() == id)
