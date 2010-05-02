@@ -1,7 +1,7 @@
 package client;
 
-import client.anim.UpdateLoop;
-import client.anim.UpdateObject;
+import common.engine.UpdateLoop;
+import common.engine.UpdateObject;
 import client.resource.MapLoader;
 import common.CVector2;
 import common.engine.CMap;
@@ -18,13 +18,20 @@ import static common.net.ProtocolCmdArgument.*;
  * @author J.A.F.S
  */
 public class GameData implements UpdateObject {
+    public static final int maxEvents = 7;
+
     private MapLoader loader = new MapLoader(null, null);
     private String name;
     private CPlayer[] player;
-    private ArrayList<CProjectile> projectiles;
+    private ArrayList<Event> gameEvents;
+    private ArrayList<Event> chatEvents;
     private int selfId;
     private Input input;
     private boolean loaded;
+    private long roundTime;
+    private long respawnTime;
+    private int scoreRed;
+    private int scoreBlue;
 
     /**
      * Constructs an GameData object
@@ -32,7 +39,22 @@ public class GameData implements UpdateObject {
      */
     public GameData(Input input) {
         this.input = input;
-        this.projectiles = new ArrayList<CProjectile>(100);
+        this.gameEvents = new ArrayList<Event>();
+        this.chatEvents = new ArrayList<Event>();
+    }
+
+    public void reset() {
+        scoreRed = 0;
+        scoreBlue = 0;
+        roundTime = 0;
+        respawnTime = 0;
+        
+        for(int i=0; i<player.length; ++i) {
+            player[i] = null;
+        }
+
+        gameEvents.clear();
+        chatEvents.clear();
     }
 
     /**
@@ -41,16 +63,49 @@ public class GameData implements UpdateObject {
      * @return specified map
      */
     public boolean loadMap(String map) {
+        reset();
         loader.setMap(map);
 
         loaded = loader.load(map);
         return loaded;
     }
 
+    public void setScoreRed(int score) {
+        scoreRed = score;
+    }
+
+    public int getScoreRed() {
+        return scoreRed;
+    }
+
+    public void setScoreBlue(int score) {
+        scoreBlue = score;
+    }
+
+    public int getScoreBlue() {
+        return scoreBlue;
+    }
+
+    public void setRoundTime(long time) {
+        roundTime = time;
+    }
+
+    public long getRoundTime() {
+        return roundTime;
+    }
+
+    public void setRespawnTime(long time) {
+        respawnTime = time;
+    }
+
+    public long getRespawnTime() {
+        return respawnTime;
+    }
+
     private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
         
-        if(self == null || !Main.getNetwork().isReallyConnected())
+        if(self == null || !Main.getNetwork().isReallyConnected() || self.isDead())
             return;
         
         CVector2 mov = null;
@@ -99,9 +154,10 @@ public class GameData implements UpdateObject {
             CProjectile c = null;
             if((c = self.shoot(u)) != null) {
                 ProjectileManager.addProjectile(c);
+
                 Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_SHOOT, argInt(c.getId()),
-                        argInt(self.getCurrentWeapon()), argInt((int)c.getDirection().getX()),
-                        argInt((int)c.getDirection().getY()), argDouble(c.getOrigin().getX()),
+                        argInt(self.getCurrentWeapon()), argDouble(c.getDirection().getX()),
+                        argDouble(c.getDirection().getY()), argDouble(c.getOrigin().getX()),
                         argDouble(c.getOrigin().getY()));
             }
         }
@@ -223,5 +279,43 @@ public class GameData implements UpdateObject {
      */
     public boolean isLoaded() {
         return loaded;
+    }
+
+    public void addGameEvent(Event e) {
+        synchronized(gameEvents) {
+            if(gameEvents.size() >= 7)
+                gameEvents.remove(0);
+            gameEvents.add(e);
+        }
+    }
+
+    public void removeGameEvent() {
+        synchronized(gameEvents) {
+            if(gameEvents.size() > 0)
+                gameEvents.remove(0);
+        }
+    }
+
+    public ArrayList<Event> getGameEvents() {
+        return gameEvents;
+    }
+
+    public void addChatEvent(Event e) {
+        synchronized(chatEvents) {
+            if(chatEvents.size() >= 7)
+                chatEvents.remove(0);
+            chatEvents.add(e);
+        }
+    }
+
+    public void removeChatEvent() {
+        synchronized(chatEvents) {
+            if(chatEvents.size() > 0)
+                chatEvents.remove(0);
+        }
+    }
+
+    public ArrayList<Event> getChatEvents() {
+        return chatEvents;
     }
 }

@@ -1,7 +1,7 @@
 package server;
 
-import client.anim.UpdateLoop;
-import client.anim.UpdateObject;
+import common.engine.UpdateLoop;
+import common.engine.UpdateObject;
 import client.resource.MapLoader;
 import common.engine.CMap;
 import common.engine.CPlayer;
@@ -10,6 +10,8 @@ import common.engine.CWeapon;
 import common.engine.CWeaponPistol;
 import common.engine.CWeaponRifle;
 import common.engine.ProjectileManager;
+import common.engine.UpdateCountdown;
+import common.engine.UpdateCountdownObject;
 import common.net.ProtocolCmd;
 
 import static common.net.ProtocolCmdArgument.*;
@@ -18,7 +20,7 @@ import static common.net.ProtocolCmdArgument.*;
  *
  * @author miracle
  */
-public class Game implements UpdateObject {
+public class Game implements UpdateObject, UpdateCountdownObject {
     private MapLoader loader;
     private String map;
     private CPlayer[] player = new CPlayer[Main.getMaxPlayers()];
@@ -50,23 +52,42 @@ public class Game implements UpdateObject {
          * Just broadcasting for now...
         */
 
+        ProjectileManager.checkProjectiles(u, player, getMap());
+
         for(int i=0; i<player.length; ++i) {
-            if(player[i] != null) {
-                int id = player[i].getId();
+            if(player[i] == null)
+                continue;
+            
+            int id = player[i].getId();
             int weapon = player[i].getCurrentWeapon();
             int t = player[i].getTeam();
+            int h = player[i].getHealth();
+            int k = player[i].getKills();
+            int d = player[i].getDeaths();
             double posX = player[i].getPosition().getX();
             double posY = player[i].getPosition().getY();
             double dirX = player[i].getDirection().getX();
             double dirY = player[i].getDirection().getY();
 
-            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id), argInt(t),
-                    argInt(weapon), argDouble(posX), argDouble(posY),
-                    argDouble(dirX), argDouble(dirY));
-            }
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id), argInt(h), 
+                    argInt(k), argInt(d), argInt(t), argInt(weapon), argDouble(posX),
+                    argDouble(posY), argDouble(dirX), argDouble(dirY));
         }
 
-        ProjectileManager.checkProjectiles(u, player, getMap());
+        long round = Main.getRoundTimeLeft();
+        long res = Main.getRespawnTimeLeft();
+        Main.broadcast(ProtocolCmd.SERVER_CLIENT_GAME_INFO, argLong(round), argLong(res),
+                argInt(scoreRed), argInt(scoreBlue));
+    }
+
+    public void countdown(UpdateCountdown c) {
+        String name = c.getName();
+        if(name.equals("ping"))
+            Main.ping();
+        else if(name.equals("respawn"))
+            Main.respawn();
+        else if(name.equals("round"))
+            Main.end();
     }
 
     /**
@@ -119,6 +140,10 @@ public class Game implements UpdateObject {
         return null;
     }
 
+    public CPlayer[] getPlayer() {
+        return player;
+    }
+
     /**
      *
      * @param score
@@ -149,6 +174,21 @@ public class Game implements UpdateObject {
      */
     public int getScoreRed() {
         return scoreRed;
+    }
+
+    public int getBestPlayer() {
+        int kills = 0;
+        int id = 0;
+        for(int i=0; i<player.length; ++i) {
+            if(player[i] == null)
+                continue;
+
+            if(player[i].getKills() > kills) {
+                kills = player[i].getKills();
+                id = i;
+            }
+        }
+        return id;
     }
 
     /**
@@ -182,12 +222,15 @@ public class Game implements UpdateObject {
      */
     public void hitPlayer(int pId, CProjectile c) {
         CPlayer p = player[pId];
+        CPlayer a = player[c.getId()];
         CWeapon w = getWeapon(c.getWeaponId());
         if(p != null && w != null && !p.isDead()) {
             p.setHealth(p.getHealth() - w.getDamage());
             if(p.isDead()) {
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_KILLED, argInt(pId),
-                        argInt(c.getOwner()));
+                        argInt(c.getId()));
+                p.setDeaths(p.getDeaths() + 1);
+                a.setKills(a.getKills() + 1);
             }
         }
     }

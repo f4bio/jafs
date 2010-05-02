@@ -235,7 +235,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void c_s_shoot(int id, int wepId, int dirX, int dirY, double orgX, double orgY,
+    public void c_s_shoot(int id, int wepId, double dirX, double dirY, double orgX, double orgY,
                           InetSocketAddress adr) {
         CWeapon wep = Main.getGame().getWeapon(id);
         if(wep != null) {
@@ -244,8 +244,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
             ProjectileManager.addProjectile(c);
             Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT,
-                           argInt(id), argInt(wepId), argInt(dirX),
-                           argInt(dirY), argDouble(orgX), argDouble(orgY));
+                           argInt(id), argInt(wepId), argDouble(dirX),
+                           argDouble(dirY), argDouble(orgX), argDouble(orgY));
         }
     }
 
@@ -373,7 +373,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 else
                     teamId = 2;
 
-//                c.setTeamId(teamId);
                 net.send(adr,
                          ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                          argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
@@ -381,6 +380,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
                                argInt(c.getId()) , argInt(teamId));
                 c.setTeamId(teamId);
+                c.getPlayer().setHealth(0);
                 System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
         }

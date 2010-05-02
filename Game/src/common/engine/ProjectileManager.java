@@ -5,7 +5,6 @@
 
 package common.engine;
 
-import client.anim.UpdateLoop;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -47,13 +46,18 @@ public class ProjectileManager {
             while (i.hasNext()) {
                 CProjectile pr = i.next();
                 if (pr != null) {
+                    if(pr.isCollided()) {
+                        i.remove();
+                        continue;
+                    }
+
                     int retC;
-                    if ((retC = pr.move(map, pr.getDirection().resize_cpy(1.0d),
-                            u.getSpeedfactor(), false, p)) != -2) {
+                    if ((retC = pr.move(map, pr.getDirection(),
+                            u.getSpeedfactor(), true, p)) != -2) {
                         if (game != null && retC > -1) {
                             game.hitPlayer(retC, pr);
                         }
-                        i.remove();
+                        pr.setCollided(true);
                     }
                 }
             }

@@ -97,6 +97,10 @@ public class CVector2 {
         this.x -= x;
         this.y -= y;
     }
+    
+    public CVector2 sub_cpy(CVector2 vec) {
+            return new CVector2(x - vec.x, y - vec.y);
+    }
 
     /**
      *
@@ -114,6 +118,15 @@ public class CVector2 {
      */
     public CVector2 mul_cpy(double a) {
         return new CVector2(x*a, y*a);
+    }
+
+    public void div(double a) {
+        x /= a;
+        y /= a;
+    }
+
+    public CVector2 div_cpy(double a) {
+        return new CVector2(x/a, y/a);
     }
 
     /**
@@ -153,8 +166,11 @@ public class CVector2 {
      * @param a
      */
     public void rotate(double a) {
-        x = x*Math.cos(a) - y*Math.sin(a);
-        y = x*Math.sin(a) + y*Math.cos(a);
+        double xx = x;
+        double yy = y;
+
+        x = xx*Math.cos(a) - yy*Math.sin(a);
+        y = xx*Math.sin(a) + yy*Math.cos(a);
     }
 
     /**
