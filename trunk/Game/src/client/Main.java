@@ -158,7 +158,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return MainScreen Frame
      */
     public static JFrame getFrame(){
         return frame;

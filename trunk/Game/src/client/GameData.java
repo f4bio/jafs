@@ -283,7 +283,7 @@ public class GameData implements UpdateObject {
 
     /**
      *
-     * @return
+     * @return true: Game data was loaded, false: Game data was not loaded
      */
     public boolean isLoaded() {
         return loaded;

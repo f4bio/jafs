@@ -54,10 +54,6 @@ public abstract class UiWindow extends JPanel
      *
      */
     public static final Color UI_COLOR_IN_BACKGROUND = new Color(240, 240, 240);
-    /**
-     *
-     */
-    public static final Color UI_COLOR_TRANSPARENT = new Color(1, 1, 1, 0);
 
     /**
      *
