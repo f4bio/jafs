@@ -903,7 +903,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @return
+     * @return Selfname set in GUI
      */
     public String getSelfName(){
         return tfPlayerName.getText();
@@ -911,7 +911,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @return
+     * @return Host and port of masterserver set in GUI
      */
     public String getMasterHostPortSettings(){
         return this.tfMasterserverIP.getText();
@@ -929,10 +929,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         private JTextArea txt;
         private JScrollPane sp;
 
-        /**
-         *
-         * @param client
-         */
         public PrivateChatTab(Client client){
             cl = client;
             txt = new JTextArea();
@@ -944,40 +940,16 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
             caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         }
 
-        /**
-         *
-         * @return
-         */
         public int getID(){ return cl.getId(); }
 
-        /**
-         *
-         * @return
-         */
         public String getName(){ return cl.getPlayer().getName(); }
 
-        /**
-         *
-         * @return
-         */
         public JTextArea getTextArea(){ return txt; }
 
-        /**
-         *
-         * @param s
-         */
         public void appendText(String s){ txt.append(s);}
 
-        /**
-         *
-         * @return
-         */
         public JScrollPane getScrollPane(){ return sp; }
 
-        /**
-         *
-         * @return
-         */
         public Client getClient(){ return cl; }
     }
 

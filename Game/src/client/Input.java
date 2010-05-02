@@ -169,7 +169,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return
+     * @return Direction of Vector
      */
     public CVector2 getDirection() {
         return direction;

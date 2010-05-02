@@ -27,7 +27,6 @@ public class InGameChat extends UiWindow implements MouseListener {
         super(scr);
         listModel = new DefaultListModel();
         initComponents();
-        jList1.setBackground(UiWindow.UI_COLOR_TRANSPARENT);
         jList1.addMouseListener(this);
         DefaultCaret caret = (DefaultCaret)jTextArea1.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
@@ -47,8 +46,10 @@ public class InGameChat extends UiWindow implements MouseListener {
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
 
+        setAlignmentX(0.0F);
+        setAlignmentY(0.0F);
         setName("InGameChat"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(320, 430));
+        setPreferredSize(new java.awt.Dimension(302, 406));
         setRequestFocusEnabled(false);
         setLayout(null);
 
@@ -62,7 +63,7 @@ public class InGameChat extends UiWindow implements MouseListener {
         jScrollPane1.setViewportView(jTextArea1);
 
         add(jScrollPane1);
-        jScrollPane1.setBounds(10, 255, 300, 137);
+        jScrollPane1.setBounds(0, 240, 300, 137);
 
         jTextField1.setBackground(new java.awt.Color(240, 240, 240));
         jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -70,22 +71,22 @@ public class InGameChat extends UiWindow implements MouseListener {
         jTextField1.setPreferredSize(new java.awt.Dimension(2, 21));
         jTextField1.setSelectionColor(new java.awt.Color(204, 204, 204));
         add(jTextField1);
-        jTextField1.setBounds(10, 398, 213, 21);
+        jTextField1.setBounds(0, 380, 213, 21);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("Senden");
         jButton1.setMaximumSize(new java.awt.Dimension(73, 21));
         jButton1.setMinimumSize(new java.awt.Dimension(73, 21));
         jButton1.setPreferredSize(new java.awt.Dimension(73, 21));
         add(jButton1);
-        jButton1.setBounds(229, 398, 81, 21);
+        jButton1.setBounds(220, 380, 81, 21);
 
         jList1.setModel(listModel);
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jList1);
 
         add(jScrollPane2);
-        jScrollPane2.setBounds(10, 11, 156, 238);
+        jScrollPane2.setBounds(0, 0, 156, 238);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
