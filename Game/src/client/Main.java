@@ -11,10 +11,13 @@ import common.net.Protocol;
 import common.net.ProtocolCmd;
 import common.net.Server;
 import common.utils.CUtils;
+import java.awt.Cursor;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.net.InetSocketAddress;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import static common.net.ProtocolCmdArgument.*;
@@ -45,7 +48,6 @@ public class Main {
      *
      */
     public static final String PATH = CUtils.getApplicationPath("Game");
-
     
     /**
      *
@@ -78,7 +80,7 @@ public class Main {
         net = new Network();
         ProtocolHandler pHandler = new ProtocolHandler(net);
         net.setProtocolHandler(pHandler);
-        net.listen(net.getFreePort(50000, 65000));
+        net.listen(Network.getFreePort(50000, 65000));
 
         // Frame
         frame = new JFrame();
@@ -98,6 +100,13 @@ public class Main {
         input = new Input(screen);
         frame.addKeyListener(input);
         frame.addKeyListener(kListener);
+        // Cursor
+        // Pfad: getClass().getResource("/common/resource/cursor.png"
+//        Cursor c = screen.getToolkit().createCustomCursor(
+//                new ImageIcon("common/resource/cursor.png").getImage(),
+//                new Point(10,10), "Cursor" );
+        screen.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+
         screen.addMouseMotionListener(input);
         screen.addMouseListener(input);
 
@@ -109,21 +118,17 @@ public class Main {
  
         // UIManger
         UiManager.addComponent(uiInGameChat);
-
         screen.getContentPane().add(uiInGameChat);
 
         // GameData
         data = new GameData(input);
         data.setName(System.getProperty("user.name"));
         mainMenu.setSelfName(Main.getGameData().getName());
+        
         // UpdateLoop
         loop = new UpdateLoop(60);
         loop.addUpdateObject(data);
         loop.addUpdateObject(screen);
-
-        // Anmeldung: Client -> Masterserver
-//        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));
-//        new Chat(net).start();
 
         EventQueue.invokeLater(new Runnable() {
            public void run() {

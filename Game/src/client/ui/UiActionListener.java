@@ -110,10 +110,6 @@ public class UiActionListener implements ActionListener {
                 net.send(Main.getSelectedServer().getAddress(),
                          ProtocolCmd.CLIENT_SERVER_AUTH);
                 System.out.println("CLIENT_SERVER_AUTH");
-                Main.getMainMenu().enableLobby(false);
-                Main.getMainMenu().setVisible(false);
-                Main.getScreen().setVisible(true);
-                Main.getFrame().setVisible(true);
             }
         }
         // Lobby Chat senden
@@ -173,6 +169,7 @@ public class UiActionListener implements ActionListener {
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LOGOFF);
+            System.out.println("CLIENT_MASTER_LOGOFF");
             System.exit(0);
         }
     }

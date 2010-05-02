@@ -140,7 +140,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println("MASTER_CLIENT_ENDLIST (client)");
             Main.getMainMenu().completeClientlist();
         }
-        
     }
 
     /**
@@ -264,6 +263,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(i == Protocol.REPLY_SUCCESS) {
 //            System.out.println("client succesfully listed. (server)");
             System.out.println("SERVER_CLIENT_AUTH_REPLY success (client listed)");
+            Main.getMainMenu().enableLobby(false);
+            Main.getMainMenu().setVisible(false);
+            Main.getScreen().setVisible(true);
+            Main.getFrame().setVisible(true);
         }
         else {
 //            System.out.println("client failed to be listed. (server)");
@@ -698,6 +701,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     public void noReplyReceived(Packet p)
     {
-
+        System.out.println("noReplyReceived -> " + Protocol.getCmdById(p.getCmd()));
+        if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.CLIENT_MASTER_AUTH) {
+            Main.getMainMenu().appendIncommingMSG(false, -2, -1, "Verbindung konnte nicht hergestellt werden!");
+        }
+        else if(Protocol.getCmdById(p.getCmd()) == ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY ||
+                Protocol.getCmdById(p.getCmd()) == ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE) {
+            Main.getMainMenu().appendIncommingMSG(false, -2, -1, "Verbindung zum Masterserver verloren!");
+        }
     }
 }
