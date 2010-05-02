@@ -184,16 +184,22 @@ public class Main {
      */
     public static void broadcast(String msg, InetSocketAddress adr){
         int senderID = -2;
+        Client sender = null;
         if(!adr.getHostName().equals(Network.MASTERHOST) && adr.getPort() != Network.MASTERPORT) {
-            Client sender = getClient(adr);
-            senderID = sender.getId();
+            sender = getClient(adr);
+            //senderID = sender.getId();
         }
-        for(Client client: clientlist)
-            if(!client.isInGame())
-                net.send(client.getAddress(),
-                         ProtocolCmd.MASTER_CLIENT_CHAT,
-                         argInt(senderID),
-                         argStr(msg));
+        if (sender != null) {
+            senderID = sender.getId();
+            for (Client client : clientlist) {
+                if (!client.isInGame()) {
+                    net.send(client.getAddress(),
+                            ProtocolCmd.MASTER_CLIENT_CHAT,
+                            argInt(senderID),
+                            argStr(msg));
+                }
+            }
+        }
     }
 
     /**

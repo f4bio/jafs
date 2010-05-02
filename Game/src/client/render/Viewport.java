@@ -1,6 +1,7 @@
 package client.render;
 
 import client.Event;
+import client.GameData;
 import client.Main;
 import common.CVector2;
 import common.engine.CMap;
@@ -29,10 +30,12 @@ public class Viewport {
      */
     public static final Dimension size = new Dimension(1024, 768);
     public static final Color background = new Color(128, 128, 128, 64);
+    public static final Color backgroundSelected = new Color(128, 128, 128, 128);
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
     private float aspectRatio = (float)size.width / size.height;
+    private boolean statsVisible;
 
     /**
      *
@@ -41,6 +44,7 @@ public class Viewport {
     public Viewport(GraphicsConfiguration gc) {
         this.gc = gc;
         createBuffer();
+        statsVisible = false;
     }
 
     /**
@@ -262,6 +266,17 @@ public class Viewport {
 
         g.drawString(s, textX, textY);
     }
+
+    public static void drawCenteredStringY(Graphics2D g, String s, int x, int y) {
+        FontMetrics fm = g.getFontMetrics(g.getFont());
+
+        int textHeight = (int)Math.round(fm.getStringBounds(s, g).getHeight());
+        int textAscent = fm.getAscent();
+
+        int textY = y - (textHeight / 2) + textAscent;
+
+        g.drawString(s, x, textY);
+    }
     
     public Rectangle2D getStringMetrics(String s, Graphics2D g) {
         FontMetrics fm = g.getFontMetrics(g.getFont());
@@ -273,7 +288,14 @@ public class Viewport {
         g.setColor(Color.BLACK);
         g.drawRect(x, y, width, height);
         g.setColor(background);
-        g.fillRect(x+1, y+1, width-2, height-2);
+        g.fillRect(x+1, y+1, width-1, height-1);
+    }
+
+    public void renderBox(int x, int y, int width, int height, Graphics2D g, Color c) {
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, width, height);
+        g.setColor(c);
+        g.fillRect(x+1, y+1, width-1, height-1);
     }
     
     public void renderHealthBox(Graphics2D g) {
@@ -355,11 +377,106 @@ public class Viewport {
         drawCenteredString(g, getTime(time), x + 5 + w/2, y + 5 + h/2);
     }
 
+    public CPlayer[] sortByKills(int team) {
+        CPlayer[] p = new CPlayer[Main.getGameData().getPlayers().length];
+        CPlayer[] l = Main.getGameData().getPlayers();
+
+        int idx = 0;
+        for(int i=0; i<l.length; ++i) {
+            if(l[i] != null && l[i].getTeam() == team) {
+                p[idx] = l[i];
+                for(int j = i+1; j<l.length; ++j) {
+                    if(l[j] != null && l[j].getKills() > p[idx].getKills()
+                            && l[j].getTeam() == team) {
+                        p[idx] = l[j];
+                    }
+                }
+                idx++;
+            }
+        }
+
+        return p;
+    }
+
+    public void renderStats(Graphics2D g) {
+        GameData d = Main.getGameData();
+        CPlayer[] pRed = sortByKills(CPlayer.TEAM_RED);
+        CPlayer[] pBlue = sortByKills(CPlayer.TEAM_BLUE);
+        CPlayer[][] players = {
+            pRed, pBlue
+        };
+
+        int w = 640;
+        int h = 30;
+        int x = buffer.getWidth()/2;
+        int y = 70;
+
+        int w1 = (int)((4.0d/5.0d) * w);
+        int w2 = (int)((0.5d/5.0d) * w);
+
+        for(int i=0; i<2; ++i) {
+            CPlayer[] p = players[i];
+            String team = (i==0)?"Team Red (" + d.getScoreRed() + ")":
+                "Team Blue (" + d.getScoreBlue() + ")";
+            Color c = (i==0)?Color.RED:Color.BLUE;
+
+            renderBox(x - w/2, y, w, h, g);
+            g.setColor(c);
+            drawCenteredString(g, team, x, y + h/2);
+            y += h;
+
+            for(int j=0; j<p.length + 1; ++j) {
+                if(j > 0 && p[j-1] != null &&
+                        p[j-1].getId() == Main.getGameData().getSelfId()) {
+                    renderBox(x - w/2, y, w1, h, g, backgroundSelected);
+                    renderBox(x - w/2 + w1, y, w2, h, g, backgroundSelected);
+                    renderBox(x - w/2 + w1 + w2, y, w2, h, g, backgroundSelected);
+                } else if(j==0 || (j > 0 && p[j-1] != null)) {
+                    renderBox(x - w/2, y, w1, h, g);
+                    renderBox(x - w/2 + w1, y, w2, h, g);
+                    renderBox(x - w/2 + w1 + w2, y, w2, h, g);
+                }
+
+                g.setColor(c);
+                if(j == 0) {
+                    drawCenteredStringY(g, "Name", x - w/2 + 5, y + h/2);
+                    drawCenteredStringY(g, "Kills", x - w/2 + 5 + w1, y + h/2);
+                    drawCenteredStringY(g, "Deaths", x - w/2 + 5 + w1 + w2, y + h/2);
+                } else {
+                    CPlayer o = p[j - 1];
+                    if(o != null) {
+                        String name = o.getName();
+                        int kills = o.getKills();
+                        int deaths = o.getDeaths();
+
+                        drawCenteredStringY(g, name, x - w/2 + 5, y + h/2);
+                        drawCenteredStringY(g, "" + kills, x - w/2 + 5 + w1, y + h/2);
+                        drawCenteredStringY(g, "" + deaths, x - w/2 + 5 + w1 + w2, y + h/2);
+                    }
+                }
+
+                if(j==0 || (j > 0 && p[j-1] != null))
+                    y += h;
+            }
+        }
+    }
+
     public void renderHud(Graphics2D g) {
+        if(statsVisible)
+            renderStats(g);
+
         renderHealthBox(g);
         renderRoundTime(g);
         renderRespawnTime(g);
         renderGameEvents(g);
         renderChatEvents(g);
+    }
+
+    public void setStatsVisible(boolean vis) {
+        statsVisible = vis;
+    }
+
+    public boolean areStatsVisible() {
+        return statsVisible;
     }
 }

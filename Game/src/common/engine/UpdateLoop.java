@@ -44,8 +44,6 @@ public class UpdateLoop implements Runnable{
 
     private void countdown() {
         for(UpdateCountdown o : count) {
-            /*long end = o.getStartTime() + o.getIntervall() * 1000000;
-            long left = (long)((end - curTime) * 0.000001);*/
             long cur = System.currentTimeMillis();
             long end = o.getStartTime() + o.getIntervall();
             long left = end - cur;
@@ -168,7 +166,7 @@ public class UpdateLoop implements Runnable{
     }
 
     public void resetCountdown(UpdateCountdown o) {
-        o.setStartTime(curTime);
+        o.setStartTime(System.currentTimeMillis());
     }
 
     /**

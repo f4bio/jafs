@@ -98,9 +98,7 @@ public abstract class ProtocolHandler implements Runnable {
 
             for(int i=packet.getOffset(); i<packet.getLength(); ++i) {
                 data[i] = recv[i];
-                //System.out.print(recv[i] + " ");
             }
-            //System.out.println(packet.getLength());
             
             int index = 1;
             
@@ -108,9 +106,7 @@ public abstract class ProtocolHandler implements Runnable {
                 switch(param[i]) {
                     case Protocol.ARG_STRING:
                         idx[i] = index;
-                        ///System.out.println(index);
                         index = ProtocolCmdArgument.terminatorIndex(data, index) + 1;
-                        //System.out.println(index);
                         break;
                         
                     case Protocol.ARG_NONE:
@@ -118,7 +114,6 @@ public abstract class ProtocolHandler implements Runnable {
                     
                     default:
                         idx[i] = index;
-                        //System.out.println(index);
                         index += Protocol.ARG_SIZE[param[i]];
                 }
             }
@@ -135,7 +130,6 @@ public abstract class ProtocolHandler implements Runnable {
                         c_m_chat_lobby(toStr(data, idx[0]), adr);
                         break;
                     case CLIENT_MASTER_CHAT_PRIVATE:
-//                        c_m_chat_private(toInt(data, idx[0]), "test", adr);
                         c_m_chat_private(toInt(data, idx[0]), toStr(data, idx[1]), adr);
                         break;
                     case CLIENT_MASTER_CHAT_PRIVATE_OK:

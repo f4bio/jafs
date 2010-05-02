@@ -150,4 +150,8 @@ public  class MainScreen extends JWindow implements UpdateObject {
     public void createGameScene() {
         gamescene = new Viewport(getGraphicsConfiguration());
     }
+
+    public Viewport getGameScene() {
+        return gamescene;
+    }
 }

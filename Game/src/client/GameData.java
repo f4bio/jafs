@@ -104,8 +104,16 @@ public class GameData implements UpdateObject {
 
     private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
+
+        if(self == null || !Main.getNetwork().isReallyConnected())
+            return;
+
+        if(input.isKeyEPressed())
+            Main.getScreen().getGameScene().setStatsVisible(true);
+        else
+            Main.getScreen().getGameScene().setStatsVisible(false);
         
-        if(self == null || !Main.getNetwork().isReallyConnected() || self.isDead())
+        if(self.isDead())
             return;
         
         CVector2 mov = null;

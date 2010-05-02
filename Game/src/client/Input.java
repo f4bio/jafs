@@ -18,6 +18,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private boolean key_s;
     private boolean key_d;
     private boolean key_m_1;
+    private boolean key_e;
 
     private CVector2 direction;
     private MainScreen scrn;
@@ -32,6 +33,7 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
         key_s = false;
         key_d = false;
         key_m_1 = false;
+        key_e = false;
 
         direction = new CVector2();
         this.scrn = scrn;
@@ -50,6 +52,9 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
                 break;
             case KeyEvent.VK_D:
                 key_d = true;
+                break;
+            case KeyEvent.VK_E:
+                key_e = true;
         }
     }
 
@@ -70,6 +75,9 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
                 break;
             case KeyEvent.VK_D:
                 key_d = false;
+                break;
+            case KeyEvent.VK_E:
+                key_e = false;
         }
         if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
 //            Main.showUi();
@@ -148,6 +156,15 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
      */
     public boolean isKeyM1Pressed() {
         return key_m_1;
+    }
+
+
+    /**
+     *
+     * @return true if 'E' is pressed, otherwise false
+     */
+    public boolean isKeyEPressed() {
+        return key_e;
     }
 
     /**
