@@ -17,7 +17,13 @@ import static common.net.ProtocolCmdArgument.*;
  * @author miracle
  */
 public class Main {
+    /**
+     *
+     */
     public static int maxPingFailures = 2;
+    /**
+     *
+     */
     public static final int pingRefreshInterval = 10000;
 
     private static Network net;
@@ -39,6 +45,10 @@ public class Main {
 
     private static Timer pingTimer;
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Protocol.init();
         net = new Network();
@@ -51,6 +61,11 @@ public class Main {
         pingTimer.schedule(pinger, pingRefreshInterval, pingRefreshInterval);
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static Server addServer(InetSocketAddress adr) {
         for(Server server : serverlist) {
             if(server.getAddress().equals(adr))
@@ -64,6 +79,10 @@ public class Main {
         return server;
     }
 
+    /**
+     *
+     * @param server
+     */
     public static void removeServer(Server server) {
         serverlist.remove(server);
         System.out.println("Server dropped.");
@@ -71,10 +90,20 @@ public class Main {
         //System.out.println("Server " + server.getHost() + ":" + server.getPort() + " dropped." );
     }
 
+    /**
+     *
+     * @param adr
+     */
     public static void removeServer(InetSocketAddress adr) {
         removeServer(getServer(adr));
     }
 
+    /**
+     *
+     * @param host
+     * @param port
+     * @return
+     */
     public static Server getServer(String host, int port) {
         for(Server cur : serverlist) {
             if(cur.getHost().equals(host) && cur.getPort() == port)
@@ -84,6 +113,11 @@ public class Main {
         return null;
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static Server getServer(InetSocketAddress adr) {
         for(Server cur : serverlist) {
             if(cur.getAddress().equals(adr))
@@ -93,6 +127,10 @@ public class Main {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public static String[] getServerlist() {
         String[] srv = new String[serverlist.size()];
         int i = 0;
@@ -104,6 +142,10 @@ public class Main {
         return srv;
     }
 
+    /**
+     *
+     * @return
+     */
     public static Client[] getClientlist() {
         Client[] cl = new Client[clientlist.size()];
         int i = 0;
@@ -115,6 +157,11 @@ public class Main {
         return cl;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public static Client getClient(int id){
         for(Client client: clientlist)
             if(client.getId() == id)
@@ -122,10 +169,19 @@ public class Main {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public static int serverCount(){
         return serverlist.size();
     }
 
+    /**
+     *
+     * @param msg
+     * @param adr
+     */
     public static void broadcast(String msg, InetSocketAddress adr){
         int senderID = -2;
         if(!adr.getHostName().equals(Network.MASTERHOST) && adr.getPort() != Network.MASTERPORT) {
@@ -140,6 +196,11 @@ public class Main {
                          argStr(msg));
     }
 
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static Client getClient(InetSocketAddress adr) {
         for(Client cur : clientlist) {
             if(cur.getAddress().equals(adr))
@@ -148,6 +209,11 @@ public class Main {
 
         return null;
     }
+    /**
+     *
+     * @param adr
+     * @return
+     */
     public static Client addClient(InetSocketAddress adr) {
         for(Client client: clientlist)
             if(client.getAddress().equals(adr))
@@ -169,6 +235,10 @@ public class Main {
         return client;
     }
 
+    /**
+     *
+     * @param client
+     */
     public static void removeClient(Client client) {
         if(clientlist.remove(client))
             System.out.println("removeClient(...) Client dropped.");
@@ -176,16 +246,29 @@ public class Main {
             System.out.println("removeClient(...) Couldn't find client to drop.");
     }
     
+    /**
+     *
+     * @param adr
+     */
     public static void removeClient(InetSocketAddress adr) {
         removeClient(getClient(adr));
     }
 
+    /**
+     *
+     */
     public static void broadcastClientlist(){
         for(Client i : clientlist) {
             handler.c_m_listrequest(Protocol.LIST_TYPE_CLIENTLIST, i.getAddress());
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param ignoreName
+     * @return
+     */
     public static boolean nameExists(String name, String ignoreName) {
         if(ignoreName != null){
             for(Client c : clientlist) {
@@ -206,6 +289,12 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param nick
+     * @param adr
+     * @return
+     */
     public static String checkNick(String nick, InetSocketAddress adr){
         System.out.print("CLIENT_MASTER_NICKCHANGE (nick="+nick+", id="+getClient(adr).getId()+")");
         String nameOld = getClient(adr).getPlayer().getName();

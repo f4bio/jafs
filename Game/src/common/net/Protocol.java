@@ -29,7 +29,7 @@ public class Protocol {
 
     //----- Argument definitions
     /**
-     *
+     * 
      */
     public static final byte ARG_BYTE   = 0;
     /**
