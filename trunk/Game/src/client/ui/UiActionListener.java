@@ -17,35 +17,31 @@ public class UiActionListener implements ActionListener {
 
     // Command list
     /**
-     *
-     */
-    public static final String CMD_TOGGLE_SERVERBROWSER     = "1";
-    /**
-     *
+     * ActionCommand
      */
     public static final String CMD_EXIT                     = "2";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_CONNECT                  = "3";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_REFRESH_SERVERBROWSER    = "4";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_LOBBYCHAT_SEND_MSG       = "5";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_NICKCHANGE               = "6";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_INGAMECHAT_SEND_MSG      = "7";
     /**
-     *
+     * ActionCommand
      */
     public static final String CMD_CREATE_SERVER            = "8";
 
@@ -62,15 +58,8 @@ public class UiActionListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
   
-        // Serverbrowser
-        if(e.getActionCommand().equals(CMD_TOGGLE_SERVERBROWSER)) {
-            net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
-                     ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
-                     argShort(Protocol.LIST_TYPE_SERVERLIST));
-        }
         // Serverliste aktualisieren
-        else if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
+        if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
@@ -85,7 +74,7 @@ public class UiActionListener implements ActionListener {
             net.send(Network.MASTERHOST,
                      Network.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_NICKCHANGE,
-                     argStr(Main.getMainMenu().getPlayerName()));
+                     argStr(Main.getMainMenu().getSelfName()));
             Main.getMainMenu().enableOptions(false);
         }
         // Mit Server verbinden
