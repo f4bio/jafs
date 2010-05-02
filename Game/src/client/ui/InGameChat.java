@@ -8,7 +8,6 @@ package client.ui;
 
 import client.Main;
 import client.render.MainScreen;
-import common.net.Client;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,7 +21,7 @@ import javax.swing.text.DefaultCaret;
 public class InGameChat extends UiWindow implements MouseListener {
 
     /** Creates new form LobbyChat
-     * @param scr
+     * @param scr MainScreen
      */
     public InGameChat(MainScreen scr) {
         super(scr);
@@ -104,7 +103,7 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @param a
+     * @param a ActionListener you want to implement
      */
     @Override
     public void addActionListener(ActionListener a) {
@@ -116,8 +115,8 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @param clientID
-     * @return
+     * @param clientID ID of client you want to get th name
+     * @return name of client
      */
     public String getClientName(int clientID){
         if(clientID == -1)
@@ -130,7 +129,7 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @return
+     * @return ID of receiver client
      */
     public int getSelectedPrivateChatID(){
         return privateChatID;
@@ -138,14 +137,14 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @return
+     * @return true: private chat mode, false: public chat mode
      */
     public boolean isPrivateChatMode(){
         return privateChatMode;
     }
 
     /**
-     *
+     * Clear list of clients
      */
     public void clearClientlist(){
         listModel.clear();
@@ -155,8 +154,8 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @param clientID
-     * @param playerName
+     * @param clientID ID of client you want to add
+     * @param playerName Name of client you want to add
      */
     public void addClientToList(int clientID, String playerName){
         idlist[listModel.size()] = clientID;
@@ -167,7 +166,7 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @return
+     * @return Message you want to send
      */
     public String getMSG() {
         String str = jTextField1.getText();
@@ -177,14 +176,14 @@ public class InGameChat extends UiWindow implements MouseListener {
 
     /**
      *
-     * @param msg
+     * @param msg Messag you want to add to InGame chat
      */
     public void appendMSG(String msg) {
         jTextArea1.append(msg + "\n");
     }
 
     /**
-     *
+     * Clear Messagefield of InGame chat
      */
     public void clearMsgField() {
         jTextField1.setText("");

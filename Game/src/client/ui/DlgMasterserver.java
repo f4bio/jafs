@@ -22,7 +22,7 @@ import static common.net.ProtocolCmdArgument.*;
  */
 public class DlgMasterserver extends javax.swing.JDialog implements WindowListener {
 
-    /** Creates new form MasterserverIP */
+    /** Creates new form DlgMasterserver */
     public DlgMasterserver(java.awt.Frame parent, boolean modal, UiActionListener aListener) {
         super(parent, modal);
         initComponents();
@@ -35,10 +35,18 @@ public class DlgMasterserver extends javax.swing.JDialog implements WindowListen
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
     }
 
+    /**
+     *
+     * @return Host adress
+     */
     public String getHost(){
         return jTextField1.getText().split(":")[0];
     }
 
+    /**
+     *
+     * @return Port
+     */
     public int getPort(){
         return Integer.parseInt(jTextField1.getText().split(":")[1]);
     }
