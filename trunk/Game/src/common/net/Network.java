@@ -18,11 +18,11 @@ public class Network {
     /**
      *
      */
-    public static final String MASTERHOST = "secureit.ath.cx";
+    public static String MASTERHOST = "localhost";
     /**
      *
      */
-    public static final int MASTERPORT = 30000;
+    public static int MASTERPORT = 30000;
 
     /**
      *
@@ -440,7 +440,7 @@ public class Network {
      * @param to
      * @return
      */
-    public int getFreePort(int from, int to){
+    public static int getFreePort(int from, int to){
         DatagramSocket testSocket;
             for(int i = from; i<to;i++)
                 try{

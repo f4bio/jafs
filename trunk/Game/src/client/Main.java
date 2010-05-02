@@ -1,5 +1,6 @@
 package client;
 
+import client.ui.DlgMasterserver;
 import client.anim.UpdateLoop;
 import client.render.MainScreen;
 import client.ui.*;
@@ -34,6 +35,7 @@ public class Main {
     private static UpdateLoop loop;
     // GUI
     private static MainMenu mainMenu;
+    private static DlgMasterserver masterip;
     // UI
     private static InGameChat uiInGameChat;
 
@@ -92,6 +94,7 @@ public class Main {
 
         // Main GUI
         mainMenu = new MainMenu(aListener);
+        masterip = new DlgMasterserver(mainMenu, true, aListener);
         // Input
         input = new Input(screen);
         frame.addKeyListener(input);
@@ -120,13 +123,14 @@ public class Main {
         loop.addUpdateObject(data);
 
         // Anmeldung: Client -> Masterserver
-        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));
+//        net.send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(data.getName()));
 //        new Chat(net).start();
 
         EventQueue.invokeLater(new Runnable() {
            public void run() {
 //               frame.setVisible(true);
                mainMenu.setVisible(true);
+               masterip.setVisible(true);
            }
         });
         
@@ -144,6 +148,14 @@ public class Main {
     /**
      *
      * @return frame
+     */
+    public static DlgMasterserver getDlgMasterserver() {
+        return masterip;
+    }
+
+    /**
+     *
+     * @return
      */
     public static JFrame getFrame(){
         return frame;

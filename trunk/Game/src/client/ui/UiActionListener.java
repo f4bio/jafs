@@ -44,6 +44,10 @@ public class UiActionListener implements ActionListener {
      * ActionCommand
      */
     public static final String CMD_CREATE_SERVER            = "8";
+    /**
+     * ActionCommand
+     */
+    public static final String CMD_AUTH_MASTERSERVER        = "9";
 
     private Network net;
 
@@ -57,7 +61,19 @@ public class UiActionListener implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 //        System.out.println(e.getActionCommand() + " (actionPerformed by " + e.getSource().getClass().getSimpleName() + ")");
-  
+
+        // Anmeldung: Client -> Masterserver
+        if(e.getActionCommand().equals(CMD_AUTH_MASTERSERVER)){
+            if(!Network.MASTERHOST.equals(Main.getDlgMasterserver().getHost()))
+                Network.MASTERHOST = Main.getDlgMasterserver().getHost();
+            if(Network.MASTERPORT != Main.getDlgMasterserver().getPort())
+                Network.MASTERPORT = Main.getDlgMasterserver().getPort();
+            Main.getDlgMasterserver().dispose();
+            net.send(Network.MASTERHOST,
+                     Network.MASTERPORT,
+                     ProtocolCmd.CLIENT_MASTER_AUTH,
+                     argStr(Main.getGameData().getName()));
+        }
         // Serverliste aktualisieren
         if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
             net.send(Network.MASTERHOST,
@@ -67,7 +83,7 @@ public class UiActionListener implements ActionListener {
         }
         // Server erstellen
         else if(e.getActionCommand().equals(CMD_CREATE_SERVER)) {
-            new server.GUI().setVisible(true);
+            new server.ui.DlgGUI(Main.getMainMenu(), true).setVisible(true);
         }
         // Nick change
         else if(e.getActionCommand().equals(CMD_NICKCHANGE)) {
