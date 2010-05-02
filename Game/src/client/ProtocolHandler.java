@@ -50,8 +50,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void m_c_nickchange_ok(InetSocketAddress adr)
     {
         System.out.println("MASTER_CLIENT_NICKCHANGE_OK");
-        Main.getGameData().setName(Main.getMainMenu().getPlayerName());
-        Main.getMainMenu().setPlayerName(Main.getMainMenu().getPlayerName());
+        Main.getGameData().setName(Main.getMainMenu().getSelfName());
+        Main.getMainMenu().setSelfName(Main.getMainMenu().getSelfName());
         Main.getMainMenu().enableOptions(true);
     }
 
@@ -65,7 +65,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         System.out.print("MASTER_CLIENT_FORCED_NICKCHANGE");
         Main.getGameData().setName(forcedNick);
-        Main.getMainMenu().setPlayerName(forcedNick);
+        Main.getMainMenu().setSelfName(forcedNick);
         Main.getMainMenu().enableOptions(true);
         System.out.println(" -> CLIENT_MASTER_FORCED_NICKCHANGE_OK");
         net.send(adr, ProtocolCmd.CLIENT_MASTER_FORCED_NICKCHANGE_OK);
@@ -153,7 +153,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     {
         if(i == Protocol.REPLY_SUCCESS){
             Main.getGameData().setSelfId(id);
-            Main.getMainMenu().setPlayerName(Main.getGameData().getName());
+            Main.getMainMenu().setSelfName(Main.getGameData().getName());
             Main.getMainMenu().enableLobby(true);
 //            Main.getMainMenu().appendIncommingMSG(false, -1, id, "Connection established!\n");
             System.out.println("MASTER_CLIENT_AUTH_REPLY success (id="+id+")");

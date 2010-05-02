@@ -78,16 +78,18 @@ public class Main {
         net.setProtocolHandler(pHandler);
         net.listen(net.getFreePort(50000, 65000));
 
+        // Frame
         frame = new JFrame();
         frame.setIgnoreRepaint(true);
 
+        // Screen
         screen = new MainScreen(frame);
         screen.setVisible(false);
         
         UiActionListener aListener = new UiActionListener(net);
         UiKeyListener kListener = new UiKeyListener();
 
-        // Init Interfaces
+        // Main GUI
         mainMenu = new MainMenu(aListener);
         // Input
         input = new Input(screen);
@@ -96,6 +98,7 @@ public class Main {
         screen.addMouseMotionListener(input);
         screen.addMouseListener(input);
 
+        // InGame UI
         uiInGameChat = new InGameChat(screen);
         uiInGameChat.setLocation(10, screen.getHeight()-uiInGameChat.getHeight()-10);
         uiInGameChat.addActionListener(aListener);
@@ -109,7 +112,7 @@ public class Main {
         // GameData
         data = new GameData(input);
         data.setName(System.getProperty("user.name"));
-        mainMenu.setPlayerName(Main.getGameData().getName());
+        mainMenu.setSelfName(Main.getGameData().getName());
         // UpdateLoop
         loop = new UpdateLoop(60);
         loop.addUpdateObject(screen);
@@ -163,6 +166,25 @@ public class Main {
 
     /**
      *
+     * @return
+     */
+    public static MainMenu getMainMenu() {
+        return mainMenu;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static InGameChat getUiInGameChat() {
+        return uiInGameChat;
+    }
+
+
+// --- Server ---
+
+    /**
+     *
      * @param host
      * @param port
      * @return
@@ -188,22 +210,6 @@ public class Main {
         }
         return -1;
     }
-
-    /**
-     *
-     * @return
-     */
-    public static MainMenu getMainMenu() {
-        return mainMenu;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public static InGameChat getUiInGameChat() {
-        return uiInGameChat;
-    }
     
     /**
      *
@@ -212,46 +218,12 @@ public class Main {
     public static void addServerToServerlist(Server s){
         serverlist.add(s);
     }
-
-    /**
-     *
-     */
-    public static void refInGameClientlist(){
-        System.out.print("refInGameClientlist()");
-        clientlist.clear();
-        uiInGameChat.clearClientlist();
-        CPlayer[] p = data.getPlayers();
-        for(int i=0; i<p.length; i++){
-            if(p[i] != null){ // && !p[i].getName().equals(data.getName())) {
-                uiInGameChat.addClientToList(p[i].getId(), p[i].getName());
-                System.out.println(" -> added \""+p[i].getName()+"\" (id="+p[i].getId()+")");
-            }
-        }
-        System.out.println(" finished!");
-    }
-
-    /**
-     *
-     * @param c
-     */
-    public static void addClientToClientlist(Client c){
-        clientlist.add(c);
-        mainMenu.addClientToList(c);
-    }
-
+    
     /**
      *
      */
     public static void clearServerlist(){
         serverlist.clear();
-    }
-
-    /**
-     *
-     */
-    public static void clearClientlist(){
-        clientlist.clear();
-        mainMenu.clearClientlist();
     }
 
     /**
@@ -294,7 +266,7 @@ public class Main {
     public static void refreshLatency(InetSocketAddress adr, long nanoTime){
         int i = getServerlistIndex(adr);
         serverlist.get(i).setClientServerLatency(nanoTime);
-        mainMenu.refreshValue(new DecimalFormat("#0.00").format(serverlist.get(i).getClientSserverLatency()*0.000001)+"ms", i, 3);
+        mainMenu.refreshServerTableValue(new DecimalFormat("#0.00").format(serverlist.get(i).getClientSserverLatency()*0.000001)+"ms", i, 3);
     }
 
     /**
@@ -305,11 +277,11 @@ public class Main {
     public static void refreshServerInfo(String name, String map, String players, int highscore, InetSocketAddress adr){
         int i = getServerlistIndex(adr);
         serverlist.get(i).setName(name);
-        mainMenu.refreshValue(name, i, 0);
+        mainMenu.refreshServerTableValue(name, i, 0);
         serverlist.get(i).setMap(map);
-        mainMenu.refreshValue(map, i, 1);
+        mainMenu.refreshServerTableValue(map, i, 1);
         serverlist.get(i).setCurPlayers(players);
-        mainMenu.refreshValue(players, i, 2);
+        mainMenu.refreshServerTableValue(players, i, 2);
         serverlist.get(i).setClientHighscore(highscore);
         mainMenu.refreshServerinfoPanel();
     }
@@ -324,6 +296,43 @@ public class Main {
             return serverlist.get(mainMenu.getSelectedServerlistIndex());
         else
             return null;
+    }
+
+
+// --- Client ---
+
+    /**
+     *
+     * @param c
+     */
+    public static void addClientToClientlist(Client c){
+        clientlist.add(c);
+        mainMenu.addClientToList(c);
+    }
+
+    /**
+     *
+     */
+    public static void clearClientlist(){
+        clientlist.clear();
+        mainMenu.clearClientlist();
+    }
+
+    /**
+     *
+     */
+    public static void refInGameClientlist(){
+        System.out.print("refInGameClientlist()");
+        clientlist.clear();
+        uiInGameChat.clearClientlist();
+        CPlayer[] p = data.getPlayers();
+        for(int i=0; i<p.length; i++){
+            if(p[i] != null){ // && !p[i].getName().equals(data.getName())) {
+                uiInGameChat.addClientToList(p[i].getId(), p[i].getName());
+                System.out.println(" -> added \""+p[i].getName()+"\" (id="+p[i].getId()+")");
+            }
+        }
+        System.out.println(" finished!");
     }
 
     /**

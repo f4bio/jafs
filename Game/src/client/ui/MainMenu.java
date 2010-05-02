@@ -1,5 +1,5 @@
 /*
- * Gui.java
+ * MainMenu.java
  *
  * Created on 16.04.2010, 16:40:19
  */
@@ -38,7 +38,7 @@ import static common.net.ProtocolCmdArgument.*;
  */
 public class MainMenu extends javax.swing.JFrame implements ActionListener, MouseListener, KeyListener, ListSelectionListener {
 
-    private ArrayList<PrivateChatTab> clientlist = new ArrayList<PrivateChatTab>();
+    private ArrayList<PrivateChatTab> clientlist    = new ArrayList<PrivateChatTab>();
     private ArrayList<PrivateChatTab> clientlistOld = new ArrayList<PrivateChatTab>();
     
     /** Creates new form Gui
@@ -70,7 +70,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         btnCreate.addActionListener(uiaListener);
         btnMenuServerbrowser.setBackground(btn_bg_normal);
         btnMenuServerbrowser.addActionListener(this);
-        btnMenuServerbrowser.setActionCommand(UiActionListener.CMD_TOGGLE_SERVERBROWSER);
+        btnMenuServerbrowser.setActionCommand(UiActionListener.CMD_REFRESH_SERVERBROWSER);
         btnMenuServerbrowser.addActionListener(uiaListener);
         btnApplyOptionsPlayer.setActionCommand(UiActionListener.CMD_NICKCHANGE);
         btnApplyOptionsPlayer.addActionListener(uiaListener);
@@ -79,244 +79,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         tfLobbyChat.addKeyListener(this);
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         setLocation((d.width - getSize().width) / 2, (d.height - getSize().height) / 2);
-    }
-
-    /**
-     *
-     */
-    public void clearClientlist(){
-        clientlistOld.clear();
-        for(int i=0; i<clientlist.size(); i++){
-            clientlistOld.add(clientlist.get(i));
-        }
-        clientlist.clear();
-        listModel.clear();
-        repaint();
-        pack();
-    }
-
-    /**
-     *
-     * @param client
-     */
-    public void addClientToList(Client client){
-        clientlist.add(new PrivateChatTab(client));
-        listModel.addElement(client.getPlayer().getName());
-        repaint();
-        pack();
-    }
-
-    /**
-     *
-     */
-    public void completeClientlist(){
-        //System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
-        //System.out.print(" sync clientlist with old data...");
-        for(int i=0; i<clientlist.size(); i++){
-            for(int j=0; j<clientlistOld.size(); j++){
-                if(clientlist.get(i).getID() == clientlistOld.get(j).getID()){
-                    //System.out.print("id"+clientlistOld.get(j).getID()+" ");
-                    clientlist.get(i).appendText(clientlistOld.get(j).getTextArea().getText());
-                    break;
-                }
-            }
-        }
-        //System.out.println("done!\n correcting opened tabs...");
-        for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
-            if(!tbpLobbyChat.getComponentAt(i).getName().equals("offline")){
-                int id = Integer.parseInt(tbpLobbyChat.getComponentAt(i).getName());
-                //System.out.print("id"+id+" ");
-                int index = getClientlistIndex(id, clientlist);
-                if(index == -1) { // not in clientlist -> in clientlistOld
-                    int indexOld = getClientlistIndex(id, clientlistOld);
-                    JTextArea a = new JTextArea();
-                    a.setText(clientlistOld.get(indexOld).getTextArea().getText());
-                    JScrollPane s = new JScrollPane();
-                    s.setName("offline");
-                    s.setViewportView(a);
-                    tbpLobbyChat.setComponentAt(i, s);
-                    tbpLobbyChat.setTitleAt(i, tbpLobbyChat.getTitleAt(i)+ " (offline)");
-                } else {
-                    String name = clientlist.get(index).getName();
-                    if(!name.equals(tbpLobbyChat.getTitleAt(i))) {
-                        clientlist.get(index).appendText("\n= Nick changed =\n\n");
-                        tbpLobbyChat.setTitleAt(i, name);
-                    }
-                    tbpLobbyChat.setComponentAt(i, clientlist.get(index).getScrollPane());
-                }
-            }
-        }
-        //System.out.println("done!");
-    }
-
-    private void openPrivateChatTab(int clientID) {
-        //System.out.print("openPrivateChatTab(...) clientID="+clientID+" -> ");
-        //System.out.print(""+(tbpLobbyChat.getComponentCount()-1)+" private tabs opened -> ");
-        for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
-            //System.out.println(" tab"+i+": "+tbpLobbyChat.getTitleAt(i));
-            if(tbpLobbyChat.getTitleAt(i).equals(Main.getClientName(clientID))){
-                tbpLobbyChat.setSelectedIndex(i);
-                //System.out.println("tab allready opened -> nothing to do!");
-                return;
-            }
-        }
-        //System.out.println("specific tab not opened -> opening new tab!");
-        tbpLobbyChat.addTab(clientlist.get(clientID).getName(), clientlist.get(clientID).getScrollPane());
-        tbpLobbyChat.setToolTipTextAt(tbpLobbyChat.getTabCount()-1, "Doubleclick to close private chat tab.");
-        tbpLobbyChat.setSelectedIndex(tbpLobbyChat.getTabCount()-1);
-    }
-
-    /**
-     *
-     * @param list
-     */
-    public void setServerlist(String[][] list) {
-        sModel.setServerlist(list);
-        repaint();
-        pack();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public int getSelectedServerlistIndex(){
-        return tblServerlist.getSelectedRow();
-    }
-
-    /**
-     *
-     * @param v
-     * @param row
-     * @param col
-     */
-    public void refreshValue(String v, int row, int col){
-        sModel.setValueAt(v, row, col);
-        repaint();
-        pack();
-    }
-
-    public void clearServerinfoPanel(){
-        lblServerinfoName.setText("-");
-        lblServerinfoMap.setText("-");
-        lblServerinfoPlayers.setText("-");
-        lblServerinfoIpPort.setText("-");
-        lblServerinfoHighscore.setText("-");
-    }
-
-    public void refreshServerinfoPanel(){
-        Server s = Main.getSelectedServer();
-        if(s != null){
-            lblServerinfoName.setText(s.getName());
-            lblServerinfoMap.setText(s.getMap());
-            lblServerinfoPlayers.setText(s.getCurPlayers());
-            lblServerinfoIpPort.setText(s.getHostPort());
-            lblServerinfoHighscore.setText(""+s.getClientHighscore());
-        }
-    }
-
-    private int getClientlistIndex(int clientID, ArrayList<PrivateChatTab> list){
-        //System.out.print(" getClientlistIndex(...) -> ");
-        for(int i=0; i<list.size(); i++) {
-            if(list.get(i).getID() == clientID){
-                //System.out.println("found index:"+i);
-                return i;
-            }
-        }
-        //System.out.println("no id matched");
-        return -1;
-    }
-
-    /**
-     *
-     * @param b
-     */
-    public void enableLobby(boolean b){
-        tbpLobbyChat.setEnabled(b);
-        tfLobbyChat.setEnabled(b);
-        btnSendLobbyChat.setEnabled(b);
-        lClientlist.setEnabled(b);
-        lblLobbyChatPlayerName.setEnabled(b);
-    }
-
-    /**
-     *
-     * @param b
-     */
-    public void enableOptions(boolean b){
-        pnlOptions.setEnabled(b);
-    }
-
-    /**
-     *
-     * @param privateMsg
-     * @param senderID
-     * @param recieverID
-     * @param msg
-     */
-    public void appendIncommingMSG(boolean privateMsg, int senderID, int recieverID, String msg){
-        //System.out.print("appendIncommingMSG(...)");
-        // PRIVATE
-        if(privateMsg) {
-            //System.out.print(" (private msg, id"+senderID+" to id"+recieverID+" :"+msg+")");
-            if(recieverID == Main.getGameData().getSelfId()) {
-                //System.out.println(" (recieverID==SefID)");
-//                //System.out.println("msg to this client -> from id"+senderID);
-                openPrivateChatTab(getClientlistIndex(senderID, clientlist));
-                clientlist.get(getClientlistIndex(senderID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
-            } else {
-                //System.out.println("");
-//                //System.out.println("msg to other client -> to id"+recieverID);
-                clientlist.get(getClientlistIndex(recieverID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
-            }
-        }
-        // PUBLIC
-        else {
-            //System.out.println(" (public msg, senderID="+senderID+")");
-            taLobbyChatPublic.append(Main.getClientName(senderID) + ": " + msg + "\n");
-        }
-    }
-
-    /**
-     *
-     * @param name
-     */
-    public void setPlayerName(String name){
-        tfPlayerName.setText(name);
-        lblLobbyChatPlayerName.setText(" "+name);
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getPlayerName(){
-        return tfPlayerName.getText();
-    }
-
-    /**
-     *
-     */
-    public void sendLobbyMsg(){
-        if(!tfLobbyChat.getText().equals("")){
-            // PRIVATE LOBBY CHAT
-            if(tbpLobbyChat.getSelectedIndex()>0){
-                Main.getNetwork().send(Network.MASTERHOST,
-                                       Network.MASTERPORT,
-                                       ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE,
-                                       argInt(Integer.parseInt(tbpLobbyChat.getSelectedComponent().getName())),
-                                       argStr(tfLobbyChat.getText()));
-            }
-            // PUBLIC LOBBY CHAT
-            else {
-                if(tfLobbyChat.getText() != null && !tfLobbyChat.getText().equals(""))
-                Main.getNetwork().send(Network.MASTERHOST,
-                                       Network.MASTERPORT,
-                                       ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY,
-                                       argStr(tfLobbyChat.getText()));
-            }
-            tfLobbyChat.setText("");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -825,6 +587,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private DefaultListModel listModel;
 
 
+// --- ActionListener ---
+
     public void actionPerformed(ActionEvent e) {
         pnlLobbyChat.removeAll();
         btnMenuLobby.setBackground(btn_bg_normal);
@@ -857,6 +621,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     }
 
 
+// --- MouseListener ---
+
     public void mouseClicked(MouseEvent e) {
         // Open private tab
         if (e.getSource() == lClientlist && !listModel.isEmpty() && e.getClickCount() == 2) {
@@ -868,16 +634,18 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         }
     }
 
-    public void mousePressed(MouseEvent e) {  }
+    public void mousePressed(MouseEvent e) { }
 
-    public void mouseReleased(MouseEvent e) {  }
+    public void mouseReleased(MouseEvent e) { }
 
-    public void mouseEntered(MouseEvent e) {  }
+    public void mouseEntered(MouseEvent e) { }
 
-    public void mouseExited(MouseEvent e) {  }
+    public void mouseExited(MouseEvent e) { }
 
-    
-    public void keyTyped(KeyEvent e) {  }
+
+// --- KeyListener ---
+
+    public void keyTyped(KeyEvent e) { }
 
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
@@ -885,7 +653,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         }
     }
 
-    public void keyReleased(KeyEvent e) {  }
+    public void keyReleased(KeyEvent e) { }
+
+
+// --- ListSelectionListener ---
 
     public void valueChanged(ListSelectionEvent e) {
         //System.out.println("refreshServerinfoPanel()");
@@ -893,8 +664,253 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     }
 
 
+// --- Client ---
+
     /**
      *
+     */
+    public void clearClientlist(){
+        clientlistOld.clear();
+        for(int i=0; i<clientlist.size(); i++){
+            clientlistOld.add(clientlist.get(i));
+        }
+        clientlist.clear();
+        listModel.clear();
+        repaint();
+        pack();
+    }
+
+    /**
+     *
+     * @param client
+     */
+    public void addClientToList(Client client){
+        clientlist.add(new PrivateChatTab(client));
+        listModel.addElement(client.getPlayer().getName());
+        repaint();
+        pack();
+    }
+
+    /**
+     *
+     */
+    public void completeClientlist(){
+        //System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
+        //System.out.print(" sync clientlist with old data...");
+        for(int i=0; i<clientlist.size(); i++){
+            for(int j=0; j<clientlistOld.size(); j++){
+                if(clientlist.get(i).getID() == clientlistOld.get(j).getID()){
+                    //System.out.print("id"+clientlistOld.get(j).getID()+" ");
+                    clientlist.get(i).appendText(clientlistOld.get(j).getTextArea().getText());
+                    break;
+                }
+            }
+        }
+        //System.out.println("done!\n correcting opened tabs...");
+        for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
+            if(!tbpLobbyChat.getComponentAt(i).getName().equals("offline")){
+                int id = Integer.parseInt(tbpLobbyChat.getComponentAt(i).getName());
+                //System.out.print("id"+id+" ");
+                int index = getClientlistIndex(id, clientlist);
+                if(index == -1) { // client offline, not in clientlist -> in clientlistOld
+                    int indexOld = getClientlistIndex(id, clientlistOld);
+                    JTextArea a = new JTextArea();
+                    a.setText(clientlistOld.get(indexOld).getTextArea().getText());
+                    JScrollPane s = new JScrollPane();
+                    s.setName("offline");
+                    s.setViewportView(a);
+                    tbpLobbyChat.setComponentAt(i, s);
+                    tbpLobbyChat.setTitleAt(i, tbpLobbyChat.getTitleAt(i)+ " (offline)");
+                } else {
+                    String name = clientlist.get(index).getName();
+                    if(!name.equals(tbpLobbyChat.getTitleAt(i))) {
+                        clientlist.get(index).appendText("\n= Nick changed =\n\n");
+                        tbpLobbyChat.setTitleAt(i, name);
+                    }
+                    tbpLobbyChat.setComponentAt(i, clientlist.get(index).getScrollPane());
+                }
+            }
+        }
+        //System.out.println("done!");
+    }
+
+    private int getClientlistIndex(int clientID, ArrayList<PrivateChatTab> list){
+        //System.out.print(" getClientlistIndex(...) -> ");
+        for(int i=0; i<list.size(); i++) {
+            if(list.get(i).getID() == clientID){
+                //System.out.println("found index:"+i);
+                return i;
+            }
+        }
+        //System.out.println("no id matched");
+        return -1;
+    }
+
+
+// -- Server --
+
+    /**
+     *
+     * @param list
+     */
+    public void setServerlist(String[][] list) {
+        sModel.setServerlist(list);
+        repaint();
+        pack();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getSelectedServerlistIndex(){
+        return tblServerlist.getSelectedRow();
+    }
+
+    /**
+     *
+     * @param value
+     * @param row
+     * @param col
+     */
+    public void refreshServerTableValue(String value, int row, int col){
+        sModel.setValueAt(value, row, col);
+        repaint();
+        pack();
+    }
+
+    public void clearServerinfoPanel(){
+        lblServerinfoName.setText("-");
+        lblServerinfoMap.setText("-");
+        lblServerinfoPlayers.setText("-");
+        lblServerinfoIpPort.setText("-");
+        lblServerinfoHighscore.setText("-");
+    }
+
+    public void refreshServerinfoPanel(){
+        Server s = Main.getSelectedServer();
+        if(s != null){
+            lblServerinfoName.setText(s.getName());
+            lblServerinfoMap.setText(s.getMap());
+            lblServerinfoPlayers.setText(s.getCurPlayers());
+            lblServerinfoIpPort.setText(s.getHostPort());
+            lblServerinfoHighscore.setText(""+s.getClientHighscore());
+        }
+    }
+
+    /**
+     *
+     * @param b
+     */
+    public void enableLobby(boolean enabled){
+        tbpLobbyChat.setEnabled(enabled);
+        tfLobbyChat.setEnabled(enabled);
+        btnSendLobbyChat.setEnabled(enabled);
+        lClientlist.setEnabled(enabled);
+        lblLobbyChatPlayerName.setEnabled(enabled);
+    }
+
+    /**
+     *
+     * @param b
+     */
+    public void enableOptions(boolean enabled){
+        pnlOptions.setEnabled(enabled);
+    }
+
+    /**
+     *
+     * @param privateMsg
+     * @param senderID
+     * @param recieverID
+     * @param msg
+     */
+    public void appendIncommingMSG(boolean isPrivateMsg, int senderID, int recieverID, String msg){
+        //System.out.print("appendIncommingMSG(...)");
+        // PRIVATE
+        if(isPrivateMsg) {
+            //System.out.print(" (private msg, id"+senderID+" to id"+recieverID+" :"+msg+")");
+            if(recieverID == Main.getGameData().getSelfId()) {
+                //System.out.println(" (recieverID==SefID)");
+                //System.out.println("msg to this client -> from id"+senderID);
+                openPrivateChatTab(getClientlistIndex(senderID, clientlist));
+                clientlist.get(getClientlistIndex(senderID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
+            } else {
+                //System.out.println("");
+                //System.out.println("msg to other client -> to id"+recieverID);
+                clientlist.get(getClientlistIndex(recieverID, clientlist)).getTextArea().append(Main.getClientName(senderID) + ": " + msg + "\n");
+            }
+        }
+        // PUBLIC
+        else {
+            //System.out.println(" (public msg, senderID="+senderID+")");
+            taLobbyChatPublic.append(Main.getClientName(senderID) + ": " + msg + "\n");
+        }
+    }
+
+    private void openPrivateChatTab(int clientID) {
+        //System.out.print("openPrivateChatTab(...) clientID="+clientID+" -> ");
+        //System.out.print(""+(tbpLobbyChat.getComponentCount()-1)+" private tabs opened -> ");
+        for(int i=1; i<tbpLobbyChat.getComponentCount(); i++){
+            //System.out.println(" tab"+i+": "+tbpLobbyChat.getTitleAt(i));
+            if(tbpLobbyChat.getTitleAt(i).equals(Main.getClientName(clientID))){
+                tbpLobbyChat.setSelectedIndex(i);
+                //System.out.println("tab allready opened -> nothing to do!");
+                return;
+            }
+        }
+        //System.out.println("specific tab not opened -> opening new tab!");
+        tbpLobbyChat.addTab(clientlist.get(clientID).getName(), clientlist.get(clientID).getScrollPane());
+        tbpLobbyChat.setToolTipTextAt(tbpLobbyChat.getTabCount()-1, "Doubleclick to close private chat tab.");
+        tbpLobbyChat.setSelectedIndex(tbpLobbyChat.getTabCount()-1);
+    }
+
+    /**
+     *
+     */
+    public void sendLobbyMsg(){
+        if(!tfLobbyChat.getText().equals("")){
+            // PRIVATE LOBBY CHAT
+            if(tbpLobbyChat.getSelectedIndex()>0){
+                Main.getNetwork().send(Network.MASTERHOST,
+                                       Network.MASTERPORT,
+                                       ProtocolCmd.CLIENT_MASTER_CHAT_PRIVATE,
+                                       argInt(Integer.parseInt(tbpLobbyChat.getSelectedComponent().getName())),
+                                       argStr(tfLobbyChat.getText()));
+            }
+            // PUBLIC LOBBY CHAT
+            else {
+                if(tfLobbyChat.getText() != null && !tfLobbyChat.getText().equals(""))
+                Main.getNetwork().send(Network.MASTERHOST,
+                                       Network.MASTERPORT,
+                                       ProtocolCmd.CLIENT_MASTER_CHAT_LOBBY,
+                                       argStr(tfLobbyChat.getText()));
+            }
+            tfLobbyChat.setText("");
+        }
+    }
+
+    /**
+     *
+     * @param selfName
+     */
+    public void setSelfName(String selfName){
+        tfPlayerName.setText(selfName);
+        lblLobbyChatPlayerName.setText(" " + selfName);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getSelfName(){
+        return tfPlayerName.getText();
+    }
+
+
+
+    /**
+     * Custom Object for JTabbedPane
      * @author Julian Sanio
      */
     public class PrivateChatTab {
@@ -957,7 +973,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
 
     /**
-     *
+     * Custom TableModel for JTable
      * @author Julian Sanio
      */
     public class ServerbrowserTableModel extends AbstractTableModel {
