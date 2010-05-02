@@ -61,7 +61,7 @@ public class GUI extends javax.swing.JFrame implements ActionListener {
         jLabel4.setText("Map");
         jPanel1.add(jLabel4);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "map", "map2", "map3" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "map", "rhein1", "rhein2", "labyrinth" }));
         jPanel1.add(jComboBox1);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/resource/Logo.png"))); // NOI18N
