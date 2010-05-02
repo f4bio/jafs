@@ -44,7 +44,7 @@ public class Network {
         Iterator<Packet> t;
 
         public void run() {
-            synchronized(replyQueue) {
+            synchronized(replyQueue.iterator()) {
                 t = replyQueue.iterator();
 
                 while(t.hasNext()) {

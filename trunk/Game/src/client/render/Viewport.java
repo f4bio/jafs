@@ -36,6 +36,7 @@ public class Viewport {
     private GraphicsConfiguration gc;
     private float aspectRatio = (float)size.width / size.height;
     private boolean statsVisible;
+    private boolean teamSelectionVisible;
 
     /**
      *
@@ -45,6 +46,7 @@ public class Viewport {
         this.gc = gc;
         createBuffer();
         statsVisible = false;
+        teamSelectionVisible = false;
     }
 
     /**
@@ -461,10 +463,31 @@ public class Viewport {
         }
     }
 
+    public void renderTeamSelection(Graphics2D g) {
+        int w = 320;
+        int h = 240;
+        int x = buffer.getWidth()/2;
+        int y = buffer.getHeight()/2;
+
+        renderBox(x - w/2, y - h/2 - 40, w, 40, g);
+        g.setColor(Color.WHITE);
+        drawCenteredString(g, "Pick a team", x, y - h/2 - 20);
+
+        renderBox(x - w/2, y - h/2, w, h, g);
+        g.setColor(Color.RED);
+        g.fillRect(x - w/2 + 5, y - h/2 + 5, w/2 - 10, h - 40);
+        drawCenteredStringY(g, "Press \"B\"", x - w/2 + 5, y + h/2 - 20);
+        g.setColor(Color.BLUE);
+        g.fillRect(x + 5, y - h/2 + 5, w/2 - 10, h - 40);
+        drawCenteredStringY(g, "Press \"M\"", x + 5, y + h/2 - 20);
+    }
+
     public void renderHud(Graphics2D g) {
         if(statsVisible)
             renderStats(g);
-
+        if(teamSelectionVisible)
+            renderTeamSelection(g);
+        
         renderHealthBox(g);
         renderRoundTime(g);
         renderRespawnTime(g);
@@ -478,5 +501,13 @@ public class Viewport {
 
     public boolean areStatsVisible() {
         return statsVisible;
+    }
+
+    public void setTeamSelectionVisible(boolean vis) {
+        teamSelectionVisible = vis;
+    }
+
+    public boolean isTeamSelectionVisible() {
+        return teamSelectionVisible;
     }
 }

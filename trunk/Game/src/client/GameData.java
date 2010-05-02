@@ -1,5 +1,6 @@
 package client;
 
+import client.render.Viewport;
 import common.engine.UpdateLoop;
 import common.engine.UpdateObject;
 import client.resource.MapLoader;
@@ -8,6 +9,7 @@ import common.engine.CMap;
 import common.engine.CPlayer;
 import common.engine.CProjectile;
 import common.engine.ProjectileManager;
+import common.net.Network;
 import common.net.ProtocolCmd;
 
 import java.util.ArrayList;
@@ -104,14 +106,29 @@ public class GameData implements UpdateObject {
 
     private void checkPlayerInput(UpdateLoop u) {
         CPlayer self = getSelf();
+        Viewport port = Main.getScreen().getGameScene();
+        Network net = Main.getNetwork();
 
-        if(self == null || !Main.getNetwork().isReallyConnected())
+        if(self == null || !net.isReallyConnected())
             return;
 
+        if(input.isKeyNPressed())
+            port.setTeamSelectionVisible(true);
+
+        if(input.isKeyBPressed() && port.isTeamSelectionVisible()) {
+            port.setTeamSelectionVisible(false);
+            net.send(ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_RED));
+        }
+
+        if(input.isKeyMPressed() && port.isTeamSelectionVisible()) {
+            port.setTeamSelectionVisible(false);
+            net.send(ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
+        }
+
         if(input.isKeyEPressed())
-            Main.getScreen().getGameScene().setStatsVisible(true);
+            port.setStatsVisible(true);
         else
-            Main.getScreen().getGameScene().setStatsVisible(false);
+            port.setStatsVisible(false);
         
         if(self.isDead())
             return;
@@ -154,7 +171,7 @@ public class GameData implements UpdateObject {
         double dirX = self.getDirection().getX();
         double dirY = self.getDirection().getY();
 
-        Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_PLAYER_INFO, argInt(id),
+        net.send(ProtocolCmd.CLIENT_SERVER_PLAYER_INFO, argInt(id),
                 argInt(weapon), argDouble(posX), argDouble(posY), argDouble(dirX),
                 argDouble(dirY));
 
@@ -163,7 +180,7 @@ public class GameData implements UpdateObject {
             if((c = self.shoot(u)) != null) {
                 ProjectileManager.addProjectile(c);
 
-                Main.getNetwork().send(ProtocolCmd.CLIENT_SERVER_SHOOT, argInt(c.getId()),
+                net.send(ProtocolCmd.CLIENT_SERVER_SHOOT, argInt(c.getId()),
                         argInt(self.getCurrentWeapon()), argDouble(c.getDirection().getX()),
                         argDouble(c.getDirection().getY()), argDouble(c.getOrigin().getX()),
                         argDouble(c.getOrigin().getY()));
