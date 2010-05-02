@@ -47,11 +47,11 @@ public class Main {
     private static UpdateCountdown roundTimer;
 
     private static String pathHighscore = System.getProperty("user.dir")+"\\highscores.ini";
-    private static Properties highscores = new Properties();
+    private static Properties highscores;
 
     /**
      *
-     * @param args
+     * @param args the command line arguments
      */
     public static void main(String[] args) {
         if(args.length == 2) {
@@ -61,6 +61,9 @@ public class Main {
             name = "Server";
             map = "rhein2";
         }
+
+        highscores = new Properties();
+        readHighscores();
 
         game = new Game(map);
         boolean loaded = game.load();
@@ -100,7 +103,7 @@ public class Main {
     }
 
     /**
-     *
+     * Reset the whole server settings and stats
      */
     public static void reset() {
         //net.clear();
@@ -122,25 +125,25 @@ public class Main {
 
     /**
      *
-     * @param playerName
-     * @param highscore
+     * @param playerName Name of the player you want to set the highscore
+     * @param highscore The highscore of the player
      */
     public static void setPlayerHighscore(String playerName, int highscore){
-        readHighscores();
         highscores.setProperty(playerName, ""+highscore);
-        writeHighscores();
     }
 
     /**
      *
-     * @param playerName
-     * @return
+     * @param playerName Name of the player you want to get the highscore
+     * @return The highscore of the player
      */
     public static int getPlayerHighscore(String playerName){
-        readHighscores();
         return Integer.parseInt(highscores.getProperty(playerName, "0"));
     }
 
+    /**
+     * To read the highscores saved in ini file
+     */
     private static void readHighscores() {
         FileInputStream fis;
         try {
@@ -152,6 +155,9 @@ public class Main {
         catch (IOException ex){ }
     }
 
+    /**
+     * To write the highscores into ini file
+     */
     private static void writeHighscores() {
         FileOutputStream fos;
         try {
@@ -189,8 +195,8 @@ public class Main {
 
     /**
      *
-     * @param adr
-     * @return
+     * @param adr InetSocketAddress of the client you wat to get
+     * @return The client you want to get
      */
     public synchronized static Client addClient(InetSocketAddress adr) {
         Client c = null;
@@ -210,7 +216,7 @@ public class Main {
 
     /**
      *
-     * @param c
+     * @param c The client you want to remove
      */
     public synchronized static void removeClient(Client c) {
         try {
@@ -228,7 +234,7 @@ public class Main {
 
     /**
      *
-     * @param adr
+     * @param adr InetSocketAddress of the player you want to remove
      */
     public synchronized static void removeClient(InetSocketAddress adr) {
         removeClient(getClient(adr));
@@ -236,8 +242,8 @@ public class Main {
 
     /**
      *
-     * @param i
-     * @return
+     * @param i Index of the listed client you want to get
+     * @return Client you want to get
      */
     public static Client getClient(int i) {
         if(i < 0 || i > client.length - 1)
@@ -247,7 +253,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return The client array
      */
     public static Client[] getClients() {
         return client;
@@ -255,7 +261,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return The server id
      */
     public static int getServerId(){
         return serverId;
@@ -263,7 +269,7 @@ public class Main {
 
     /**
      *
-     * @param id
+     * @param id To set the server id
      */
     public static void setServerId(int id){
         serverId = id;
@@ -271,8 +277,8 @@ public class Main {
 
     /**
      *
-     * @param adr
-     * @return
+     * @param adr InetSocketAddress of the client you want to get
+     * @return The client you want to get
      */
     public static Client getClient(InetSocketAddress adr) {
         for(Client cur : client) {
@@ -285,7 +291,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Number of clients, which are connected
      */
     public static int clientCount() {
         int cnt = 0;
@@ -298,8 +304,8 @@ public class Main {
 
     /**
      *
-     * @param adr
-     * @return
+     * @param adr InetSocketAddress of the client you want to get the id
+     * @return ID of the client
      */
     public static int getClientId(InetSocketAddress adr){
         for(Client c: client)
@@ -310,8 +316,8 @@ public class Main {
     
     /**
      *
-     * @param cmd
-     * @param d
+     * @param cmd Network command
+     * @param d Parameters of network command
      */
     public synchronized static void broadcast(ProtocolCmd cmd, byte[]... d) {
         for(Client c : client) {
@@ -323,8 +329,8 @@ public class Main {
 
     /**
      *
-     * @param msg
-     * @param adr
+     * @param msg Message of the client you want to broadcast as chat
+     * @param adr InetSocketAddress of the client, which sent the message
      */
     public synchronized static void broadcast_chat(String msg, InetSocketAddress adr){
         Client from = getClient(adr);
@@ -347,8 +353,8 @@ public class Main {
 
     /**
      *
-     * @param msg
-     * @param adr
+     * @param msg Message of the client you want to broadcast as team chat
+     * @param adr InetSocketAddress of the client, who sent the message
      */
     public synchronized static void broadcast_chat_team(String msg, InetSocketAddress adr) {
         Client from = getClient(adr);
@@ -363,9 +369,9 @@ public class Main {
     //well, not really a bradcast, is it?
     /**
      *
-     * @param msg
-     * @param to
-     * @param adr
+     * @param msg Message of the client you want to broadcast as private chat
+     * @param to Index in clientlist of the receiver client
+     * @param adr InetSocketAddress of the client, who sent the message
      */
     public synchronized static void broadcast_chat_private(String msg, int to, InetSocketAddress adr) {
         Client from = getClient(adr);
@@ -387,8 +393,8 @@ public class Main {
 
     /**
      *
-     * @param adr
-     * @return
+     * @param adr InetSocketAddress of the client you want to get the team id
+     * @return Team ID of client
      */
     public static int getClientTeamId(InetSocketAddress adr) {
         Client c = getClient(adr);
@@ -402,9 +408,9 @@ public class Main {
     // wenn teamid schon gesetzt nicht nehr setzten?!  xD
     /**
      *
-     * @param adr
-     * @param teamId
-     * @return
+     * @param adr InetSocketAddress of the client you want to set the Team ID
+     * @param teamId Team ID
+     * @return 0: success, -1: failture
      */
     public static int setClientTeamId(InetSocketAddress adr, int teamId) {
         Client c = getClient(adr);
@@ -418,8 +424,8 @@ public class Main {
 
     /**
      *
-     * @param name
-     * @return
+     * @param name Name to check if it exists
+     * @return true: name exists, false: name does not exist
      */
     public static boolean nameExists(String name) {
         for(Client c : client) {
@@ -434,7 +440,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Name of server
      */
     public static String getServerName() {
         return name;
@@ -442,7 +448,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Name of map
      */
     public static String getMapName() {
         return map;
@@ -450,7 +456,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Number of max players
      */
     public static int getMaxPlayers() {
         return maxClients;
@@ -458,7 +464,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Number of current players
      */
     public static int getCurPlayers() {
         return clientCount();
@@ -466,7 +472,7 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Network object of server
      */
     public static Network getNetwork() {
         return net;
@@ -474,16 +480,24 @@ public class Main {
 
     /**
      *
-     * @return
+     * @return Gamedata of server
      */
     public static Game getGame() {
         return game;
     }
 
+    /**
+     *
+     * @return Left round time
+     */
     public static long getRoundTimeLeft() {
         return roundTimer.getTimeLeft();
     }
 
+    /**
+     *
+     * @return Left respawn time
+     */
     public static long getRespawnTimeLeft() {
         return respawnTimer.getTimeLeft();
     }

@@ -6,18 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /*
- * Launche.java
+ * Launcher.java
  *
  * Created on 02.05.2010, 16:17:41
  */
 
 /**
- *
+ * J.A.F.S. Game Launcher
  * @author Julian Sanio
  */
 public class Launcher extends javax.swing.JFrame implements ActionListener  {
 
-    /** Creates new form Launche */
+    /** Creates new form Launcher */
     public Launcher() {
         initComponents();
         jButton1.addActionListener(this);
@@ -128,6 +128,10 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
         }
     }
 
+    /**
+     * Invoked when an action occurs.
+     * @param e ActionEvent
+     */
     public void actionPerformed(ActionEvent e) {
         // launch client
         if(e.getSource().equals(jButton1)) {
@@ -138,7 +142,6 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
         else if(e.getSource().equals(jButton2)) {
             dispose();
             new server.ui.DlgGUI(this, true).setVisible(true);
-//            server.Main.main(new String[0]);
         }
         // launch masterserver
         else {

@@ -149,7 +149,7 @@ public abstract class UiWindow extends JPanel
     
     /**
      *
-     * @param a
+     * @param a ActionListener you want to implement
      */
     public abstract void addActionListener(ActionListener a);
 

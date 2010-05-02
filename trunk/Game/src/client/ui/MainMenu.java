@@ -41,8 +41,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     private ArrayList<PrivateChatTab> clientlist    = new ArrayList<PrivateChatTab>();
     private ArrayList<PrivateChatTab> clientlistOld = new ArrayList<PrivateChatTab>();
     
-    /** Creates new form Gui
-     * @param uiaListener
+    /** Creates new form MainMenu
+     * @param uiaListener UiActionListener object
      */
     public MainMenu(UiActionListener uiaListener) {
         sModel = new ServerbrowserTableModel();
@@ -142,7 +142,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         tblServerlist.getTableHeader().setReorderingAllowed(false);
         scpServerlist.setViewportView(tblServerlist);
 
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRefresh.setText("Aktualisieren");
 
         btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10));
@@ -246,13 +246,8 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         scpServerinfo.setViewportView(pnlServerinfo);
 
-        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnCreate.setText("Erstellen");
-        btnCreate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlServerbrowserLayout = new javax.swing.GroupLayout(pnlServerbrowser);
         pnlServerbrowser.setLayout(pnlServerbrowserLayout);
@@ -335,7 +330,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         pfPassword.setEnabled(false);
 
-        btnApplyOptionsNetwork.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnApplyOptionsNetwork.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnApplyOptionsNetwork.setText("Übernehmen");
 
         javax.swing.GroupLayout pnlOptionsNetworkLayout = new javax.swing.GroupLayout(pnlOptionsNetwork);
@@ -524,11 +519,6 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApplyOptionsNetwork;
     private javax.swing.JButton btnApplyOptionsPlayer;
@@ -586,7 +576,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
 
 // --- ActionListener ---
-
+    /**
+     * Invoked when an action occurs.
+     * @param e ActionEvent
+     */
     public void actionPerformed(ActionEvent e) {
         pnlLobbyChat.removeAll();
         btnMenuLobby.setBackground(btn_bg_normal);
@@ -665,7 +658,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 // --- Client ---
 
     /**
-     *
+     * Clear list of clients
      */
     public void clearClientlist(){
         clientlistOld.clear();
@@ -680,7 +673,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param client
+     * @param client Client you want to add
      */
     public void addClientToList(Client client){
         clientlist.add(new PrivateChatTab(client));
@@ -690,11 +683,11 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     }
 
     /**
-     *
+     * sync clientlist with old list, correcting opened tabs
      */
     public void completeClientlist(){
         //System.out.println("completeClientlist() "+(tbpLobbyChat.getComponentCount()-1)+" opened private tabs");
-        //System.out.print(" sync clientlist with old data...");
+        //System.out.print(" sync clientlist with old list...");
         for(int i=0; i<clientlist.size(); i++){
             for(int j=0; j<clientlistOld.size(); j++){
                 if(clientlist.get(i).getID() == clientlistOld.get(j).getID()){
@@ -732,6 +725,11 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         //System.out.println("done!");
     }
 
+    /**
+     *
+     * @param clientID ID of client you want to get index in list
+     * @param list Clientlist
+     */
     private int getClientlistIndex(int clientID, ArrayList<PrivateChatTab> list){
         //System.out.print(" getClientlistIndex(...) -> ");
         for(int i=0; i<list.size(); i++) {
@@ -749,7 +747,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param list
+     * @param list String array for server table
      */
     public void setServerlist(String[][] list) {
         sModel.setServerlist(list);
@@ -759,7 +757,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @return
+     * @return Index of selected server in list
      */
     public int getSelectedServerlistIndex(){
         return tblServerlist.getSelectedRow();
@@ -767,9 +765,9 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
     /**
      *
-     * @param value
-     * @param row
-     * @param col
+     * @param value Value you want to refresh
+     * @param row Row of value
+     * @param col Column of value
      */
     public void refreshServerTableValue(String value, int row, int col){
         sModel.setValueAt(value, row, col);
@@ -778,7 +776,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
     }
 
     /**
-     *
+     * Clear Info-Panel in Serverbrowser
      */
     public void clearServerinfoPanel(){
         lblServerinfoName.setText("-");
