@@ -426,7 +426,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void s_c_all_player_data_ok(InetSocketAddress adr) {
         net.setReallyConnected(true);
         net.setServer(adr);
-        net.send(adr, ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
+        //net.send(adr, ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
+        Main.getScreen().getGameScene().setTeamSelectionVisible(true);
         Main.refInGameClientlist();
         System.out.println("SERVER_CLIENT_ALL_PLAYER_DATA_OK -> CLIENT_SERVER_JOINTEAM (TEAM_BLUE)");
     }
@@ -619,8 +620,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(reply == Protocol.REPLY_SUCCESS) {
             Main.getGameData().getSelf().setTeam(team);
             System.out.println("SERVER_CLIENT_JOINTEAM_REPLY success (team="+team+")");
-        } else
+        } else {
             System.out.println("SERVER_CLIENT_JOINTEAM_REPLY failure");
+            Main.getGameData().addGameEvent(new Event(Event.EVENT_SYSTEM, "Unable to change team."));
+        }
     }
 
     /**

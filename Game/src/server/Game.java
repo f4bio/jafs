@@ -176,6 +176,19 @@ public class Game implements UpdateObject, UpdateCountdownObject {
         return scoreRed;
     }
 
+    public int playerCount(int team) {
+        if(team == CPlayer.TEAM_NONE)
+            return 0;
+
+        int n = 0;
+        for(int i=0; i<player.length; ++i) {
+            if(player[i] != null && player[i].getTeam() == team)
+                n++;
+        }
+
+        return n;
+    }
+
     public int getBestPlayer() {
         int kills = 0;
         int id = 0;

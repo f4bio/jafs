@@ -19,6 +19,9 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private boolean key_d;
     private boolean key_m_1;
     private boolean key_e;
+    private boolean key_b;
+    private boolean key_n;
+    private boolean key_m;
 
     private CVector2 direction;
     private MainScreen scrn;
@@ -34,6 +37,9 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
         key_d = false;
         key_m_1 = false;
         key_e = false;
+        key_b = false;
+        key_n = false;
+        key_m = false;
 
         direction = new CVector2();
         this.scrn = scrn;
@@ -55,6 +61,15 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
                 break;
             case KeyEvent.VK_E:
                 key_e = true;
+                break;
+            case KeyEvent.VK_B:
+                key_b = true;
+                break;
+            case KeyEvent.VK_N:
+                key_n = true;
+                break;
+            case KeyEvent.VK_M:
+                key_m = true;
         }
     }
 
@@ -78,6 +93,15 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
                 break;
             case KeyEvent.VK_E:
                 key_e = false;
+                break;
+            case KeyEvent.VK_B:
+                key_b = false;
+                break;
+            case KeyEvent.VK_N:
+                key_n = false;
+                break;
+            case KeyEvent.VK_M:
+                key_m = false;
         }
         if(k.getKeyCode() == KeyEvent.VK_ESCAPE){
 //            Main.showUi();
@@ -169,7 +193,31 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
 
     /**
      *
-     * @return Direction of Vector
+     * @return true if 'B' is pressed, otherwise false
+     */
+    public boolean isKeyBPressed() {
+        return key_b;
+    }
+
+    /**
+     *
+     * @return true if 'N' is pressed, otherwise false
+     */
+    public boolean isKeyNPressed() {
+        return key_n;
+    }
+
+    /**
+     *
+     * @return true if 'M' is pressed, otherwise false
+     */
+    public boolean isKeyMPressed() {
+        return key_m;
+    }
+
+    /**
+     *
+     * @return
      */
     public CVector2 getDirection() {
         return direction;

@@ -360,7 +360,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(Main.setClientTeamId(adr, teamId) == -1) {
             net.send(adr,
                      ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
-                     argInt(Protocol.REPLY_FAILURE));
+                     argInt(Protocol.REPLY_FAILURE), argInt(teamId));
             System.out.println("CLIENT_SERVER_JOINTEAM failure -> SERVER_CLIENT_JOINTEAM_REPLY (failure)");
         }
         else {
@@ -368,19 +368,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
             if(c != null) {
 
-                if((c.getId()+1) % 2 == 0)
-                    teamId = 1;
-                else
-                    teamId = 2;
-
                 net.send(adr,
                          ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
                          argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
 
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
                                argInt(c.getId()) , argInt(teamId));
-                c.setTeamId(teamId);
-                c.getPlayer().setHealth(0);
+
                 System.out.println("CLIENT_SERVER_JOINTEAM success id="+teamId+" -> SERVER_CLIENT_JOINTEAM_REPLY (success)");
             }
         }

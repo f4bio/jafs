@@ -121,6 +121,7 @@ public class Main {
         }
 
         update.resetCountdown(respawnTimer);
+        update.resetCountdown(roundTimer);
     }
 
     /**
@@ -129,7 +130,10 @@ public class Main {
      * @param highscore The highscore of the player
      */
     public static void setPlayerHighscore(String playerName, int highscore){
-        highscores.setProperty(playerName, ""+highscore);
+        int current = Integer.parseInt(highscores.getProperty(playerName, "0"));
+        
+        if(highscore > current)
+            highscores.setProperty(playerName, ""+highscore);
     }
 
     /**
@@ -190,6 +194,16 @@ public class Main {
     public static void end() {
         broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_TEAM_WON,
                     argInt(game.getWinnerTeam()), argInt(game.getBestPlayer()));
+        for(Client c : client) {
+            if(c != null) {
+                CPlayer p = c.getPlayer();
+                
+                if(p != null) {
+                    setPlayerHighscore(p.getName(), p.getKills());
+                }
+            }
+        }
+        writeHighscores();
         reset();
     }
 
@@ -416,7 +430,18 @@ public class Main {
         Client c = getClient(adr);
 
         if(c != null) {
+            if(teamId == c.getTeamId())
+                return -1;
+
+            if(game.playerCount(teamId) - game.playerCount(c.getTeamId()) > 1)
+                return -1;
+
             c.setTeamId(teamId);
+            c.getPlayer().setHealth(0);
+
+            if(getCurPlayers() < 2)
+                reset();
+
             return 0;
         } else
             return -1;
