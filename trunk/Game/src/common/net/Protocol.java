@@ -351,6 +351,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_RESPAWN_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_NICK_CHANGED_OK, ARG_NONE);
         registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_TEAM_CHANGED_OK, ARG_NONE);
+        registerCmd(ProtocolCmd.CLIENT_SERVER_EVENT_TEAM_WON_OK, ARG_NONE);
 
         //----- Server commands
         registerCmd(ProtocolCmd.SERVER_MASTER_PONG, ARG_NONE);
@@ -390,7 +391,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA, ARG_STRING, ARG_INT, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_REQUEST_NAME, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, ARG_STRING);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_INT, ARG_INT, ARG_INT,
+        registerCmd(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, ARG_INT, ARG_STRING, ARG_INT, ARG_INT, ARG_INT,
                 ARG_INT, ARG_INT, ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE, ARG_DOUBLE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_GAME_INFO, ARG_LONG, ARG_LONG, ARG_INT, ARG_INT);
 

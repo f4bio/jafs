@@ -22,6 +22,7 @@ import static common.net.ProtocolCmdArgument.*;
  * @author J.A.F.S
  */
 public class ProtocolHandler extends common.net.ProtocolHandler {
+    private boolean dataRecv = false;
 
     /**
      * Constructs an ProtocolHandler object.
@@ -385,14 +386,17 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void s_c_player_info(int id, int health, int kills, int deaths, int team,
+    public void s_c_player_info(int id, String name, int health, int kills, int deaths, int team,
             int wep, double posX, double posY, double dirX, double dirY, InetSocketAddress adr) {
         if(!net.isReallyConnected())
             return;
 
+        System.out.println(id + " " + name + " " + health);
+
         CPlayer c = Main.getGameData().getPlayer(id);
 
         if(c != null && c.getId() != Main.getGameData().getSelfId()) {
+            c.setName(name);
             c.setCurrentWeapon(wep);
             c.setPosition(posX, posY);
             c.setDirection(dirX, dirY);
@@ -402,9 +406,23 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setDeaths(deaths);
         }
         if(c != null && c.getId() == Main.getGameData().getSelfId()) {
+            c.setName(name);
+            c.setTeam(team);
             c.setHealth(health);
             c.setKills(kills);
             c.setDeaths(deaths);
+        }
+        if(c == null && dataRecv) {
+            c = new CPlayer();
+            c.setName(name);
+            c.setCurrentWeapon(wep);
+            c.setPosition(posX, posY);
+            c.setDirection(dirX, dirY);
+            c.setTeam(team);
+            c.setHealth(health);
+            c.setKills(kills);
+            c.setDeaths(deaths);
+            Main.getGameData().addPlayer(c);
         }
     }
 
@@ -428,6 +446,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         net.setServer(adr);
         //net.send(adr, ProtocolCmd.CLIENT_SERVER_JOINTEAM, argInt(CPlayer.TEAM_BLUE));
         Main.getScreen().getGameScene().setTeamSelectionVisible(true);
+        dataRecv = true;
         Main.refInGameClientlist();
         System.out.println("SERVER_CLIENT_ALL_PLAYER_DATA_OK -> CLIENT_SERVER_JOINTEAM (TEAM_BLUE)");
     }
@@ -513,10 +532,14 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 
         GameData g = Main.getGameData();
 
-        int t = g.getPlayer(by).getTeam();
+        CPlayer p = g.getPlayer(by);
 
-        g.addGameEvent(new Event(t, "" + g.getPlayer(who).getName() + " got marked by " +
-                g.getPlayer(by).getName()));
+        if(p != null) {
+            int t = g.getPlayer(by).getTeam();
+
+            g.addGameEvent(new Event(t, "" + g.getPlayer(who).getName() + " got marked by " +
+                    g.getPlayer(by).getName()));
+        }
     }
 
     // --- chat fkt
@@ -643,6 +666,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             return;
 
         self.moveToSpawn(map);
+        Main.getScreen().getGameScene().setLockStatsVisible(false);
     }
 
     @Override
@@ -660,6 +684,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             team = "Rounds ends in a draw.";
 
         Main.getGameData().addGameEvent(new Event(Event.EVENT_SYSTEM, team));
+        Main.getScreen().getGameScene().setLockStatsVisible(true);
     }
 
     @Override

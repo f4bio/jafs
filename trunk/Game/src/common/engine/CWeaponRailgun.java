@@ -11,17 +11,15 @@ import java.awt.Color;
  *
  * @author miracle
  */
-public class CWeaponRifle extends CWeapon {
-    /**
-     *
-     */
-    public CWeaponRifle() {
-        id = 1;
-        setColor(Color.CYAN);
-        setDamage(11);
-        setCriticalRate(0.25);
-        setCoolDown(250000000L);
-        setSpread(15);
+public class CWeaponRailgun extends CWeapon {
+
+    public CWeaponRailgun() {
+        id = 2;
+        setColor(Color.MAGENTA);
+        setDamage(25);
+        setCriticalRate(0.15);
+        setCoolDown(1000000000L);
+        setSpread(3);
         setSpeed(150);
         setMaxBullets(-1);
         setBullets(1);

@@ -39,9 +39,10 @@ public class CPlayer extends CEntity {
      */
     public CPlayer() {
         team = TEAM_NONE;
-        weapon = new CWeapon[2];
+        weapon = new CWeapon[3];
         weapon[0] = new CWeaponPistol();
         weapon[1] = new CWeaponRifle();
+        weapon[2] = new CWeaponRailgun();
         currentWeapon = 0;
         size = new Dimension(50, 50);
         speed = 3.0d;
@@ -99,8 +100,6 @@ public class CPlayer extends CEntity {
      * @param i
      */
     public void setCurrentWeapon(int i) {
-        if(i < 0 || i > weapon.length - 1)
-            return;
         currentWeapon = i;
     }
 
@@ -137,7 +136,7 @@ public class CPlayer extends CEntity {
      * @param ent
      */
     public void hit(CEntity ent) {
-        System.out.println("hit player " + id);
+
     }
     
     /**

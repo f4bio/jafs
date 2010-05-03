@@ -6,9 +6,8 @@
 package common.engine;
 
 import common.CVector2;
-import common.resource.CImage;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  *
@@ -55,6 +54,8 @@ public class CWeapon {
      *
      */
     protected int id;
+
+    protected Random rand = new Random();
 
     /**
      *
@@ -210,10 +211,16 @@ public class CWeapon {
         if(Math.abs(shotLast - u.getCurrentTime()) > coolDown && bullets > 0) {
             if(maxBullets != -1)
                 bullets--;
+
+            double d = Math.toRadians((double)spread/2.0d) * rand.nextDouble();
+            boolean leftRight = rand.nextBoolean();
+            d = (leftRight)?d:-d;
+
             shotLast = u.getCurrentTime();
-            CVector2 offset = player.getDirection().resize_cpy(25.0d);
+            CVector2 direction = player.getDirection().rotate_cpy(d);
+            CVector2 offset = direction.resize_cpy(25.0d);
             CVector2 pos = player.getPosition().add_cpy(offset);
-            CVector2 dir = player.getDirection().cpy();
+            CVector2 dir = direction.cpy();
             return new CProjectile(player.getId(), speed, this, dir, pos);
         }
         return null;

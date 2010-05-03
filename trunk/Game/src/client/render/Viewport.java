@@ -30,13 +30,15 @@ public class Viewport {
      */
     public static final Dimension size = new Dimension(1024, 768);
     public static final Color background = new Color(128, 128, 128, 64);
-    public static final Color backgroundSelected = new Color(128, 128, 128, 128);
+    public static final Color backgroundSelected = new Color(128, 128, 128, 192);
 
     private VolatileImage buffer;
     private GraphicsConfiguration gc;
     private float aspectRatio = (float)size.width / size.height;
     private boolean statsVisible;
+    private boolean lockStatsVisible;
     private boolean teamSelectionVisible;
+    private boolean wepSelectionVisible;
 
     /**
      *
@@ -47,6 +49,8 @@ public class Viewport {
         createBuffer();
         statsVisible = false;
         teamSelectionVisible = false;
+        wepSelectionVisible = false;
+        lockStatsVisible = false;
     }
 
     /**
@@ -182,10 +186,15 @@ public class Viewport {
                     else
                         g.setColor(Color.RED);
 
+                    g.fillOval(posX - (player[i].getSize().width/2),
+                            posY - (player[i].getSize().height/2),
+                            pSize.width, pSize.height);
+                    g.setColor(Color.BLACK);
                     g.drawOval(posX - (player[i].getSize().width/2),
                             posY - (player[i].getSize().height/2),
                             pSize.width, pSize.height);
 
+                    g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
                     CVector2 dir = player[i].getDirection().resize_cpy(25);
                     g.drawLine(posX, posY, posX + (int)dir.getX(),
                             posY + (int)dir.getY());
@@ -228,8 +237,11 @@ public class Viewport {
                 int posX = initCntX + pXS + (loc.x - upperLeft.x) * map.getTileSize().width;
                 int posY = initCntY + pYS + (loc.y - upperLeft.y) * map.getTileSize().height;
 
-                g.setColor(Color.YELLOW);
+                g.setColor(Main.getGameData().getSelf().getWeapon(cp.getWeaponId()).getColor());
                 g.drawLine(posX, posY, posX + end.x, posY + end.y);
+
+                if(cp.isCollided())
+                    g.fillOval(posX - 10, posY - 10, 20, 20);
             }
         }
     }
@@ -482,11 +494,31 @@ public class Viewport {
         drawCenteredStringY(g, "Press \"M\"", x + 5, y + h/2 - 20);
     }
 
+    public void renderWeaponSelection(Graphics2D g) {
+        CPlayer self = Main.getGameData().getSelf();
+        int w = 100;
+        int h = 100;
+        int x = buffer.getWidth() - w - 5;
+        int y = buffer.getHeight()/2 - (h*3)/2;
+
+        for(int i=0; i<3; ++i) {
+            if(self.getCurrentWeapon() == i)
+                renderBox(x, y, w, h, g, backgroundSelected);
+            else
+                renderBox(x, y, w, h, g);
+            g.setColor(self.getWeapon(i).getColor());
+            g.fillRect(x + 5, y + 5, 90, 90);
+            y += 100;
+        }
+    }
+
     public void renderHud(Graphics2D g) {
-        if(statsVisible)
+        if(statsVisible || lockStatsVisible)
             renderStats(g);
         if(teamSelectionVisible)
             renderTeamSelection(g);
+        if(wepSelectionVisible)
+            renderWeaponSelection(g);
         
         renderHealthBox(g);
         renderRoundTime(g);
@@ -503,11 +535,27 @@ public class Viewport {
         return statsVisible;
     }
 
+    public void setLockStatsVisible(boolean vis) {
+        lockStatsVisible = vis;
+    }
+
+    public boolean isLockStatsVisible() {
+        return lockStatsVisible;
+    }
+
     public void setTeamSelectionVisible(boolean vis) {
         teamSelectionVisible = vis;
     }
 
     public boolean isTeamSelectionVisible() {
         return teamSelectionVisible;
+    }
+
+    public void setWeaponSelectionVisible(boolean vis) {
+        wepSelectionVisible = vis;
+    }
+
+    public boolean isWeaponSelectionVisible() {
+        return wepSelectionVisible;
     }
 }

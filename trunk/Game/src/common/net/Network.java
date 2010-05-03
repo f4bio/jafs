@@ -44,16 +44,16 @@ public class Network {
         Iterator<Packet> t;
 
         public void run() {
-            synchronized(replyQueue.iterator()) {
+            synchronized (replyQueue) {
                 t = replyQueue.iterator();
 
-                while(t.hasNext()) {
+                while (t.hasNext()) {
                     p = t.next();
 
-                    if(!p.hasTimeToLive()) {
+                    if (!p.hasTimeToLive()) {
                         send(p.getDatagram(), false);
 
-                        if(p.decreaseResentCounter() == 0) {
+                        if (p.decreaseResentCounter() == 0) {
                             t.remove();
                             handler.noReplyReceived(p);
                         } else {

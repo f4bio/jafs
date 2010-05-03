@@ -8,6 +8,7 @@ import common.engine.CPlayer;
 import common.engine.CProjectile;
 import common.engine.CWeapon;
 import common.engine.CWeaponPistol;
+import common.engine.CWeaponRailgun;
 import common.engine.CWeaponRifle;
 import common.engine.ProjectileManager;
 import common.engine.UpdateCountdown;
@@ -33,9 +34,10 @@ public class Game implements UpdateObject, UpdateCountdownObject {
      * @param map
      */
     public Game(String map) {
-        weapon = new CWeapon[2];
+        weapon = new CWeapon[3];
         weapon[0] = new CWeaponPistol();
         weapon[1] = new CWeaponRifle();
+        weapon[2] = new CWeaponRailgun();
         loader = new MapLoader(null, null);
         this.map = map;
         scoreRed = 0;
@@ -59,6 +61,7 @@ public class Game implements UpdateObject, UpdateCountdownObject {
                 continue;
             
             int id = player[i].getId();
+            String name = player[i].getName();
             int weapon = player[i].getCurrentWeapon();
             int t = player[i].getTeam();
             int h = player[i].getHealth();
@@ -69,7 +72,7 @@ public class Game implements UpdateObject, UpdateCountdownObject {
             double dirX = player[i].getDirection().getX();
             double dirY = player[i].getDirection().getY();
 
-            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id), argInt(h), 
+            Main.broadcast(ProtocolCmd.SERVER_CLIENT_PLAYER_INFO, argInt(id), argStr(name), argInt(h),
                     argInt(k), argInt(d), argInt(t), argInt(weapon), argDouble(posX),
                     argDouble(posY), argDouble(dirX), argDouble(dirY));
         }

@@ -7,12 +7,14 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 /**
  *
  * @author J.A.F.S
  */
-public class Input implements KeyListener, MouseMotionListener, MouseListener {
+public class Input implements KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
     private boolean key_w;
     private boolean key_a;
     private boolean key_s;
@@ -22,6 +24,8 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
     private boolean key_b;
     private boolean key_n;
     private boolean key_m;
+    private boolean mouseWheelUp;
+    private boolean mouseWheelDown;
 
     private CVector2 direction;
     private MainScreen scrn;
@@ -40,6 +44,8 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
         key_b = false;
         key_n = false;
         key_m = false;
+        mouseWheelUp = false;
+        mouseWheelDown = false;
 
         direction = new CVector2();
         this.scrn = scrn;
@@ -142,6 +148,14 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
         key_m_1 = false;
     }
 
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int dir = e.getWheelRotation();
+        if(dir < 0)
+            mouseWheelUp = true;
+        else
+            mouseWheelDown = true;
+    }
+
     /**
      *
      * @return true if 'W' is pressed, otherwise false
@@ -213,6 +227,26 @@ public class Input implements KeyListener, MouseMotionListener, MouseListener {
      */
     public boolean isKeyMPressed() {
         return key_m;
+    }
+
+    /**
+     *
+     * @return true if mouse wheel was rotated upwards.
+     */
+    public boolean wasMouseWheelMoveUp() {
+        boolean b = mouseWheelUp;
+        mouseWheelUp = false;
+        return b;
+    }
+
+    /**
+     *
+     * @return true if mouse wheel was rotated downwards.
+     */
+    public boolean wasMouseWheelMoveDown() {
+        boolean b = mouseWheelDown;
+        mouseWheelDown = false;
+        return b;
     }
 
     /**

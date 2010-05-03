@@ -9,6 +9,8 @@ import common.engine.CMap;
 import common.engine.CPlayer;
 import common.engine.CProjectile;
 import common.engine.ProjectileManager;
+import common.engine.UpdateCountdown;
+import common.engine.UpdateCountdownObject;
 import common.net.Network;
 import common.net.ProtocolCmd;
 
@@ -19,7 +21,7 @@ import static common.net.ProtocolCmdArgument.*;
  *
  * @author J.A.F.S
  */
-public class GameData implements UpdateObject {
+public class GameData implements UpdateObject, UpdateCountdownObject {
     public static final int maxEvents = 7;
 
     private MapLoader loader = new MapLoader(null, null);
@@ -109,7 +111,7 @@ public class GameData implements UpdateObject {
         Viewport port = Main.getScreen().getGameScene();
         Network net = Main.getNetwork();
 
-        if(self == null || !net.isReallyConnected())
+        if(self == null || !net.isReallyConnected() || port == null)
             return;
 
         if(input.isKeyNPressed())
@@ -132,6 +134,26 @@ public class GameData implements UpdateObject {
         
         if(self.isDead())
             return;
+
+        if(input.wasMouseWheelMoveUp()) {
+            int cur = self.getCurrentWeapon();
+            if(cur == 0)
+                self.setCurrentWeapon(2);
+            else
+                self.setCurrentWeapon(self.getCurrentWeapon() - 1);
+            port.setWeaponSelectionVisible(true);
+            u.resetCountdown(Main.getWeaponCountdown());
+        }
+
+        if(input.wasMouseWheelMoveDown()) {
+            int cur = self.getCurrentWeapon();
+            if(cur == 2)
+                self.setCurrentWeapon(0);
+            else
+                self.setCurrentWeapon(self.getCurrentWeapon() + 1);
+            port.setWeaponSelectionVisible(true);
+            u.resetCountdown(Main.getWeaponCountdown());
+        }
         
         CVector2 mov = null;
 
@@ -195,6 +217,15 @@ public class GameData implements UpdateObject {
     public void update(UpdateLoop u) {
         checkPlayerInput(u);
         ProjectileManager.checkProjectiles(u, player, getMap());
+    }
+
+    public void countdown(UpdateCountdown u) {
+        Viewport port = Main.getScreen().getGameScene();
+
+        if(u.getName().equals("weapon")) {
+            if(port != null)
+                port.setWeaponSelectionVisible(false);
+        }
     }
 
     /**
