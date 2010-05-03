@@ -1,13 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package common.engine;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -33,6 +31,7 @@ public class CPlayer extends CEntity {
     private int health;
     private int kills;
     private int deaths;
+    private BufferedImage[] body;
 
     /**
      *
@@ -51,6 +50,21 @@ public class CPlayer extends CEntity {
         setDirection(1, 0);
         kills = 0;
         deaths = 0;
+        body = new BufferedImage[2];
+        body[0] = new BufferedImage(50, 26, BufferedImage.TYPE_INT_ARGB);
+        body[1] = new BufferedImage(50, 26, BufferedImage.TYPE_INT_ARGB);
+        try {
+             body[0] = ImageIO.read(getClass().getResource("/common/resource/player_team_red.png"));
+             body[1] = ImageIO.read(getClass().getResource("/common/resource/player_team_blue.png"));
+        } catch(Exception e) { }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public BufferedImage getBody(int team){
+        return body[team-1];
     }
 
     /**

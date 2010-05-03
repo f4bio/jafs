@@ -12,7 +12,6 @@ import common.net.Packet;
 import common.net.Protocol;
 import common.net.ProtocolCmd;
 import common.net.Server;
-import java.awt.Point;
 import java.net.InetSocketAddress;
 
 import static common.net.ProtocolCmdArgument.*;

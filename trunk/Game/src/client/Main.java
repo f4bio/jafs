@@ -266,6 +266,7 @@ public class Main {
      * Completes serverlist
      */
     public static void completeServerlist() {
+        mainMenu.clearServerinfoPanel();
         if(serverlist.size() == 0){
             String[][] list = new String[1][4];
             list[0][0] = "No server listed.";
@@ -282,7 +283,6 @@ public class Main {
                 list[i][2] = "<pending>";
                 list[i][3] = "<pending>";
             }
-            mainMenu.clearServerinfoPanel();
             mainMenu.setServerlist(list);
             // map, players, latency requests
             for(int i=0; i<serverlist.size(); i++){
