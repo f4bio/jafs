@@ -5,7 +5,6 @@
 
 package common.engine;
 
-import client.Main;
 import common.CVector2;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -241,7 +240,8 @@ public class CEntity {
             CVector2 p = player[i].getPosition();
             double distance = hit.getDistanceTo(p);
             if(!player[i].isDead() && player[i].getId() != getId()
-                    && distance <= (player[i].getSize().width/2)){
+                    && distance <= (player[i].getSize().width/2)
+                    && player[i].getTeam() != getId()){
                 return i;
             }
         }
@@ -300,6 +300,9 @@ public class CEntity {
      * @return
      */
     public int move(CMap map, CVector2 mov, double speedfactor, boolean pc, CPlayer[] p){
+        if(map == null || mov == null)
+            return -2;
+
         CVector2 next = position;
         CVector2 last = next;
 

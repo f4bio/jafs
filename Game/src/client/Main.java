@@ -4,6 +4,7 @@ import client.render.MainScreen;
 import client.ui.*;
 import common.CLog;
 import common.engine.CPlayer;
+import common.engine.UpdateCountdown;
 import common.engine.UpdateLoop;
 import common.net.Client;
 import common.net.Network;
@@ -42,6 +43,8 @@ public class Main {
 
     private static ArrayList<Server> serverlist = new ArrayList<Server>();
     private static ArrayList<Client> clientlist = new ArrayList<Client>();
+
+    private static UpdateCountdown weaponCountdown;
     
     /**
      *
@@ -109,6 +112,7 @@ public class Main {
 
         screen.addMouseMotionListener(input);
         screen.addMouseListener(input);
+        screen.addMouseWheelListener(input);
 
         // InGame UI
         uiInGameChat = new InGameChat(screen);
@@ -126,8 +130,11 @@ public class Main {
         mainMenu.setSelfName(Main.getGameData().getName());
         
         // UpdateLoop
+        weaponCountdown = new UpdateCountdown("weapon", 1000);
         loop = new UpdateLoop(60);
         loop.addUpdateObject(data);
+        loop.addUpdateCountdownObject(data);
+        loop.addUpdateCountdown(weaponCountdown);
         loop.addUpdateObject(screen);
 
         EventQueue.invokeLater(new Runnable() {
@@ -171,6 +178,10 @@ public class Main {
      */
     public static GameData getGameData() {
         return data;
+    }
+
+    public static UpdateCountdown getWeaponCountdown() {
+        return weaponCountdown;
     }
 
     /**

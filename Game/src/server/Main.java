@@ -29,8 +29,10 @@ public class Main {
     public static final int PING_INTERVAL = 10000;
 
     private static int maxClients = 16;
-    private static int respawntime = 10000;
-    private static int gameTime = 60*10000;
+    /*private static int respawntime = 10000;
+    private static int gameTime = 60*10000;*/
+    private static int respawntime = 5000;
+    private static int gameTime = 10*10000;
 
     private static String map;
     private static String name;
@@ -81,14 +83,10 @@ public class Main {
 
         System.out.println("### SERVER STARTET ###\n");
         pingTimer = new UpdateCountdown("ping", PING_INTERVAL);
-        //pingTimer.
-        //pingTimer.scheduleAtFixedRate(pinger, PING_INTERVAL, PING_INTERVAL);
 
         respawnTimer = new UpdateCountdown("respawn", respawntime);
-        //respawnTimer.scheduleAtFixedRate(respawner, respawntime, respawntime);
 
         roundTimer = new UpdateCountdown("round", gameTime);
-        //roundTimer.scheduleAtFixedRate(gameTimer, gameTime, gameTime);
 
         update = new UpdateLoop(60);
         update.addUpdateObject(game);

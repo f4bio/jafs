@@ -326,10 +326,10 @@ public abstract class ProtocolHandler implements Runnable {
                         s_c_player_data(toStr(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), adr);
                         break;
                     case SERVER_CLIENT_PLAYER_INFO:
-                        s_c_player_info(toInt(data, idx[0]), toInt(data, idx[1]), toInt(data, idx[2]), 
-                                toInt(data, idx[3]), toInt(data, idx[4]), toInt(data, idx[5]),
-                                toDouble(data, idx[6]), toDouble(data, idx[7]), toDouble(data, idx[8]),
-                                toDouble(data, idx[9]), adr);
+                        s_c_player_info(toInt(data, idx[0]), toStr(data, idx[1]), toInt(data, idx[2]), toInt(data, idx[3]),
+                                toInt(data, idx[4]), toInt(data, idx[5]), toInt(data, idx[6]),
+                                toDouble(data, idx[7]), toDouble(data, idx[8]), toDouble(data, idx[9]),
+                                toDouble(data, idx[10]), adr);
                         break;
                     case SERVER_CLIENT_GAME_INFO:
                         s_c_game_info(toLong(data, idx[0]), toLong(data, idx[1]), toInt(data, idx[2]),
@@ -783,7 +783,7 @@ public abstract class ProtocolHandler implements Runnable {
      * @param dirY
      * @param adr
      */
-    public void s_c_player_info(int id, int health, int kills, int deaths, int team,
+    public void s_c_player_info(int id, String name, int health, int kills, int deaths, int team,
             int wep, double posX, double posY, double dirX, double dirY, InetSocketAddress adr) { }
 
     public void s_c_game_info(long roundTime, long respawnTime, int scoreRed, int scoreBlue,

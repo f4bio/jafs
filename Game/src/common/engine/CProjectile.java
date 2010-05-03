@@ -36,6 +36,7 @@ public class CProjectile extends CEntity {
          this.direction = direction;
          this.setPosition(org);
          this.weaponObj = weapon;
+         this.weapon = weapon.getId();
          this.id = owner;
     }
 
