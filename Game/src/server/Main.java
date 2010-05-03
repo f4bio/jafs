@@ -42,7 +42,7 @@ public class Main {
     private static Network net;
     private static Game game;
     private static UpdateLoop update;
-
+    private static boolean reset;
 
     private static UpdateCountdown pingTimer;
     private static UpdateCountdown respawnTimer;
@@ -74,6 +74,7 @@ public class Main {
         if(!loaded)
             System.exit(0);
 
+        reset = false;
         Protocol.init();
         net = new Network();
         ProtocolHandler protocol = new ProtocolHandler(net);
@@ -113,13 +114,9 @@ public class Main {
             if(p[i] == null)
                 continue;
 
-            p[i].setKills(0);
             p[i].setDeaths(0);
             p[i].setHealth(0);
         }
-
-        update.resetCountdown(respawnTimer);
-        update.resetCountdown(roundTimer);
     }
 
     /**
@@ -181,11 +178,17 @@ public class Main {
     }
 
     public static void respawn() {
+        if(reset) {
+            reset();
+            reset = false;
+        }
+
         CPlayer[] p = game.getPlayer();
         for(CPlayer c : p) {
             if(c != null && c.isDead())
                 c.setHealth(100);
         }
+
         broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_RESPAWN);
     }
 
@@ -202,7 +205,16 @@ public class Main {
             }
         }
         writeHighscores();
-        reset();
+
+        CPlayer[] p = game.getPlayer();
+        for(CPlayer c : p) {
+            if(c != null && c.isDead())
+                c.setHealth(0);
+        }
+        
+        update.resetCountdown(respawnTimer);
+        update.resetCountdown(roundTimer);
+        reset = true;
     }
 
     /**
@@ -452,12 +464,11 @@ public class Main {
      */
     public static boolean nameExists(String name) {
         for(Client c : client) {
-            if(c != null) {
+            if(c != null && c.getStatus() != Client.STATUS_PENDING) {
                 if(name.equalsIgnoreCase(c.getPlayer().getName()))
                     return true;
             }
         }
-
         return false;
     }
 

@@ -248,13 +248,13 @@ public class Viewport {
 
                     g.setColor(Color.BLACK);
                     if(player[i].isDead()) {
-                        g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
-                        g.fillOval(posX - (player[i].getSize().width/2), posY - (player[i].getSize().height/2), 50, 50);
-//                        g.drawLine(posX - player[i].getSize().width/2, posY,
-//                                posX + player[i].getSize().width/2, posY);
-//
-//                        g.drawLine(posX, posY + player[i].getSize().height/2,
-//                                posX, posY - player[i].getSize().height/2);
+                        //g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
+                        //g.fillOval(posX - (player[i].getSize().width/2), posY - (player[i].getSize().height/2), 50, 50);
+                        g.drawLine(posX - player[i].getSize().width/2, posY,
+                                posX + player[i].getSize().width/2, posY);
+
+                        g.drawLine(posX, posY + player[i].getSize().height/2,
+                                posX, posY - player[i].getSize().height/2);
                     }
                 }
             }

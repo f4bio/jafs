@@ -390,8 +390,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         if(!net.isReallyConnected())
             return;
 
-        System.out.println(id + " " + name + " " + health);
-
         CPlayer c = Main.getGameData().getPlayer(id);
 
         if(c != null && c.getId() != Main.getGameData().getSelfId()) {
@@ -411,7 +409,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setKills(kills);
             c.setDeaths(deaths);
         }
-        if(c == null && dataRecv) {
+        /*if(c == null && dataRecv) {
             c = new CPlayer();
             c.setName(name);
             c.setCurrentWeapon(wep);
@@ -422,7 +420,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setKills(kills);
             c.setDeaths(deaths);
             Main.getGameData().addPlayer(c);
-        }
+        }*/
     }
 
     @Override

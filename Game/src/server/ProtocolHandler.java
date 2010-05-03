@@ -106,11 +106,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_request_name_reply(String name, InetSocketAddress adr) {
+        Client c = Main.getClient(adr);
+
+        if(c.getPlayer().getName() != null)
+            return;
+
         System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY (name: "+name+") ");
         boolean changed = false;
 
         while(Main.nameExists(name)) {
-            name = name.concat("*");
+            name += "*";
             changed = true;
         }
 
@@ -118,8 +123,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             System.out.println(" -> SERVER_CLIENT_FORCED_NICKCHANGE (name: "+name+")");
             net.send(adr, ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, argStr(name));
         }
-
-        Client c = Main.getClient(adr);
 
         c.getPlayer().setName(name);
 
@@ -129,8 +132,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         int id = c.getId();
 
         System.out.println(" -> SERVER_CLIENT_PLAYER_DATA (name: "+name+", id: "+id+", teamid: "+team+")");
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
-                 argStr(name), argInt(id), argInt(team));
+        /*net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
+                 argStr(name), argInt(id), argInt(team));*/
 
         System.out.println(" -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED);
@@ -244,7 +247,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_shoot(int id, int wepId, double dirX, double dirY, double orgX, double orgY,
                           InetSocketAddress adr) {
-        CWeapon wep = Main.getGame().getWeapon(id);
+        CWeapon wep = Main.getGame().getWeapon(wepId);
         if(wep != null) {
             CVector2 dir = new CVector2(dirX, dirY);
             CVector2 org = new CVector2(orgX, orgY);

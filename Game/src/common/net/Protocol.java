@@ -458,8 +458,8 @@ public class Protocol {
                 ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_ALL_PLAYER_DATA,
                 ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK);
-        registerCmdReply(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
-                ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
+        /*registerCmdReply(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
+                ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);*/
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO,
                 ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_ALL,
