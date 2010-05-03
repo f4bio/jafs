@@ -1,0 +1,1018 @@
+[Main]
+name = Test
+texture0 = textures/tile.jpg
+texture1 = textures/stone.png
+texture2 = textures/kp.jpg
+texture3 = textures/grass.jpg
+texture4 = textures/water.jpg
+texture5 = textures/red.png
+texture6 = textures/blue.png
+texture7 = textures/bridge.jpg
+[SpaxnRed]
+tileX = 0
+tileY = 0
+
+[SpawnBlue]
+tileX = 9
+tileY = 19
+
+[Tile 0 0]
+typeId = 0
+textureId = 5
+itemId = 0
+
+[Tile 0 1]
+typeId = 1
+textureId = 4
+itemId = 0
+
+[Tile 0 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 0 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 0]
+typeId = 1
+textureId = 4
+itemId = 0
+
+[Tile 1 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 1 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 2 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 3 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 4 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 5 18]
+typeId = 1
+textureId = 4
+itemId = 0
+
+[Tile 5 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 6 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 7 19]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 18]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 8 19]
+typeId = 1
+textureId = 4
+itemId = 0
+
+[Tile 9 0]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 1]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 2]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 3]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 4]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 5]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 6]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 7]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 8]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 9]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 10]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 11]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 12]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 13]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 14]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 15]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 16]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 17]
+typeId = 0
+textureId = 7
+itemId = 0
+
+[Tile 9 18]
+typeId = 1
+textureId = 4
+itemId = 0
+
+[Tile 9 19]
+typeId = 0
+textureId = 6
+itemId = 0
+
