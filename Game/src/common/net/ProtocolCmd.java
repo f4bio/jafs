@@ -213,7 +213,7 @@ public enum ProtocolCmd {
     /**
      *
      */
-    SERVER_CLIENT_CLIENTCOUNT,
+    SERVER_CLIENT_CLIENTCOUNT_REPLY,
     /**
      *
      */

@@ -390,8 +390,8 @@ public abstract class ProtocolHandler implements Runnable {
                     case SERVER_CLIENT_CLIENTID_REPLY:
                         s_c_clientid_reply(toInt(data, idx[0]), adr);
                         break;
-                    case SERVER_CLIENT_CLIENTCOUNT:
-                        s_c_clientcount(toInt(data, idx[0]), adr);
+                    case SERVER_CLIENT_CLIENTCOUNT_REPLY:
+                        s_c_clientcount_reply(toInt(data, idx[0]), adr);
                         break;
                     case SERVER_CLIENT_LATENCY_REPLY:
                         s_c_latency_reply(adr);
@@ -723,7 +723,7 @@ public abstract class ProtocolHandler implements Runnable {
      * @param i
      * @param adr
      */
-    public void s_c_clientcount(int i, InetSocketAddress adr) { }
+    public void s_c_clientcount_reply(int i, InetSocketAddress adr) { }
     /**
      *
      * @param id

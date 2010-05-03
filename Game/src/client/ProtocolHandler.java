@@ -229,7 +229,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      * @param adr
      */
     @Override
-    public void s_c_clientcount(int i, InetSocketAddress adr)
+    public void s_c_clientcount_reply(int i, InetSocketAddress adr)
     {
         System.out.println("SERVER_CLIENT_CLIENTCOUNT "+i+" (clients connected)");
     }
