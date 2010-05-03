@@ -29,6 +29,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.text.DefaultCaret;
+import server.ui.DlgGUI;
 
 import static common.net.ProtocolCmdArgument.*;
 

@@ -43,6 +43,7 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("J.A.F.S. Game Launcher");
+        setResizable(false);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/resource/Logo.png"))); // NOI18N
 
