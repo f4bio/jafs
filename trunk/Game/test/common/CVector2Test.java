@@ -53,12 +53,12 @@ public class CVector2Test {
     @Test
     public void testAdd_CVector2() {
         System.out.println("add");
-        double x=5.0, y=9.0, s = 20.0, t = 30.0;
-        CVector2 vec = new CVector2(x, y);
-        CVector2 instance = new CVector2(t, s);
+        double a = 5.0, b = 9.0, c = 20.0, d = 30.0;
+        CVector2 vec = new CVector2(a, b);
+        CVector2 instance = new CVector2(d, c);
         instance.add(vec);
-        assertEquals(x+t, instance.getX(), 0.00001);
-        assertEquals(y+s, instance.getY(), 0.00001);
+        assertEquals(a + d, instance.getX(), 0.00001);
+        assertEquals(b + c, instance.getY(), 0.00001);
     }
 
     /**
@@ -67,13 +67,12 @@ public class CVector2Test {
     @Test
     public void testAdd_cpy() {
         System.out.println("add_cpy");
-        CVector2 vec = new CVector2();
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double a = 5.0, b = 9.0, c = 20.0, d = 30.0;
+        CVector2 vec = new CVector2(a, b);
+        CVector2 instance = new CVector2(c, d);
+        CVector2 expResult = new CVector2(a+c, b+d);
         CVector2 result = instance.add_cpy(vec);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult.get(), result.get());
     }
 
     /**
@@ -82,12 +81,13 @@ public class CVector2Test {
     @Test
     public void testAdd_double_double() {
         System.out.println("add");
-        double x = 0.0;
-        double y = 0.0;
-        CVector2 instance = new CVector2();
+        double x = 3.0;
+        double y = 4.0;
+        CVector2 instance = new CVector2(1, 2);
         instance.add(x, y);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(4, instance.getX(), 0.0001);
+        assertEquals(6, instance.getY(), 0.0001);
+
     }
 
     /**
@@ -96,11 +96,13 @@ public class CVector2Test {
     @Test
     public void testSub_CVector2() {
         System.out.println("sub");
-        CVector2 vec = null;
+        double x = 3.0;
+        double y = 4.0;
+        CVector2 vec = new CVector2(x, y);
         CVector2 instance = new CVector2();
         instance.sub(vec);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(-x, instance.getX(), 0.0001);
+        assertEquals(-y, instance.getY(), 0.0001);
     }
 
     /**
@@ -109,12 +111,12 @@ public class CVector2Test {
     @Test
     public void testSub_double_double() {
         System.out.println("sub");
-        double x = 0.0;
-        double y = 0.0;
+        double x = 7.0;
+        double y = 8.0;
         CVector2 instance = new CVector2();
         instance.sub(x, y);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(-x, instance.getX(), 0.0001);
+        assertEquals(-y, instance.getY(), 0.0001);
     }
 
     /**
@@ -123,13 +125,12 @@ public class CVector2Test {
     @Test
     public void testSub_cpy() {
         System.out.println("sub_cpy");
-        CVector2 vec = null;
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double a = 5.0, b = 9.0, c = 20.0, d = 30.0;
+        CVector2 vec = new CVector2(a, b);
+        CVector2 instance = new CVector2(c, d);
+        CVector2 expResult = new CVector2(c-a, d-b);
         CVector2 result = instance.sub_cpy(vec);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult.get(), result.get());
     }
 
     /**
@@ -138,11 +139,12 @@ public class CVector2Test {
     @Test
     public void testMul() {
         System.out.println("mul");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
+        double a = 2.0;
+        double x = 5.0, y = 9.0;
+        CVector2 instance = new CVector2(x, y);
         instance.mul(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x*a, instance.getX(), 0.0001);
+        assertEquals(y*a, instance.getY(), 0.0001);
     }
 
     /**
@@ -151,13 +153,12 @@ public class CVector2Test {
     @Test
     public void testMul_cpy() {
         System.out.println("mul_cpy");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double a = 6.0;
+        double x = 5.0, y = 9.0;
+        CVector2 instance = new CVector2(x, y);
         CVector2 result = instance.mul_cpy(a);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x*a, result.getX(), 0.0001);
+        assertEquals(y*a, result.getY(), 0.0001);
     }
 
     /**
@@ -166,11 +167,12 @@ public class CVector2Test {
     @Test
     public void testDiv() {
         System.out.println("div");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
+        double a = 2.0;
+        double x = 5.0, y = 9.0;
+        CVector2 instance = new CVector2(x, y);
         instance.div(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x/a, instance.getX(), 0.0001);
+        assertEquals(y/a, instance.getY(), 0.0001);
     }
 
     /**
@@ -179,13 +181,12 @@ public class CVector2Test {
     @Test
     public void testDiv_cpy() {
         System.out.println("div_cpy");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double a = 6.0;
+        double x = 5.0, y = 9.0;
+        CVector2 instance = new CVector2(x, y);
         CVector2 result = instance.div_cpy(a);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x/a, result.getX(), 0.0001);
+        assertEquals(y/a, result.getY(), 0.0001);
     }
 
     /**
@@ -194,12 +195,11 @@ public class CVector2Test {
     @Test
     public void testNorm() {
         System.out.println("norm");
-        CVector2 instance = new CVector2();
-        double expResult = 0.0;
+        double x = 10.0, y = 6.0;
+        CVector2 instance = new CVector2(x, y);
+        double expResult = Math.sqrt((x*x) + (y*y));
         double result = instance.norm();
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult, result, 0.0001);
     }
 
     /**
@@ -208,12 +208,10 @@ public class CVector2Test {
     @Test
     public void testGet() {
         System.out.println("get");
-        CVector2 instance = new CVector2();
-        Point expResult = null;
+        CVector2 instance = new CVector2(3.0, 5.0);
+        Point expResult = new Point(3, 5);
         Point result = instance.get();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -222,12 +220,11 @@ public class CVector2Test {
     @Test
     public void testGetX() {
         System.out.println("getX");
-        CVector2 instance = new CVector2();
-        double expResult = 0.0;
+        double x = 4.2, y = 1.2;
+        CVector2 instance = new CVector2(x, y);
+        double expResult = x;
         double result = instance.getX();
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult, result, 0.0001);
     }
 
     /**
@@ -236,12 +233,11 @@ public class CVector2Test {
     @Test
     public void testGetY() {
         System.out.println("getY");
-        CVector2 instance = new CVector2();
-        double expResult = 0.0;
+        double x = 4.2, y = 1.2;
+        CVector2 instance = new CVector2(x, y);
+        double expResult = y;
         double result = instance.getY();
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(expResult, result, 0.0001);
     }
 
     /**
@@ -250,11 +246,15 @@ public class CVector2Test {
     @Test
     public void testRotate() {
         System.out.println("rotate");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
+        double a = 3.1;
+        double xx = 5.1;
+        double yy = 7.1;
+        double x = xx*Math.cos(a) - yy*Math.sin(a);
+        double y = xx*Math.sin(a) + yy*Math.cos(a);
+        CVector2 instance = new CVector2(xx, yy);
         instance.rotate(a);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(x, instance.getX(), 0.0001);
+        assertEquals(y, instance.getY(), 0.0001);
     }
 
     /**
@@ -263,13 +263,14 @@ public class CVector2Test {
     @Test
     public void testRotate_cpy() {
         System.out.println("rotate_cpy");
-        double a = 0.0;
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double a = 3.1;
+        double xx = 5.1;
+        double yy = 7.1;
+        double x = xx*Math.cos(a) - yy*Math.sin(a);
+        double y = xx*Math.sin(a) + yy*Math.cos(a);
+        CVector2 instance = new CVector2(xx, yy);
         CVector2 result = instance.rotate_cpy(a);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(result.get(), new CVector2(x, y).get());
     }
 
     /**
@@ -278,10 +279,11 @@ public class CVector2Test {
     @Test
     public void testInvert() {
         System.out.println("invert");
-        CVector2 instance = new CVector2();
+        double x = 3.1, y = 5.4;
+        CVector2 instance = new CVector2(x, y);
         instance.invert();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(-x, instance.getX(), 0.0001);
+        assertEquals(-y, instance.getY(), 0.0001);
     }
 
     /**
@@ -289,13 +291,13 @@ public class CVector2Test {
      */
     @Test
     public void testInvert_cpy() {
+
         System.out.println("invert_cpy");
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double x = 3.1, y = 5.4;
+        CVector2 instance = new CVector2(x, y);
         CVector2 result = instance.invert_cpy();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.invert();
+        assertEquals(instance.get(), result.get());
     }
 
     /**
@@ -304,11 +306,11 @@ public class CVector2Test {
     @Test
     public void testResize() {
         System.out.println("resize");
-        double l = 0.0;
-        CVector2 instance = new CVector2();
+        double l = 1.0;
+        CVector2 instance = new CVector2(1.0, 2.0);
         instance.resize(l);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(0.4472135954999579d, instance.getX(), 0.0001);
+        assertEquals(0.8944271909999159d, instance.getY(), 0.0001);
     }
 
     /**
@@ -317,13 +319,11 @@ public class CVector2Test {
     @Test
     public void testResize_cpy() {
         System.out.println("resize_cpy");
-        double l = 0.0;
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double l = 1.0;
+        CVector2 instance = new CVector2(1.0, 2.0);
         CVector2 result = instance.resize_cpy(l);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        instance.resize(l);
+        assertEquals(instance.get(), result.get());
     }
 
     /**
@@ -332,12 +332,10 @@ public class CVector2Test {
     @Test
     public void testCpy() {
         System.out.println("cpy");
-        CVector2 instance = new CVector2();
-        CVector2 expResult = null;
+        double x= 3.6, y= 7.3;
+        CVector2 instance = new CVector2(x, y);
         CVector2 result = instance.cpy();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(instance.get(), result.get());
     }
 
     /**
@@ -346,13 +344,13 @@ public class CVector2Test {
     @Test
     public void testGetDistanceTo() {
         System.out.println("getDistanceTo");
-        CVector2 vec = null;
-        CVector2 instance = new CVector2();
-        double expResult = 0.0;
+        double x = 5.4, y = 12.3, a = 4.56, b = 7.89;
+        CVector2 vec = new CVector2(a, b);
+        CVector2 instance = new CVector2(x, y);
+        double diffX = x-a, diffY = y-b;
+        double contr = Math.sqrt((diffX * diffX) + (diffY * diffY));
         double result = instance.getDistanceTo(vec);
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(contr, result, 0.0);
     }
 
     /**
@@ -361,13 +359,11 @@ public class CVector2Test {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        CVector2 c = null;
-        CVector2 instance = new CVector2();
-        boolean expResult = false;
+        double x= 3.6, y= 7.3;
+        CVector2 c = new CVector2(x, y);
+        CVector2 instance = new CVector2(x, y);
         boolean result = instance.equals(c);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(true, result);
     }
 
 }
