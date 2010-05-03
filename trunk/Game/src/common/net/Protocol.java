@@ -357,7 +357,7 @@ public class Protocol {
         registerCmd(ProtocolCmd.SERVER_MASTER_AUTH, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_MASTER_SERVERCOUNT, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY, ARG_INT);
-        registerCmd(ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT, ARG_INT);
+        registerCmd(ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT_REPLY, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_PING, ARG_NONE);
         registerCmd(ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, ARG_INT);
         registerCmd(ProtocolCmd.SERVER_CLIENT_CHAT_ALL, ARG_INT, ARG_STRING);

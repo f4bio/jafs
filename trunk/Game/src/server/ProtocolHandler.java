@@ -265,7 +265,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_clientcount(InetSocketAddress adr){
         net.send(adr,
-                 ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT,
+                 ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT_REPLY,
                  argInt(Main.clientCount()));
     }
 
