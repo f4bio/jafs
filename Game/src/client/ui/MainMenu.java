@@ -29,7 +29,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.text.DefaultCaret;
-import server.ui.DlgGUI;
 
 import static common.net.ProtocolCmdArgument.*;
 
@@ -138,12 +137,12 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         scpLobbyChat = new javax.swing.JScrollPane();
         taLobbyChatPublic = new javax.swing.JTextArea();
 
-        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10));
+        tblServerlist.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         tblServerlist.setModel(sModel);
         tblServerlist.getTableHeader().setReorderingAllowed(false);
         scpServerlist.setViewportView(tblServerlist);
 
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRefresh.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnRefresh.setText("Aktualisieren");
 
         btnConnect.setFont(new java.awt.Font("Tahoma", 0, 10));
@@ -171,7 +170,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         lblServerinfoIpPort.setForeground(new java.awt.Color(102, 102, 102));
         lblServerinfoIpPort.setText("<IP:Port>");
 
-        lblServerinfoHighscoreTxt.setText("Highscore");
+        lblServerinfoHighscoreTxt.setText("Dein Highscore");
 
         lblServerinfoHighscore.setForeground(new java.awt.Color(102, 102, 102));
         lblServerinfoHighscore.setText("<Highscore>");
@@ -247,7 +246,7 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
 
         scpServerinfo.setViewportView(pnlServerinfo);
 
-        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnCreate.setFont(new java.awt.Font("Tahoma", 0, 10));
         btnCreate.setText("Erstellen");
 
         javax.swing.GroupLayout pnlServerbrowserLayout = new javax.swing.GroupLayout(pnlServerbrowser);

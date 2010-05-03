@@ -32,6 +32,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void m_s_ping(InetSocketAddress adr) {
+//        System.out.println("MASTER_SERVER_PING -> SERVER_MASTER_PONG");
         net.send(adr, ProtocolCmd.SERVER_MASTER_PONG);
     }
 
@@ -42,6 +43,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void m_s_servercount(int i, InetSocketAddress adr){
+        System.out.println("MASTER_SERVER_SERVERCOUNT");
         Main.setServerId(i);
     }
 
@@ -73,11 +75,11 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_INIT, argStr(Main.getMapName()),
                      argInt(Main.getMaxPlayers()));
 //            System.out.println("Client "+added.getHost()+":"+added.getPort()+" joined server");
-            System.out.println("CLIENT_SERVER_AUTH success -> SERVER_CLIENT_AUTH_REPLY (REPLY_SUCCESS), SERVER_CLIENT_INIT");
+            System.out.println("CLIENT_SERVER_AUTH (success) -> SERVER_CLIENT_AUTH_REPLY (REPLY_SUCCESS), SERVER_CLIENT_INIT");
         } else {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, argInt(Protocol.REPLY_FAILURE));
 //            System.out.println("Client "+added.getHost()+":"+added.getPort()+" not able joined server");
-            System.out.println("CLIENT_SERVER_AUTH failure -> SERVER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
+            System.out.println("CLIENT_SERVER_AUTH (failure) -> SERVER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
     }
 
@@ -90,10 +92,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_init_reply(int i, InetSocketAddress adr) {
         if(i == Protocol.REPLY_SUCCESS) {
             net.send(adr, ProtocolCmd.SERVER_CLIENT_REQUEST_NAME);
-            System.out.println("CLIENT_SERVER_INIT_REPLY success -> SERVER_CLIENT_REQUEST_NAME");
+            System.out.println("CLIENT_SERVER_INIT_REPLY (success) -> SERVER_CLIENT_REQUEST_NAME");
         } else {
             Main.removeClient(adr);
-            System.out.println("CLIENT_SERVER_INIT_REPLY failure -> client removed");
+            System.out.println("CLIENT_SERVER_INIT_REPLY (failure) -> client removed");
         }
     }
 
@@ -104,6 +106,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_request_name_reply(String name, InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY (name: "+name+") ");
         boolean changed = false;
 
         while(Main.nameExists(name)) {
@@ -111,8 +114,10 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             changed = true;
         }
 
-        if(changed)     
+        if(changed){
+            System.out.println(" -> SERVER_CLIENT_FORCED_NICKCHANGE (name: "+name+")");
             net.send(adr, ProtocolCmd.SERVER_CLIENT_FORCED_NICKCHANGE, argStr(name));
+        }
 
         Client c = Main.getClient(adr);
 
@@ -123,15 +128,16 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         int team = c.getTeamId();
         int id = c.getId();
 
+        System.out.println(" -> SERVER_CLIENT_PLAYER_DATA (name: "+name+", id: "+id+", teamid: "+team+")");
         net.send(adr, ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
-                argStr(name), argInt(id), argInt(team));
+                 argStr(name), argInt(id), argInt(team));
 
+        System.out.println(" -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
         net.send(adr, ProtocolCmd.SERVER_CLIENT_CONNECTION_ESTABLISHED);
 
+        System.out.println(" -> broadcast SERVER_CLIENT_EVENT_PLAYER_JOINED (name: "+c.getPlayer().getName()+", id:"+c.getId()+")");
         Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_JOINED,
                         argStr(c.getPlayer().getName()), argInt(c.getId()));
-
-        System.out.println("CLIENT_SERVER_REQUEST_NAME_REPLY "+name+"(no SERVER_CLIENT_FORCED_NICKCHANGE) -> SERVER_CLIENT_CONNECTION_ESTABLISHED");
     }
 
     /**
@@ -140,7 +146,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_connection_established_ok(InetSocketAddress adr) {
-
+        System.out.println("CLIENT_SERVER_CONNECTION_ESTABLISHED");
     }
 
     /**
@@ -149,7 +155,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_forced_nickchange_ok(InetSocketAddress adr) {
-
+        System.out.println("CLIENT_SERVER_FORCED_NICKCHANGE_OK");
     }
 
     /**
@@ -176,6 +182,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_all_player_data(InetSocketAddress adr) {
+        System.out.println("CLIENT_SERVER_PLAYER_DATA");
         Client[] c = Main.getClients();
 
         for(Client client : c) {
@@ -264,6 +271,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_clientcount(InetSocketAddress adr){
+        System.out.println("CLIENT_SERVER_CLIENTCOUNT -> SERVER_CLIENT_CLIENTCOUNT_REPLY");
         net.send(adr,
                  ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT_REPLY,
                  argInt(Main.clientCount()));
@@ -324,6 +332,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_chat_team(String msg, InetSocketAddress adr){
+        System.out.println("CLIENT_SERVER_CHAT_TEAM (msg:"+msg+")");
         Main.broadcast_chat_team(msg, adr);
     }
     
@@ -387,6 +396,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_latency(InetSocketAddress adr){
         net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY);
+        System.out.println("CLIENT_SERVER_LATENCY -> SERVER_CLIENT_LATENCY_REPLY");
     }
 
     /**

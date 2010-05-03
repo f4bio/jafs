@@ -44,6 +44,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_m_nickchange(String newNick, InetSocketAddress adr)
     {
+        System.out.println("CLIENT_MASTER_NICKCHANGE (new nick:"+newNick+")");
         Main.checkNick(newNick, adr);
     }
 
@@ -73,7 +74,6 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_ENDLIST, argShort(Protocol.LIST_TYPE_CLIENTLIST));
             System.out.println("MASTER_CLIENT_ENDLIST");
         }
-        
     }
 
     @Override
@@ -167,12 +167,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void s_m_pong(InetSocketAddress adr)
     {
-
+//        System.out.println("SERVER_MASTER_PONG");
     }
 
     @Override
     public void s_m_servercount(InetSocketAddress adr)
     {
+        System.out.println("SERVER_MASTER_SERVERCOUNT -> MASTER_SERVER_SERVERCOUNT");
         net.send(adr, ProtocolCmd.MASTER_SERVER_SERVERCOUNT, argInt(Main.serverCount()));
     }
 

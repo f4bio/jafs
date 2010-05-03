@@ -141,8 +141,8 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
         }
         // launch server
         else if(e.getSource().equals(jButton2)) {
-            dispose();
-            new server.ui.DlgGUI(this, true).setVisible(true);
+//            dispose();
+            new server.ui.DlgGUI(this, false).setVisible(true);
         }
         // launch masterserver
         else {

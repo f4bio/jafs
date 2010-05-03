@@ -143,9 +143,9 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
 //        if(started){
 //            t.interrupt();
 //        }
-        if(standalone)
-            System.exit(0);
-        else
+//        if(standalone)
+//            System.exit(0);
+//        else
             dispose();
     }
 
