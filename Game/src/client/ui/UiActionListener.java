@@ -87,7 +87,7 @@ public class UiActionListener implements ActionListener {
         }
         // Server erstellen
         else if(e.getActionCommand().equals(CMD_CREATE_SERVER)) {
-            new server.ui.DlgGUI(Main.getMainMenu(), true).setVisible(true);
+            Main.getDlgCreateServer().setVisible(Main.getDlgCreateServer().isVisible()?false:true);
         }
         // Nick change
         else if(e.getActionCommand().equals(CMD_NICKCHANGE)) {

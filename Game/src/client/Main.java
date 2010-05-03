@@ -13,12 +13,11 @@ import common.net.Server;
 import common.utils.CUtils;
 import java.awt.Cursor;
 import java.awt.EventQueue;
-import java.awt.Point;
 import java.net.InetSocketAddress;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import server.ui.DlgGUI;
 
 import static common.net.ProtocolCmdArgument.*;
 
@@ -37,6 +36,7 @@ public class Main {
     // GUI
     private static MainMenu mainMenu;
     private static DlgMasterserver masterip;
+    private static DlgGUI dlgCreateServer;
     // UI
     private static InGameChat uiInGameChat;
 
@@ -95,6 +95,7 @@ public class Main {
         // Main GUI
         mainMenu = new MainMenu(aListener);
         masterip = new DlgMasterserver(mainMenu, true, aListener);
+        dlgCreateServer = new DlgGUI(mainMenu, true);
         // Input
         input = new Input(screen);
         frame.addKeyListener(input);
@@ -178,6 +179,14 @@ public class Main {
      */
     public static Network getNetwork() {
         return net;
+    }
+
+    /**
+     *
+     * @return DlgGUI
+     */
+    public static DlgGUI getDlgCreateServer() {
+        return dlgCreateServer;
     }
 
     /**
