@@ -208,7 +208,7 @@ public class Main {
 
         CPlayer[] p = game.getPlayer();
         for(CPlayer c : p) {
-            if(c != null && c.isDead())
+            if(c != null)
                 c.setHealth(0);
         }
         
