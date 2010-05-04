@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
 
 /**
@@ -50,12 +49,14 @@ public class CPlayer extends CEntity {
         setDirection(1, 0);
         kills = 0;
         deaths = 0;
-        body = new BufferedImage[2];
-        body[0] = new BufferedImage(50, 26, BufferedImage.TYPE_INT_ARGB);
-        body[1] = new BufferedImage(50, 26, BufferedImage.TYPE_INT_ARGB);
+        body = new BufferedImage[3];
+        body[0] = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+        body[1] = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+        body[2] = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
         try {
              body[0] = ImageIO.read(getClass().getResource("/common/resource/player_team_red.png"));
              body[1] = ImageIO.read(getClass().getResource("/common/resource/player_team_blue.png"));
+             body[2] = ImageIO.read(getClass().getResource("/common/resource/player_team_dead.png"));
         } catch(Exception e) { }
     }
 
@@ -63,8 +64,19 @@ public class CPlayer extends CEntity {
      *
      * @return
      */
+    public BufferedImage getDeadBody(){
+        return body[2];
+    }
+
+    /**
+     *
+     * @return
+     */
     public BufferedImage getBody(int team){
-        return body[team-1];
+        if(team<=2 && team>=0)
+            return body[team-1];
+        else
+            return null;
     }
 
     /**

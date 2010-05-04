@@ -29,10 +29,10 @@ public class Main {
     public static final int PING_INTERVAL = 10000;
 
     private static int maxClients = 16;
-    /*private static int respawntime = 10000;
-    private static int gameTime = 60*10000;*/
-    private static int respawntime = 5000;
-    private static int gameTime = 10*10000;
+    private static int respawntime = 10000;
+    private static int gameTime = 60*10000;
+    /*private static int respawntime = 5000;
+    private static int gameTime = 10*10000;*/
 
     private static String map;
     private static String name;

@@ -101,18 +101,15 @@ public class Viewport {
     }
 
     public double getAngleTo(double fromX, double fromY, double x, double y) {
-        //int diff = buffer.getHeight()/2;
-
         if (fromX < x && fromY > y) {
             return Math.toDegrees((Math.atan(x - fromX) / (y - fromY)));
         } else if (fromX < x && fromY < y) {
-            return 180 - Math.toDegrees(Math.atan((x - fromX) / (fromY - y)));
+            return 180 - Math.toDegrees((Math.atan((x - fromX) / (fromY - y))));
         } else if (fromX > x && fromY > y) {
             return 360 - Math.toDegrees((Math.atan((fromX - x) / (y - fromY))));
         } else if (fromX > x && fromY < y) {
-            return 180 + Math.toDegrees(Math.atan(((fromX - x) / (fromY - y))));
+            return 180 + Math.toDegrees((Math.atan((fromX - x) / (fromY - y))));
         }
-        
         return 0;
     }
 
@@ -226,36 +223,40 @@ public class Viewport {
                     else
                         g.setColor(Color.RED);
 
-                    g.fillOval(posX - (player[i].getSize().width/2),
-                            posY - (player[i].getSize().height/2),
-                            pSize.width, pSize.height);
+//                    g.fillOval(posX - (player[i].getSize().width/2),
+//                            posY - (player[i].getSize().height/2),
+//                            pSize.width, pSize.height);
+//
+//                    g.setColor(Color.BLACK);
+//                    g.drawOval(posX - (player[i].getSize().width/2),
+//                            posY - (player[i].getSize().height/2),
+//                            pSize.width, pSize.height);
+//
+//                    g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
+//                    CVector2 dir = player[i].getDirection().resize_cpy(25);
+//                    g.drawLine(posX, posY, posX + (int)dir.getX(),
+//                            posY + (int)dir.getY());
 
-                    g.setColor(Color.BLACK);
-                    g.drawOval(posX - (player[i].getSize().width/2),
-                            posY - (player[i].getSize().height/2),
-                            pSize.width, pSize.height);
-
-                    g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
-                    CVector2 dir = player[i].getDirection().resize_cpy(25);
-                    g.drawLine(posX, posY, posX + (int)dir.getX(),
-                            posY + (int)dir.getY());
-
-                    /*CVector2 direction = player[i].getDirection();
-                    double ang = getAngleTo(0, -1, direction.getX(), direction.getY());
-                    BufferedImage img = rotateImage(player[i].getBody(player[i].getTeam()), -ang);
-                    g.drawImage(img, null, posX - (player[i].getSize().width/2),
-                            posY - (player[i].getSize().height/2));*/
-
-                    g.setColor(Color.BLACK);
-                    if(player[i].isDead()) {
-                        //g.setColor(player[i].getWeapon(player[i].getCurrentWeapon()).getColor());
-                        //g.fillOval(posX - (player[i].getSize().width/2), posY - (player[i].getSize().height/2), 50, 50);
-                        g.drawLine(posX - player[i].getSize().width/2, posY,
-                                posX + player[i].getSize().width/2, posY);
-
-                        g.drawLine(posX, posY + player[i].getSize().height/2,
-                                posX, posY - player[i].getSize().height/2);
+                        CVector2 direction = player[i].getDirection();
+                        double ang = getAngleTo(0, -1, direction.getX(), direction.getY());
+                        BufferedImage img = rotateImage(player[i].getBody(player[i].getTeam()), -ang);
+                    if(!player[i].isDead()) {
+                        g.drawImage(img, null, posX - (player[i].getSize().width/2),
+                                    posY - (player[i].getSize().height/2));
+                    } else {
+                        g.drawImage(player[i].getDeadBody(), null, posX - (player[i].getSize().width/2),
+                                    posY - (player[i].getSize().height/2));
                     }
+//                    g.setColor(Color.BLACK);
+//                    if(player[i].isDead()) {
+//                        g.setColor(Color.BLACK);
+//                        g.fillOval(posX - (player[i].getSize().width/2), posY - (player[i].getSize().height/2), 25, 25);
+//                        g.drawLine(posX - player[i].getSize().width/2, posY,
+//                                posX + player[i].getSize().width/2, posY);
+//
+//                        g.drawLine(posX, posY + player[i].getSize().height/2,
+//                                posX, posY - player[i].getSize().height/2);
+//                    }
                 }
             }
         }
