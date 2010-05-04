@@ -33,7 +33,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void m_s_ping(InetSocketAddress adr) {
 //        System.out.println("MASTER_SERVER_PING -> SERVER_MASTER_PONG");
-        net.send(adr, ProtocolCmd.SERVER_MASTER_PONG);
+        net.send(adr, ProtocolCmd.SERVER_MASTER_PONG, count);
     }
 
     /**
@@ -71,13 +71,13 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Client added = Main.addClient(adr);
 
         if(added != null) {
-            net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, argInt(Protocol.REPLY_SUCCESS));
+            net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, count, argInt(Protocol.REPLY_SUCCESS));
             net.send(adr, ProtocolCmd.SERVER_CLIENT_INIT, argStr(Main.getMapName()),
                      argInt(Main.getMaxPlayers()));
 //            System.out.println("Client "+added.getHost()+":"+added.getPort()+" joined server");
             System.out.println("CLIENT_SERVER_AUTH (success) -> SERVER_CLIENT_AUTH_REPLY (REPLY_SUCCESS), SERVER_CLIENT_INIT");
         } else {
-            net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, argInt(Protocol.REPLY_FAILURE));
+            net.send(adr, ProtocolCmd.SERVER_CLIENT_AUTH_REPLY, count, argInt(Protocol.REPLY_FAILURE));
 //            System.out.println("Client "+added.getHost()+":"+added.getPort()+" not able joined server");
             System.out.println("CLIENT_SERVER_AUTH (failure) -> SERVER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
@@ -175,7 +175,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         int max = Main.getMaxPlayers();
         int high = Main.getPlayerHighscore(playerName);
         net.send(adr,
-                 ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY,
+                 ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY, count,
                  argStr(name), argStr(map), argInt(cur), argInt(max), argInt(high));
     }
 
@@ -200,7 +200,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             }
         }
 
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK);
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK, count);
     }
 
     /**
@@ -276,7 +276,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_clientcount(InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_CLIENTCOUNT -> SERVER_CLIENT_CLIENTCOUNT_REPLY");
         net.send(adr,
-                 ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT_REPLY,
+                 ProtocolCmd.SERVER_CLIENT_CLIENTCOUNT_REPLY, count,
                  argInt(Main.clientCount()));
     }
 
@@ -287,7 +287,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_clientid(InetSocketAddress adr){
         net.send(adr,
-                 ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY,
+                 ProtocolCmd.SERVER_CLIENT_CLIENTID_REPLY, count,
                  argInt(Main.getClient(adr).getId()));
     }
 
@@ -300,7 +300,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         System.out.println("CLIENT_SERVER_LOGOFF");
         Main.removeClient(adr);
         net.send(adr,
-                 ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY,
+                 ProtocolCmd.SERVER_CLIENT_LOGOFF_REPLY, count,
                  argInt(Protocol.REPLY_SUCCESS));
     }
 
@@ -313,7 +313,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_s_chat_all(String msg, InetSocketAddress adr){
         System.out.println("CLIENT_SERVER_CHAT_ALL (msg="+msg+")-> SERVER_CLIENT_CHAT_ALL_OK");
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK);
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_ALL_OK, count);
         Main.broadcast_chat(msg, adr);
 //        net.send(adr, Protocol.server_client_chat, "(PUBLiC-CHAT) Player-"+Main.getClientId(adr)+" ("+adr.getHostName()+":"+adr.getPort()+"): "+msg);
     }
@@ -349,7 +349,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_chat_private(int to, String msg, InetSocketAddress adr) {
         System.out.println("CLIENT_SERVER_CHAT_PRIVATE -> SERVER_CLIENT_CHAT_PRIVATE_OK");
         Main.broadcast_chat_private(msg, to, adr);
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE_OK);
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_CHAT_PRIVATE_OK, count);
     }
 
     /**
@@ -371,7 +371,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_s_jointeam(int teamId, InetSocketAddress adr){
         if(Main.setClientTeamId(adr, teamId) == -1) {
             net.send(adr,
-                     ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
+                     ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY, count,
                      argInt(Protocol.REPLY_FAILURE), argInt(teamId));
             System.out.println("CLIENT_SERVER_JOINTEAM failure -> SERVER_CLIENT_JOINTEAM_REPLY (failure)");
         }
@@ -381,7 +381,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             if(c != null) {
 
                 net.send(adr,
-                         ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY,
+                         ProtocolCmd.SERVER_CLIENT_JOINTEAM_REPLY, count,
                          argInt(Protocol.REPLY_SUCCESS), argInt(teamId));
 
                 Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_TEAM_CHANGED,
@@ -398,7 +398,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
      */
     @Override
     public void c_s_latency(InetSocketAddress adr){
-        net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY);
+        net.send(adr, ProtocolCmd.SERVER_CLIENT_LATENCY_REPLY, count);
         System.out.println("CLIENT_SERVER_LATENCY -> SERVER_CLIENT_LATENCY_REPLY");
     }
 

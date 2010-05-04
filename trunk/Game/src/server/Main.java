@@ -115,6 +115,7 @@ public class Main {
                 continue;
 
             p[i].setDeaths(0);
+            p[i].setKills(0);
             p[i].setHealth(0);
         }
     }
@@ -125,10 +126,14 @@ public class Main {
      * @param highscore The highscore of the player
      */
     public static void setPlayerHighscore(String playerName, int highscore){
-        int current = Integer.parseInt(highscores.getProperty(playerName, "0"));
-        
-        if(highscore > current)
+        try {
+            int current = Integer.parseInt(highscores.getProperty(playerName, "0"));
+            
+            if(highscore > current)
+                highscores.setProperty(playerName, ""+highscore);
+        } catch(Exception e) {
             highscores.setProperty(playerName, ""+highscore);
+        }
     }
 
     /**

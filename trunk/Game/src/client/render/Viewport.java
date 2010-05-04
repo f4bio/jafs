@@ -442,18 +442,24 @@ public class Viewport {
 
     public CPlayer[] sortByKills(int team) {
         CPlayer[] p = new CPlayer[Main.getGameData().getPlayers().length];
+        boolean[] gone = new boolean[p.length];
         CPlayer[] l = Main.getGameData().getPlayers();
 
         int idx = 0;
+        int gIdx = 0;
+        
         for(int i=0; i<l.length; ++i) {
-            if(l[i] != null && l[i].getTeam() == team) {
+            if(l[i] != null && l[i].getTeam() == team && !gone[i]) {
                 p[idx] = l[i];
-                for(int j = i+1; j<l.length; ++j) {
+                gIdx = i;
+                for(int j = 0; j<l.length; ++j) {
                     if(l[j] != null && l[j].getKills() > p[idx].getKills()
-                            && l[j].getTeam() == team) {
+                            && l[j].getTeam() == team && !gone[j]) {
                         p[idx] = l[j];
+                        gIdx = j;
                     }
                 }
+                gone[gIdx] = true;
                 idx++;
             }
         }
@@ -481,7 +487,7 @@ public class Viewport {
             CPlayer[] p = players[i];
             String team = (i==0)?"Team Red (" + d.getScoreRed() + ")":
                 "Team Blue (" + d.getScoreBlue() + ")";
-            Color c = (i==0)?Color.RED:Color.BLUE;
+            Color c = (i==0)?Color.RED:Color.CYAN;
 
             renderBox(x - w/2, y, w, h, g);
             g.setColor(c);

@@ -30,7 +30,7 @@ public class Event {
                 c = Color.RED;
                 break;
             case EVENT_BLUE:
-                c = Color.BLUE;
+                c = Color.CYAN;
                 break;
             default:
                 c = Color.YELLOW;

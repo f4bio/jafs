@@ -3,7 +3,6 @@ package common.net;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class Network {
         Iterator<Packet> t;
 
         public void run() {
-            synchronized (replyQueue) {
+            synchronized(replyLock) {
                 t = replyQueue.iterator();
 
                 while (t.hasNext()) {
@@ -96,7 +95,7 @@ public class Network {
                         byte cmd = packet.getData()[0];
 
                         if(Protocol.isReplyById(cmd)) {
-                            synchronized(replyQueue) {
+                            synchronized(replyLock) {
                                 i = replyQueue.iterator();
 
                                 while(i.hasNext()) {
@@ -118,6 +117,7 @@ public class Network {
     }
 
     private class NetworkWriter implements Runnable {
+        private final Object threadLock = new Object();
         private Thread thread;
         private boolean ready;
 
@@ -128,7 +128,7 @@ public class Network {
         }
 
         private void waiting() {
-            synchronized(thread) {
+            synchronized(threadLock) {
                 try {
                     while(!ready) {
                         thread.wait();
@@ -143,7 +143,7 @@ public class Network {
             if (!ready) {
                 ready = true;
 
-                synchronized(thread) {
+                synchronized(threadLock) {
                     thread.notify();
                 }
             }
@@ -176,8 +176,9 @@ public class Network {
     private ConcurrentLinkedQueue<DatagramPacket> outQueue =
             new ConcurrentLinkedQueue<DatagramPacket>();
 
-    private final ArrayList<Packet> replyQueue =
+    private ArrayList<Packet> replyQueue =
             new ArrayList<Packet>();
+    private final Object replyLock = new Object();
 
     private DatagramSocket socket;
     private NetworkReader nIn;
@@ -220,20 +221,9 @@ public class Network {
 
     private synchronized void send(DatagramPacket packet, boolean check) {
         if(check && Protocol.hasReplyById(packet.getData()[0])) {
-            /*Iterator<Packet> i;
-            Packet p;
-
-            synchronized(replyQueue) {
-                i = replyQueue.iterator();
-                while(i.hasNext()) {
-                    p = i.next();
-                    if(p.equals(packet)) {
-                        return;
-                    }
-                }
-                */
+            synchronized(replyLock) {
                 replyQueue.add(new Packet(packet));
-            //}
+            }
         }
 
         outQueue.add(packet);
@@ -364,7 +354,7 @@ public class Network {
      *
      */
     public void clearReplyQueue() {
-        synchronized(replyQueue) {
+        synchronized(replyLock) {
             replyQueue.clear();
         }
     }

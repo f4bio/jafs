@@ -233,6 +233,8 @@ public class CEntity {
     }
 
     private int collidePlayer(CPlayer[] player, CVector2 hit) {
+        CPlayer owner = player[getId()];
+
         for(int i=0; i<player.length; i++){
             if(player[i] == null)
                 continue;
@@ -241,7 +243,7 @@ public class CEntity {
             double distance = hit.getDistanceTo(p);
             if(!player[i].isDead() && player[i].getId() != getId()
                     && distance <= (player[i].getSize().width/2)
-                    && player[i].getTeam() != getId()){
+                    && player[i].getTeam() != owner.getTeam()){
                 return i;
             }
         }

@@ -217,7 +217,7 @@ public class Game implements UpdateObject, UpdateCountdownObject {
         else if(scoreBlue > scoreRed)
             return CPlayer.TEAM_BLUE;
         else
-            return -1; // DRAW
+            return 0; // DRAW
     }
 
     /**

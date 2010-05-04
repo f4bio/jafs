@@ -28,7 +28,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void c_m_joinserver(String host, int port, InetSocketAddress adr)
     {
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY,
+        net.send(adr, ProtocolCmd.MASTER_CLIENT_JOINSERVER_REPLY, count,
                  argStr("JOINED! ServerInfos: "+host+":"+port));
         Main.broadcast(Main.getClient(adr).getPlayer().getName()+" betritt den Server: "+Main.getServer(host, port).getName()+" ("+host+":"+port+")", new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
         System.out.println("CLIENT_MASTER_JOINSERVER -> MASTER_CLIENT_JOINSERVER_REPLY (JOINED! ServerInfos: "+host+":"+port+")");
@@ -83,7 +83,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         
         if(client != null) {
             client.getPlayer().setName(Main.checkNick(name, adr));
-            net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
+            net.send(adr, ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, count,
                      argInt(Protocol.REPLY_SUCCESS),
                      argInt(client.getId()));
             System.out.println("CLIENT_MASTER_AUTH success (id="+client.getId()+") -> MASTER_CLIENT_AUTH_REPLY (REPLY_SUCCESS)");
@@ -93,7 +93,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         }
         else {
             net.send(adr,
-                     ProtocolCmd.MASTER_CLIENT_AUTH_REPLY,
+                     ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, count,
                      argInt(Protocol.REPLY_FAILURE));
             System.out.println("CLIENT_MASTER_AUTH failure -> MASTER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
@@ -102,7 +102,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     public void c_m_chat_lobby(String msg, InetSocketAddress adr)
     {
         System.out.println("CLIENT_MASTER_CHAT_LOBBY msg="+msg);
-        net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK);
+        net.send(adr, ProtocolCmd.MASTER_CLIENT_CHAT_OK, count);
         Main.broadcast(msg, adr);
     }
 
@@ -113,7 +113,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Client receiver = Main.getClient(receiverID);
         Client sender = Main.getClient(adr);
         net.send(sender.getAddress(),
-                 ProtocolCmd.MASTER_CLIENT_CHAT_OK);
+                 ProtocolCmd.MASTER_CLIENT_CHAT_OK, count);
         if(receiver != null) {
             // to sender
             net.send(sender.getAddress(),
@@ -153,12 +153,12 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         Server added = Main.addServer(adr);
         if(added != null) {
             net.send(adr,
-                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
+                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY, count,
                      argInt(Protocol.REPLY_SUCCESS));
             System.out.println("SERVER_MASTER_AUTH success -> MASTER_SERVER_AUTH_REPLY (REPLY_SUCCESS)");
         } else {
             net.send(adr,
-                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY,
+                     ProtocolCmd.MASTER_SERVER_AUTH_REPLY, count,
                      argInt(Protocol.REPLY_FAILURE));
             System.out.println("SERVER_MASTER_AUTH failure -> MASTER_SERVER_AUTH_REPLY (REPLY_FAILURE)");
         }
