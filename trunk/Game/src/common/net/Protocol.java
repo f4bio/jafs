@@ -181,16 +181,16 @@ public class Protocol {
      * @param c
      * @return
      */
-    public static byte[] buildPacket(ProtocolCmd command, byte[]... c) {
+    public static byte[] buildPacket(ProtocolCmd command, byte count, byte[]... c) {
         byte[] args = getArgType(command);
 
         if(cmdTable.containsKey(command) && args[0] == ARG_NONE)
-            return new byte[] { (byte) command.ordinal() };
+            return new byte[] { (byte) command.ordinal(), count };
 
         if(!cmdTable.containsKey(command) || cmdTable.get(command).length != c.length)
             return null;
 
-        int size = 1;
+        int size = 2;
 
         for(byte i=0; i<args.length; ++i) {
             if(args[i] == ARG_STRING) {
@@ -201,7 +201,8 @@ public class Protocol {
 
         byte[] packet = new byte[size];
         packet[0] = (byte)command.ordinal();
-        int idx = 1;
+        packet[1] = count;
+        int idx = 2;
 
         for(byte i=0; i<args.length; ++i) {
             for(int j=0; j<c[i].length; ++j) {
@@ -218,8 +219,8 @@ public class Protocol {
      * @param command
      * @return
      */
-    public static byte[] buildPacket(ProtocolCmd command) {
-        return buildPacket(command, new byte[0]);
+    public static byte[] buildPacket(ProtocolCmd command, byte count) {
+        return buildPacket(command, count, new byte[0]);
     }
 
     /**
@@ -458,8 +459,8 @@ public class Protocol {
                 ProtocolCmd.CLIENT_SERVER_CONNECTION_TERMINATED_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_ALL_PLAYER_DATA,
                 ProtocolCmd.SERVER_CLIENT_ALL_PLAYER_DATA_OK);
-        /*registerCmdReply(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
-                ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);*/
+        registerCmdReply(ProtocolCmd.SERVER_CLIENT_PLAYER_DATA,
+                ProtocolCmd.CLIENT_SERVER_PLAYER_DATA_OK);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_REQUEST_SERVER_INFO,
                 ProtocolCmd.SERVER_CLIENT_REQUEST_SERVER_INFO_REPLY);
         registerCmdReply(ProtocolCmd.CLIENT_SERVER_CHAT_ALL,

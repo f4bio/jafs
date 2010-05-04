@@ -39,6 +39,8 @@ public abstract class ProtocolHandler implements Runnable {
      */
     protected int mode;
 
+    protected byte count;
+
     /**
      *
      * @param net
@@ -92,7 +94,8 @@ public abstract class ProtocolHandler implements Runnable {
             byte[] data = new byte[packet.getLength()];
             byte[] recv = packet.getData();
             adr = (InetSocketAddress)packet.getSocketAddress();
-            ProtocolCmd cmd = Protocol.getCmdById(packet.getData()[0]);
+            count = recv[1];
+            ProtocolCmd cmd = Protocol.getCmdById(recv[0]);
             byte[] param = Protocol.getArgType(cmd);
             int[] idx = new int[param.length];
 
@@ -100,7 +103,7 @@ public abstract class ProtocolHandler implements Runnable {
                 data[i] = recv[i];
             }
             
-            int index = 1;
+            int index = 2;
             
             for(byte i=0; i<param.length; ++i) {
                 switch(param[i]) {

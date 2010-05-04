@@ -20,6 +20,7 @@ public class Packet {
 
     private DatagramPacket p;
     private byte cmd;
+    private byte count;
     private byte ttl;
     private byte resent;
 
@@ -31,6 +32,7 @@ public class Packet {
         if(packet != null) {
             p = packet;
             cmd = p.getData()[0];
+            count = p.getData()[1];
         }
         resent = Network.RESEND_COUNT;
         ttl = CHECK_COUNTER;
@@ -113,5 +115,16 @@ public class Packet {
             return false;
 
         return true;
+    }
+
+    public boolean checkReply(DatagramPacket p) {
+        if(getAddress().equals((InetSocketAddress)p.getSocketAddress()) &&
+                count == p.getData()[1] &&
+                Protocol.getReplyOfCmdById(cmd) == p.getData()[0])
+        {
+            return true;
+        }
+
+        return false;
     }
 }

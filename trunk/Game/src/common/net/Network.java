@@ -3,8 +3,10 @@ package common.net;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +34,8 @@ public class Network {
      *
      */
     public static final int RESEND_INTERVAL = 500;
+
+    private HashMap<InetSocketAddress, Byte> counterTable;
 
     private InetSocketAddress dest;
     private ProtocolHandler handler;
@@ -97,9 +101,8 @@ public class Network {
 
                                 while(i.hasNext()) {
                                     rPacket = i.next();
-                                    if(Protocol.getReplyOfCmdById(rPacket.getCmd()) == cmd) {
+                                    if(rPacket.checkReply(packet))
                                         i.remove();
-                                    }
                                 }
                             }
                         }
@@ -192,14 +195,32 @@ public class Network {
         socket = null;
         connected = false;
         sConnected = false;
+        counterTable = new HashMap<InetSocketAddress, Byte>();
 
         checker = new Timer();
         checker.scheduleAtFixedRate(failCheck, RESEND_INTERVAL, RESEND_INTERVAL);
     }
 
+    private synchronized void handleCounterTable(InetSocketAddress adr) {
+        if(!counterTable.containsKey(adr)) {
+            counterTable.put(adr, Byte.MIN_VALUE);
+        } else {
+            Byte val = counterTable.get(adr);
+            if(val == Byte.MAX_VALUE) {
+                counterTable.put(adr, Byte.MIN_VALUE);
+            } else {
+                counterTable.put(adr, (byte)(val + 1));
+            }
+        }
+    }
+
+    public synchronized void removeCounter(InetSocketAddress adr) {
+        counterTable.remove(adr);
+    }
+
     private synchronized void send(DatagramPacket packet, boolean check) {
         if(check && Protocol.hasReplyById(packet.getData()[0])) {
-            Iterator<Packet> i;
+            /*Iterator<Packet> i;
             Packet p;
 
             synchronized(replyQueue) {
@@ -210,12 +231,11 @@ public class Network {
                         return;
                     }
                 }
-
+                */
                 replyQueue.add(new Packet(packet));
-            }
+            //}
         }
 
-//        System.out.println("Sending: " + Protocol.getCmdById(packet.getData()[0]));
         outQueue.add(packet);
         nOut.wakeUp();
     }
@@ -227,7 +247,19 @@ public class Network {
      * @return
      */
     public synchronized boolean send(ProtocolCmd cmd, byte[]... c) {
-        byte[] packet = Protocol.buildPacket(cmd, c);
+        handleCounterTable(dest);
+        return send(cmd, counterTable.get(dest), c);
+    }
+
+    /**
+     *
+     * @param cmd
+     * @param count
+     * @param c
+     * @return
+     */
+    public synchronized boolean send(ProtocolCmd cmd, byte count, byte[]... c) {
+        byte[] packet = Protocol.buildPacket(cmd, count, c);
 
         if(packet == null)
             return false;
@@ -253,7 +285,20 @@ public class Network {
      */
     public synchronized boolean send(InetSocketAddress destination, ProtocolCmd cmd,
             byte[]... c) {
-        byte[] packet = Protocol.buildPacket(cmd, c);
+        handleCounterTable(destination);
+        return send(destination, cmd, counterTable.get(destination), c);
+    }
+
+    /**
+     *
+     * @param destination
+     * @param cmd
+     * @param c
+     * @return
+     */
+    public synchronized boolean send(InetSocketAddress destination, ProtocolCmd cmd,
+            byte count, byte[]... c) {
+        byte[] packet = Protocol.buildPacket(cmd, count, c);
 
         if(destination == null || packet == null)
              return false;
@@ -282,6 +327,20 @@ public class Network {
             byte[]... c) {
         InetSocketAddress destination = new InetSocketAddress(host, port);
         return send(destination, cmd, c);
+    }
+
+    /**
+     *
+     * @param host
+     * @param port
+     * @param cmd
+     * @param c
+     * @return
+     */
+    public synchronized boolean send(String host, int port, ProtocolCmd cmd,
+            byte count, byte[]... c) {
+        InetSocketAddress destination = new InetSocketAddress(host, port);
+        return send(destination, cmd, count, c);
     }
    
     /**
