@@ -184,22 +184,16 @@ public class Main {
      */
     public static void broadcast(String msg, InetSocketAddress adr){
         int senderID = -2;
-        Client sender = null;
         if(!adr.getHostName().equals(Network.MASTERHOST) && adr.getPort() != Network.MASTERPORT) {
-            sender = getClient(adr);
-            //senderID = sender.getId();
-        }
-        if (sender != null) {
+            Client sender = getClient(adr);
             senderID = sender.getId();
-            for (Client client : clientlist) {
-                if (!client.isInGame()) {
-                    net.send(client.getAddress(),
-                            ProtocolCmd.MASTER_CLIENT_CHAT,
-                            argInt(senderID),
-                            argStr(msg));
-                }
-            }
         }
+        for(Client client: clientlist)
+            if(!client.isInGame())
+                net.send(client.getAddress(),
+                         ProtocolCmd.MASTER_CLIENT_CHAT,
+                         argInt(senderID),
+                         argStr(msg));
     }
 
     /**
@@ -317,8 +311,9 @@ public class Main {
             net.send(adr, ProtocolCmd.MASTER_CLIENT_FORCED_NICKCHANGE, argStr(nick));
         } else {
             System.out.println(" -> MASTER_CLIENT_NICKCHANGE_OK");
-            net.send(adr, ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK);
         }
+        net.send(adr, ProtocolCmd.MASTER_CLIENT_NICKCHANGE_OK, handler.getCurrentCount());
+
         getClient(adr).getPlayer().setName(nick);
         broadcastClientlist();
         if(nameOld != null)
