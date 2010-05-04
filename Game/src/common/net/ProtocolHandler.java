@@ -31,7 +31,6 @@ public abstract class ProtocolHandler implements Runnable {
      */
     protected Thread thread;
 
-    protected final Object threadLock = new Object();
     /**
      *
      */
@@ -61,7 +60,7 @@ public abstract class ProtocolHandler implements Runnable {
     }
 
     private void waiting() {
-        synchronized(threadLock) {
+        synchronized(thread) {
             try {
                 while(!ready)
                     thread.wait();
@@ -78,7 +77,7 @@ public abstract class ProtocolHandler implements Runnable {
         if(!ready) {
             ready = true;
 
-            synchronized(threadLock) {
+            synchronized(thread) {
                 thread.notify();
             }
         }

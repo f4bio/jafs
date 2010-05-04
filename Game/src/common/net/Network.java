@@ -128,7 +128,7 @@ public class Network {
         }
 
         private void waiting() {
-            synchronized(threadLock) {
+            synchronized(thread) {
                 try {
                     while(!ready) {
                         thread.wait();
@@ -143,7 +143,7 @@ public class Network {
             if (!ready) {
                 ready = true;
 
-                synchronized(threadLock) {
+                synchronized(thread) {
                     thread.notify();
                 }
             }
