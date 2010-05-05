@@ -24,8 +24,6 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     /** Creates new form DlgGUI */
     public DlgGUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        if(parent.equals(client.Main.getMainMenu()))
-            standalone = false;
         initComponents();
         jTextField2.setText(Network.MASTERHOST+":"+Network.MASTERPORT);
         jButton1.addActionListener(this);
@@ -58,7 +56,7 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Server erstellen");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/resource/Logo.png")));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/common/resource/Logo.png"))); // NOI18N
 
         jPanel1.setLayout(new java.awt.GridLayout(3, 2));
 
@@ -86,12 +84,14 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(109, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,9 +99,9 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -118,7 +118,6 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
     private boolean started = false;
-    private boolean standalone = true;
     private Thread t;
 
     public void actionPerformed(ActionEvent e) {
@@ -138,13 +137,7 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     public void windowOpened(WindowEvent e) { }
 
     public void windowClosing(WindowEvent e) {
-//        if(started){
-//            t.interrupt();
-//        }
-//        if(standalone)
-//            System.exit(0);
-//        else
-            dispose();
+        dispose();
     }
 
     public void windowClosed(WindowEvent e) { }

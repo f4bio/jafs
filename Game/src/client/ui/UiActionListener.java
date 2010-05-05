@@ -68,20 +68,20 @@ public class UiActionListener implements ActionListener {
 
         // Anmeldung: Client -> Masterserver
         if(e.getActionCommand().equals(CMD_AUTH_MASTERSERVER)){
-            if(!Network.MASTERHOST.equals(Main.getDlgMasterserver().getHost()))
-                Network.MASTERHOST = Main.getDlgMasterserver().getHost();
-            if(Network.MASTERPORT != Main.getDlgMasterserver().getPort())
-                Network.MASTERPORT = Main.getDlgMasterserver().getPort();
+            if(!net.MASTERHOST.equals(Main.getDlgMasterserver().getHost()))
+                net.MASTERHOST = Main.getDlgMasterserver().getHost();
+            if(net.MASTERPORT != Main.getDlgMasterserver().getPort())
+                net.MASTERPORT = Main.getDlgMasterserver().getPort();
             Main.getDlgMasterserver().dispose();
-            net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
+            net.send(net.MASTERHOST,
+                     net.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_AUTH,
                      argStr(Main.getGameData().getName()));
         }
         // Serverliste aktualisieren
         if(e.getActionCommand().equals(CMD_REFRESH_SERVERBROWSER)) {
-            net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
+            net.send(net.MASTERHOST,
+                     net.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LISTREQUEST,
                      argShort(Protocol.LIST_TYPE_SERVERLIST));
         }
@@ -91,8 +91,8 @@ public class UiActionListener implements ActionListener {
         }
         // Nick change
         else if(e.getActionCommand().equals(CMD_NICKCHANGE)) {
-            net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
+            net.send(net.MASTERHOST,
+                     net.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_NICKCHANGE,
                      argStr(Main.getMainMenu().getSelfName()));
             Main.getMainMenu().enableOptions(false);
@@ -101,8 +101,8 @@ public class UiActionListener implements ActionListener {
         else if(e.getActionCommand().equals(CMD_CONNECT)) {
             if(Main.getSelectedServer() != null) {
 //                System.out.println("Connecting to Server: "+Main.getSelectedServer().getHostPort());
-                net.send(Network.MASTERHOST,
-                         Network.MASTERPORT,
+                net.send(net.MASTERHOST,
+                         net.MASTERPORT,
                          ProtocolCmd.CLIENT_MASTER_JOINSERVER,
                          argStr(Main.getSelectedServer().getHost()),
                          argInt(Main.getSelectedServer().getPort()));
@@ -147,27 +147,27 @@ public class UiActionListener implements ActionListener {
         // Netwerk Einstellungen übernehmen
         else if(e.getActionCommand().equals(CMD_APPLY_NETWORK_SETTINGS)) {
             String hostPort = Main.getMainMenu().getMasterHostPortSettings();
-            if(!Network.MASTERHOST.equals(hostPort.split(":")[0]) ||
-                    Network.MASTERPORT != Integer.parseInt(hostPort.split(":")[1])){
+            if(!net.MASTERHOST.equals(hostPort.split(":")[0]) ||
+                    net.MASTERPORT != Integer.parseInt(hostPort.split(":")[1])){
                 Main.getMainMenu().enableLobby(false);
                 // Logoff old masterserver
-                net.send(Network.MASTERHOST,
-                         Network.MASTERPORT,
+                net.send(net.MASTERHOST,
+                         net.MASTERPORT,
                          ProtocolCmd.CLIENT_MASTER_LOGOFF);
                 // apply new settings
-                Network.MASTERHOST = hostPort.split(":")[0];
-                Network.MASTERPORT = Integer.parseInt(hostPort.split(":")[1]);
+                net.MASTERHOST = hostPort.split(":")[0];
+                net.MASTERPORT = Integer.parseInt(hostPort.split(":")[1]);
                 // login new masterserver
-                net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
-                     ProtocolCmd.CLIENT_MASTER_AUTH,
-                     argStr(Main.getGameData().getName()));
+                net.send(net.MASTERHOST,
+                         net.MASTERPORT,
+                         ProtocolCmd.CLIENT_MASTER_AUTH,
+                         argStr(Main.getGameData().getName()));
             }
         }
         // Exit
         else if(e.getActionCommand().equals(CMD_EXIT)) {
-            net.send(Network.MASTERHOST,
-                     Network.MASTERPORT,
+            net.send(net.MASTERHOST,
+                     net.MASTERPORT,
                      ProtocolCmd.CLIENT_MASTER_LOGOFF);
             System.out.println("CLIENT_MASTER_LOGOFF");
             System.exit(0);
