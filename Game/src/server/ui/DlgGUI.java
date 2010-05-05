@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import server.Main;
 
 /**
  *
@@ -92,9 +91,9 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
+                .addContainerGap(63, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,19 +125,20 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
 
     @Override
     public void setVisible(boolean b){
-        if(!standalone)
+        if(!standalone){
             jTextField2.setText(client.Main.getNetwork().MASTERHOST+":"+client.Main.getNetwork().MASTERPORT);
+        }
         super.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
 //        if(e.getSource() == jButton1) {
+        server.Main.getNetwork().MASTERHOST = jTextField2.getText().split(":")[0];
+        server.Main.getNetwork().MASTERPORT = Integer.parseInt(jTextField2.getText().split(":")[1]);
         if(!started){
-            t = new Thread(this);
             t.start();
             jButton1.setEnabled(false);
         } else {
-            t.interrupt();
             started = false;
             jButton1.setText("Starten");
         }
@@ -162,11 +162,11 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     public void windowDeactivated(WindowEvent e) { }
 
     public void run() {
-        started = true;
         String[] args = new String[2];
         args[0] = jTextField1.getText();
         args[1] = (String)jComboBox1.getSelectedItem();
-        Main.main(args);
+        server.Main.main(args);
+        started = true;
         jButton1.setText("Beenden");
         jButton1.setEnabled(true);
     }
