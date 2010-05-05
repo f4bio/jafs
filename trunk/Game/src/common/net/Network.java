@@ -18,14 +18,14 @@ public class Network {
     /**
      *
      */
-    public static String MASTERHOST = "localhost";
+    public static String MASTERHOST = "secureit.ath.cx";
     /**
      *
      */
     public static int MASTERPORT = 30000;
 
     /**
-     *
+     *y
      */
     public static final int RESEND_COUNT = 5;
     /**
