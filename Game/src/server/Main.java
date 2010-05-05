@@ -62,7 +62,7 @@ public class Main {
             map = args[1];
         } else {
             name = "Server";
-            map = "rhein2";
+            map = "labyrinth2";
         }
 
         highscores = new Properties();
