@@ -459,13 +459,15 @@ public class Viewport {
         int gIdx = 0;
         
         for(int i=0; i<l.length; ++i) {
-            if(l[i] != null && l[i].getTeam() == team && !gone[i]) {
-                p[idx] = l[i];
+            CPlayer cp = l[i];
+            if(cp != null && cp.getTeam() == team && !gone[i]) {
+                p[idx] = cp;
                 gIdx = i;
                 for(int j = 0; j<l.length; ++j) {
-                    if(l[j] != null && l[j].getKills() > p[idx].getKills()
-                            && l[j].getTeam() == team && !gone[j]) {
-                        p[idx] = l[j];
+                    CPlayer cpj = l[j];
+                    if(cpj != null && cpj.getKills() > p[idx].getKills()
+                            && cpj.getTeam() == team && !gone[j]) {
+                        p[idx] = cpj;
                         gIdx = j;
                     }
                 }
