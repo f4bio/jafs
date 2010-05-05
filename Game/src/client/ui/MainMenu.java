@@ -800,6 +800,10 @@ public class MainMenu extends javax.swing.JFrame implements ActionListener, Mous
         }
     }
 
+    public void setOptionsMasterHostPort(String host, int port){
+        tfMasterserverIP.setText(host+":"+port);
+    }
+
     /**
      *
      * @param enabled

@@ -25,6 +25,8 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     public DlgGUI(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        if(!parent.equals(client.Main.getMainMenu()))
+            standalone = true;
         jTextField2.setText(Network.MASTERHOST+":"+Network.MASTERPORT);
         jButton1.addActionListener(this);
         addWindowListener(this);
@@ -76,6 +78,7 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
         jPanel1.add(jLabel5);
         jPanel1.add(jTextField2);
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("Starten");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -99,18 +102,13 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jComboBox1;
@@ -123,7 +121,15 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
     private boolean started = false;
+    private boolean standalone = false;
     private Thread t;
+
+    @Override
+    public void setVisible(boolean b){
+        if(!standalone)
+            jTextField2.setText(client.Main.getNetwork().MASTERHOST+":"+client.Main.getNetwork().MASTERPORT);
+        super.setVisible(true);
+    }
 
     public void actionPerformed(ActionEvent e) {
 //        if(e.getSource() == jButton1) {
