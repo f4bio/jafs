@@ -97,7 +97,7 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
     public static void main(String args[]) {
         // Checking Java version >= 6
         if ( Double.parseDouble(System.getProperty("java.version").substring(0, 3)) >= 1.6 ) {
-            if( args.length >= 2 ) {
+            if( args.length >= 1 ) {
                 if( args[0].equals("master") ) {
                     // launch masterserver
                     masterserver.Main.main(new String[0]);

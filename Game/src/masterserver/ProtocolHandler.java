@@ -38,6 +38,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
                     new InetSocketAddress(Network.MASTERHOST, Network.MASTERPORT));
             System.out.println("CLIENT_MASTER_JOINSERVER -> " +
                     "MASTER_CLIENT_JOINSERVER_REPLY (JOINED! ServerInfos: "+host+":"+port+")");
+            Main.removeClient(c);
+            Main.broadcastClientlist();
         }
 //        System.out.println("c_m_joinserver()");
     }
@@ -101,7 +103,8 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
         else {
             net.send(adr,
                      ProtocolCmd.MASTER_CLIENT_AUTH_REPLY, count,
-                     argInt(Protocol.REPLY_FAILURE));
+                     argInt(Protocol.REPLY_FAILURE),
+                     argInt(-1));
             System.out.println("CLIENT_MASTER_AUTH failure -> MASTER_CLIENT_AUTH_REPLY (REPLY_FAILURE)");
         }
     }

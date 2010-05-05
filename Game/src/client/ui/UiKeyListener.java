@@ -40,7 +40,6 @@ public class UiKeyListener implements KeyListener {
                                    Network.MASTERPORT,
                                    ProtocolCmd.CLIENT_MASTER_AUTH,
                                    argStr(Main.getGameData().getName()));
-            Main.getNetwork().send(Network.MASTERHOST, Network.MASTERPORT, ProtocolCmd.CLIENT_MASTER_AUTH, argStr(Main.getGameData().getName()));
             Main.getMainMenu().enableLobby(true);
             Main.getMainMenu().setVisible(true);
             Main.getMainMenu().requestFocus();
