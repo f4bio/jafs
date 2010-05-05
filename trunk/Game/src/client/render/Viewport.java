@@ -101,8 +101,17 @@ public class Viewport {
     }
 
     public double getAngleTo(double fromX, double fromY, double x, double y) {
+        if(fromX < x && fromY == y)
+            return 270;
+        else if(fromX > x && fromY == y)
+            return 90;
+        else if(fromX == x && fromY > y)
+            return 0;
+        else if(fromX == x && fromY < y)
+            return 180;
+
         if (fromX < x && fromY > y) {
-            return Math.toDegrees((Math.atan(x - fromX) / (y - fromY)));
+            return Math.toDegrees((Math.atan((x - fromX) / (y - fromY))));
         } else if (fromX < x && fromY < y) {
             return 180 - Math.toDegrees((Math.atan((x - fromX) / (fromY - y))));
         } else if (fromX > x && fromY > y) {
@@ -238,7 +247,7 @@ public class Viewport {
 //                            posY + (int)dir.getY());
 
                         CVector2 direction = player[i].getDirection();
-                        double ang = getAngleTo(0, -1, direction.getX(), direction.getY());
+                        double ang = getAngleTo(0, 1, direction.getX(), direction.getY());
                         BufferedImage img = rotateImage(player[i].getBody(player[i].getTeam()), -ang);
                     if(!player[i].isDead()) {
                         g.drawImage(img, null, posX - (player[i].getSize().width/2),
@@ -262,7 +271,7 @@ public class Viewport {
         }
 
         // ----- Projectiles
-        Vector<CProjectile> list = ProjectileManager.getProjectiles();
+        Vector<CProjectile> list = Main.getProjectileManager().getProjectiles();
 
         for (int i = 0; i < list.size(); ++i) {
             CProjectile cp = list.get(i);

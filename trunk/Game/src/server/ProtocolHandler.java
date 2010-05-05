@@ -252,7 +252,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             CVector2 dir = new CVector2(dirX, dirY);
             CVector2 org = new CVector2(orgX, orgY);
             CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
-            ProjectileManager.addProjectile(c);
+            Main.getProjectileManager().addProjectile(c);
             Main.broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_SHOT,
                            argInt(id), argInt(wepId), argDouble(dirX),
                            argDouble(dirY), argDouble(orgX), argDouble(orgY));

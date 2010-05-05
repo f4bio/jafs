@@ -43,6 +43,7 @@ public class Main {
     private static Game game;
     private static UpdateLoop update;
     private static boolean reset;
+    private static ProjectileManager projectile;
 
     private static UpdateCountdown pingTimer;
     private static UpdateCountdown respawnTimer;
@@ -69,7 +70,8 @@ public class Main {
 
         game = new Game(map);
         boolean loaded = game.load();
-        ProjectileManager.setGame(game);
+        projectile = new ProjectileManager();
+        projectile.setGame(game);
 
         if(!loaded)
             System.exit(0);
@@ -250,11 +252,11 @@ public class Main {
     public synchronized static void removeClient(Client c) {
         try {
             if(c != null) {
+                System.out.println("Client " + c.getHost() + ":" + c.getPort() + " dropped from Server-"+serverId+"." );
                 game.removePlayer(c.getPlayer());
                 client[c.getId()] = null;
                 broadcast(ProtocolCmd.SERVER_CLIENT_EVENT_PLAYER_LEFT, argInt(c.getId()));
             }
-            System.out.println("Client " + c.getHost() + ":" + c.getPort() + " dropped from Server-"+serverId+"." );
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -523,6 +525,10 @@ public class Main {
      */
     public static Game getGame() {
         return game;
+    }
+
+    public static ProjectileManager getProjectileManager() {
+        return projectile;
     }
 
     /**

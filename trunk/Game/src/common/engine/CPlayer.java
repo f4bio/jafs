@@ -26,6 +26,7 @@ public class CPlayer extends CEntity {
 
     private int team;
     private CWeapon[] weapon;
+    private boolean shootLock;
     private int currentWeapon;
     private int health;
     private int kills;
@@ -42,6 +43,7 @@ public class CPlayer extends CEntity {
         weapon[1] = new CWeaponRifle();
         weapon[2] = new CWeaponRailgun();
         currentWeapon = 0;
+        shootLock = false;
         size = new Dimension(50, 50);
         speed = 3.0d;
         health = 0;
@@ -58,6 +60,14 @@ public class CPlayer extends CEntity {
              body[1] = ImageIO.read(getClass().getResource("/common/resource/player_team_blue.png"));
              body[2] = ImageIO.read(getClass().getResource("/common/resource/player_team_dead.png"));
         } catch(Exception e) { }
+    }
+
+    public void setLockedShoot(boolean lock) {
+        shootLock = lock;
+    }
+
+    public boolean isShootingLocked() {
+        return shootLock;
     }
 
     /**
@@ -171,7 +181,9 @@ public class CPlayer extends CEntity {
      * @return
      */
     public CProjectile shoot(UpdateLoop u) {
-        return weapon[currentWeapon].shoot(this, u);
+        if(!shootLock)
+            return weapon[currentWeapon].shoot(this, u);
+        return null;
     }
 
     public void setKills(int k) {

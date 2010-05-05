@@ -42,6 +42,7 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
      * @param input
      */
     public GameData(Input input) {
+        selfId = -1;
         this.input = input;
         this.gameEvents = new ArrayList<Event>();
         this.chatEvents = new ArrayList<Event>();
@@ -143,6 +144,7 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
                 self.setCurrentWeapon(self.getCurrentWeapon() - 1);
             port.setWeaponSelectionVisible(true);
             u.resetCountdown(Main.getWeaponCountdown());
+            self.setLockedShoot(true);
         }
 
         if(input.wasMouseWheelMoveDown()) {
@@ -153,6 +155,7 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
                 self.setCurrentWeapon(self.getCurrentWeapon() + 1);
             port.setWeaponSelectionVisible(true);
             u.resetCountdown(Main.getWeaponCountdown());
+            self.setLockedShoot(true);
         }
         
         CVector2 mov = null;
@@ -200,7 +203,7 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
         if(input.isKeyM1Pressed()) {
             CProjectile c = null;
             if((c = self.shoot(u)) != null) {
-                ProjectileManager.addProjectile(c);
+                Main.getProjectileManager().addProjectile(c);
 
                 net.send(ProtocolCmd.CLIENT_SERVER_SHOOT, argInt(c.getId()),
                         argInt(self.getCurrentWeapon()), argDouble(c.getDirection().getX()),
@@ -216,7 +219,7 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
      */
     public void update(UpdateLoop u) {
         checkPlayerInput(u);
-        ProjectileManager.checkProjectiles(u, player, getMap());
+        Main.getProjectileManager().checkProjectiles(u, player, getMap());
     }
 
     public void countdown(UpdateCountdown u) {
@@ -225,6 +228,12 @@ public class GameData implements UpdateObject, UpdateCountdownObject {
         if(u.getName().equals("weapon")) {
             if(port != null)
                 port.setWeaponSelectionVisible(false);
+            GameData g = Main.getGameData();
+            if(g != null) {
+                CPlayer p = g.getSelf();
+                if(p != null)
+                    p.setLockedShoot(false);
+            }
         }
     }
 

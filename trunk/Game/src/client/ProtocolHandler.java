@@ -409,7 +409,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setKills(kills);
             c.setDeaths(deaths);
         }
-        if(c == null && dataRecv) {
+        /*if(c == null && dataRecv) {
             c = new CPlayer();
             c.setName(name);
             c.setCurrentWeapon(wep);
@@ -420,7 +420,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             c.setKills(kills);
             c.setDeaths(deaths);
             Main.getGameData().addPlayer(c);
-        }
+        }*/
     }
 
     @Override
@@ -456,6 +456,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
     @Override
     public void s_c_event_player_joined(String n, int id, InetSocketAddress adr) {
         net.send(adr, ProtocolCmd.CLIENT_SERVER_EVENT_PLAYER_JOINED_OK, count);
+        System.out.println("joined " + n + " " + id);
 
         CPlayer player = new CPlayer();
         player.setId(id);
@@ -512,7 +513,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
             CVector2 dir = new CVector2(dirX, dirY);
             CVector2 org = new CVector2(orgX, orgY);
             CProjectile c = new CProjectile(id, wep.getSpeed(), wepId, dir, org);
-            ProjectileManager.addProjectile(c);
+            Main.getProjectileManager().addProjectile(c);
         }
     }
 

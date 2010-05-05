@@ -4,6 +4,7 @@ import client.render.MainScreen;
 import client.ui.*;
 import common.CLog;
 import common.engine.CPlayer;
+import common.engine.ProjectileManager;
 import common.engine.UpdateCountdown;
 import common.engine.UpdateLoop;
 import common.net.Client;
@@ -34,6 +35,7 @@ public class Main {
     private static Input input;
     private static GameData data;
     private static UpdateLoop loop;
+    private static ProjectileManager projectile;
     // GUI
     private static MainMenu mainMenu;
     private static DlgMasterserver masterip;
@@ -128,6 +130,9 @@ public class Main {
         data = new GameData(input);
         data.setName(System.getProperty("user.name"));
         mainMenu.setSelfName(Main.getGameData().getName());
+
+        // ProjectileManager
+        projectile = new ProjectileManager();
         
         // UpdateLoop
         weaponCountdown = new UpdateCountdown("weapon", 1000);
@@ -214,6 +219,10 @@ public class Main {
      */
     public static InGameChat getUiInGameChat() {
         return uiInGameChat;
+    }
+
+    public static ProjectileManager getProjectileManager() {
+        return projectile;
     }
 
 
