@@ -457,7 +457,7 @@ public class Main {
             c.getPlayer().setHealth(0);
 
             if(getCurPlayers() < 2)
-                reset();
+                end();
 
             return 0;
         } else
