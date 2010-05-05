@@ -54,7 +54,7 @@ public class Game implements UpdateObject, UpdateCountdownObject {
          * Just broadcasting for now...
         */
 
-        ProjectileManager.checkProjectiles(u, player, getMap());
+        Main.getProjectileManager().checkProjectiles(u, player, getMap());
 
         for(int i=0; i<player.length; ++i) {
             if(player[i] == null)

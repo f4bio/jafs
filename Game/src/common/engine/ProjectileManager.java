@@ -5,7 +5,6 @@
 
 package common.engine;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 import server.Game;
@@ -15,14 +14,18 @@ import server.Game;
  * @author miracle
  */
 public class ProjectileManager {
-    private static Vector<CProjectile> projectiles = new Vector<CProjectile>();
-    private static Game game = null;
+    private Vector<CProjectile> projectiles = new Vector<CProjectile>();
+    private Game game = null;
+
+    public ProjectileManager() {
+        projectiles = new Vector<CProjectile>();
+    }
 
     /**
      *
      * @param p
      */
-    public static void addProjectile(CProjectile p) {
+    public void addProjectile(CProjectile p) {
         projectiles.add(p);
     }
 
@@ -30,7 +33,7 @@ public class ProjectileManager {
      *
      * @param p
      */
-    public static void removeProjectile(CProjectile p) {
+    public void removeProjectile(CProjectile p) {
         projectiles.remove(p);
     }
 
@@ -40,7 +43,7 @@ public class ProjectileManager {
      * @param p
      * @param map
      */
-    public static void checkProjectiles(UpdateLoop u, CPlayer[] p, CMap map) {
+    public void checkProjectiles(UpdateLoop u, CPlayer[] p, CMap map) {
         synchronized (projectiles) {
             Iterator<CProjectile> i = projectiles.iterator();
             while (i.hasNext()) {
@@ -68,7 +71,7 @@ public class ProjectileManager {
      *
      * @return
      */
-    public static Vector<CProjectile> getProjectiles() {
+    public Vector<CProjectile> getProjectiles() {
         return projectiles;
     }
 
@@ -76,7 +79,7 @@ public class ProjectileManager {
      *
      * @param g
      */
-    public static void setGame(Game g) {
+    public void setGame(Game g) {
         game = g;
     }
 }

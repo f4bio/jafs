@@ -22,9 +22,7 @@ public  class MainScreen extends JWindow implements UpdateObject {
     private VolatileImage buffer;
     private Dimension screenSize;
     private Viewport gamescene;
-    private boolean init = true;
     private JLayeredPane pane;
-    private boolean rendered;
     private Color clr = new Color(0, 0, 0, 255);
     private int cntUiRepaint = 0;
 
@@ -40,7 +38,6 @@ public  class MainScreen extends JWindow implements UpdateObject {
         this.pane = new JLayeredPane();
         this.setContentPane(pane);
         this.getContentPane().setLayout(null);
-        rendered = false;
         
         createBuffer();
         createGameScene();

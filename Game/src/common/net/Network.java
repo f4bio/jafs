@@ -4,12 +4,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -44,21 +45,22 @@ public class Network {
 
     private TimerTask failCheck = new TimerTask() {
         Packet p;
-        Iterator<Packet> t;
+        //Iterator<Packet> t;
 
         public void run() {
             synchronized(replyLock) {
-                t = replyQueue.iterator();
+                //t = replyQueue.iterator();
 
-                while (t.hasNext()) {
-                    p = t.next();
+                //while (t.hasNext()) {
+                for(int i=0; i<replyQueue.size(); ++i) {
+                    p = replyQueue.get(i);
 
                     if (!p.hasTimeToLive()) {
                         send(p.getDatagram(), false);
 
                         if (p.decreaseResentCounter() == 0) {
-                            t.remove();
                             handler.noReplyReceived(p);
+                            replyQueue.remove(i);
                         } else {
                             p.resetTimeToLive();
                         }
@@ -84,7 +86,7 @@ public class Network {
         public void run() {
             DatagramPacket packet;
             Packet rPacket;
-            Iterator<Packet> i;
+            //Iterator<Packet> i;
 
             try {
                 while(socket != null) {
@@ -96,12 +98,13 @@ public class Network {
 
                         if(Protocol.isReplyById(cmd)) {
                             synchronized(replyLock) {
-                                i = replyQueue.iterator();
+                                //i = replyQueue.iterator();
 
-                                while(i.hasNext()) {
-                                    rPacket = i.next();
+                                //while(i.hasNext()) {
+                                for(int i=0; i<replyQueue.size(); ++i) {
+                                    rPacket = replyQueue.get(i);
                                     if(rPacket.checkReply(packet))
-                                        i.remove();
+                                        replyQueue.remove(i);
                                 }
                             }
                         }
@@ -176,8 +179,8 @@ public class Network {
     private ConcurrentLinkedQueue<DatagramPacket> outQueue =
             new ConcurrentLinkedQueue<DatagramPacket>();
 
-    private ArrayList<Packet> replyQueue =
-            new ArrayList<Packet>();
+    private LinkedList<Packet> replyQueue =
+            new LinkedList<Packet>();
     private final Object replyLock = new Object();
 
     private DatagramSocket socket;
