@@ -16,15 +16,13 @@ public class UiKeyListener implements KeyListener {
 
     public void keyTyped(KeyEvent e) {  }
 
-    public void keyPressed(KeyEvent e) {
-//        System.out.println("Pressed "+e.getKeyChar());
-    }
+    public void keyPressed(KeyEvent e) { }
 
     public void keyReleased(KeyEvent e) {
         // InGame Chat
         if(e.getKeyCode() == KeyEvent.VK_Y) {
             Main.getUiInGameChat().setVisible(true);
-            Main.getUiInGameChat().requestFocus();
+            Main.getUiInGameChat().getTextField().requestFocus();
         }
         // MainMenu
         else if(e.getKeyCode() == KeyEvent.VK_ESCAPE){

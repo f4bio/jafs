@@ -46,7 +46,7 @@ public class UiManager {
      */
     public static void renderAll(Graphics2D g) {
         UiWindow w;
-        AlphaComposite ac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f);
+        AlphaComposite ac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f);
         g.setComposite(ac1);
         for(int i=0; i<content.size(); ++i) {
             w = content.get(i);
