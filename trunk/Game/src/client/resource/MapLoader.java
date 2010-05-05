@@ -8,6 +8,7 @@ import common.resource.CConfig;
 import common.resource.CImage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  *
@@ -42,7 +43,7 @@ public class MapLoader extends Thread {
      * @return
      */
     public boolean load(String m) {
-        String path = Main.PATH + mapFolder + "\\" + m + ".map";
+        String path = Main.PATH + mapFolder + File.separatorChar + m + ".map";
 
         archive = new CArchive(path);
         CConfig config = new CConfig(archive.getFileData("about.ini"));
