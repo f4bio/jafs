@@ -136,12 +136,12 @@ public abstract class UiWindow extends JPanel
         initDecoration();
     }
 
-    @Override
-    public void setVisible(boolean aFlag) {
-        super.setVisible(aFlag);
-//        if(aFlag)
-//            UiManager.setForeground(this);
-    }
+//    @Override
+//    public void setVisible(boolean aFlag) {
+//        super.setVisible(aFlag);
+////        if(aFlag)
+////            UiManager.setForeground(this);
+//    }
     
     /**
      *
