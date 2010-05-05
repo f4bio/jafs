@@ -69,7 +69,7 @@ public class DlgGUI extends javax.swing.JDialog  implements ActionListener, Wind
         jLabel4.setText("Map");
         jPanel1.add(jLabel4);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "map", "map1", "rhein1", "rhein2", "labyrinth" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "map", "map1", "rhein1", "rhein2", "labyrinth", "labyrinth2" }));
         jPanel1.add(jComboBox1);
 
         jLabel5.setText("Masterserver");
