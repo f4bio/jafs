@@ -236,14 +236,15 @@ public class CEntity {
         CPlayer owner = player[getId()];
 
         for(int i=0; i<player.length; i++){
-            if(player[i] == null)
+            CPlayer cp = player[i];
+            if(cp == null)
                 continue;
 
-            CVector2 p = player[i].getPosition();
+            CVector2 p = cp.getPosition();
             double distance = hit.getDistanceTo(p);
-            if(!player[i].isDead() && player[i].getId() != getId()
-                    && distance <= (player[i].getSize().width/2)
-                    && player[i].getTeam() != owner.getTeam()){
+            if(!cp.isDead() && cp.getId() != getId()
+                    && distance <= (cp.getSize().width/2)
+                    && cp.getTeam() != owner.getTeam()){
                 return i;
             }
         }
