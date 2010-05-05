@@ -68,10 +68,14 @@ public class UiActionListener implements ActionListener {
 
         // Anmeldung: Client -> Masterserver
         if(e.getActionCommand().equals(CMD_AUTH_MASTERSERVER)){
-            if(!net.MASTERHOST.equals(Main.getDlgMasterserver().getHost()))
+            if(!net.MASTERHOST.equals(Main.getDlgMasterserver().getHost()) ||
+                    net.MASTERPORT != Main.getDlgMasterserver().getPort()){
                 net.MASTERHOST = Main.getDlgMasterserver().getHost();
-            if(net.MASTERPORT != Main.getDlgMasterserver().getPort())
+                Network.MASTERHOST = Main.getDlgMasterserver().getHost();
                 net.MASTERPORT = Main.getDlgMasterserver().getPort();
+                Network.MASTERPORT = Main.getDlgMasterserver().getPort();
+                Main.getMainMenu().setOptionsMasterHostPort(Main.getDlgMasterserver().getHost(), Main.getDlgMasterserver().getPort());
+            }
             Main.getDlgMasterserver().dispose();
             net.send(net.MASTERHOST,
                      net.MASTERPORT,
@@ -156,7 +160,9 @@ public class UiActionListener implements ActionListener {
                          ProtocolCmd.CLIENT_MASTER_LOGOFF);
                 // apply new settings
                 net.MASTERHOST = hostPort.split(":")[0];
+                Network.MASTERHOST = hostPort.split(":")[0];
                 net.MASTERPORT = Integer.parseInt(hostPort.split(":")[1]);
+                Network.MASTERPORT = Integer.parseInt(hostPort.split(":")[1]);
                 // login new masterserver
                 net.send(net.MASTERHOST,
                          net.MASTERPORT,

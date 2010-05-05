@@ -49,12 +49,15 @@ public class Launcher extends javax.swing.JFrame implements ActionListener  {
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 3));
 
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton1.setText("Client");
         jPanel1.add(jButton1);
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton2.setText("Server");
         jPanel1.add(jButton2);
 
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jButton3.setText("Masterserver");
         jPanel1.add(jButton3);
 

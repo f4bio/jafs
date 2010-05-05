@@ -5,7 +5,6 @@ import common.engine.CMap;
 import common.engine.CPlayer;
 import common.engine.CProjectile;
 import common.engine.CWeapon;
-import common.engine.ProjectileManager;
 import common.net.Client;
 import common.net.Network;
 import common.net.Packet;
@@ -264,7 +263,7 @@ public class ProtocolHandler extends common.net.ProtocolHandler {
 //            System.out.println("client succesfully listed. (server)");
             System.out.println("SERVER_CLIENT_AUTH_REPLY success (client listed)");
             Main.getMainMenu().enableLobby(false);
-            Main.getMainMenu().setVisible(false);
+            Main.getMainMenu().dispose();//.setVisible(false);
             Main.getScreen().setVisible(true);
             Main.getFrame().setVisible(true);
         }

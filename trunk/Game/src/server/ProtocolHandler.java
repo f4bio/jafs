@@ -3,7 +3,6 @@ package server;
 import common.CVector2;
 import common.engine.CProjectile;
 import common.engine.CWeapon;
-import common.engine.ProjectileManager;
 import common.net.Client;
 import common.net.Network;
 import common.net.Packet;
