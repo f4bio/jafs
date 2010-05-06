@@ -399,9 +399,12 @@ public class Viewport {
             int y = 0;
             for(int i=0; i<events.size(); ++i) {
                 Event e = events.get(i);
-                y += (int)getStringMetrics(e.getMsg(), g).getHeight() + 5;
+                Rectangle2D rec = getStringMetrics(e.getMsg(), g);
+                y += (int)rec.getHeight() + 5;
+
+                renderBox(5, y-(int)rec.getHeight()-1, (int)rec.getWidth() + 10, (int)rec.getHeight()+5, g);
                 g.setColor(e.getColor());
-                g.drawString(e.getMsg(), 5, y);
+                g.drawString(e.getMsg(), 10, y);
             }
         }
     }
@@ -414,10 +417,12 @@ public class Viewport {
 
             for(int i=events.size()-1; i>=0; --i) {
                 Event e = events.get(i);
-                y = y - 5 - (int)getStringMetrics(e.getMsg(), g).getHeight();
+                Rectangle2D rec = getStringMetrics(e.getMsg(), g);
+                y = y - 5 - (int)rec.getHeight();
 
+                renderBox(5, y-(int)rec.getHeight()-1, (int)rec.getWidth()+10, (int)rec.getHeight()+5, g);
                 g.setColor(e.getColor());
-                g.drawString(e.getMsg(), 5, y);
+                g.drawString(e.getMsg(), 10, y);
             }
         }
     }
@@ -451,29 +456,38 @@ public class Viewport {
     }
 
     public CPlayer[] sortByKills(int team) {
-        CPlayer[] p = new CPlayer[Main.getGameData().getPlayers().length];
-        boolean[] gone = new boolean[p.length];
         CPlayer[] l = Main.getGameData().getPlayers();
+        CPlayer[] p = new CPlayer[l.length];
+        boolean[] gone = new boolean[p.length];
 
         int idx = 0;
         int gIdx = 0;
-        
-        for(int i=0; i<l.length; ++i) {
-            CPlayer cp = l[i];
-            if(cp != null && cp.getTeam() == team && !gone[i]) {
-                p[idx] = cp;
-                gIdx = i;
-                for(int j = 0; j<l.length; ++j) {
-                    CPlayer cpj = l[j];
-                    if(cpj != null && cpj.getKills() > p[idx].getKills()
-                            && cpj.getTeam() == team && !gone[j]) {
-                        p[idx] = cpj;
-                        gIdx = j;
-                    }
+
+        boolean done = false;
+        boolean changed;
+        CPlayer max = null;
+        CPlayer cp = null;
+
+        while(!done) {
+            max = null;
+            changed = false;
+
+            for(int i=0; i<l.length; ++i) {
+                cp = l[i];
+                if(cp != null && cp.getTeam() == team && !gone[i]
+                    && (max == null || cp.getKills() > max.getKills())) {
+                    max = cp;
+                    gIdx = i;
+                    changed = true;
                 }
-                gone[gIdx] = true;
-                idx++;
             }
+
+            p[idx] = max;
+            gone[gIdx] = true;
+            idx++;
+
+            if(!changed)
+                done = true;
         }
 
         return p;
