@@ -6,7 +6,7 @@
 <br />
 === Julian: ===
 
-* Serverbrowser with Lobby chat (added by Julian)
+* ----
 
 <br />
 === Alex: ===
@@ -20,6 +20,4 @@
 <br />
 === Sezer: ===
 
-* Traffic-Encryption / Security... (added by Fabio)
-
-* Map-Editor (added by Julian)
+* ----
